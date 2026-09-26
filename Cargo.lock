@@ -1363,6 +1363,8 @@ dependencies = [
 name = "koof"
 version = "0.1.0"
 dependencies = [
+ "futures",
+ "jiff",
  "k8s-openapi",
  "kube",
  "reqwest",
@@ -1370,6 +1372,7 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror",
+ "tracing",
  "urlencoding",
 ]
 

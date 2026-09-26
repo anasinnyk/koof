@@ -10,9 +10,9 @@ pub trait Operation {
     /// Path template relative to the base URL, e.g. `/zones/{zone_id}`.
     const PATH: &'static str;
     /// Request body; `()` when the operation takes none.
-    type Request: Serialize;
+    type Request: Serialize + Send + Sync;
     /// Successful response body.
-    type Response: DeserializeOwned;
+    type Response: DeserializeOwned + Send + Sync;
 }
 
 /// Credentials for one request. `Debug` never prints the secret.
