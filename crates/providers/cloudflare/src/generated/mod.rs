@@ -1,5 +1,6 @@
+pub mod operations;
+pub mod types;
 pub mod account;
-pub mod client;
 pub mod dns_record;
 pub mod pages_project;
 pub mod zone;

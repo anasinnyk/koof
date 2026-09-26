@@ -322,11 +322,13 @@ name = "cloudflare-provider"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "chrono",
  "futures",
  "jiff",
  "k8s-openapi",
  "koof",
  "kube",
+ "regress 0.10.5",
  "reqwest",
  "rustls",
  "schemars 1.2.2",
@@ -337,7 +339,6 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
- "urlencoding",
 ]
 
 [[package]]
@@ -1369,6 +1370,7 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror",
+ "urlencoding",
 ]
 
 [[package]]
@@ -1379,15 +1381,18 @@ dependencies = [
  "clap",
  "enumset",
  "heck",
+ "openapiv3",
  "prettyplease",
  "proc-macro2",
  "quote",
  "roas-overlay",
+ "schemars 0.8.22",
  "serde",
  "serde_json",
  "serde_yaml",
  "syn 3.0.6",
  "thiserror",
+ "typify",
 ]
 
 [[package]]
@@ -1500,29 +1505,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "lazy-regex"
-version = "3.6.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4994ba703f78b083e2f7946dac9251abd83fd43a0365f030e99b69be5b4b9ef9"
-dependencies = [
- "lazy-regex-proc_macros",
- "once_cell",
- "regex",
-]
-
-[[package]]
-name = "lazy-regex-proc_macros"
-version = "3.6.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fd97232314824e6dbef1918a871bb93f51070455e3715bf26e19a6d01aa977a0"
-dependencies = [
- "proc-macro2",
- "quote",
- "regex",
- "syn 2.0.119",
-]
-
-[[package]]
 name = "lazy_static"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1597,28 +1579,6 @@ dependencies = [
  "libc",
  "wasi",
  "windows-sys 0.61.2",
-]
-
-[[package]]
-name = "monostate"
-version = "1.0.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fdc4dfdf312bb1b22fce127237589f4ee31652bc479f3d208332f32132aaccc9"
-dependencies = [
- "monostate-impl",
- "serde",
- "serde_core",
-]
-
-[[package]]
-name = "monostate-impl"
-version = "1.0.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a656449eeb444c77364a3033f013c51869eee320c0dff805eb53024c0dfd435b"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 3.0.6",
 ]
 
 [[package]]
@@ -2091,22 +2051,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "roas"
-version = "0.21.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "33eaff88438397c05573c77675fab80b1bbd732b02e7009dd114a74f05fb2dc0"
-dependencies = [
- "enumset",
- "lazy-regex",
- "monostate",
- "regex",
- "serde",
- "serde_json",
- "thiserror",
- "url",
-]
-
-[[package]]
 name = "roas-overlay"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2479,17 +2423,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "serde_path_to_error"
-version = "0.1.20"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "10a9ff822e371bb5403e391ecd83e182e0e77ba7f6fe0160b795797109d1b457"
-dependencies = [
- "itoa",
- "serde",
- "serde_core",
-]
-
-[[package]]
 name = "serde_yaml"
 version = "0.9.34+deprecated"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2563,43 +2496,6 @@ checksum = "c3d1e2c7f27f8d4cb10542a02c49005dbd6e93095799d6f3be745fae9f8fedd4"
 dependencies = [
  "libc",
  "windows-sys 0.61.2",
-]
-
-[[package]]
-name = "spike-gen"
-version = "0.0.0"
-dependencies = [
- "anyhow",
- "enumset",
- "openapiv3",
- "prettyplease",
- "roas",
- "roas-overlay",
- "schemars 0.8.22",
- "serde_json",
- "serde_path_to_error",
- "serde_yaml",
- "syn 3.0.6",
- "typify",
-]
-
-[[package]]
-name = "spike-provider"
-version = "0.0.0"
-dependencies = [
- "chrono",
- "k8s-openapi",
- "kube",
- "regress 0.10.5",
- "reqwest",
- "rustls",
- "schemars 1.2.2",
- "serde",
- "serde_json",
- "serde_yaml",
- "thiserror",
- "tokio",
- "urlencoding",
 ]
 
 [[package]]

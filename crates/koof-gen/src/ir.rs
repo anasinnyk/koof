@@ -1,12 +1,10 @@
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
 use std::collections::BTreeMap;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ProviderIr {
     pub version: u32,
     pub provider: String,
-    pub schemas: BTreeMap<SchemaName, SchemaIr>,
     pub resources: BTreeMap<ResourceName, ResourceIr>,
     pub operations: BTreeMap<OperationId, OperationIr>,
     pub security_schemes: BTreeMap<SecuritySchemeName, SecuritySchemeIr>,
@@ -64,7 +62,6 @@ impl Default for FieldSelectionIr {
 pub struct ResourceIr {
     pub api_version: String,
     pub kind: String,
-    pub spec_schema: SchemaName,
     #[serde(default)]
     pub identifiers: BTreeMap<String, ValueExpr>,
     #[serde(default)]
@@ -73,11 +70,6 @@ pub struct ResourceIr {
     pub references: BTreeMap<String, ReferenceIr>,
     pub credentials: Option<CredentialsIr>,
     pub lifecycle: LifecycleIr,
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct SchemaRef {
-    pub pointer: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -117,11 +109,15 @@ pub struct OperationIr {
     #[serde(default)]
     pub path_parameters: BTreeMap<String, ValueExpr>,
 
-    pub request_schema: Option<SchemaRef>,
-    pub response_schema: Option<SchemaRef>,
-
-    pub request_body: Option<SchemaIr>,
-    pub response_body: Option<SchemaIr>,
+    /// `components.schemas` name of the JSON request body, if any.
+    #[serde(default)]
+    pub request: Option<SchemaName>,
+    /// `components.schemas` name of the first successful JSON response, if any.
+    #[serde(default)]
+    pub response: Option<SchemaName>,
+    /// Dot path of the resource inside the response body (e.g. `result`).
+    #[serde(default)]
+    pub response_path: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -178,92 +174,6 @@ impl AsRef<str> for HttpMethod {
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct SchemaName(pub String);
-
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(tag = "type", rename_all = "snake_case")]
-pub enum SchemaIr {
-    Ref {
-        target: SchemaName,
-    },
-
-    Object {
-        #[serde(default)]
-        properties: BTreeMap<String, FieldIr>,
-
-        #[serde(default)]
-        additional_properties: AdditionalPropertiesIr,
-    },
-
-    Array {
-        items: Box<SchemaIr>,
-    },
-
-    String {
-        format: Option<String>,
-
-        #[serde(default)]
-        enum_values: Vec<String>,
-    },
-
-    Integer {
-        format: Option<String>,
-    },
-
-    Number {
-        format: Option<String>,
-    },
-
-    Boolean,
-
-    OneOf {
-        variants: Vec<SchemaIr>,
-    },
-
-    AllOf {
-        variants: Vec<SchemaIr>,
-    },
-
-    Any,
-}
-
-// Mirrors the boolean flags of an OpenAPI property; `SchemaIr`/`FieldIr` are
-// replaced by typify-generated types in phase 4 of docs/refactor-plan.md.
-#[allow(clippy::struct_excessive_bools)]
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct FieldIr {
-    pub schema: SchemaIr,
-
-    #[serde(default)]
-    pub required: bool,
-
-    #[serde(default)]
-    pub nullable: bool,
-
-    #[serde(default)]
-    pub read_only: bool,
-
-    #[serde(default)]
-    pub write_only: bool,
-
-    #[serde(default)]
-    pub ignored: bool,
-
-    pub description: Option<String>,
-    pub default: Option<Value>,
-}
-
-#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(tag = "type", rename_all = "snake_case")]
-pub enum AdditionalPropertiesIr {
-    #[default]
-    Forbidden,
-
-    Any,
-
-    Typed {
-        schema: Box<SchemaIr>,
-    },
-}
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
 pub struct SecuritySchemeName(pub String);

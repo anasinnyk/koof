@@ -1,18 +1,17 @@
 use crate::{
     generator::{
         errors::GeneratorError,
-        naming::{field_ident, kind_ident},
-        schema::{SchemaCodegen, generate_http_client},
+        naming::{field_ident, kind_ident, operation_ident},
+        operations::generate_operations,
+        types::GeneratedTypes,
     },
     ir::{
         ApiKeyLocationIr, CredentialSourceIr, FieldPath, OperationIr, ProviderIr, ResourceIr,
         ResourceName, SecuritySchemeIr, ValueExpr,
     },
 };
-use heck::{ToSnakeCase, ToUpperCamelCase};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote};
-use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
 
 pub struct GeneratedFile {
@@ -22,15 +21,16 @@ pub struct GeneratedFile {
 
 pub fn generate_resource(
     ir: &ProviderIr,
+    types: &GeneratedTypes,
     name: &ResourceName,
     resource: &ResourceIr,
 ) -> Result<GeneratedFile, GeneratorError> {
     let custom_resource = generate_custom_resource(&[
-        generate_spec(ir, resource)?,
-        generate_status(resource)?,
+        generate_spec(resource, types)?,
+        generate_status(resource, types)?,
         generate_observe(ir, name, resource)?,
         generate_resolve_credentials(ir, name, resource)?,
-        generate_update_status(resource)?,
+        generate_update_status(resource, types)?,
         generate_reconciler(resource)?,
         generate_run_controller(resource)?,
     ]);
@@ -70,9 +70,7 @@ pub fn generate_run_controller(resource: &ResourceIr) -> Result<TokenStream, Gen
     Ok(quote! {
         pub async fn run_controller(
             context: std::sync::Arc<
-                koof::reconciler::ControllerContext<
-                    crate::generated::client::ProviderClient
-                >
+                koof::reconciler::ControllerContext<koof::http::HttpClient>
             >,
         ) {
             use futures::StreamExt as _;
@@ -143,7 +141,7 @@ pub fn generate_path_parameters(
                 })?;
         });
 
-        arguments.push(quote!(&#parameter_ident));
+        arguments.push(quote!((#parameter_name, #parameter_ident.as_str())));
     }
 
     Ok(GeneratedPathParameters {
@@ -163,31 +161,26 @@ pub fn generate_observe(
         GeneratorError::InvalidIr(format!("unknown observe operation {}", operation_id.0))
     })?;
 
+    if resource.credentials.is_none() {
+        return Err(GeneratorError::UnsupportedCredential(format!(
+            "resource {} has no credentials",
+            resource_name.0
+        )));
+    }
+
     let GeneratedPathParameters {
         bindings,
         arguments,
     } = generate_path_parameters(ir, resource_name, operation)?;
 
     let resource_ident = kind_ident(&resource.kind)?;
-    let method_ident = field_ident(&operation_id.0.to_snake_case())?;
-
-    let credentials = if resource.credentials.is_some() {
-        quote! {
-            let credentials =
-                resolve_credentials(kube_client, resource).await?;
-
-            let request =
-                request.with_credentials(&credentials);
-        }
-    } else {
-        TokenStream::new()
-    };
+    let operation_type = operation_ident(operation_id)?;
+    let response_path = operation.response_path.clone().unwrap_or_default();
 
     Ok(quote! {
         pub async fn observe(
             kube_client: &kube::Client,
-            provider_client:
-                &crate::generated::client::ProviderClient,
+            http: &koof::http::HttpClient,
             resource: &#resource_ident,
         ) -> Result<
             koof::reconciler::Observation,
@@ -195,20 +188,23 @@ pub fn generate_observe(
         > {
             #(#bindings)*
 
-            let request = provider_client.#method_ident(
-                #(#arguments),*
-            );
+            let auth = resolve_credentials(kube_client, resource).await?;
 
-            #credentials
+            let response = http
+                .send::<crate::generated::operations::#operation_type>(
+                    &auth,
+                    &[#(#arguments),*],
+                    None,
+                )
+                .await?;
 
-            let observed = request.send_optional().await?;
-
-            let at_provider = observed
-                .map(serde_json::to_value)
-                .transpose()?;
+            let at_provider = match &response {
+                Some(response) => koof::http::extract(response, #response_path)?,
+                None => None,
+            };
 
             Ok(koof::reconciler::Observation {
-                exists: at_provider.is_some(),
+                exists: response.is_some(),
                 at_provider,
             })
         }
@@ -391,47 +387,29 @@ fn format_tokens(tokens: TokenStream) -> Result<String, GeneratorError> {
     Ok(prettyplease::unparse(&syntax))
 }
 
-fn generate_spec(ir: &ProviderIr, resource: &ResourceIr) -> Result<TokenStream, GeneratorError> {
-    let schema = ir
-        .schemas
-        .get(&resource.spec_schema)
-        .ok_or_else(|| GeneratorError::UnknownSchema(resource.spec_schema.0.clone()))?;
-
+fn generate_spec(
+    resource: &ResourceIr,
+    types: &GeneratedTypes,
+) -> Result<TokenStream, GeneratorError> {
     let (group, version) = resource
         .api_version
         .split_once('/')
         .ok_or_else(|| GeneratorError::InvalidApiVersion(resource.api_version.clone()))?;
 
     let kind = &resource.kind;
-    let status_name = format!("{}Status", resource.kind);
+    let status_name = format!("{kind}Status");
+    let spec_ident = kind_ident(&format!("{kind}Spec"))?;
+    let for_provider_ident = kind_ident(&format!("{kind}ForProviderSpec"))?;
+    let fields_type = types.path(&format!("{kind}ForProvider"))?;
 
-    let mut codegen = SchemaCodegen::new(&ir.schemas);
-
-    let properties = codegen.object_properties(schema)?;
-    let for_provider_name = format!("{}ForProvider", resource.kind);
-
-    let for_provider_ident = kind_ident(&for_provider_name)?;
-
-    let spec_ident = kind_ident(&format!("{}Spec", resource.kind))?;
-
-    let managed_properties = properties
-        .iter()
-        .filter(|(_, field)| !field.read_only && !field.ignored)
-        .map(|(name, field)| (name.clone(), field.clone()))
-        .collect::<BTreeMap<_, _>>();
-
-    let mut fields = codegen.generate_fields(&for_provider_name, &managed_properties)?;
-    fields.extend(generate_reference_fields(resource)?);
-
+    let mut fields = generate_reference_fields(resource)?;
     if let Some(credentials) = generate_credential_field(resource)? {
         fields.push(credentials);
     }
 
-    let declarations = codegen.finish();
-
     Ok(quote! {
-        #(#declarations)*
-
+        /// `spec.forProvider`: the generated API fields plus references and
+        /// credentials.
         #[derive(
             Clone,
             Debug,
@@ -440,7 +418,11 @@ fn generate_spec(ir: &ProviderIr, resource: &ResourceIr) -> Result<TokenStream, 
             serde::Deserialize,
             schemars::JsonSchema
         )]
+        #[schemars(transform = koof::schema::flatten_object_unions)]
         pub struct #for_provider_ident {
+            #[serde(flatten)]
+            pub fields: #fields_type,
+
             #(#fields)*
         }
 
@@ -471,10 +453,13 @@ fn generate_spec(ir: &ProviderIr, resource: &ResourceIr) -> Result<TokenStream, 
     })
 }
 
-pub fn generate_update_status(resource: &ResourceIr) -> Result<TokenStream, GeneratorError> {
+pub fn generate_update_status(
+    resource: &ResourceIr,
+    types: &GeneratedTypes,
+) -> Result<TokenStream, GeneratorError> {
     let resource_ident = kind_ident(&resource.kind)?;
     let status_ident = kind_ident(&format!("{}Status", resource.kind))?;
-    let at_provider_ident = kind_ident(&format!("{}AtProvider", resource.kind))?;
+    let at_provider_ident = types.path(&format!("{}AtProvider", resource.kind))?;
 
     Ok(quote! {
         pub async fn update_status(
@@ -593,9 +578,7 @@ pub fn generate_reconciler(resource: &ResourceIr) -> Result<TokenStream, Generat
         pub async fn reconcile(
             resource: std::sync::Arc<#resource_ident>,
             context: std::sync::Arc<
-                koof::reconciler::ControllerContext<
-                    crate::generated::client::ProviderClient
-                >
+                koof::reconciler::ControllerContext<koof::http::HttpClient>
             >,
         ) -> Result<
             kube::runtime::controller::Action,
@@ -633,9 +616,7 @@ pub fn generate_reconciler(resource: &ResourceIr) -> Result<TokenStream, Generat
             _resource: std::sync::Arc<#resource_ident>,
             _error: &koof::error::ReconcileError,
             _context: std::sync::Arc<
-                koof::reconciler::ControllerContext<
-                    crate::generated::client::ProviderClient
-                >
+                koof::reconciler::ControllerContext<koof::http::HttpClient>
             >,
         ) -> kube::runtime::controller::Action {
             kube::runtime::controller::Action::requeue(
@@ -645,66 +626,14 @@ pub fn generate_reconciler(resource: &ResourceIr) -> Result<TokenStream, Generat
     })
 }
 
-fn generate_status(resource: &ResourceIr) -> Result<TokenStream, GeneratorError> {
+fn generate_status(
+    resource: &ResourceIr,
+    types: &GeneratedTypes,
+) -> Result<TokenStream, GeneratorError> {
     let status_ident = kind_ident(&format!("{}Status", resource.kind))?;
-    let at_provider_ident = kind_ident(&format!("{}AtProvider", resource.kind))?;
-
-    let mut identifier_fields = BTreeSet::new();
-
-    for expression in resource.identifiers.values() {
-        let ValueExpr::Field { path } = expression else {
-            return Err(GeneratorError::UnsupportedSchema(
-                "resource identifier must be a field expression".into(),
-            ));
-        };
-
-        let name = path.0.strip_prefix("status.atProvider.").ok_or_else(|| {
-            GeneratorError::UnsupportedSchema(format!(
-                "identifier path must start with status.atProvider.: {}",
-                path.0
-            ))
-        })?;
-
-        if name.contains('.') {
-            return Err(GeneratorError::UnsupportedSchema(format!(
-                "nested status path is not supported yet: {}",
-                path.0
-            )));
-        }
-
-        identifier_fields.insert(name.to_owned());
-    }
-
-    let identifier_fields = identifier_fields
-        .into_iter()
-        .map(|json_name| {
-            let ident = field_ident(&json_name)?;
-
-            Ok(quote! {
-                #[serde(
-                    rename = #json_name,
-                    default,
-                    skip_serializing_if = "Option::is_none"
-                )]
-                pub #ident: Option<String>,
-            })
-        })
-        .collect::<Result<Vec<_>, GeneratorError>>()?;
+    let at_provider_type = types.path(&format!("{}AtProvider", resource.kind))?;
 
     Ok(quote! {
-        #[derive(
-            Clone,
-            Debug,
-            Default,
-            PartialEq,
-            serde::Serialize,
-            serde::Deserialize,
-            schemars::JsonSchema
-        )]
-        pub struct #at_provider_ident {
-            #(#identifier_fields)*
-        }
-
         #[derive(
             Clone,
             Debug,
@@ -720,7 +649,8 @@ fn generate_status(resource: &ResourceIr) -> Result<TokenStream, GeneratorError>
                 default,
                 skip_serializing_if = "Option::is_none"
             )]
-            pub at_provider: Option<#at_provider_ident>,
+            #[schemars(transform = koof::schema::flatten_object_unions)]
+            pub at_provider: Option<#at_provider_type>,
 
             #[serde(
                 rename = "observedGeneration",
@@ -746,7 +676,7 @@ fn generate_reference_fields(resource: &ResourceIr) -> Result<Vec<TokenStream>, 
             let ident = field_ident(json_name)?;
 
             Ok(quote! {
-                #[serde(rename = #json_name)]
+                #[serde(rename = #json_name, default, skip_serializing_if = "Option::is_none")]
                 pub #ident:
                     Option<koof::reference::ResourceReference>,
             })
@@ -767,7 +697,7 @@ fn generate_credential_field(resource: &ResourceIr) -> Result<Option<TokenStream
     let ident = field_ident(json_name)?;
 
     Ok(Some(quote! {
-        #[serde(rename = #json_name)]
+        #[serde(rename = #json_name, default, skip_serializing_if = "Option::is_none")]
         pub #ident:
             Option<koof::reference::SecretReference>,
     }))
@@ -813,10 +743,24 @@ pub fn generate_resolve_credentials(
 
     let resource_ident = kind_ident(&resource.kind)?;
 
-    let credential_ident = kind_ident(&format!(
-        "{}Credential",
-        credentials.security_scheme.0.to_upper_camel_case(),
-    ))?;
+    let auth = match ir.security_schemes.get(&credentials.security_scheme) {
+        Some(SecuritySchemeIr::Http { scheme, .. }) if scheme == "bearer" => {
+            quote!(koof::http::Auth::Bearer(value))
+        }
+        Some(SecuritySchemeIr::ApiKey {
+            name,
+            location: ApiKeyLocationIr::Header,
+        }) => quote!(koof::http::Auth::Header {
+            name: #name.to_owned(),
+            value,
+        }),
+        _ => {
+            return Err(GeneratorError::UnsupportedCredential(format!(
+                "security scheme {} is not supported",
+                credentials.security_scheme.0,
+            )));
+        }
+    };
 
     let mut traversal = Vec::new();
     let mut current_resource = resource;
@@ -935,10 +879,7 @@ pub fn generate_resolve_credentials(
         pub async fn resolve_credentials(
             client: &kube::Client,
             resource: &#resource_ident,
-        ) -> Result<
-            crate::generated::client::#credential_ident,
-            koof::error::CredentialError,
-        > {
+        ) -> Result<koof::http::Auth, koof::error::CredentialError> {
             let namespace =
                 kube::ResourceExt::namespace(resource)
                     .ok_or_else(|| {
@@ -970,84 +911,8 @@ pub fn generate_resolve_credentials(
             )
             .await?;
 
-            crate::generated::client::#credential_ident::new(value)
+            Ok(#auth)
         }
-    })
-}
-
-pub fn generate_credentials(ir: &ProviderIr) -> Result<TokenStream, GeneratorError> {
-    let mut generated = Vec::new();
-
-    for (name, scheme) in &ir.security_schemes {
-        let type_name = format!("{}Credential", name.0.to_upper_camel_case());
-        let credential_ident = kind_ident(&type_name)?;
-
-        let inner_type;
-        let constructor;
-
-        match scheme {
-            SecuritySchemeIr::Http { scheme, .. } if scheme == "bearer" => {
-                inner_type = quote!(koof::api::BearerCredential);
-
-                constructor = quote! {
-                    koof::api::BearerCredential::new(value)?
-                };
-            }
-
-            SecuritySchemeIr::ApiKey {
-                name: header_name,
-                location: ApiKeyLocationIr::Header,
-            } => {
-                inner_type = quote!(koof::api::HeaderCredential);
-
-                constructor = quote! {
-                    koof::api::HeaderCredential::new(
-                        #header_name,
-                        value,
-                    )?
-                };
-            }
-
-            _ => {
-                return Err(GeneratorError::UnsupportedCredential(format!(
-                    "security scheme {} is not supported",
-                    name.0,
-                )));
-            }
-        }
-
-        generated.push(quote! {
-            pub struct #credential_ident(#inner_type);
-
-            impl #credential_ident {
-                pub fn new(
-                    value: impl AsRef<str>,
-                ) -> Result<
-                    Self,
-                    koof::error::CredentialError,
-                > {
-                    Ok(Self(#constructor))
-                }
-            }
-
-            impl koof::api::ApiCredential
-                for #credential_ident
-            {
-                fn apply(
-                    &self,
-                    request: reqwest::RequestBuilder,
-                ) -> reqwest::RequestBuilder {
-                    koof::api::ApiCredential::apply(
-                        &self.0,
-                        request,
-                    )
-                }
-            }
-        });
-    }
-
-    Ok(quote! {
-        #(#generated)*
     })
 }
 
@@ -1059,7 +924,8 @@ pub fn generate_mod_file(ir: &ProviderIr) -> Result<GeneratedFile, GeneratorErro
         .collect::<Result<Vec<_>, _>>()?;
 
     let content = quote! {
-        pub mod client;
+        pub mod operations;
+        pub mod types;
 
         #(
             pub mod #resource_modules;
@@ -1072,21 +938,32 @@ pub fn generate_mod_file(ir: &ProviderIr) -> Result<GeneratedFile, GeneratorErro
     })
 }
 
-pub fn generate_client_file(ir: &ProviderIr) -> Result<GeneratedFile, GeneratorError> {
-    let mut schema_codegen = SchemaCodegen::new(&ir.schemas);
+/// `src/generated/types.rs`: typify output. Lints are relaxed for the whole file:
+/// it is third-party-generated code with upstream doc strings, and typify compiles
+/// `pattern` regexes with `unwrap()`.
+pub fn generate_types_file(types: &GeneratedTypes) -> Result<GeneratedFile, GeneratorError> {
+    let tokens = &types.tokens;
+    let content = quote! {
+        #![doc = " This file is generated. Do not edit manually."]
+        #![allow(clippy::all, clippy::pedantic, clippy::unwrap_used, clippy::expect_used)]
 
-    let credentials = generate_credentials(ir)?;
-    let client = generate_http_client(ir, &mut schema_codegen)?;
-    let declarations = schema_codegen.finish();
-
-    let content = generated_file(&quote! {
-        #(#declarations)*
-        #credentials
-        #client
-    });
+        #tokens
+    };
 
     Ok(GeneratedFile {
-        path: "src/generated/client.rs".into(),
+        path: "src/generated/types.rs".into(),
+        content: format_tokens(content)?,
+    })
+}
+
+pub fn generate_operations_file(
+    ir: &ProviderIr,
+    types: &GeneratedTypes,
+) -> Result<GeneratedFile, GeneratorError> {
+    let content = generated_file(&generate_operations(ir, types)?);
+
+    Ok(GeneratedFile {
+        path: "src/generated/operations.rs".into(),
         content: format_tokens(content)?,
     })
 }

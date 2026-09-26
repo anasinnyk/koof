@@ -1,21 +1,34 @@
 use crate::ir::ProviderIr;
+use serde_json::Value;
 
 mod errors;
 mod naming;
+mod operations;
 mod resource;
-mod schema;
+mod types;
 
+pub use errors::GeneratorError;
+pub use resource::GeneratedFile;
+
+/// Generates `src/generated/{mod,types,operations,<resource>}.rs`.
+///
+/// `document` is the schema set from [`crate::spec::for_codegen`].
+///
 /// # Errors
 ///
-/// Return errors when we cannot generate a controller/mod/client
-pub fn generate(ir: &ProviderIr) -> Result<Vec<resource::GeneratedFile>, errors::GeneratorError> {
+/// Returns [`GeneratorError`] when typify rejects the schemas, a referenced schema has
+/// no generated type, or a resource cannot be rendered.
+pub fn generate(ir: &ProviderIr, document: &Value) -> Result<Vec<GeneratedFile>, GeneratorError> {
+    let types = types::generate_types(document)?;
+
     let mut files = ir
         .resources
         .iter()
-        .map(|(name, res)| resource::generate_resource(ir, name, res))
+        .map(|(name, res)| resource::generate_resource(ir, &types, name, res))
         .collect::<Result<Vec<_>, _>>()?;
 
-    files.push(resource::generate_client_file(ir)?);
+    files.push(resource::generate_operations_file(ir, &types)?);
+    files.push(resource::generate_types_file(&types)?);
     files.push(resource::generate_mod_file(ir)?);
 
     Ok(files)

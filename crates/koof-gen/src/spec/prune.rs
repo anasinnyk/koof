@@ -1,4 +1,4 @@
-use super::{DATA_KEYWORDS, SpecError, decode_segment};
+use super::{SpecError, decode_segment, schema_children};
 use serde_json::{Map, Value};
 use std::collections::BTreeSet;
 
@@ -102,10 +102,8 @@ fn collect_component_refs(value: &Value, out: &mut Vec<(String, String)>) {
             {
                 out.push((section.to_owned(), decode_segment(name)));
             }
-            for (key, child) in map {
-                if !DATA_KEYWORDS.contains(&key.as_str()) {
-                    collect_component_refs(child, out);
-                }
+            for child in schema_children(map) {
+                collect_component_refs(child, out);
             }
         }
         Value::Array(items) => items
