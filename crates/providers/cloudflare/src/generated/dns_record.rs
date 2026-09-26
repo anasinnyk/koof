@@ -48,8 +48,7 @@ fn api_resource() -> kube::api::ApiResource {
 pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "DNSRecord",
     api_resource,
-    external_name_annotation: "zones.cloudflare.kube.nas1k.dev/external-name",
-    finalizer: "zones.cloudflare.kube.nas1k.dev/finalizer",
+    group: "zones.cloudflare.kube.nas1k.dev",
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     references: &[
         koof::resource::Reference {
@@ -78,6 +77,25 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         ],
         response_path: "result",
     },
+    create: Some(koof::resource::CreateDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[
+                (
+                    "zone_id",
+                    koof::resource::ValueExpr::RelatedIdentifier {
+                        via: &["zone"],
+                        name: "external_id",
+                    },
+                ),
+            ],
+            response_path: "",
+        },
+        request: koof::resource::RequestMapping {
+            from: "spec.forProvider",
+            set: &[],
+        },
+        external_name: "result.id",
+    }),
     delete: Some(koof::resource::OperationDescriptor {
         path_parameters: &[
             ("dns_record_id", koof::resource::ValueExpr::ExternalName),
@@ -95,6 +113,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
 impl koof::ManagedResource for DNSRecord {
     type AtProvider = crate::generated::types::DnsRecordAtProvider;
     type Observe = crate::generated::operations::DnsRecordObserve;
+    type Create = crate::generated::operations::DnsRecordCreate;
     type Delete = crate::generated::operations::DnsRecordDelete;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR

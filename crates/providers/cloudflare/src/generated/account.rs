@@ -52,8 +52,7 @@ fn api_resource() -> kube::api::ApiResource {
 pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "Account",
     api_resource,
-    external_name_annotation: "cloudflare.kube.nas1k.dev/external-name",
-    finalizer: "cloudflare.kube.nas1k.dev/finalizer",
+    group: "cloudflare.kube.nas1k.dev",
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     references: &[],
     credentials: Some(koof::resource::Credentials {
@@ -66,6 +65,17 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
         response_path: "result",
     },
+    create: Some(koof::resource::CreateDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[],
+            response_path: "",
+        },
+        request: koof::resource::RequestMapping {
+            from: "spec.forProvider",
+            set: &[],
+        },
+        external_name: "result.id",
+    }),
     delete: Some(koof::resource::OperationDescriptor {
         path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
         response_path: "",
@@ -74,6 +84,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
 impl koof::ManagedResource for Account {
     type AtProvider = crate::generated::types::AccountAtProvider;
     type Observe = crate::generated::operations::AccountObserve;
+    type Create = crate::generated::operations::AccountCreate;
     type Delete = crate::generated::operations::AccountDelete;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR

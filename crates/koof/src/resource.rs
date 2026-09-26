@@ -31,6 +31,11 @@ pub trait ManagedResource:
     /// Operation that reads the external resource.
     type Observe: Operation<Response: Serialize>;
 
+    /// Operation that creates it; [`crate::http::Unsupported`] when there is none
+    /// (then [`ResourceDescriptor::create`] is `None`). The request body is built
+    /// as JSON and deserialized into `Request`.
+    type Create: Operation<Request: DeserializeOwned>;
+
     /// Operation that deletes it; [`crate::http::Unsupported`] when there is none
     /// (then [`ResourceDescriptor::delete`] is `None`).
     type Delete: Operation;
@@ -51,17 +56,14 @@ pub struct ResourceDescriptor {
     /// Used to read this resource as a `DynamicObject` when another resource
     /// references it.
     pub api_resource: fn() -> kube::api::ApiResource,
-    /// Annotation holding the external name (ID) of the resource, e.g.
-    /// `zones.cloudflare.kube.nas1k.dev/external-name`. It is the source of truth:
-    /// setting it on a new resource imports an existing external resource.
-    pub external_name_annotation: &'static str,
-    /// Finalizer that keeps the managed resource until the external one is
-    /// deleted or orphaned, e.g. `zones.cloudflare.kube.nas1k.dev/finalizer`.
-    pub finalizer: &'static str,
+    /// API group; prefixes koof's annotations and finalizer, e.g.
+    /// `zones.cloudflare.kube.nas1k.dev/external-name`.
+    pub group: &'static str,
     pub identifiers: &'static [(&'static str, ValueExpr)],
     pub references: &'static [Reference],
     pub credentials: Option<Credentials>,
     pub observe: OperationDescriptor,
+    pub create: Option<CreateDescriptor>,
     pub delete: Option<OperationDescriptor>,
 }
 
@@ -74,12 +76,27 @@ impl ResourceDescriptor {
             .map(|(_, expression)| expression)
     }
 
-    /// The external name annotation of `resource` (as JSON), if set and not empty.
+    /// `<group>/<name>`, the key of one of koof's annotations.
+    #[must_use]
+    pub fn annotation(&self, name: &str) -> String {
+        format!("{}/{name}", self.group)
+    }
+
+    /// `<group>/finalizer`.
+    #[must_use]
+    pub fn finalizer(&self) -> String {
+        self.annotation("finalizer")
+    }
+
+    /// The external name (ID) of `resource` (as JSON) from the
+    /// `<group>/external-name` annotation, if set and not empty. The annotation is
+    /// the source of truth: setting it on a new resource imports an existing
+    /// external resource.
     #[must_use]
     pub fn external_name<'a>(&self, resource: &'a serde_json::Value) -> Option<&'a str> {
         resource
             .pointer("/metadata/annotations")
-            .and_then(|annotations| annotations.get(self.external_name_annotation))
+            .and_then(|annotations| annotations.get(self.annotation(EXTERNAL_NAME).as_str()))
             .and_then(serde_json::Value::as_str)
             .filter(|name| !name.is_empty())
     }
@@ -91,6 +108,9 @@ impl ResourceDescriptor {
             .find(|reference| reference.name == name)
     }
 }
+
+/// Annotation (under the resource's group) holding the external name.
+pub const EXTERNAL_NAME: &str = "external-name";
 
 /// How a string value (path parameter, identifier) is obtained.
 #[derive(Debug)]
@@ -155,4 +175,22 @@ pub struct OperationDescriptor {
     pub path_parameters: &'static [(&'static str, ValueExpr)],
     /// Dot path of the resource inside the response body; empty for the whole body.
     pub response_path: &'static str,
+}
+
+#[derive(Debug)]
+pub struct CreateDescriptor {
+    pub operation: OperationDescriptor,
+    pub request: RequestMapping,
+    /// Dot path of the new resource's external name in the response body, e.g.
+    /// `result.id`.
+    pub external_name: &'static str,
+}
+
+/// How a request body is built: the object at `from` (usually `spec.forProvider`)
+/// plus values written at dot paths. Fields the request type does not know are
+/// dropped when the JSON is deserialized into it.
+#[derive(Debug)]
+pub struct RequestMapping {
+    pub from: &'static str,
+    pub set: &'static [(&'static str, ValueExpr)],
 }

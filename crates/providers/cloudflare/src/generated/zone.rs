@@ -48,8 +48,7 @@ fn api_resource() -> kube::api::ApiResource {
 pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "Zone",
     api_resource,
-    external_name_annotation: "cloudflare.kube.nas1k.dev/external-name",
-    finalizer: "cloudflare.kube.nas1k.dev/finalizer",
+    group: "cloudflare.kube.nas1k.dev",
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     references: &[
         koof::resource::Reference {
@@ -69,6 +68,25 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         path_parameters: &[("zone_id", koof::resource::ValueExpr::ExternalName)],
         response_path: "result",
     },
+    create: Some(koof::resource::CreateDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[],
+            response_path: "",
+        },
+        request: koof::resource::RequestMapping {
+            from: "spec.forProvider",
+            set: &[
+                (
+                    "account.id",
+                    koof::resource::ValueExpr::RelatedIdentifier {
+                        via: &["account"],
+                        name: "external_id",
+                    },
+                ),
+            ],
+        },
+        external_name: "result.id",
+    }),
     delete: Some(koof::resource::OperationDescriptor {
         path_parameters: &[("zone_id", koof::resource::ValueExpr::ExternalName)],
         response_path: "",
@@ -77,6 +95,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
 impl koof::ManagedResource for Zone {
     type AtProvider = crate::generated::types::ZoneAtProvider;
     type Observe = crate::generated::operations::ZoneObserve;
+    type Create = crate::generated::operations::ZoneCreate;
     type Delete = crate::generated::operations::ZoneDelete;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR

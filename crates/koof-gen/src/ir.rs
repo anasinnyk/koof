@@ -121,6 +121,37 @@ pub struct OperationIr {
     /// Dot path of the resource inside the response body (e.g. `result`).
     #[serde(default)]
     pub response_path: Option<String>,
+    /// How the request body is built (create / update).
+    #[serde(default)]
+    pub request_mapping: Option<RequestMappingIr>,
+    /// Identifiers read from the response, e.g.
+    /// `external_id: response.body.result.id`.
+    #[serde(default)]
+    pub result_identifiers: BTreeMap<String, String>,
+}
+
+/// `x-kube-operation.request`: the object at `from` plus `set` values.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct RequestMappingIr {
+    #[serde(default = "RequestMappingIr::default_from")]
+    pub from: FieldPath,
+    #[serde(default)]
+    pub set: BTreeMap<String, ValueExpr>,
+}
+
+impl RequestMappingIr {
+    fn default_from() -> FieldPath {
+        FieldPath("spec.forProvider".to_owned())
+    }
+}
+
+impl Default for RequestMappingIr {
+    fn default() -> Self {
+        Self {
+            from: Self::default_from(),
+            set: BTreeMap::new(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

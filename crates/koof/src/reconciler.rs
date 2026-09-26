@@ -2,12 +2,13 @@
 
 use crate::{
     conditions::ConditionSpec,
+    create::{self, CreateState},
     error::{ReconcileError, ResolveValueError, Retry},
     finalizer,
     http::{HttpClient, extract},
     policy::{self, Action as PolicyAction, State},
     resolve::{Node, resolve_credentials, resolve_value},
-    resource::{ManagedResource, OperationDescriptor},
+    resource::{EXTERNAL_NAME, ManagedResource, OperationDescriptor},
     status::{record_failure, set_conditions, update_status},
 };
 use futures::StreamExt as _;
@@ -30,8 +31,8 @@ const RESYNC: Duration = Duration::from_mins(5);
 const MISSING: Duration = Duration::from_secs(30);
 /// Retry interval while waiting for a referenced resource or Secret.
 const WAITING: Duration = Duration::from_secs(15);
-/// Delay before confirming that a deleted external resource is gone.
-const CONFIRM_DELETION: Duration = Duration::from_secs(5);
+/// Delay before confirming the outcome of a create or delete.
+const CONFIRM: Duration = Duration::from_secs(5);
 /// First transient retry; doubles per consecutive failure up to [`RESYNC`].
 const BACKOFF_BASE: Duration = Duration::from_secs(5);
 
@@ -206,10 +207,15 @@ async fn reconcile_inner<R: ManagedResource>(
     context: &ControllerContext,
 ) -> Result<Action, ReconcileError> {
     let deleting = resource.meta().deletion_timestamp.is_some();
-    if !deleting {
+    let ensured;
+    let resource = if deleting {
+        resource
+    } else {
         // Before anything can be created externally, so deletion is never missed.
-        finalizer::ensure(&context.kube_client, resource).await?;
-    } else if policy::orphans_on_delete(resource.management()) {
+        ensured = finalizer::ensure(&context.kube_client, resource).await?;
+        &ensured
+    };
+    if deleting && policy::orphans_on_delete(resource.management()) {
         tracing::info!("external resource orphaned");
         publish(
             context,
@@ -259,7 +265,7 @@ async fn reconcile_inner<R: ManagedResource>(
             )
             .await;
             // Confirm on the next reconcile that it is gone, then release.
-            return Ok(Action::requeue(CONFIRM_DELETION));
+            return Ok(Action::requeue(CONFIRM));
         }
         PolicyAction::Finalize => {
             if observation.exists {
@@ -276,8 +282,14 @@ async fn reconcile_inner<R: ManagedResource>(
             finalizer::remove(&context.kube_client, resource).await?;
             return Ok(Action::await_change());
         }
-        // Executed from L3 (create) and L4 (update) on.
-        PolicyAction::Create | PolicyAction::Update => {
+        PolicyAction::Create if R::descriptor().create.is_some() => {
+            return create_external(context, resource).await;
+        }
+        PolicyAction::Create => {
+            tracing::debug!("external resource missing and the API has no create operation");
+        }
+        // Executed from L4 (update) on.
+        PolicyAction::Update => {
             tracing::info!(action = ?decision.action, "action planned but not implemented yet");
         }
     }
@@ -299,6 +311,49 @@ async fn reconcile_inner<R: ManagedResource>(
     } else {
         MISSING
     }))
+}
+
+async fn create_external<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+) -> Result<Action, ReconcileError> {
+    let state = CreateState::of(resource);
+    let descriptor = R::descriptor();
+    if state.is_incomplete() {
+        return Err(ReconcileError::CreateIncomplete(format!(
+            "a previous create may have succeeded ({} is set, no outcome recorded); if the \
+             external resource exists set {} to its ID, otherwise remove {}",
+            descriptor.annotation(create::CREATE_PENDING),
+            descriptor.annotation(EXTERNAL_NAME),
+            descriptor.annotation(create::CREATE_PENDING),
+        )));
+    }
+    if state.recently_succeeded(jiff::Timestamp::now()) {
+        tracing::debug!("created recently and not visible yet; waiting");
+        set_conditions(
+            &context.kube_client,
+            resource,
+            vec![
+                ConditionSpec::creating(),
+                ConditionSpec::reconcile_success(),
+            ],
+        )
+        .await?;
+        return Ok(Action::requeue(CONFIRM));
+    }
+
+    let external_name = create::create(context, resource).await?;
+    tracing::info!(%external_name, "external resource created");
+    publish(
+        context,
+        resource,
+        EventType::Normal,
+        "Created",
+        &format!("External resource created: {external_name}"),
+    )
+    .await;
+    // The annotation patch triggers the next reconcile, which observes it.
+    Ok(Action::requeue(CONFIRM))
 }
 
 /// Requeue delay after a failed reconcile, by [`Retry`] class.
@@ -369,8 +424,20 @@ pub async fn run<R: ManagedResource>(context: Arc<ControllerContext>) {
     let api = kube::Api::<R>::all(context.kube_client.clone());
     tracing::info!(resource = kind, "starting controller");
 
-    // Reconcile on spec (generation), annotation (external name), finalizer and
-    // deletion changes only — not on the controller's own status updates.
+    // Reconcile on spec (generation), external name, finalizer and deletion changes
+    // only — not on the controller's own status updates or create bookkeeping
+    // annotations (those would retrigger a failing create immediately instead of
+    // honouring the error policy's backoff).
+    let external_name_key = R::descriptor().annotation(EXTERNAL_NAME);
+    let external_name = move |resource: &R| {
+        kube::ResourceExt::annotations(resource)
+            .get(&external_name_key)
+            .map(|name| {
+                let mut hasher = std::hash::DefaultHasher::new();
+                std::hash::Hash::hash(name, &mut hasher);
+                std::hash::Hasher::finish(&hasher)
+            })
+    };
     let deleting = |resource: &R| resource.meta().deletion_timestamp.as_ref().map(|_| 1_u64);
     let (reader, writer) = reflector::store();
     let stream = watcher(api, watcher::Config::default())
@@ -379,7 +446,7 @@ pub async fn run<R: ManagedResource>(context: Arc<ControllerContext>) {
         .applied_objects()
         .predicate_filter(
             predicates::generation
-                .combine(predicates::annotations)
+                .combine(external_name)
                 .combine(predicates::finalizers)
                 .combine(deleting),
             PredicateConfig::default(),

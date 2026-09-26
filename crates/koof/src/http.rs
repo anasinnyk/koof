@@ -129,6 +129,30 @@ impl HttpClient {
         .await
     }
 
+    /// Like [`send`](Self::send) but returns the response body as raw JSON instead
+    /// of `O::Response`, so a body that does not match the generated type cannot
+    /// lose data (used for create, whose response carries the new ID).
+    ///
+    /// # Errors
+    ///
+    /// See [`send`](Self::send).
+    pub async fn send_json<O: Operation>(
+        &self,
+        auth: &Auth,
+        parameters: &[(&str, &str)],
+        body: Option<&O::Request>,
+    ) -> Result<Option<serde_json::Value>, HttpError> {
+        struct Json<O>(std::marker::PhantomData<O>);
+        impl<O: Operation> Operation for Json<O> {
+            const NAME: &'static str = O::NAME;
+            const METHOD: reqwest::Method = O::METHOD;
+            const PATH: &'static str = O::PATH;
+            type Request = O::Request;
+            type Response = serde_json::Value;
+        }
+        self.send::<Json<O>>(auth, parameters, body).await
+    }
+
     /// Like [`send`](Self::send) but ignores the response body: `Ok(true)` on
     /// success, `Ok(false)` on `404`. For operations whose body is irrelevant
     /// (delete), so an unexpected body shape cannot fail the call.

@@ -71,6 +71,13 @@ actions:
       x-kube-operation:
         resource: zone
         lifecycle: create
+        request:
+          from: spec.forProvider
+          set:
+            account.id:
+              type: related_identifier
+              via: [account]
+              name: external_id
         result:
           identifiers:
             external_id: response.body.result.id

@@ -70,6 +70,15 @@ pub enum ReconcileError {
 
     #[error(transparent)]
     Policy(#[from] crate::policy::PolicyError),
+
+    #[error("{0}")]
+    Unsupported(String),
+
+    #[error("{0}")]
+    InvalidRequest(String),
+
+    #[error("{0}")]
+    CreateIncomplete(String),
 }
 
 impl ReconcileError {
@@ -80,7 +89,11 @@ impl ReconcileError {
             Self::Kubernetes(error) => kubernetes_retry(error),
             Self::ResolveValue(error) => error.retry(),
             Self::Credentials(error) => error.retry(),
-            Self::Serialization(_) | Self::Policy(_) => Retry::Permanent,
+            Self::Serialization(_)
+            | Self::Policy(_)
+            | Self::Unsupported(_)
+            | Self::InvalidRequest(_)
+            | Self::CreateIncomplete(_) => Retry::Permanent,
         }
     }
 }

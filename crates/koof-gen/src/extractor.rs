@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 
 use crate::ir::{
     ApiKeyLocationIr, CredentialsIr, FieldSelectionIr, HttpMethod, LifecycleIr, OperationId,
-    OperationIr, ProviderIr, ReferenceIr, ResourceIr, ResourceName, SchemaName, SecuritySchemeIr,
-    SecuritySchemeName, ValueExpr,
+    OperationIr, ProviderIr, ReferenceIr, RequestMappingIr, ResourceIr, ResourceName, SchemaName,
+    SecuritySchemeIr, SecuritySchemeName, ValueExpr,
 };
 use crate::loader::LoaderError;
 use openapiv3::{
@@ -35,11 +35,21 @@ struct OperationExtension {
     path_parameters: BTreeMap<String, ValueExpr>,
     #[serde(default)]
     response: Option<ResponseExtension>,
+    #[serde(default)]
+    request: Option<RequestMappingIr>,
+    #[serde(default)]
+    result: Option<ResultExtension>,
 }
 
 #[derive(Debug, Deserialize)]
 struct ResponseExtension {
     path: String,
+}
+
+#[derive(Debug, Default, Deserialize)]
+struct ResultExtension {
+    #[serde(default)]
+    identifiers: BTreeMap<String, String>,
 }
 
 #[derive(Debug, Clone, Copy, Deserialize)]
@@ -132,6 +142,8 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, LoaderError> {
                 request: request_schema(operation),
                 response: response_schema(operation),
                 response_path: extension.response.map(|response| response.path),
+                request_mapping: extension.request,
+                result_identifiers: extension.result.unwrap_or_default().identifiers,
             },
         );
     }

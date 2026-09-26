@@ -15,10 +15,11 @@ use crate::{
 pub fn has_finalizer<R: ManagedResource>(resource: &R) -> bool {
     kube::ResourceExt::finalizers(resource)
         .iter()
-        .any(|finalizer| finalizer == R::descriptor().finalizer)
+        .any(|finalizer| *finalizer == R::descriptor().finalizer())
 }
 
-/// Adds the finalizer unless it is already there.
+/// Adds the finalizer unless it is already there; returns the up-to-date object
+/// (use it for further patches, its `resourceVersion` changed).
 ///
 /// # Errors
 ///
@@ -26,12 +27,12 @@ pub fn has_finalizer<R: ManagedResource>(resource: &R) -> bool {
 pub async fn ensure<R: ManagedResource>(
     client: &kube::Client,
     resource: &R,
-) -> Result<(), ReconcileError> {
+) -> Result<R, ReconcileError> {
     if has_finalizer(resource) {
-        return Ok(());
+        return Ok(resource.clone());
     }
     let mut finalizers = kube::ResourceExt::finalizers(resource).to_vec();
-    finalizers.push(R::descriptor().finalizer.to_owned());
+    finalizers.push(R::descriptor().finalizer());
     patch(client, resource, &finalizers).await
 }
 
@@ -47,19 +48,21 @@ pub async fn remove<R: ManagedResource>(
     if !has_finalizer(resource) {
         return Ok(());
     }
+    let own = R::descriptor().finalizer();
     let finalizers: Vec<String> = kube::ResourceExt::finalizers(resource)
         .iter()
-        .filter(|finalizer| *finalizer != R::descriptor().finalizer)
+        .filter(|finalizer| **finalizer != own)
         .cloned()
         .collect();
-    patch(client, resource, &finalizers).await
+    patch(client, resource, &finalizers).await?;
+    Ok(())
 }
 
 async fn patch<R: ManagedResource>(
     client: &kube::Client,
     resource: &R,
     finalizers: &[String],
-) -> Result<(), ReconcileError> {
+) -> Result<R, ReconcileError> {
     let namespace = kube::ResourceExt::namespace(resource).ok_or_else(|| {
         ResolveValueError::Missing(format!("{} has no namespace", R::descriptor().kind))
     })?;
@@ -69,12 +72,11 @@ async fn patch<R: ManagedResource>(
             "resourceVersion": kube::ResourceExt::resource_version(resource),
         }
     });
-    kube::Api::<R>::namespaced(client.clone(), &namespace)
+    Ok(kube::Api::<R>::namespaced(client.clone(), &namespace)
         .patch(
             &kube::ResourceExt::name_any(resource),
             &kube::api::PatchParams::default(),
             &kube::api::Patch::Merge(&patch),
         )
-        .await?;
-    Ok(())
+        .await?)
 }
