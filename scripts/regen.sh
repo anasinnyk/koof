@@ -4,16 +4,17 @@
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
-output="${1:-$root/crates/providers/cloudflare}"
+provider="$root/crates/providers/cloudflare"
+output="${1:-$provider}"
 
 cargo run --quiet --manifest-path "$root/Cargo.toml" -p koof-gen -- \
-  --openapi "$root/openapi/cloudflare.yaml" \
-  --overlay "$root/openapi/cloudflare.account.overlay.yaml" \
-  --overlay "$root/openapi/cloudflare.zone.overlay.yaml" \
-  --overlay "$root/openapi/cloudflare.dns-record.overlay.yaml" \
-  --overlay "$root/openapi/cloudflare.ruleset.overlay.yaml" \
-  --overlay "$root/openapi/cloudflare.pages-project.overlay.yaml" \
-  --overlay "$root/openapi/cloudflare.typify.overlay.yaml" \
+  --openapi "$provider/openapi/cloudflare.yaml" \
+  --overlay "$provider/openapi/cloudflare.account.overlay.yaml" \
+  --overlay "$provider/openapi/cloudflare.zone.overlay.yaml" \
+  --overlay "$provider/openapi/cloudflare.dns-record.overlay.yaml" \
+  --overlay "$provider/openapi/cloudflare.ruleset.overlay.yaml" \
+  --overlay "$provider/openapi/cloudflare.pages-project.overlay.yaml" \
+  --overlay "$provider/openapi/cloudflare.typify.overlay.yaml" \
   --output "$output"
 
 # Generated files are formatted by prettyplease inside koof-gen; rustfmt is not
