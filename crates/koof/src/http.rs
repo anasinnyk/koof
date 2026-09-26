@@ -75,6 +75,7 @@ pub enum HttpError {
 pub struct HttpClient {
     http: reqwest::Client,
     base_url: String,
+    metrics: Option<std::sync::Arc<crate::metrics::Metrics>>,
 }
 
 impl HttpClient {
@@ -82,7 +83,15 @@ impl HttpClient {
         Self {
             http,
             base_url: base_url.into(),
+            metrics: None,
         }
+    }
+
+    /// Records every request in `metrics`.
+    #[must_use]
+    pub fn with_metrics(mut self, metrics: std::sync::Arc<crate::metrics::Metrics>) -> Self {
+        self.metrics = Some(metrics);
+        self
     }
 
     /// Sends `O` with the given path parameters and optional body.
@@ -113,7 +122,18 @@ impl HttpClient {
             let started = std::time::Instant::now();
             let result = self.execute::<O>(auth, parameters, body).await;
             let span = tracing::Span::current();
-            span.record("duration_ms", started.elapsed().as_millis());
+            let elapsed = started.elapsed();
+            span.record("duration_ms", elapsed.as_millis());
+            if let Some(metrics) = &self.metrics {
+                let class = match &result {
+                    Ok(Some(_)) => "2xx",
+                    Ok(None) => "not_found",
+                    Err(HttpError::Status { status, .. }) if status.is_server_error() => "5xx",
+                    Err(HttpError::Status { .. }) => "4xx",
+                    Err(_) => "error",
+                };
+                metrics.request(O::NAME, class, elapsed);
+            }
             match &result {
                 Ok(Some(_)) => span.record("status", "ok"),
                 Ok(None) => span.record("status", "not_found"),
