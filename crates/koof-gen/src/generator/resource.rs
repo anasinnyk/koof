@@ -136,6 +136,11 @@ fn generate_descriptor(
 ) -> Result<TokenStream, GeneratorError> {
     let kind = &resource.kind;
     let resource_ident = kind_ident(kind)?;
+    let (group, _) = resource
+        .api_version
+        .split_once('/')
+        .ok_or_else(|| GeneratorError::InvalidApiVersion(resource.api_version.clone()))?;
+    let external_name_annotation = format!("{group}/external-name");
 
     let identifiers = resource.identifiers.iter().map(|(identifier, expression)| {
         let expression = value_expr(expression);
@@ -170,7 +175,51 @@ fn generate_descriptor(
         })
         .collect::<Result<Vec<_>, GeneratorError>>()?;
 
-    let credentials = match &resource.credentials {
+    let credentials = credentials_tokens(ir, resource)?;
+
+    let observe = ir
+        .operations
+        .get(&resource.lifecycle.observe)
+        .ok_or_else(|| {
+            GeneratorError::InvalidIr(format!(
+                "unknown observe operation {}",
+                resource.lifecycle.observe.0
+            ))
+        })?;
+    let path_parameters = observe
+        .path_parameters
+        .iter()
+        .map(|(parameter, expression)| {
+            let expression = value_expr(expression);
+            quote!((#parameter, #expression))
+        });
+    let response_path = observe.response_path.clone().unwrap_or_default();
+
+    Ok(quote! {
+        fn api_resource() -> kube::api::ApiResource {
+            kube::api::ApiResource::erase::<#resource_ident>(&())
+        }
+
+        pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
+            kind: #kind,
+            api_resource,
+            external_name_annotation: #external_name_annotation,
+            identifiers: &[#(#identifiers),*],
+            references: &[#(#references),*],
+            credentials: #credentials,
+            observe: koof::resource::OperationDescriptor {
+                path_parameters: &[#(#path_parameters),*],
+                response_path: #response_path,
+            },
+        };
+    })
+}
+
+fn credentials_tokens(
+    ir: &ProviderIr,
+    resource: &ResourceIr,
+) -> Result<TokenStream, GeneratorError> {
+    let tokens = match &resource.credentials {
         None => quote!(None),
         Some(credentials) => {
             let source = match &credentials.source {
@@ -201,41 +250,7 @@ fn generate_descriptor(
         }
     };
 
-    let observe = ir
-        .operations
-        .get(&resource.lifecycle.observe)
-        .ok_or_else(|| {
-            GeneratorError::InvalidIr(format!(
-                "unknown observe operation {}",
-                resource.lifecycle.observe.0
-            ))
-        })?;
-    let path_parameters = observe
-        .path_parameters
-        .iter()
-        .map(|(parameter, expression)| {
-            let expression = value_expr(expression);
-            quote!((#parameter, #expression))
-        });
-    let response_path = observe.response_path.clone().unwrap_or_default();
-
-    Ok(quote! {
-        fn api_resource() -> kube::api::ApiResource {
-            kube::api::ApiResource::erase::<#resource_ident>(&())
-        }
-
-        pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
-            kind: #kind,
-            api_resource,
-            identifiers: &[#(#identifiers),*],
-            references: &[#(#references),*],
-            credentials: #credentials,
-            observe: koof::resource::OperationDescriptor {
-                path_parameters: &[#(#path_parameters),*],
-                response_path: #response_path,
-            },
-        };
-    })
+    Ok(tokens)
 }
 
 fn generate_managed_resource(
@@ -283,6 +298,7 @@ fn value_expr(expression: &ValueExpr) -> TokenStream {
             quote!(koof::resource::ValueExpr::Coalesce(&[#(#values),*]))
         }
         ValueExpr::Literal { value } => quote!(koof::resource::ValueExpr::Literal(#value)),
+        ValueExpr::ExternalName => quote!(koof::resource::ValueExpr::ExternalName),
     }
 }
 
@@ -353,6 +369,8 @@ pub fn generate_mod_file(ir: &ProviderIr) -> Result<GeneratedFile, GeneratorErro
         .map(|name| field_ident(&name.0))
         .collect::<Result<Vec<_>, _>>()?;
 
+    let provider = &ir.provider;
+    let base_url = &ir.base_url;
     let content = quote! {
         pub mod operations;
         pub mod types;
@@ -360,6 +378,11 @@ pub fn generate_mod_file(ir: &ProviderIr) -> Result<GeneratedFile, GeneratorErro
         #(
             pub mod #resource_modules;
         )*
+
+        pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo {
+            name: #provider,
+            base_url: #base_url,
+        };
     };
 
     Ok(GeneratedFile {

@@ -20,6 +20,7 @@ pub fn generate_operations(
         .iter()
         .map(|(id, operation)| {
             let ident = operation_ident(id)?;
+            let name = &id.0;
             let path = &operation.path;
             let method = match operation.method {
                 HttpMethod::GET => quote!(GET),
@@ -38,6 +39,7 @@ pub fn generate_operations(
                 pub struct #ident;
 
                 impl koof::Operation for #ident {
+                    const NAME: &'static str = #name;
                     const METHOD: reqwest::Method = reqwest::Method::#method;
                     const PATH: &'static str = #path;
                     type Request = #request;

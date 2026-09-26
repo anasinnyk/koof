@@ -14,8 +14,7 @@ actions:
 
         identifiers:
           external_id:
-            type: field
-            path: status.atProvider.id
+            type: external_name
 
         credentials:
           security_scheme: api_token
@@ -45,8 +44,7 @@ actions:
           path: result
         path_parameters:
           account_id:
-            type: field
-            path: status.atProvider.id
+            type: external_name
         result:
           identifiers:
             external_id: response.body.result.id
@@ -67,8 +65,7 @@ actions:
         lifecycle: update
         path_parameters:
           account_id:
-            type: field
-            path: status.atProvider.id
+            type: external_name
         result:
           identifiers:
             external_id: response.body.result.id
@@ -80,8 +77,7 @@ actions:
         lifecycle: delete
         path_parameters:
           account_id:
-            type: field
-            path: status.atProvider.id
+            type: external_name
         result:
           identifiers:
             external_id: response.body.result.id

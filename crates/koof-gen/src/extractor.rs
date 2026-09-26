@@ -156,9 +156,16 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, LoaderError> {
         .unwrap_or(&api.info.title)
         .to_owned();
 
+    let base_url = api
+        .servers
+        .first()
+        .map(|server| server.url.clone())
+        .unwrap_or_default();
+
     Ok(ProviderIr {
         version: 1,
         provider,
+        base_url,
         resources,
         operations,
         security_schemes: extract_security_schemes(&api),

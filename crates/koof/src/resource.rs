@@ -44,6 +44,10 @@ pub struct ResourceDescriptor {
     /// Used to read this resource as a `DynamicObject` when another resource
     /// references it.
     pub api_resource: fn() -> kube::api::ApiResource,
+    /// Annotation holding the external name (ID) of the resource, e.g.
+    /// `zones.cloudflare.kube.nas1k.dev/external-name`. It is the source of truth:
+    /// setting it on a new resource imports an existing external resource.
+    pub external_name_annotation: &'static str,
     pub identifiers: &'static [(&'static str, ValueExpr)],
     pub references: &'static [Reference],
     pub credentials: Option<Credentials>,
@@ -59,6 +63,16 @@ impl ResourceDescriptor {
             .map(|(_, expression)| expression)
     }
 
+    /// The external name annotation of `resource` (as JSON), if set and not empty.
+    #[must_use]
+    pub fn external_name<'a>(&self, resource: &'a serde_json::Value) -> Option<&'a str> {
+        resource
+            .pointer("/metadata/annotations")
+            .and_then(|annotations| annotations.get(self.external_name_annotation))
+            .and_then(serde_json::Value::as_str)
+            .filter(|name| !name.is_empty())
+    }
+
     #[must_use]
     pub fn reference(&self, name: &str) -> Option<&Reference> {
         self.references
@@ -72,6 +86,8 @@ impl ResourceDescriptor {
 pub enum ValueExpr {
     /// Dot path into the resource as JSON, e.g. `status.atProvider.id`.
     Field(&'static str),
+    /// The resource's external name annotation.
+    ExternalName,
     /// An identifier of a resource reached through the named references.
     RelatedIdentifier {
         via: &'static [&'static str],

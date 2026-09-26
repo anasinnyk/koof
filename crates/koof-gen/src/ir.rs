@@ -5,6 +5,9 @@ use std::collections::BTreeMap;
 pub struct ProviderIr {
     pub version: u32,
     pub provider: String,
+    /// First `servers[].url` of the document.
+    #[serde(default)]
+    pub base_url: String,
     pub resources: BTreeMap<ResourceName, ResourceIr>,
     pub operations: BTreeMap<OperationId, OperationIr>,
     pub security_schemes: BTreeMap<SecuritySchemeName, SecuritySchemeIr>,
@@ -123,10 +126,21 @@ pub struct OperationIr {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ValueExpr {
-    Field { path: FieldPath },
-    RelatedIdentifier { via: Vec<String>, name: String },
-    Coalesce { values: Vec<ValueExpr> },
-    Literal { value: String },
+    Field {
+        path: FieldPath,
+    },
+    /// The resource's external name annotation (`<group>/external-name`).
+    ExternalName,
+    RelatedIdentifier {
+        via: Vec<String>,
+        name: String,
+    },
+    Coalesce {
+        values: Vec<ValueExpr>,
+    },
+    Literal {
+        value: String,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

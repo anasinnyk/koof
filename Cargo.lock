@@ -330,7 +330,6 @@ dependencies = [
  "kube",
  "regress 0.10.5",
  "reqwest",
- "rustls",
  "schemars 1.2.2",
  "serde",
  "serde_json",
@@ -338,7 +337,6 @@ dependencies = [
  "thiserror",
  "tokio",
  "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -1368,11 +1366,13 @@ dependencies = [
  "k8s-openapi",
  "kube",
  "reqwest",
+ "rustls",
  "schemars 1.2.2",
  "serde",
  "serde_json",
  "thiserror",
  "tracing",
+ "tracing-subscriber",
  "urlencoding",
 ]
 
