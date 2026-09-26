@@ -78,4 +78,7 @@ impl koof::ManagedResource for Zone {
     fn status(&self) -> Option<&koof::status::ManagedStatus<Self::AtProvider>> {
         self.status.as_ref()
     }
+    fn management(&self) -> &koof::managed::ManagedResourceSpec {
+        &self.spec.management
+    }
 }

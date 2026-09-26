@@ -3,6 +3,7 @@ pub mod conditions;
 pub mod error;
 pub mod http;
 pub mod managed;
+pub mod policy;
 pub mod reconciler;
 pub mod reference;
 pub mod resolve;
