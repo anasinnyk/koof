@@ -1,0 +1,34 @@
+# koof-gen inputs for this provider: the OpenAPI document, then overlays in the
+# order they are applied.
+cloudflare.yaml
+cloudflare.provider.overlay.yaml
+cloudflare.account.overlay.yaml
+cloudflare.zone.overlay.yaml
+cloudflare.dns-record.overlay.yaml
+cloudflare.ruleset.overlay.yaml
+cloudflare.pages-project.overlay.yaml
+cloudflare.kv-namespace.overlay.yaml
+cloudflare.r2-bucket.overlay.yaml
+cloudflare.d1-database.overlay.yaml
+cloudflare.queue.overlay.yaml
+cloudflare.vectorize-index.overlay.yaml
+cloudflare.hyperdrive.overlay.yaml
+cloudflare.worker-route.overlay.yaml
+cloudflare.lb-monitor.overlay.yaml
+cloudflare.lb-pool.overlay.yaml
+cloudflare.load-balancer.overlay.yaml
+cloudflare.access-application.overlay.yaml
+cloudflare.tunnel.overlay.yaml
+cloudflare.gateway-list.overlay.yaml
+cloudflare.gateway-rule.overlay.yaml
+cloudflare.page-rule.overlay.yaml
+cloudflare.custom-hostname.overlay.yaml
+cloudflare.email-routing-rule.overlay.yaml
+cloudflare.healthcheck.overlay.yaml
+cloudflare.waiting-room.overlay.yaml
+cloudflare.spectrum-application.overlay.yaml
+cloudflare.logpush-job.overlay.yaml
+cloudflare.ip-list.overlay.yaml
+cloudflare.notification-policy.overlay.yaml
+cloudflare.turnstile-widget.overlay.yaml
+cloudflare.typify.overlay.yaml
