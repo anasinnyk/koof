@@ -1,11 +1,5 @@
 #[derive(Debug, thiserror::Error)]
 pub enum CredentialError {
-    #[error("invalid credential header name: {0}")]
-    InvalidHeaderName(#[from] reqwest::header::InvalidHeaderName),
-
-    #[error("invalid credential header value: {0}")]
-    InvalidHeaderValue(#[from] reqwest::header::InvalidHeaderValue),
-
     #[error("Kubernetes API request failed: {0}")]
     Kubernetes(#[from] kube::Error),
 
@@ -37,15 +31,6 @@ pub enum ResolveValueError {
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum ClientError {
-    #[error("HTTP request failed: {0}")]
-    Http(#[from] reqwest::Error),
-
-    #[error("failed to decode response: {0}")]
-    Decode(#[from] serde_json::Error),
-}
-
-#[derive(Debug, thiserror::Error)]
 pub enum ReconcileError {
     #[error(transparent)]
     Credentials(#[from] CredentialError),
@@ -54,7 +39,7 @@ pub enum ReconcileError {
     ResolveValue(#[from] ResolveValueError),
 
     #[error(transparent)]
-    Client(#[from] ClientError),
+    Http(#[from] crate::http::HttpError),
 
     #[error("failed to serialize provider response: {0}")]
     Serialization(#[from] serde_json::Error),

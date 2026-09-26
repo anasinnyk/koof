@@ -13,6 +13,8 @@ cargo run --quiet --manifest-path "$root/Cargo.toml" -p koof-gen -- \
   --overlay "$root/openapi/cloudflare.dns-record.overlay.yaml" \
   --overlay "$root/openapi/cloudflare.ruleset.overlay.yaml" \
   --overlay "$root/openapi/cloudflare.pages-project.overlay.yaml" \
+  --overlay "$root/openapi/cloudflare.typify.overlay.yaml" \
   --output "$output"
 
-rustfmt --edition 2024 "$output"/src/generated/*.rs
+# Generated files are formatted by prettyplease inside koof-gen; rustfmt is not
+# idempotent on typify's block doc comments, so it is intentionally not run here.

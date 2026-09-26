@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
-use cloudflare_provider::generated::client::ProviderClient;
-use koof::reconciler::ControllerContext;
+use koof::{http::HttpClient, reconciler::ControllerContext};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -17,7 +16,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let kube_client = kube::Client::try_default().await?;
 
-    let provider_client = ProviderClient::new(reqwest::Client::new(), base_url);
+    let provider_client = HttpClient::new(reqwest::Client::new(), base_url);
 
     let context = Arc::new(ControllerContext::new(kube_client, provider_client));
 

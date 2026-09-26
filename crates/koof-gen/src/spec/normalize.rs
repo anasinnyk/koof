@@ -1,4 +1,4 @@
-use super::DATA_KEYWORDS;
+use super::schema_children_mut;
 use serde_json::{Map, Value};
 
 /// Translates `OpenAPI` 3.0 `nullable: true` into JSON Schema:
@@ -13,10 +13,8 @@ pub fn normalize_nullable(value: &mut Value) {
 }
 
 fn normalize_object(map: &mut Map<String, Value>) {
-    for (key, child) in map.iter_mut() {
-        if !DATA_KEYWORDS.contains(&key.as_str()) {
-            normalize_nullable(child);
-        }
+    for child in schema_children_mut(map) {
+        normalize_nullable(child);
     }
 
     let nullable = match map.get("nullable") {

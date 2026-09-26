@@ -1,4 +1,3 @@
-use crate::ir::ProviderIr;
 use anyhow::{Context, Result};
 use enumset::EnumSet;
 use roas_overlay::{
@@ -11,8 +10,6 @@ use std::{
     path::{Path, PathBuf},
 };
 use thiserror::Error;
-
-use crate::extractor::extract;
 
 #[derive(Debug, Error)]
 pub enum LoaderError {
@@ -38,17 +35,6 @@ pub enum LoaderError {
 
     #[error("invalid OpenAPI: {0}")]
     InvalidOpenApi(String),
-}
-
-/// Reads an `OpenAPI` document, applies overlays in the given order and extracts a
-/// [`ProviderIr`].
-///
-/// # Errors
-///
-/// Returns an error when a file cannot be read or parsed, an overlay action matches
-/// nothing, or the resulting document cannot be converted to [`ProviderIr`].
-pub fn load(openapi_path: &Path, overlay_paths: &[PathBuf]) -> Result<ProviderIr> {
-    Ok(extract(&load_document(openapi_path, overlay_paths)?)?)
 }
 
 /// Reads an `OpenAPI` document and applies overlays in the given order.

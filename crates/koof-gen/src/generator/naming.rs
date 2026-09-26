@@ -1,11 +1,7 @@
-use heck::{ToSnakeCase, ToUpperCamelCase};
+use heck::{ToPascalCase, ToSnakeCase, ToUpperCamelCase};
 use proc_macro2::Ident;
 
-use crate::generator::errors::GeneratorError;
-
-pub fn type_ident(value: &str) -> Result<Ident, GeneratorError> {
-    parse_ident(&value.to_upper_camel_case())
-}
+use crate::{generator::errors::GeneratorError, ir::OperationId};
 
 pub fn kind_ident(value: &str) -> Result<Ident, GeneratorError> {
     parse_ident(value)
@@ -31,4 +27,23 @@ fn parse_ident(value: &str) -> Result<Ident, GeneratorError> {
     };
 
     syn::parse_str(&value).map_err(|_| GeneratorError::InvalidIdentifier(value))
+}
+
+/// The Rust type name typify gives a `components.schemas` entry (mirrors typify's
+/// `sanitize(name, Case::Pascal)`).
+pub fn typify_type_name(schema_name: &str) -> String {
+    let cleaned = schema_name.replace('\'', "").replace(
+        |character: char| !(character.is_alphanumeric() || character == '_'),
+        "-",
+    );
+    let name = cleaned.to_pascal_case();
+    match name.chars().next() {
+        Some(first) if first.is_alphabetic() || first == '_' => name,
+        _ => format!("X{name}"),
+    }
+}
+
+/// `dns_record.observe` → `DnsRecordObserve`.
+pub fn operation_ident(id: &OperationId) -> Result<Ident, GeneratorError> {
+    parse_ident(&id.0.to_upper_camel_case())
 }

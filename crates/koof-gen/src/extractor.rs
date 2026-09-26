@@ -1,14 +1,16 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 
 use crate::ir::{
-    AdditionalPropertiesIr, ApiKeyLocationIr, CredentialsIr, FieldIr, FieldSelectionIr, HttpMethod,
-    LifecycleIr, OperationId, OperationIr, ProviderIr, ReferenceIr, ResourceIr, ResourceName,
-    SchemaIr, SchemaName, SecuritySchemeIr, SecuritySchemeName, ValueExpr,
+    ApiKeyLocationIr, CredentialsIr, FieldSelectionIr, HttpMethod, LifecycleIr, OperationId,
+    OperationIr, ProviderIr, ReferenceIr, ResourceIr, ResourceName, SchemaName, SecuritySchemeIr,
+    SecuritySchemeName, ValueExpr,
+};
+use crate::loader::LoaderError;
+use openapiv3::{
+    APIKeyLocation, Content, OpenAPI, Operation, ReferenceOr, SecurityScheme, StatusCode,
 };
 use serde::Deserialize;
-use serde_json::{Map, Value};
-
-use crate::loader::LoaderError;
+use serde_json::Value;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -16,7 +18,8 @@ struct ResourceExtension {
     name: ResourceName,
     api_version: String,
     kind: String,
-    fields: Option<FieldSelectionIr>,
+    #[serde(default)]
+    fields: FieldSelectionIr,
     #[serde(default)]
     identifiers: BTreeMap<String, ValueExpr>,
     #[serde(default)]
@@ -30,6 +33,13 @@ struct OperationExtension {
     lifecycle: LifecycleAction,
     #[serde(default)]
     path_parameters: BTreeMap<String, ValueExpr>,
+    #[serde(default)]
+    response: Option<ResponseExtension>,
+}
+
+#[derive(Debug, Deserialize)]
+struct ResponseExtension {
+    path: String,
 }
 
 #[derive(Debug, Clone, Copy, Deserialize)]
@@ -41,6 +51,17 @@ enum LifecycleAction {
     Delete,
 }
 
+impl LifecycleAction {
+    fn name(self) -> &'static str {
+        match self {
+            Self::Observe => "observe",
+            Self::Create => "create",
+            Self::Update => "update",
+            Self::Delete => "delete",
+        }
+    }
+}
+
 #[derive(Debug, Default)]
 struct LifecycleDraft {
     observe: Option<OperationId>,
@@ -49,83 +70,114 @@ struct LifecycleDraft {
     delete: Option<OperationId>,
 }
 
-struct ResourceDraft {
-    extension: ResourceExtension,
-    schema: SchemaName,
-    lifecycle: LifecycleDraft,
-}
-
-/// Builds a [`ProviderIr`] from an `OpenAPI` document with overlays already applied.
+/// Builds a [`ProviderIr`] from a document prepared by [`crate::spec::prepare`]
+/// (pruned, with operation bodies as component references).
 ///
 /// # Errors
 ///
-/// Returns [`LoaderError`] when an `x-kube-*` extension is malformed, a resource has no
-/// observe operation or duplicate lifecycle operations, or the referenced schemas and
-/// security schemes are invalid.
-pub fn extract(openapi: &Value) -> Result<ProviderIr, LoaderError> {
-    let mut resources = extract_resources(openapi)?;
-    let operations = extract_operations(openapi, &mut resources)?;
+/// Returns [`LoaderError`] when the document is not valid `OpenAPI` 3.0, an
+/// `x-kube-*` extension is malformed, a resource has no observe operation or
+/// duplicate lifecycle operations, or a security scheme is unsupported.
+pub fn extract(prepared: &Value) -> Result<ProviderIr, LoaderError> {
+    let api: OpenAPI = serde_json::from_value(prepared.clone())
+        .map_err(|error| LoaderError::InvalidOpenApi(error.to_string()))?;
 
-    let resources = resources
-        .into_iter()
-        .map(|(name, draft)| {
-            let observe = draft
-                .lifecycle
+    let mut resources = extract_resources(&api)?;
+    let mut lifecycles: BTreeMap<ResourceName, LifecycleDraft> = BTreeMap::new();
+    let mut operations = BTreeMap::new();
+
+    for (path, method, operation) in api.operations() {
+        let Some(extension) = operation.extensions.get("x-kube-operation") else {
+            continue;
+        };
+        let location = format!("paths.{path}.{method}");
+        let extension: OperationExtension =
+            serde_json::from_value(extension.clone()).map_err(|error| {
+                ir_error(format!("invalid x-kube-operation at {location}: {error}"))
+            })?;
+
+        if !resources.contains_key(&extension.resource) {
+            return Err(ir_error(format!(
+                "{location} references unknown resource {}",
+                extension.resource.0
+            )));
+        }
+
+        let id = OperationId(format!(
+            "{}.{}",
+            extension.resource.0,
+            extension.lifecycle.name()
+        ));
+        let lifecycle = lifecycles.entry(extension.resource.clone()).or_default();
+        let slot = match extension.lifecycle {
+            LifecycleAction::Observe => &mut lifecycle.observe,
+            LifecycleAction::Create => &mut lifecycle.create,
+            LifecycleAction::Update => &mut lifecycle.update,
+            LifecycleAction::Delete => &mut lifecycle.delete,
+        };
+        if slot.replace(id.clone()).is_some() {
+            return Err(ir_error(format!(
+                "resource {} has duplicate {} operation",
+                extension.resource.0,
+                extension.lifecycle.name()
+            )));
+        }
+
+        operations.insert(
+            id,
+            OperationIr {
+                method: parse_method(method)?,
+                path: path.to_owned(),
+                path_parameters: extension.path_parameters,
+                request: request_schema(operation),
+                response: response_schema(operation),
+                response_path: extension.response.map(|response| response.path),
+            },
+        );
+    }
+
+    for (name, resource) in &mut resources {
+        let draft = lifecycles.remove(name).unwrap_or_default();
+        resource.lifecycle = LifecycleIr {
+            observe: draft
                 .observe
-                .ok_or_else(|| ir_error(format!("resource {} has no observe operation", name.0)))?;
+                .ok_or_else(|| ir_error(format!("resource {} has no observe operation", name.0)))?,
+            create: draft.create,
+            update: draft.update,
+            delete: draft.delete,
+        };
+    }
 
-            Ok((
-                name,
-                ResourceIr {
-                    api_version: draft.extension.api_version,
-                    kind: draft.extension.kind,
-                    spec_schema: draft.schema,
-                    identifiers: draft.extension.identifiers,
-                    references: draft.extension.references,
-                    credentials: draft.extension.credentials,
-                    field_selection: draft.extension.fields.unwrap_or_default(),
-                    lifecycle: LifecycleIr {
-                        observe,
-                        create: draft.lifecycle.create,
-                        update: draft.lifecycle.update,
-                        delete: draft.lifecycle.delete,
-                    },
-                },
-            ))
-        })
-        .collect::<Result<BTreeMap<_, _>, LoaderError>>()?;
-
-    let provider = openapi
-        .pointer("/x-kube-provider/name")
-        .or_else(|| openapi.pointer("/info/title"))
+    let provider = api
+        .extensions
+        .get("x-kube-provider")
+        .and_then(|provider| provider.get("name"))
         .and_then(Value::as_str)
-        .ok_or_else(|| ir_error("missing x-kube-provider.name or info.title"))?
+        .unwrap_or(&api.info.title)
         .to_owned();
-
-    let schemas = extract_schemas(openapi)?;
-    let security_schemes = extract_security_schemes(openapi)?;
 
     Ok(ProviderIr {
         version: 1,
         provider,
-        schemas,
         resources,
         operations,
-        security_schemes,
+        security_schemes: extract_security_schemes(&api),
     })
 }
 
-fn extract_resources(
-    openapi: &Value,
-) -> Result<BTreeMap<ResourceName, ResourceDraft>, LoaderError> {
-    let schemas = object_at(openapi, "/components/schemas")?;
+fn extract_resources(api: &OpenAPI) -> Result<BTreeMap<ResourceName, ResourceIr>, LoaderError> {
     let mut resources = BTreeMap::new();
+    let Some(components) = &api.components else {
+        return Ok(resources);
+    };
 
-    for (schema_name, schema) in schemas {
-        let Some(extension) = schema.get("x-kube-resource") else {
+    for (schema_name, schema) in &components.schemas {
+        let ReferenceOr::Item(schema) = schema else {
             continue;
         };
-
+        let Some(extension) = schema.schema_data.extensions.get("x-kube-resource") else {
+            continue;
+        };
         let extension: ResourceExtension =
             serde_json::from_value(extension.clone()).map_err(|error| {
                 ir_error(format!(
@@ -134,126 +186,105 @@ fn extract_resources(
             })?;
 
         let name = extension.name.clone();
-        let draft = ResourceDraft {
-            extension,
-            schema: SchemaName(schema_name.clone()),
-            lifecycle: LifecycleDraft::default(),
+        let resource = ResourceIr {
+            api_version: extension.api_version,
+            kind: extension.kind,
+            identifiers: extension.identifiers,
+            field_selection: extension.fields,
+            references: extension.references,
+            credentials: extension.credentials,
+            lifecycle: LifecycleIr {
+                observe: OperationId(String::new()),
+                create: None,
+                update: None,
+                delete: None,
+            },
         };
-
-        if resources.insert(name.clone(), draft).is_some() {
+        if resources.insert(name.clone(), resource).is_some() {
             return Err(ir_error(format!("duplicate resource {}", name.0)));
         }
     }
-
     Ok(resources)
 }
 
-fn extract_operations(
-    openapi: &Value,
-    resources: &mut BTreeMap<ResourceName, ResourceDraft>,
-) -> Result<BTreeMap<OperationId, OperationIr>, LoaderError> {
-    let paths = object_at(openapi, "/paths")?;
-    let mut operations = BTreeMap::new();
+fn request_schema(operation: &Operation) -> Option<SchemaName> {
+    match operation.request_body.as_ref()? {
+        ReferenceOr::Item(body) => json_schema_name(&body.content),
+        ReferenceOr::Reference { .. } => None,
+    }
+}
 
-    for (path, path_item) in paths {
-        let Some(path_item) = path_item.as_object() else {
+fn response_schema(operation: &Operation) -> Option<SchemaName> {
+    let mut successful: Vec<(u16, &ReferenceOr<openapiv3::Response>)> = operation
+        .responses
+        .responses
+        .iter()
+        .filter_map(|(status, response)| match status {
+            StatusCode::Code(code) if (200..300).contains(code) => Some((*code, response)),
+            StatusCode::Range(2) => Some((200, response)),
+            _ => None,
+        })
+        .collect();
+    successful.sort_by_key(|(code, _)| *code);
+    successful
+        .into_iter()
+        .find_map(|(_, response)| match response {
+            ReferenceOr::Item(response) => json_schema_name(&response.content),
+            ReferenceOr::Reference { .. } => None,
+        })
+}
+
+/// Component name of the JSON media type's schema, if it is a `$ref`.
+fn json_schema_name(content: &Content) -> Option<SchemaName> {
+    let media = content.get("application/json").or_else(|| {
+        content
+            .iter()
+            .find(|(name, _)| name.ends_with("+json"))
+            .map(|(_, media)| media)
+    })?;
+    match media.schema.as_ref()? {
+        ReferenceOr::Reference { reference } => reference
+            .strip_prefix("#/components/schemas/")
+            .map(|name| SchemaName(name.replace("~1", "/").replace("~0", "~"))),
+        ReferenceOr::Item(_) => None,
+    }
+}
+
+fn extract_security_schemes(api: &OpenAPI) -> BTreeMap<SecuritySchemeName, SecuritySchemeIr> {
+    let mut result = BTreeMap::new();
+    let Some(components) = &api.components else {
+        return result;
+    };
+    for (name, scheme) in &components.security_schemes {
+        let ReferenceOr::Item(scheme) = scheme else {
             continue;
         };
-
-        for (method_name, method) in http_operations(path_item) {
-            let Some(extension) = method.get("x-kube-operation") else {
+        let scheme = match scheme {
+            SecurityScheme::APIKey { location, name, .. } => SecuritySchemeIr::ApiKey {
+                name: name.clone(),
+                location: match location {
+                    APIKeyLocation::Header => ApiKeyLocationIr::Header,
+                    APIKeyLocation::Query => ApiKeyLocationIr::Query,
+                    APIKeyLocation::Cookie => ApiKeyLocationIr::Cookie,
+                },
+            },
+            SecurityScheme::HTTP {
+                scheme,
+                bearer_format,
+                ..
+            } => SecuritySchemeIr::Http {
+                scheme: scheme.to_ascii_lowercase(),
+                bearer_format: bearer_format.clone(),
+            },
+            SecurityScheme::OAuth2 { .. } | SecurityScheme::OpenIDConnect { .. } => {
+                // Not usable for operator credentials; resources cannot select them
+                // (validation reports an unknown scheme).
                 continue;
-            };
-
-            let extension: OperationExtension =
-                serde_json::from_value(extension.clone()).map_err(|error| {
-                    ir_error(format!(
-                        "invalid x-kube-operation on {method_name} {path}: {error}"
-                    ))
-                })?;
-
-            let operation_id = method
-                .get("operationId")
-                .and_then(Value::as_str)
-                .map_or_else(
-                    || {
-                        format!(
-                            "{}.{}",
-                            extension.resource.0,
-                            lifecycle_name(extension.lifecycle)
-                        )
-                    },
-                    str::to_owned,
-                );
-            let operation_id = OperationId(operation_id);
-
-            let resource = resources.get_mut(&extension.resource).ok_or_else(|| {
-                ir_error(format!(
-                    "operation {method_name} {path} references unknown resource {}",
-                    extension.resource.0
-                ))
-            })?;
-
-            set_lifecycle(
-                &mut resource.lifecycle,
-                extension.lifecycle,
-                operation_id.clone(),
-                &extension.resource,
-            )?;
-
-            let location = format!("paths.{path}.{method_name}");
-
-            let operation = OperationIr {
-                method: parse_method(method_name)?,
-                path: path.clone(),
-                path_parameters: extension.path_parameters,
-                request_body: extract_request_body(openapi, method, &location)?,
-                response_body: extract_response_body(openapi, method, &location)?,
-                request_schema: None,
-                response_schema: None,
-            };
-
-            if operations.insert(operation_id.clone(), operation).is_some() {
-                return Err(ir_error(format!(
-                    "duplicate operation id {}",
-                    operation_id.0
-                )));
             }
-        }
+        };
+        result.insert(SecuritySchemeName(name.clone()), scheme);
     }
-
-    Ok(operations)
-}
-
-fn set_lifecycle(
-    draft: &mut LifecycleDraft,
-    action: LifecycleAction,
-    operation: OperationId,
-    resource: &ResourceName,
-) -> Result<(), LoaderError> {
-    let slot = match action {
-        LifecycleAction::Observe => &mut draft.observe,
-        LifecycleAction::Create => &mut draft.create,
-        LifecycleAction::Update => &mut draft.update,
-        LifecycleAction::Delete => &mut draft.delete,
-    };
-
-    if slot.replace(operation).is_some() {
-        return Err(ir_error(format!(
-            "resource {} has duplicate {} operation",
-            resource.0,
-            lifecycle_name(action)
-        )));
-    }
-
-    Ok(())
-}
-
-fn http_operations(path_item: &Map<String, Value>) -> impl Iterator<Item = (&str, &Value)> {
-    const METHODS: [&str; 5] = ["get", "post", "put", "patch", "delete"];
-    METHODS
-        .into_iter()
-        .filter_map(|method| path_item.get(method).map(|value| (method, value)))
+    result
 }
 
 fn parse_method(method: &str) -> Result<HttpMethod, LoaderError> {
@@ -267,434 +298,6 @@ fn parse_method(method: &str) -> Result<HttpMethod, LoaderError> {
     }
 }
 
-fn lifecycle_name(action: LifecycleAction) -> &'static str {
-    match action {
-        LifecycleAction::Observe => "observe",
-        LifecycleAction::Create => "create",
-        LifecycleAction::Update => "update",
-        LifecycleAction::Delete => "delete",
-    }
-}
-
-fn object_at<'a>(value: &'a Value, pointer: &str) -> Result<&'a Map<String, Value>, LoaderError> {
-    value
-        .pointer(pointer)
-        .and_then(Value::as_object)
-        .ok_or_else(|| ir_error(format!("missing object at {pointer}")))
-}
-
 fn ir_error(message: impl Into<String>) -> LoaderError {
     LoaderError::Ir(message.into())
-}
-
-fn extract_schemas(openapi: &Value) -> Result<BTreeMap<SchemaName, SchemaIr>, LoaderError> {
-    let schemas = openapi
-        .pointer("/components/schemas")
-        .and_then(Value::as_object)
-        .ok_or_else(|| ir_error("missing components.schemas"))?;
-
-    schemas
-        .iter()
-        .map(|(name, value)| {
-            let name = SchemaName(name.clone());
-            let schema = extract_schema(value, &format!("components.schemas.{}", name.0))?;
-
-            Ok((name, schema))
-        })
-        .collect()
-}
-
-fn extract_schema(value: &Value, location: &str) -> Result<SchemaIr, LoaderError> {
-    if let Some(reference) = value.get("$ref").and_then(Value::as_str) {
-        return Ok(SchemaIr::Ref {
-            target: extract_reference(reference, location)?,
-        });
-    }
-
-    if let Some(variants) = value.get("oneOf") {
-        return Ok(SchemaIr::OneOf {
-            variants: extract_variants(variants, &format!("{location}.oneOf"))?,
-        });
-    }
-
-    if let Some(variants) = value.get("allOf") {
-        return Ok(SchemaIr::AllOf {
-            variants: extract_variants(variants, &format!("{location}.allOf"))?,
-        });
-    }
-
-    match value.get("type").and_then(Value::as_str) {
-        Some("object") => extract_object(value, location),
-
-        Some("array") => {
-            let items = value
-                .get("items")
-                .ok_or_else(|| ir_error(format!("{location}: array has no items")))?;
-
-            Ok(SchemaIr::Array {
-                items: Box::new(extract_schema(items, &format!("{location}.items"))?),
-            })
-        }
-
-        Some("string") => {
-            let enum_values = value
-                .get("enum")
-                .and_then(Value::as_array)
-                .map(|values| {
-                    values
-                        .iter()
-                        .filter_map(Value::as_str)
-                        .map(str::to_owned)
-                        .collect()
-                })
-                .unwrap_or_default();
-
-            Ok(SchemaIr::String {
-                format: optional_string(value, "format"),
-                enum_values,
-            })
-        }
-
-        Some("integer") => Ok(SchemaIr::Integer {
-            format: optional_string(value, "format"),
-        }),
-
-        Some("number") => Ok(SchemaIr::Number {
-            format: optional_string(value, "format"),
-        }),
-
-        Some("boolean") => Ok(SchemaIr::Boolean),
-
-        Some(schema_type) => Err(ir_error(format!(
-            "{location}: unsupported schema type {schema_type}"
-        ))),
-
-        None if value.get("properties").is_some()
-            || value.get("additionalProperties").is_some() =>
-        {
-            extract_object(value, location)
-        }
-
-        None => Ok(SchemaIr::Any),
-    }
-}
-
-fn extract_object(value: &Value, location: &str) -> Result<SchemaIr, LoaderError> {
-    let required = value
-        .get("required")
-        .and_then(Value::as_array)
-        .into_iter()
-        .flatten()
-        .filter_map(Value::as_str)
-        .collect::<BTreeSet<_>>();
-
-    let mut properties = BTreeMap::new();
-
-    if let Some(source_properties) = value.get("properties").and_then(Value::as_object) {
-        for (name, property) in source_properties {
-            properties.insert(
-                name.clone(),
-                FieldIr {
-                    schema: extract_schema(property, &format!("{location}.properties.{name}"))?,
-                    required: required.contains(name.as_str()),
-                    nullable: property
-                        .get("nullable")
-                        .and_then(Value::as_bool)
-                        .unwrap_or(false),
-                    read_only: property
-                        .get("readOnly")
-                        .and_then(Value::as_bool)
-                        .unwrap_or(false),
-
-                    write_only: property
-                        .get("writeOnly")
-                        .and_then(Value::as_bool)
-                        .unwrap_or(false),
-
-                    ignored: property
-                        .pointer("/x-kube-field/ignored")
-                        .and_then(Value::as_bool)
-                        .unwrap_or(false),
-                    description: optional_string(property, "description"),
-                    default: property.get("default").cloned(),
-                },
-            );
-        }
-    }
-
-    let additional_properties = match value.get("additionalProperties") {
-        None | Some(Value::Bool(true)) => AdditionalPropertiesIr::Any,
-
-        Some(Value::Bool(false)) => AdditionalPropertiesIr::Forbidden,
-
-        Some(schema) if schema.is_object() => AdditionalPropertiesIr::Typed {
-            schema: Box::new(extract_schema(
-                schema,
-                &format!("{location}.additionalProperties"),
-            )?),
-        },
-
-        _ => {
-            return Err(ir_error(format!(
-                "{location}: invalid additionalProperties"
-            )));
-        }
-    };
-
-    Ok(SchemaIr::Object {
-        properties,
-        additional_properties,
-    })
-}
-
-fn extract_request_body(
-    openapi: &Value,
-    operation: &Value,
-    location: &str,
-) -> Result<Option<SchemaIr>, LoaderError> {
-    let Some(request_body) = operation.get("requestBody") else {
-        return Ok(None);
-    };
-
-    let request_body =
-        resolve_local_reference(openapi, request_body, &format!("{location}.requestBody"))?;
-
-    let Some(schema) = json_content_schema(request_body, &format!("{location}.requestBody"))?
-    else {
-        return Ok(None);
-    };
-
-    Ok(Some(extract_schema(
-        schema,
-        &format!("{location}.requestBody.content.application/json.schema"),
-    )?))
-}
-
-fn extract_response_body(
-    openapi: &Value,
-    operation: &Value,
-    location: &str,
-) -> Result<Option<SchemaIr>, LoaderError> {
-    let responses = operation
-        .get("responses")
-        .and_then(Value::as_object)
-        .ok_or_else(|| ir_error(format!("{location}: missing responses")))?;
-
-    let mut successful = responses
-        .iter()
-        .filter_map(|(status, response)| {
-            let status = status.parse::<u16>().ok()?;
-
-            (200..300).contains(&status).then_some((status, response))
-        })
-        .collect::<Vec<_>>();
-
-    successful.sort_by_key(|(status, _)| *status);
-
-    if successful.is_empty()
-        && let Some(response) = responses.get("2XX")
-    {
-        successful.push((200, response));
-    }
-
-    if successful.is_empty() {
-        return Err(ir_error(format!("{location}: no successful 2xx response")));
-    }
-
-    for (status, response) in successful {
-        let response =
-            resolve_local_reference(openapi, response, &format!("{location}.responses.{status}"))?;
-
-        let Some(schema) =
-            json_content_schema(response, &format!("{location}.responses.{status}"))?
-        else {
-            // Наприклад, 204 No Content.
-            continue;
-        };
-
-        return Ok(Some(extract_schema(
-            schema,
-            &format!(
-                "{location}.responses.{status}.\
-                 content.application/json.schema"
-            ),
-        )?));
-    }
-
-    Ok(None)
-}
-
-fn json_content_schema<'a>(
-    container: &'a Value,
-    location: &str,
-) -> Result<Option<&'a Value>, LoaderError> {
-    let Some(content) = container.get("content") else {
-        return Ok(None);
-    };
-
-    let content = content
-        .as_object()
-        .ok_or_else(|| ir_error(format!("{location}.content must be an object")))?;
-
-    let media_type = content
-        .get("application/json")
-        .or_else(|| content.get("application/*+json"))
-        .or_else(|| {
-            content
-                .iter()
-                .find(|(name, _)| name.ends_with("+json"))
-                .map(|(_, value)| value)
-        });
-
-    let Some(media_type) = media_type else {
-        return Err(ir_error(format!(
-            "{location}: JSON content type is missing"
-        )));
-    };
-
-    Ok(media_type.get("schema"))
-}
-
-fn resolve_local_reference<'a>(
-    openapi: &'a Value,
-    value: &'a Value,
-    location: &str,
-) -> Result<&'a Value, LoaderError> {
-    let mut current = value;
-    let mut visited = BTreeSet::new();
-
-    while let Some(reference) = current.get("$ref").and_then(Value::as_str) {
-        let pointer = reference.strip_prefix('#').ok_or_else(|| {
-            ir_error(format!(
-                "{location}: external reference is unsupported: \
-                 {reference}"
-            ))
-        })?;
-
-        if !visited.insert(reference.to_owned()) {
-            return Err(ir_error(format!(
-                "{location}: cyclic reference: {reference}"
-            )));
-        }
-
-        current = openapi
-            .pointer(pointer)
-            .ok_or_else(|| ir_error(format!("{location}: unresolved reference: {reference}")))?;
-    }
-
-    Ok(current)
-}
-
-fn extract_security_schemes(
-    openapi: &serde_json::Value,
-) -> Result<BTreeMap<SecuritySchemeName, SecuritySchemeIr>, LoaderError> {
-    let Some(schemes) = openapi
-        .pointer("/components/securitySchemes")
-        .and_then(serde_json::Value::as_object)
-    else {
-        return Ok(BTreeMap::new());
-    };
-
-    let mut result = BTreeMap::new();
-
-    for (name, value) in schemes {
-        let location = format!("components.securitySchemes.{name}");
-
-        let scheme_type = value
-            .get("type")
-            .and_then(serde_json::Value::as_str)
-            .ok_or_else(|| LoaderError::InvalidOpenApi(format!("{location}.type is required")))?;
-
-        let scheme = match scheme_type {
-            "apiKey" => {
-                let parameter_name = value
-                    .get("name")
-                    .and_then(serde_json::Value::as_str)
-                    .ok_or_else(|| {
-                        LoaderError::InvalidOpenApi(format!("{location}.name is required"))
-                    })?
-                    .to_owned();
-
-                let parameter_location = value
-                    .get("in")
-                    .and_then(serde_json::Value::as_str)
-                    .ok_or_else(|| {
-                        LoaderError::InvalidOpenApi(format!("{location}.in is required"))
-                    })?;
-
-                let location = match parameter_location {
-                    "header" => ApiKeyLocationIr::Header,
-                    "query" => ApiKeyLocationIr::Query,
-                    "cookie" => ApiKeyLocationIr::Cookie,
-
-                    other => {
-                        return Err(LoaderError::InvalidOpenApi(format!(
-                            "{location}.in has unsupported value {other}"
-                        )));
-                    }
-                };
-
-                SecuritySchemeIr::ApiKey {
-                    name: parameter_name,
-                    location,
-                }
-            }
-
-            "http" => {
-                let scheme = value
-                    .get("scheme")
-                    .and_then(serde_json::Value::as_str)
-                    .ok_or_else(|| {
-                        LoaderError::InvalidOpenApi(format!("{location}.scheme is required"))
-                    })?
-                    .to_ascii_lowercase();
-
-                let bearer_format = value
-                    .get("bearerFormat")
-                    .and_then(serde_json::Value::as_str)
-                    .map(str::to_owned);
-
-                SecuritySchemeIr::Http {
-                    scheme,
-                    bearer_format,
-                }
-            }
-
-            other => {
-                return Err(LoaderError::InvalidOpenApi(format!(
-                    "{location} has unsupported type {other}"
-                )));
-            }
-        };
-
-        result.insert(SecuritySchemeName(name.clone()), scheme);
-    }
-
-    Ok(result)
-}
-
-fn extract_variants(value: &Value, location: &str) -> Result<Vec<SchemaIr>, LoaderError> {
-    value
-        .as_array()
-        .ok_or_else(|| ir_error(format!("{location} must be an array")))?
-        .iter()
-        .enumerate()
-        .map(|(index, schema)| extract_schema(schema, &format!("{location}[{index}]")))
-        .collect()
-}
-
-fn extract_reference(reference: &str, location: &str) -> Result<SchemaName, LoaderError> {
-    let name = reference
-        .strip_prefix("#/components/schemas/")
-        .ok_or_else(|| {
-            ir_error(format!(
-                "{location}: external reference is unsupported: {reference}"
-            ))
-        })?;
-
-    Ok(SchemaName(name.replace("~1", "/").replace("~0", "~")))
-}
-
-fn optional_string(value: &Value, key: &str) -> Option<String> {
-    value.get(key).and_then(Value::as_str).map(str::to_owned)
 }

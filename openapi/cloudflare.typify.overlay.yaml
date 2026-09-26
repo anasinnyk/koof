@@ -29,3 +29,10 @@ actions:
       description: The status code to use for the redirect (301, 302, 303, 307 or 308).
       minimum: 301
       maximum: 308
+
+  # typify: `enum: [[]]` on an array (errors must be empty on success) also gets a
+  # hand-written schemars 0.8 impl. It only documents the success envelope.
+  - target: $.components.responses.rulesets_Ruleset.content['application/json'].schema.allOf[1].properties.errors.enum
+    remove: true
+  - target: $.components.responses.rulesets_RulesetOrDryRun.content['application/json'].schema.allOf[1].properties.errors.enum
+    remove: true

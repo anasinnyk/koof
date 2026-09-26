@@ -204,7 +204,10 @@ impl Resource<'_> {
                 0 => continue,
                 1 => definitions.remove(0).0,
                 _ => {
-                    json!({ "anyOf": definitions.into_iter().map(|(schema, _)| schema).collect::<Vec<_>>() })
+                    let definitions: Vec<Value> =
+                        definitions.into_iter().map(|(schema, _)| schema).collect();
+                    merge_scalars(self.schemas, &definitions)
+                        .unwrap_or_else(|| json!({ "anyOf": definitions }))
                 }
             };
             found.insert(field.clone());
@@ -256,6 +259,83 @@ impl Resource<'_> {
             message: message.to_owned(),
         }
     }
+}
+
+/// One scalar schema for several definitions of the same field when all of them are
+/// scalars of one JSON type (e.g. `type` as `enum: [A]` in one DNS record variant and
+/// `enum: [MX]` in another): enums are unioned when every definition has one,
+/// differing keywords such as `format` are dropped, `null` is kept if any allows it.
+fn merge_scalars(schemas: &Map<String, Value>, definitions: &[Value]) -> Option<Value> {
+    let resolved: Vec<&Value> = definitions
+        .iter()
+        .map(|definition| {
+            schema_ref_name(definition)
+                .and_then(|name| schemas.get(&name))
+                .unwrap_or(definition)
+        })
+        .collect();
+
+    let mut scalar_type: Option<&str> = None;
+    let mut nullable = false;
+    for definition in &resolved {
+        let (definition_type, definition_nullable) = match definition.get("type")? {
+            Value::String(name) => (name.as_str(), false),
+            Value::Array(types) => {
+                let mut non_null = types
+                    .iter()
+                    .filter_map(Value::as_str)
+                    .filter(|name| *name != "null");
+                let name = non_null.next()?;
+                if non_null.next().is_some() {
+                    return None;
+                }
+                (name, types.len() > 1)
+            }
+            _ => return None,
+        };
+        if !matches!(definition_type, "string" | "integer" | "number" | "boolean") {
+            return None;
+        }
+        match scalar_type {
+            Some(existing) if existing != definition_type => return None,
+            _ => scalar_type = Some(definition_type),
+        }
+        nullable |= definition_nullable;
+    }
+
+    let mut merged = Map::new();
+    let scalar_type = scalar_type?;
+    merged.insert(
+        "type".to_owned(),
+        if nullable {
+            json!([scalar_type, "null"])
+        } else {
+            json!(scalar_type)
+        },
+    );
+    if resolved
+        .iter()
+        .all(|definition| definition.get("enum").is_some())
+    {
+        let mut values: Vec<Value> = Vec::new();
+        for value in resolved
+            .iter()
+            .filter_map(|definition| definition.get("enum").and_then(Value::as_array))
+            .flatten()
+        {
+            if !values.contains(value) {
+                values.push(value.clone());
+            }
+        }
+        merged.insert("enum".to_owned(), Value::Array(values));
+    }
+    if let Some(description) = resolved
+        .iter()
+        .find_map(|definition| definition.get("description"))
+    {
+        merged.insert("description".to_owned(), description.clone());
+    }
+    Some(Value::Object(merged))
 }
 
 fn names(paths: &[FieldPath]) -> Vec<String> {

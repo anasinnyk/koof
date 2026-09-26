@@ -1,7 +1,6 @@
 version: 1
 provider: cloudflare
 
-schemas: {}
 
 security_schemes:
   api_token: !Http
@@ -12,7 +11,6 @@ resources:
   account:
     api_version: cloudflare.example.io/v1alpha1
     kind: Account
-    spec_schema: Account
     identifiers:
       external_id:
         type: field
@@ -31,7 +29,6 @@ resources:
   zone:
     api_version: cloudflare.example.io/v1alpha1
     kind: Zone
-    spec_schema: Zone
     identifiers:
       external_id:
         type: field
@@ -54,7 +51,6 @@ resources:
   dns_record:
     api_version: cloudflare.example.io/v1alpha1
     kind: DNSRecord
-    spec_schema: DNSRecord
     identifiers:
       external_id:
         type: field

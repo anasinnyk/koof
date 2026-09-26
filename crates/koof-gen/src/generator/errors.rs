@@ -2,8 +2,11 @@ use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum GeneratorError {
-    #[error("unknown schema: {0}")]
-    UnknownSchema(String),
+    #[error("typify failed: {0}")]
+    Typify(String),
+
+    #[error("no generated type for schema {0}")]
+    UnknownType(String),
 
     #[error("unsupported schema: {0}")]
     UnsupportedSchema(String),
@@ -16,9 +19,6 @@ pub enum GeneratorError {
 
     #[error("invalid Kubernetes apiVersion: {0}")]
     InvalidApiVersion(String),
-
-    #[error("cyclic schema reference is not supported yet: {0}")]
-    CyclicSchema(String),
 
     #[error("unsupported credential: {0}")]
     UnsupportedCredential(String),

@@ -1,8 +1,5 @@
 use crate::{
-    generator::generate,
-    loader::{load, load_document},
-    spec,
-    validation::validate,
+    extractor::extract, generator::generate, loader::load_document, spec, validation::validate,
 };
 use anyhow::{Context, Result, bail};
 use clap::Parser;
@@ -42,19 +39,21 @@ pub struct Args {
 pub fn run() -> Result<()> {
     let args = Args::parse();
 
-    if let Some(path) = &args.preprocessed_spec {
-        let document = spec::preprocess(&load_document(&args.openapi, &args.overlay)?)?;
-        fs::write(path, serde_json::to_string_pretty(&document)?)
-            .with_context(|| format!("cannot write {}", path.display()))?;
-    }
-
-    let ir = load(&args.openapi, &args.overlay)?;
+    let document = load_document(&args.openapi, &args.overlay)?;
+    let prepared = spec::prepare(&document)?;
+    let ir = extract(&prepared)?;
 
     if let Err(errors) = validate(&ir) {
         bail!("invalid ProviderIr:\n{errors:#?}");
     }
 
-    let files = generate(&ir)?;
+    let schemas = spec::for_codegen(&prepared)?;
+    if let Some(path) = &args.preprocessed_spec {
+        fs::write(path, serde_json::to_string_pretty(&schemas)?)
+            .with_context(|| format!("cannot write {}", path.display()))?;
+    }
+
+    let files = generate(&ir, &schemas)?;
 
     for file in files {
         write_generated_file(&args.output, &file.path, &file.content)?;
