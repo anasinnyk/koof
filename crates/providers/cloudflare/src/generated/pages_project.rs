@@ -55,6 +55,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "PagesProject",
     api_resource,
     group: "cloudflare.kube.nas1k.dev",
+    namespaced: true,
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     late_initialize: &[
         "build_config",

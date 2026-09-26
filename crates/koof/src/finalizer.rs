@@ -5,10 +5,7 @@
 //! so a concurrent change to the object makes the patch fail with a conflict (a
 //! transient error, retried) instead of dropping someone else's finalizer.
 
-use crate::{
-    error::{ReconcileError, ResolveValueError},
-    resource::ManagedResource,
-};
+use crate::{error::ReconcileError, resource::ManagedResource};
 
 /// Whether `resource` carries its finalizer.
 #[must_use]
@@ -63,20 +60,11 @@ async fn patch<R: ManagedResource>(
     resource: &R,
     finalizers: &[String],
 ) -> Result<R, ReconcileError> {
-    let namespace = kube::ResourceExt::namespace(resource).ok_or_else(|| {
-        ResolveValueError::Missing(format!("{} has no namespace", R::descriptor().kind))
-    })?;
     let patch = serde_json::json!({
         "metadata": {
             "finalizers": finalizers,
             "resourceVersion": kube::ResourceExt::resource_version(resource),
         }
     });
-    Ok(kube::Api::<R>::namespaced(client.clone(), &namespace)
-        .patch(
-            &kube::ResourceExt::name_any(resource),
-            &kube::api::PatchParams::default(),
-            &kube::api::Patch::Merge(&patch),
-        )
-        .await?)
+    crate::object::patch(client, resource, &patch).await
 }

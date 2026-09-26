@@ -2,7 +2,7 @@
 
 use crate::{
     conditions::{self, ConditionSpec},
-    error::{ReconcileError, ResolveValueError},
+    error::ReconcileError,
     reconciler::Observation,
     resource::ManagedResource,
 };
@@ -150,15 +150,5 @@ async fn patch_status<R: ManagedResource>(
     resource: &R,
     patch: &serde_json::Value,
 ) -> Result<(), ReconcileError> {
-    let namespace = kube::ResourceExt::namespace(resource).ok_or_else(|| {
-        ResolveValueError::Missing(format!("{} has no namespace", R::descriptor().kind))
-    })?;
-    kube::Api::<R>::namespaced(client.clone(), &namespace)
-        .patch_status(
-            &kube::ResourceExt::name_any(resource),
-            &kube::api::PatchParams::default(),
-            &kube::api::Patch::Merge(patch),
-        )
-        .await?;
-    Ok(())
+    crate::object::patch_status(client, resource, patch).await
 }

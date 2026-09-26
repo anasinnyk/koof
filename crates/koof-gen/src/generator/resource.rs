@@ -7,7 +7,7 @@ use crate::{
     },
     ir::{
         ApiKeyLocationIr, CredentialSourceIr, FieldPath, NamespacePolicy, OperationId, ProviderIr,
-        ResourceIr, ResourceName, SecuritySchemeIr, ValueExpr,
+        ResourceIr, ResourceName, ScopeIr, SecuritySchemeIr, ValueExpr,
     },
 };
 use proc_macro2::TokenStream;
@@ -68,6 +68,7 @@ fn generate_spec(
     let fields_type = types.path(&format!("{kind}ForProvider"))?;
 
     let validations = validation_tokens(resource);
+    let namespaced = (resource.scope == ScopeIr::Namespaced).then(|| quote!(namespaced,));
     let mut fields = generate_reference_fields(resource)?;
     if let Some(credentials) = generate_credential_field(resource)? {
         fields.push(credentials);
@@ -112,7 +113,7 @@ fn generate_spec(
             group = #group,
             version = #version,
             kind = #kind,
-            namespaced,
+            #namespaced
             status = #status_name
         )]
         pub struct #spec_ident {
@@ -225,6 +226,7 @@ fn generate_descriptor(
         quote!(None)
     };
     let create = create_descriptor(ir, name, resource)?;
+    let namespaced = resource.scope == ScopeIr::Namespaced;
     let late_initialize = late_initialize_fields(document, &resource.kind);
     let update = update_descriptor(ir, resource)?;
 
@@ -237,6 +239,7 @@ fn generate_descriptor(
             kind: #kind,
             api_resource,
             group: #group,
+            namespaced: #namespaced,
             identifiers: &[#(#identifiers),*],
             late_initialize: &[#(#late_initialize),*],
             references: &[#(#references),*],

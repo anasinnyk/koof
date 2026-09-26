@@ -5,11 +5,7 @@
 //!
 //! Top-level `forProvider` fields only: a partially set object is left alone.
 
-use crate::{
-    error::{ReconcileError, ResolveValueError},
-    reference::value_at,
-    resource::ManagedResource,
-};
+use crate::{error::ReconcileError, reference::value_at, resource::ManagedResource};
 use serde_json::{Map, Value};
 
 const FOR_PROVIDER: &str = "forProvider";
@@ -76,19 +72,10 @@ pub async fn apply<R: ManagedResource>(
     resource: &R,
     fields: &Map<String, Value>,
 ) -> Result<(), ReconcileError> {
-    let namespace = kube::ResourceExt::namespace(resource).ok_or_else(|| {
-        ResolveValueError::Missing(format!("{} has no namespace", R::descriptor().kind))
-    })?;
     let patch = serde_json::json!({
         "metadata": { "resourceVersion": kube::ResourceExt::resource_version(resource) },
         "spec": { FOR_PROVIDER: fields },
     });
-    kube::Api::<R>::namespaced(client.clone(), &namespace)
-        .patch(
-            &kube::ResourceExt::name_any(resource),
-            &kube::api::PatchParams::default(),
-            &kube::api::Patch::Merge(&patch),
-        )
-        .await?;
+    crate::object::patch(client, resource, &patch).await?;
     Ok(())
 }

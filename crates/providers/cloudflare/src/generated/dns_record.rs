@@ -64,6 +64,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "DNSRecord",
     api_resource,
     group: "zones.cloudflare.kube.nas1k.dev",
+    namespaced: true,
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     late_initialize: &[
         "comment",
