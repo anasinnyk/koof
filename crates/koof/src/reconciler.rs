@@ -7,6 +7,7 @@ use crate::{
     error::{ReconcileError, ResolveValueError, Retry},
     finalizer,
     http::{HttpClient, extract},
+    late_init,
     policy::{self, Action as PolicyAction, State},
     reference::value_at,
     resolve::{Node, resolve_credentials, resolve_value},
@@ -286,6 +287,28 @@ async fn reconcile_inner<R: ManagedResource>(
         resource.management(),
     )?;
     tracing::debug!(?decision, ?drifted_fields, "decided");
+
+    if decision.late_initialize
+        && let Some(observed) = &observation.at_provider
+    {
+        let fields = late_init::candidates(resource, observed)?;
+        if !fields.is_empty() {
+            late_init::apply(&context.kube_client, resource, &fields).await?;
+            let names: Vec<&str> = fields.keys().map(String::as_str).collect();
+            tracing::info!(fields = ?names, "late-initialized");
+            publish(
+                context,
+                resource,
+                EventType::Normal,
+                "LateInitialized",
+                &format!("Filled from the provider: {}", names.join(", ")),
+            )
+            .await;
+            // The spec change (new generation) triggers the next reconcile, which
+            // continues with the updated spec.
+            return Ok(Action::requeue(CONFIRM));
+        }
+    }
 
     match decision.action {
         PolicyAction::None => {}
