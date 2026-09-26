@@ -36,6 +36,10 @@ pub trait ManagedResource:
     /// as JSON and deserialized into `Request`.
     type Create: Operation<Request: DeserializeOwned>;
 
+    /// Operation that updates it; [`crate::http::Unsupported`] when there is none
+    /// (then [`ResourceDescriptor::update`] is `None`).
+    type Update: Operation<Request: DeserializeOwned>;
+
     /// Operation that deletes it; [`crate::http::Unsupported`] when there is none
     /// (then [`ResourceDescriptor::delete`] is `None`).
     type Delete: Operation;
@@ -64,6 +68,7 @@ pub struct ResourceDescriptor {
     pub credentials: Option<Credentials>,
     pub observe: OperationDescriptor,
     pub create: Option<CreateDescriptor>,
+    pub update: Option<UpdateDescriptor>,
     pub delete: Option<OperationDescriptor>,
 }
 
@@ -184,6 +189,14 @@ pub struct CreateDescriptor {
     /// Dot path of the new resource's external name in the response body, e.g.
     /// `result.id`.
     pub external_name: &'static str,
+}
+
+/// The request body is the full desired state (`from` + `set`), for `PUT` and
+/// `PATCH` alike: `spec.forProvider` holds only the fields the user set.
+#[derive(Debug)]
+pub struct UpdateDescriptor {
+    pub operation: OperationDescriptor,
+    pub request: RequestMapping,
 }
 
 /// How a request body is built: the object at `from` (usually `spec.forProvider`)

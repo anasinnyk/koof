@@ -3,10 +3,12 @@
 use crate::{
     conditions::ConditionSpec,
     create::{self, CreateState},
+    drift::drifted,
     error::{ReconcileError, ResolveValueError, Retry},
     finalizer,
     http::{HttpClient, extract},
     policy::{self, Action as PolicyAction, State},
+    reference::value_at,
     resolve::{Node, resolve_credentials, resolve_value},
     resource::{EXTERNAL_NAME, ManagedResource, OperationDescriptor},
     status::{record_failure, set_conditions, update_status},
@@ -128,6 +130,56 @@ pub async fn observe<R: ManagedResource>(
     })
 }
 
+/// Sends the desired state through `R::Update` (response body ignored).
+///
+/// # Errors
+///
+/// Returns [`ReconcileError`] when the resource has no update operation, the body
+/// cannot be built, a reference or the credentials cannot be resolved, or the
+/// request fails.
+pub async fn update<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+) -> Result<(), ReconcileError> {
+    let node = Node::of(resource)?;
+    let operation = node.descriptor.update.as_ref().ok_or_else(|| {
+        ReconcileError::Unsupported(format!("{} has no update operation", node.descriptor.kind))
+    })?;
+    let parameters = resolve_parameters(context, &node, &operation.operation)
+        .await?
+        .ok_or_else(|| {
+            ResolveValueError::Missing(format!("{} has no external name", node.descriptor.kind))
+        })?;
+    let body: <R::Update as crate::http::Operation>::Request =
+        crate::request::build(&context.kube_client, &node, &operation.request).await?;
+    let auth = resolve_credentials(&context.kube_client, &node).await?;
+    context
+        .provider_client
+        .send_discarding::<R::Update>(&auth, &as_pairs(&parameters), Some(&body))
+        .await?;
+    Ok(())
+}
+
+/// Desired fields that differ from the observation (see [`crate::drift`]).
+///
+/// # Errors
+///
+/// Returns [`ReconcileError`] when the resource cannot be serialized.
+pub fn drift<R: ManagedResource>(
+    resource: &R,
+    observation: &Observation,
+) -> Result<Vec<String>, ReconcileError> {
+    let Some(observed) = &observation.at_provider else {
+        return Ok(Vec::new());
+    };
+    let from = R::descriptor()
+        .update
+        .as_ref()
+        .map_or("spec.forProvider", |update| update.request.from);
+    let value = serde_json::to_value(resource)?;
+    Ok(value_at(&value, from).map_or_else(Vec::new, |desired| drifted(desired, observed)))
+}
+
 /// Deletes the external resource through `R::Delete`. `Ok(false)` when it was
 /// already gone.
 ///
@@ -216,81 +268,43 @@ async fn reconcile_inner<R: ManagedResource>(
         &ensured
     };
     if deleting && policy::orphans_on_delete(resource.management()) {
-        tracing::info!("external resource orphaned");
-        publish(
-            context,
-            resource,
-            EventType::Normal,
-            "Orphaned",
-            "External resource kept (orphaned)",
-        )
-        .await;
-        finalizer::remove(&context.kube_client, resource).await?;
-        return Ok(Action::await_change());
+        return release(context, resource, true).await;
     }
 
     let observation = observe(context, resource).await?;
+    let drifted_fields = if observation.exists && !deleting {
+        drift(resource, &observation)?
+    } else {
+        Vec::new()
+    };
     let decision = policy::decide(
         State {
             exists: observation.exists,
-            // Drift detection arrives in L4; until then an existing resource is
-            // considered up to date.
-            up_to_date: true,
+            up_to_date: drifted_fields.is_empty(),
             deleting,
         },
         resource.management(),
     )?;
-    tracing::debug!(?decision, "decided");
+    tracing::debug!(?decision, ?drifted_fields, "decided");
 
     match decision.action {
         PolicyAction::None => {}
-        PolicyAction::Delete => {
-            let existed = delete(context, resource).await?;
-            tracing::info!(existed, "external resource deleted");
-            set_conditions(
-                &context.kube_client,
-                resource,
-                vec![
-                    ConditionSpec::deleting(),
-                    ConditionSpec::reconcile_success(),
-                ],
-            )
-            .await?;
-            publish(
-                context,
-                resource,
-                EventType::Normal,
-                "Deleted",
-                "External resource deleted",
-            )
-            .await;
-            // Confirm on the next reconcile that it is gone, then release.
-            return Ok(Action::requeue(CONFIRM));
-        }
-        PolicyAction::Finalize => {
-            if observation.exists {
-                tracing::info!("external resource orphaned");
-                publish(
-                    context,
-                    resource,
-                    EventType::Normal,
-                    "Orphaned",
-                    "External resource kept (orphaned)",
-                )
-                .await;
-            }
-            finalizer::remove(&context.kube_client, resource).await?;
-            return Ok(Action::await_change());
-        }
+        PolicyAction::Delete => return delete_external(context, resource).await,
+        PolicyAction::Finalize => return release(context, resource, observation.exists).await,
         PolicyAction::Create if R::descriptor().create.is_some() => {
             return create_external(context, resource).await;
         }
         PolicyAction::Create => {
             tracing::debug!("external resource missing and the API has no create operation");
         }
-        // Executed from L4 (update) on.
+        PolicyAction::Update if R::descriptor().update.is_some() => {
+            return update_external(context, resource, &drifted_fields).await;
+        }
         PolicyAction::Update => {
-            tracing::info!(action = ?decision.action, "action planned but not implemented yet");
+            tracing::debug!(
+                ?drifted_fields,
+                "drift detected but the API has no update operation"
+            );
         }
     }
 
@@ -311,6 +325,94 @@ async fn reconcile_inner<R: ManagedResource>(
     } else {
         MISSING
     }))
+}
+
+/// Deletes, then confirms on the next reconcile that the resource is gone before
+/// releasing the managed resource.
+async fn delete_external<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+) -> Result<Action, ReconcileError> {
+    let existed = delete(context, resource).await?;
+    tracing::info!(existed, "external resource deleted");
+    set_conditions(
+        &context.kube_client,
+        resource,
+        vec![
+            ConditionSpec::deleting(),
+            ConditionSpec::reconcile_success(),
+        ],
+    )
+    .await?;
+    publish(
+        context,
+        resource,
+        EventType::Normal,
+        "Deleted",
+        "External resource deleted",
+    )
+    .await;
+    Ok(Action::requeue(CONFIRM))
+}
+
+/// Removes the finalizer; `orphaned` when the external resource is kept.
+async fn release<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+    orphaned: bool,
+) -> Result<Action, ReconcileError> {
+    if orphaned {
+        tracing::info!("external resource orphaned");
+        publish(
+            context,
+            resource,
+            EventType::Normal,
+            "Orphaned",
+            "External resource kept (orphaned)",
+        )
+        .await;
+    }
+    finalizer::remove(&context.kube_client, resource).await?;
+    Ok(Action::await_change())
+}
+
+/// Updates, then observes again in the same reconcile so the status is fresh. If
+/// the drift persists (the API normalises a value, or ignores a field) the next
+/// attempt waits for the regular resync instead of looping.
+async fn update_external<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+    drifted_fields: &[String],
+) -> Result<Action, ReconcileError> {
+    update(context, resource).await?;
+    tracing::info!(?drifted_fields, "external resource updated");
+    publish(
+        context,
+        resource,
+        EventType::Normal,
+        "Updated",
+        &format!("External resource updated: {}", drifted_fields.join(", ")),
+    )
+    .await;
+
+    let observation = observe(context, resource).await?;
+    let remaining = drift(resource, &observation)?;
+    if !remaining.is_empty() {
+        tracing::warn!(?remaining, "drift persists after update");
+        publish(
+            context,
+            resource,
+            EventType::Warning,
+            "DriftPersists",
+            &format!(
+                "Fields still differ after update (normalised or ignored by the API): {}",
+                remaining.join(", ")
+            ),
+        )
+        .await;
+    }
+    update_status(&context.kube_client, resource, &observation).await?;
+    Ok(Action::requeue(RESYNC))
 }
 
 async fn create_external<R: ManagedResource>(

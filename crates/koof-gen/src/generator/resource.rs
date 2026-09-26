@@ -184,6 +184,7 @@ fn generate_descriptor(
         quote!(None)
     };
     let create = create_descriptor(ir, name, resource)?;
+    let update = update_descriptor(ir, resource)?;
 
     Ok(quote! {
         fn api_resource() -> kube::api::ApiResource {
@@ -199,6 +200,7 @@ fn generate_descriptor(
             credentials: #credentials,
             observe: #observe,
             create: #create,
+            update: #update,
             delete: #delete,
         };
     })
@@ -264,6 +266,7 @@ fn generate_managed_resource(
         Ok(quote!(crate::generated::operations::#ident))
     };
     let create = operation_type(resource.lifecycle.create.as_ref())?;
+    let update = operation_type(resource.lifecycle.update.as_ref())?;
     let delete = operation_type(resource.lifecycle.delete.as_ref())?;
 
     Ok(quote! {
@@ -271,6 +274,7 @@ fn generate_managed_resource(
             type AtProvider = #at_provider_type;
             type Observe = crate::generated::operations::#observe;
             type Create = #create;
+            type Update = #update;
             type Delete = #delete;
 
             fn descriptor() -> &'static koof::ResourceDescriptor {
@@ -327,24 +331,54 @@ fn create_descriptor(
             ))
         })?;
 
+    let request = request_mapping(operation);
+    let operation = operation_descriptor(ir, id)?;
+
+    Ok(quote! {
+        Some(koof::resource::CreateDescriptor {
+            operation: #operation,
+            request: #request,
+            external_name: #external_name,
+        })
+    })
+}
+
+/// `Some(koof::resource::UpdateDescriptor { .. })` or `None`.
+fn update_descriptor(
+    ir: &ProviderIr,
+    resource: &ResourceIr,
+) -> Result<TokenStream, GeneratorError> {
+    let Some(id) = &resource.lifecycle.update else {
+        return Ok(quote!(None));
+    };
+    let operation = ir
+        .operations
+        .get(id)
+        .ok_or_else(|| GeneratorError::InvalidIr(format!("unknown operation {}", id.0)))?;
+    let request = request_mapping(operation);
+    let operation = operation_descriptor(ir, id)?;
+    Ok(quote! {
+        Some(koof::resource::UpdateDescriptor {
+            operation: #operation,
+            request: #request,
+        })
+    })
+}
+
+/// `koof::resource::RequestMapping { .. }`; defaults to `from: spec.forProvider`.
+fn request_mapping(operation: &crate::ir::OperationIr) -> TokenStream {
     let mapping = operation.request_mapping.clone().unwrap_or_default();
     let from = &mapping.from.0;
     let set = mapping.set.iter().map(|(path, expression)| {
         let expression = value_expr(expression);
         quote!((#path, #expression))
     });
-    let operation = operation_descriptor(ir, id)?;
-
-    Ok(quote! {
-        Some(koof::resource::CreateDescriptor {
-            operation: #operation,
-            request: koof::resource::RequestMapping {
-                from: #from,
-                set: &[#(#set),*],
-            },
-            external_name: #external_name,
-        })
-    })
+    quote! {
+        koof::resource::RequestMapping {
+            from: #from,
+            set: &[#(#set),*],
+        }
+    }
 }
 
 /// `koof::resource::OperationDescriptor { .. }` for an operation.
