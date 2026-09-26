@@ -24,7 +24,7 @@ pub fn generate(ir: &ProviderIr, document: &Value) -> Result<Vec<GeneratedFile>,
     let mut files = ir
         .resources
         .iter()
-        .map(|(name, res)| resource::generate_resource(ir, &types, name, res))
+        .map(|(name, res)| resource::generate_resource(ir, document, &types, name, res))
         .collect::<Result<Vec<_>, _>>()?;
 
     files.push(resource::generate_operations_file(ir, &types)?);

@@ -5,6 +5,7 @@ pub mod drift;
 pub mod error;
 pub mod finalizer;
 pub mod http;
+pub mod late_init;
 pub mod managed;
 pub mod policy;
 pub mod reconciler;

@@ -64,6 +64,9 @@ pub struct ResourceDescriptor {
     /// `zones.cloudflare.kube.nas1k.dev/external-name`.
     pub group: &'static str,
     pub identifiers: &'static [(&'static str, ValueExpr)],
+    /// Top-level `forProvider` fields that may be late-initialized from
+    /// `atProvider`.
+    pub late_initialize: &'static [&'static str],
     pub references: &'static [Reference],
     pub credentials: Option<Credentials>,
     pub observe: OperationDescriptor,

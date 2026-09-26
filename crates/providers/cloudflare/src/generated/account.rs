@@ -54,6 +54,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     api_resource,
     group: "cloudflare.kube.nas1k.dev",
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
+    late_initialize: &["name", "settings"],
     references: &[],
     credentials: Some(koof::resource::Credentials {
         source: koof::resource::CredentialSource::Secret {

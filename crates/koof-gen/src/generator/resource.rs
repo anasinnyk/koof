@@ -23,6 +23,7 @@ pub struct GeneratedFile {
 /// `koof::ManagedResource` impl. All behaviour lives in the `koof` runtime.
 pub fn generate_resource(
     ir: &ProviderIr,
+    document: &serde_json::Value,
     types: &GeneratedTypes,
     name: &ResourceName,
     resource: &ResourceIr,
@@ -30,7 +31,7 @@ pub fn generate_resource(
     let items = [
         generate_spec(resource, types)?,
         generate_status(resource, types)?,
-        generate_descriptor(ir, name, resource)?,
+        generate_descriptor(ir, document, name, resource)?,
         generate_managed_resource(ir, resource, types)?,
     ];
 
@@ -131,6 +132,7 @@ fn generate_status(
 
 fn generate_descriptor(
     ir: &ProviderIr,
+    document: &serde_json::Value,
     name: &ResourceName,
     resource: &ResourceIr,
 ) -> Result<TokenStream, GeneratorError> {
@@ -184,6 +186,7 @@ fn generate_descriptor(
         quote!(None)
     };
     let create = create_descriptor(ir, name, resource)?;
+    let late_initialize = late_initialize_fields(document, &resource.kind);
     let update = update_descriptor(ir, resource)?;
 
     Ok(quote! {
@@ -196,6 +199,7 @@ fn generate_descriptor(
             api_resource,
             group: #group,
             identifiers: &[#(#identifiers),*],
+            late_initialize: &[#(#late_initialize),*],
             references: &[#(#references),*],
             credentials: #credentials,
             observe: #observe,
@@ -290,6 +294,51 @@ fn generate_managed_resource(
             }
         }
     })
+}
+
+/// Top-level fields of the synthesized `<Kind>ForProvider` (all variants of a
+/// union), minus those marked `x-kube-field: { late_initialize: false }`.
+fn late_initialize_fields(document: &serde_json::Value, kind: &str) -> Vec<String> {
+    use serde_json::Value;
+    let Some(schemas) = document
+        .pointer("/components/schemas")
+        .and_then(Value::as_object)
+    else {
+        return Vec::new();
+    };
+    let resolve = |schema: &'_ Value| -> Option<Value> {
+        let name = schema
+            .get("$ref")?
+            .as_str()?
+            .strip_prefix("#/components/schemas/")?
+            .replace("~1", "/")
+            .replace("~0", "~");
+        schemas.get(&name).cloned()
+    };
+    let Some(root) = schemas.get(&format!("{kind}ForProvider")) else {
+        return Vec::new();
+    };
+    let objects: Vec<Value> = match root.get("oneOf").and_then(Value::as_array) {
+        Some(variants) => variants.iter().filter_map(resolve).collect(),
+        None => vec![root.clone()],
+    };
+
+    let excluded = |property: &Value| {
+        let flag = |schema: &Value| {
+            schema.pointer("/x-kube-field/late_initialize") == Some(&Value::Bool(false))
+        };
+        flag(property) || resolve(property).is_some_and(|target| flag(&target))
+    };
+    let mut fields: Vec<String> = objects
+        .iter()
+        .filter_map(|object| object.get("properties").and_then(Value::as_object))
+        .flatten()
+        .filter(|(_, property)| !excluded(property))
+        .map(|(name, _)| name.clone())
+        .collect();
+    fields.sort();
+    fields.dedup();
+    fields
 }
 
 /// `Some(koof::resource::CreateDescriptor { .. })` or `None`.
