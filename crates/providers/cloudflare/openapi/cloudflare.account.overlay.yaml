@@ -10,7 +10,9 @@ actions:
         name: account
         apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
         kind: Account
-        scope: Namespaced
+        # An account is shared by every namespace; its credentials Secret reference
+        # must name a namespace.
+        scope: Cluster
 
         identifiers:
           external_id:

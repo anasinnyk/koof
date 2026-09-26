@@ -5,14 +5,13 @@
 use crate::{
     error::{CredentialError, ResolveValueError},
     http::Auth,
-    reference::{ResourceReference, resolve_secret_key, scalar_at, value_at},
+    reference::{ResourceReference, SecretReference, resolve_secret_key, scalar_at, value_at},
     resource::{
         AuthScheme, CredentialSource, ManagedResource, NamespacePolicy, ResourceDescriptor,
         ValueExpr,
     },
 };
 use futures::future::BoxFuture;
-use k8s_openapi::api::core::v1::SecretKeySelector;
 use kube::api::{Api, DynamicObject};
 use serde_json::Value;
 
@@ -20,7 +19,8 @@ use serde_json::Value;
 #[derive(Debug, Clone)]
 pub struct Node {
     pub descriptor: &'static ResourceDescriptor,
-    pub namespace: String,
+    /// `None` for cluster-scoped resources.
+    pub namespace: Option<String>,
     pub value: Value,
 }
 
@@ -30,13 +30,19 @@ impl Node {
     /// Returns [`ResolveValueError`] when the resource has no namespace or cannot be
     /// serialized.
     pub fn of<R: ManagedResource>(resource: &R) -> Result<Self, ResolveValueError> {
-        let namespace = kube::ResourceExt::namespace(resource).ok_or_else(|| {
-            ResolveValueError::Missing(format!("{} has no namespace", R::descriptor().kind))
-        })?;
         Ok(Self {
             descriptor: R::descriptor(),
-            namespace,
+            namespace: kube::ResourceExt::namespace(resource),
             value: serde_json::to_value(resource)?,
+        })
+    }
+
+    fn require_namespace(&self, purpose: &str) -> Result<String, ResolveValueError> {
+        self.namespace.clone().ok_or_else(|| {
+            ResolveValueError::Missing(format!(
+                "{} is cluster-scoped; {purpose} needs an explicit namespace",
+                self.descriptor.kind
+            ))
         })
     }
 }
@@ -129,25 +135,22 @@ pub async fn traverse(
             })?;
 
         let api_resource = (reference.target.api_resource)();
-        let (api, namespace): (Api<DynamicObject>, String) = match reference.namespace {
-            NamespacePolicy::SameAsResource => (
-                Api::namespaced_with(client.clone(), &current.namespace, &api_resource),
-                current.namespace.clone(),
-            ),
-            NamespacePolicy::FromReference => {
-                let namespace = target
-                    .namespace
-                    .clone()
-                    .unwrap_or_else(|| current.namespace.clone());
-                (
-                    Api::namespaced_with(client.clone(), &namespace, &api_resource),
-                    namespace,
-                )
-            }
-            NamespacePolicy::ClusterScoped => (
-                Api::all_with(client.clone(), &api_resource),
-                current.namespace.clone(),
-            ),
+        let (api, namespace): (Api<DynamicObject>, Option<String>) = if !reference.target.namespaced
+            || reference.namespace == NamespacePolicy::ClusterScoped
+        {
+            (Api::all_with(client.clone(), &api_resource), None)
+        } else {
+            let namespace = match reference.namespace {
+                NamespacePolicy::FromReference => match target.namespace.clone() {
+                    Some(namespace) => namespace,
+                    None => current.require_namespace("the reference")?,
+                },
+                _ => current.require_namespace("the reference")?,
+            };
+            (
+                Api::namespaced_with(client.clone(), &namespace, &api_resource),
+                Some(namespace),
+            )
         };
 
         let object = api.get(&target.name).await?;
@@ -192,7 +195,7 @@ pub async fn resolve_credentials(
         )));
     };
 
-    let selector: SecretKeySelector = value_at(&terminal.value, path)
+    let selector: SecretReference = value_at(&terminal.value, path)
         .filter(|value| !value.is_null())
         .cloned()
         .map(serde_json::from_value)
@@ -201,7 +204,11 @@ pub async fn resolve_credentials(
         .ok_or_else(|| {
             CredentialError::MissingValue(format!("credential field {path} is not set"))
         })?;
-    let value = resolve_secret_key(client, &terminal.namespace, &selector).await?;
+    let namespace = match selector.namespace.clone() {
+        Some(namespace) => namespace,
+        None => terminal.require_namespace("the credentials Secret")?,
+    };
+    let value = resolve_secret_key(client, &namespace, &selector.name, &selector.key).await?;
 
     Ok(match credentials.auth {
         AuthScheme::Bearer => Auth::Bearer(value),

@@ -116,9 +116,12 @@ pub async fn observe<R: ManagedResource>(
         });
     };
     let auth = resolve_credentials(&context.kube_client, &node).await?;
+    // Raw JSON: a response that does not match the generated type must not stop the
+    // controller from knowing whether the resource exists (e.g. to delete it); the
+    // mismatch surfaces when `atProvider` is written to the status.
     let response = context
         .provider_client
-        .send::<R::Observe>(&auth, &as_pairs(&parameters), None)
+        .send_json::<R::Observe>(&auth, &as_pairs(&parameters), None)
         .await?;
 
     let at_provider = match &response {

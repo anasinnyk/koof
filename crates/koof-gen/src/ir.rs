@@ -66,6 +66,8 @@ pub struct ResourceIr {
     pub api_version: String,
     pub kind: String,
     #[serde(default)]
+    pub scope: ScopeIr,
+    #[serde(default)]
     pub identifiers: BTreeMap<String, ValueExpr>,
     #[serde(default)]
     pub field_selection: FieldSelectionIr,
@@ -79,6 +81,14 @@ pub struct ResourceIr {
     /// `forProvider` fields that cannot change or be removed once set.
     #[serde(default)]
     pub immutable: Vec<String>,
+}
+
+/// `x-kube-resource.scope`.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ScopeIr {
+    #[default]
+    Namespaced,
+    Cluster,
 }
 
 /// A CEL rule from `x-kube-resource.validations`.

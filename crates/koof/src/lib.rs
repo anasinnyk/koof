@@ -7,6 +7,7 @@ pub mod finalizer;
 pub mod http;
 pub mod late_init;
 pub mod managed;
+pub mod object;
 pub mod policy;
 pub mod reconciler;
 pub mod reference;

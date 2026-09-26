@@ -1,5 +1,5 @@
 use crate::error::{CredentialError, ResolveValueError};
-use k8s_openapi::api::core::v1::{Secret, SecretKeySelector};
+use k8s_openapi::api::core::v1::Secret;
 use kube::Api;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
@@ -12,46 +12,50 @@ pub struct ResourceReference {
     pub namespace: Option<String>,
 }
 
-pub type SecretReference = SecretKeySelector;
+/// A key of a Secret, for credentials. `namespace` defaults to the namespace of the
+/// resource holding the reference; cluster-scoped resources must set it.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+pub struct SecretReference {
+    pub name: String,
+    pub key: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub namespace: Option<String>,
+}
 
+/// Reads `key` of Secret `name` in `namespace` as UTF-8.
+///
 /// # Errors
 ///
-/// Can return errors related to kubernets secret references
+/// Returns [`CredentialError`] when the Secret cannot be read, has no such key, or
+/// the value is not UTF-8.
 pub async fn resolve_secret_key(
     client: &kube::Client,
     namespace: &str,
-    selector: &SecretKeySelector,
+    name: &str,
+    key: &str,
 ) -> Result<String, CredentialError> {
-    let secret_name = selector.name.clone();
-
     let secrets: Api<Secret> = Api::namespaced(client.clone(), namespace);
+    let secret = secrets.get(name).await?;
 
-    let secret = secrets.get(&secret_name).await?;
-
-    if let Some(value) = secret
-        .string_data
-        .as_ref()
-        .and_then(|data| data.get(&selector.key))
-    {
+    if let Some(value) = secret.string_data.as_ref().and_then(|data| data.get(key)) {
         return Ok(value.clone());
     }
 
     let bytes = secret
         .data
         .as_ref()
-        .and_then(|data| data.get(&selector.key))
+        .and_then(|data| data.get(key))
         .ok_or_else(|| {
             CredentialError::MissingValue(format!(
-                "Secret {secret_name:?} does not contain key {:?}",
-                selector.key,
+                "Secret {namespace}/{name} does not contain key {key:?}"
             ))
         })?
         .0
         .clone();
 
     String::from_utf8(bytes).map_err(|source| CredentialError::InvalidSecretUtf8 {
-        secret: secret_name.clone(),
-        key: selector.key.clone(),
+        secret: format!("{namespace}/{name}"),
+        key: key.to_owned(),
         source,
     })
 }

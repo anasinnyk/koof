@@ -40,7 +40,6 @@ pub struct AccountForProviderSpec {
     group = "cloudflare.kube.nas1k.dev",
     version = "v1alpha1",
     kind = "Account",
-    namespaced,
     status = "AccountStatus"
 )]
 pub struct AccountSpec {
@@ -59,6 +58,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "Account",
     api_resource,
     group: "cloudflare.kube.nas1k.dev",
+    namespaced: false,
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     late_initialize: &["name", "settings"],
     references: &[],

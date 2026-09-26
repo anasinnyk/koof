@@ -179,9 +179,6 @@ pub async fn annotate<R: ManagedResource>(
     values: &[(&str, Option<String>)],
 ) -> Result<R, ReconcileError> {
     let descriptor = R::descriptor();
-    let namespace = kube::ResourceExt::namespace(resource).ok_or_else(|| {
-        ResolveValueError::Missing(format!("{} has no namespace", descriptor.kind))
-    })?;
     let annotations: Map<String, Value> = values
         .iter()
         .map(|(name, value)| {
@@ -197,13 +194,7 @@ pub async fn annotate<R: ManagedResource>(
             "resourceVersion": kube::ResourceExt::resource_version(resource),
         }
     });
-    Ok(kube::Api::<R>::namespaced(client.clone(), &namespace)
-        .patch(
-            &kube::ResourceExt::name_any(resource),
-            &kube::api::PatchParams::default(),
-            &kube::api::Patch::Merge(&patch),
-        )
-        .await?)
+    crate::object::patch(client, resource, &patch).await
 }
 
 fn now() -> String {

@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use crate::ir::{
     ApiKeyLocationIr, CredentialsIr, FieldSelectionIr, HttpMethod, LifecycleIr, OperationId,
     OperationIr, ProviderIr, ReferenceIr, RequestMappingIr, ResourceIr, ResourceName, SchemaName,
-    SecuritySchemeIr, SecuritySchemeName, ValidationIr, ValueExpr,
+    ScopeIr, SecuritySchemeIr, SecuritySchemeName, ValidationIr, ValueExpr,
 };
 use crate::loader::LoaderError;
 use openapiv3::{
@@ -18,6 +18,8 @@ struct ResourceExtension {
     name: ResourceName,
     api_version: String,
     kind: String,
+    #[serde(default)]
+    scope: ScopeIr,
     #[serde(default)]
     fields: FieldSelectionIr,
     #[serde(default)]
@@ -212,6 +214,7 @@ fn extract_resources(api: &OpenAPI) -> Result<BTreeMap<ResourceName, ResourceIr>
         let resource = ResourceIr {
             api_version: extension.api_version,
             kind: extension.kind,
+            scope: extension.scope,
             identifiers: extension.identifiers,
             field_selection: extension.fields,
             references: extension.references,

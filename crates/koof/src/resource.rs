@@ -2,14 +2,13 @@
 //! [`ManagedResource`] impl. Everything else is generic runtime code.
 
 use crate::{http::Operation, managed::ManagedResourceSpec, status::ManagedStatus};
-use kube::core::NamespaceResourceScope;
 use schemars::JsonSchema;
 use serde::{Serialize, de::DeserializeOwned};
 use std::fmt::Debug;
 
 /// A generated custom resource managed by koof.
 pub trait ManagedResource:
-    kube::Resource<DynamicType = (), Scope = NamespaceResourceScope>
+    kube::Resource<DynamicType = ()>
     + Clone
     + Debug
     + Serialize
@@ -29,7 +28,7 @@ pub trait ManagedResource:
         + Sync;
 
     /// Operation that reads the external resource.
-    type Observe: Operation<Response: Serialize>;
+    type Observe: Operation;
 
     /// Operation that creates it; [`crate::http::Unsupported`] when there is none
     /// (then [`ResourceDescriptor::create`] is `None`). The request body is built
@@ -63,6 +62,8 @@ pub struct ResourceDescriptor {
     /// API group; prefixes koof's annotations and finalizer, e.g.
     /// `zones.cloudflare.kube.nas1k.dev/external-name`.
     pub group: &'static str,
+    /// `false` for cluster-scoped resources.
+    pub namespaced: bool,
     pub identifiers: &'static [(&'static str, ValueExpr)],
     /// Top-level `forProvider` fields that may be late-initialized from
     /// `atProvider`.
@@ -154,7 +155,8 @@ pub enum NamespacePolicy {
     SameAsResource,
     /// The reference's `namespace`, defaulting to the referencing resource's.
     FromReference,
-    /// The referenced resource is cluster-scoped.
+    /// The referenced resource is cluster-scoped. Implied whenever the target's
+    /// descriptor is cluster-scoped, whatever the policy says.
     ClusterScoped,
 }
 
