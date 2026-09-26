@@ -53,6 +53,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "Account",
     api_resource,
     external_name_annotation: "cloudflare.kube.nas1k.dev/external-name",
+    finalizer: "cloudflare.kube.nas1k.dev/finalizer",
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     references: &[],
     credentials: Some(koof::resource::Credentials {
@@ -65,10 +66,15 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
         response_path: "result",
     },
+    delete: Some(koof::resource::OperationDescriptor {
+        path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
+        response_path: "",
+    }),
 };
 impl koof::ManagedResource for Account {
     type AtProvider = crate::generated::types::AccountAtProvider;
     type Observe = crate::generated::operations::AccountObserve;
+    type Delete = crate::generated::operations::AccountDelete;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

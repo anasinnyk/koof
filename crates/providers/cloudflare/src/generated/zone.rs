@@ -49,6 +49,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "Zone",
     api_resource,
     external_name_annotation: "cloudflare.kube.nas1k.dev/external-name",
+    finalizer: "cloudflare.kube.nas1k.dev/finalizer",
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     references: &[
         koof::resource::Reference {
@@ -68,10 +69,15 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         path_parameters: &[("zone_id", koof::resource::ValueExpr::ExternalName)],
         response_path: "result",
     },
+    delete: Some(koof::resource::OperationDescriptor {
+        path_parameters: &[("zone_id", koof::resource::ValueExpr::ExternalName)],
+        response_path: "",
+    }),
 };
 impl koof::ManagedResource for Zone {
     type AtProvider = crate::generated::types::ZoneAtProvider;
     type Observe = crate::generated::operations::ZoneObserve;
+    type Delete = crate::generated::operations::ZoneDelete;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

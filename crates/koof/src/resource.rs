@@ -31,6 +31,10 @@ pub trait ManagedResource:
     /// Operation that reads the external resource.
     type Observe: Operation<Response: Serialize>;
 
+    /// Operation that deletes it; [`crate::http::Unsupported`] when there is none
+    /// (then [`ResourceDescriptor::delete`] is `None`).
+    type Delete: Operation;
+
     fn descriptor() -> &'static ResourceDescriptor;
 
     fn status(&self) -> Option<&ManagedStatus<Self::AtProvider>>;
@@ -51,10 +55,14 @@ pub struct ResourceDescriptor {
     /// `zones.cloudflare.kube.nas1k.dev/external-name`. It is the source of truth:
     /// setting it on a new resource imports an existing external resource.
     pub external_name_annotation: &'static str,
+    /// Finalizer that keeps the managed resource until the external one is
+    /// deleted or orphaned, e.g. `zones.cloudflare.kube.nas1k.dev/finalizer`.
+    pub finalizer: &'static str,
     pub identifiers: &'static [(&'static str, ValueExpr)],
     pub references: &'static [Reference],
     pub credentials: Option<Credentials>,
     pub observe: OperationDescriptor,
+    pub delete: Option<OperationDescriptor>,
 }
 
 impl ResourceDescriptor {

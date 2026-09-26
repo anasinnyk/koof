@@ -6,8 +6,8 @@ use crate::{
         types::GeneratedTypes,
     },
     ir::{
-        ApiKeyLocationIr, CredentialSourceIr, FieldPath, NamespacePolicy, ProviderIr, ResourceIr,
-        ResourceName, SecuritySchemeIr, ValueExpr,
+        ApiKeyLocationIr, CredentialSourceIr, FieldPath, NamespacePolicy, OperationId, ProviderIr,
+        ResourceIr, ResourceName, SecuritySchemeIr, ValueExpr,
     },
 };
 use proc_macro2::TokenStream;
@@ -177,23 +177,14 @@ fn generate_descriptor(
 
     let credentials = credentials_tokens(ir, resource)?;
 
-    let observe = ir
-        .operations
-        .get(&resource.lifecycle.observe)
-        .ok_or_else(|| {
-            GeneratorError::InvalidIr(format!(
-                "unknown observe operation {}",
-                resource.lifecycle.observe.0
-            ))
-        })?;
-    let path_parameters = observe
-        .path_parameters
-        .iter()
-        .map(|(parameter, expression)| {
-            let expression = value_expr(expression);
-            quote!((#parameter, #expression))
-        });
-    let response_path = observe.response_path.clone().unwrap_or_default();
+    let observe = operation_descriptor(ir, &resource.lifecycle.observe)?;
+    let delete = if let Some(id) = &resource.lifecycle.delete {
+        let delete = operation_descriptor(ir, id)?;
+        quote!(Some(#delete))
+    } else {
+        quote!(None)
+    };
+    let finalizer = format!("{group}/finalizer");
 
     Ok(quote! {
         fn api_resource() -> kube::api::ApiResource {
@@ -204,13 +195,12 @@ fn generate_descriptor(
             kind: #kind,
             api_resource,
             external_name_annotation: #external_name_annotation,
+            finalizer: #finalizer,
             identifiers: &[#(#identifiers),*],
             references: &[#(#references),*],
             credentials: #credentials,
-            observe: koof::resource::OperationDescriptor {
-                path_parameters: &[#(#path_parameters),*],
-                response_path: #response_path,
-            },
+            observe: #observe,
+            delete: #delete,
         };
     })
 }
@@ -267,11 +257,18 @@ fn generate_managed_resource(
         )));
     }
     let observe = operation_ident(&resource.lifecycle.observe)?;
+    let delete = if let Some(id) = &resource.lifecycle.delete {
+        let ident = operation_ident(id)?;
+        quote!(crate::generated::operations::#ident)
+    } else {
+        quote!(koof::http::Unsupported)
+    };
 
     Ok(quote! {
         impl koof::ManagedResource for #resource_ident {
             type AtProvider = #at_provider_type;
             type Observe = crate::generated::operations::#observe;
+            type Delete = #delete;
 
             fn descriptor() -> &'static koof::ResourceDescriptor {
                 &DESCRIPTOR
@@ -284,6 +281,28 @@ fn generate_managed_resource(
             fn management(&self) -> &koof::managed::ManagedResourceSpec {
                 &self.spec.management
             }
+        }
+    })
+}
+
+/// `koof::resource::OperationDescriptor { .. }` for an operation.
+fn operation_descriptor(ir: &ProviderIr, id: &OperationId) -> Result<TokenStream, GeneratorError> {
+    let operation = ir
+        .operations
+        .get(id)
+        .ok_or_else(|| GeneratorError::InvalidIr(format!("unknown operation {}", id.0)))?;
+    let path_parameters = operation
+        .path_parameters
+        .iter()
+        .map(|(parameter, expression)| {
+            let expression = value_expr(expression);
+            quote!((#parameter, #expression))
+        });
+    let response_path = operation.response_path.clone().unwrap_or_default();
+    Ok(quote! {
+        koof::resource::OperationDescriptor {
+            path_parameters: &[#(#path_parameters),*],
+            response_path: #response_path,
         }
     })
 }

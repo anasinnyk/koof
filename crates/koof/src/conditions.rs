@@ -29,6 +29,16 @@ impl ConditionSpec {
     }
 
     #[must_use]
+    pub fn deleting() -> Self {
+        Self::new(
+            READY,
+            "False",
+            "Deleting",
+            "External resource is being deleted",
+        )
+    }
+
+    #[must_use]
     pub fn reconcile_success() -> Self {
         Self::new(SYNCED, "True", "ReconcileSuccess", "")
     }

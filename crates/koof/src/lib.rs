@@ -1,6 +1,7 @@
 pub mod app;
 pub mod conditions;
 pub mod error;
+pub mod finalizer;
 pub mod http;
 pub mod managed;
 pub mod policy;

@@ -19,6 +19,18 @@ pub trait Operation {
     type Response: DeserializeOwned + Send + Sync;
 }
 
+/// Stand-in for a lifecycle operation the API does not have (e.g. no delete).
+/// The runtime checks the descriptor before using it and never sends it.
+pub struct Unsupported;
+
+impl Operation for Unsupported {
+    const NAME: &'static str = "unsupported";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "";
+    type Request = ();
+    type Response = ();
+}
+
 /// Credentials for one request. `Debug` never prints the secret.
 #[derive(Clone)]
 pub enum Auth {
@@ -115,6 +127,33 @@ impl HttpClient {
         }
         .instrument(span)
         .await
+    }
+
+    /// Like [`send`](Self::send) but ignores the response body: `Ok(true)` on
+    /// success, `Ok(false)` on `404`. For operations whose body is irrelevant
+    /// (delete), so an unexpected body shape cannot fail the call.
+    ///
+    /// # Errors
+    ///
+    /// See [`send`](Self::send), except decoding.
+    pub async fn send_discarding<O: Operation>(
+        &self,
+        auth: &Auth,
+        parameters: &[(&str, &str)],
+        body: Option<&O::Request>,
+    ) -> Result<bool, HttpError> {
+        struct Discard<O>(std::marker::PhantomData<O>);
+        impl<O: Operation> Operation for Discard<O> {
+            const NAME: &'static str = O::NAME;
+            const METHOD: reqwest::Method = O::METHOD;
+            const PATH: &'static str = O::PATH;
+            type Request = O::Request;
+            type Response = serde::de::IgnoredAny;
+        }
+        Ok(self
+            .send::<Discard<O>>(auth, parameters, body)
+            .await?
+            .is_some())
     }
 
     async fn execute<O: Operation>(

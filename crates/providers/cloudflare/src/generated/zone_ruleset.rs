@@ -49,6 +49,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "Ruleset",
     api_resource,
     external_name_annotation: "rulesets.cloudflare.kube.nas1k.dev/external-name",
+    finalizer: "rulesets.cloudflare.kube.nas1k.dev/finalizer",
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     references: &[
         koof::resource::Reference {
@@ -77,10 +78,24 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         ],
         response_path: "result",
     },
+    delete: Some(koof::resource::OperationDescriptor {
+        path_parameters: &[
+            ("ruleset_id", koof::resource::ValueExpr::ExternalName),
+            (
+                "zone_id",
+                koof::resource::ValueExpr::RelatedIdentifier {
+                    via: &["zone"],
+                    name: "external_id",
+                },
+            ),
+        ],
+        response_path: "",
+    }),
 };
 impl koof::ManagedResource for Ruleset {
     type AtProvider = crate::generated::types::RulesetAtProvider;
     type Observe = crate::generated::operations::ZoneRulesetObserve;
+    type Delete = crate::generated::operations::ZoneRulesetDelete;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

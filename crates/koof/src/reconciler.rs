@@ -1,12 +1,14 @@
 //! Generic observe / reconcile / controller loop for any [`ManagedResource`].
 
 use crate::{
-    error::{ReconcileError, Retry},
+    conditions::ConditionSpec,
+    error::{ReconcileError, ResolveValueError, Retry},
+    finalizer,
     http::{HttpClient, extract},
     policy::{self, Action as PolicyAction, State},
     resolve::{Node, resolve_credentials, resolve_value},
-    resource::ManagedResource,
-    status::{record_failure, update_status},
+    resource::{ManagedResource, OperationDescriptor},
+    status::{record_failure, set_conditions, update_status},
 };
 use futures::StreamExt as _;
 use kube::runtime::{
@@ -28,6 +30,8 @@ const RESYNC: Duration = Duration::from_mins(5);
 const MISSING: Duration = Duration::from_secs(30);
 /// Retry interval while waiting for a referenced resource or Secret.
 const WAITING: Duration = Duration::from_secs(15);
+/// Delay before confirming that a deleted external resource is gone.
+const CONFIRM_DELETION: Duration = Duration::from_secs(5);
 /// First transient retry; doubles per consecutive failure up to [`RESYNC`].
 const BACKOFF_BASE: Duration = Duration::from_secs(5);
 
@@ -60,11 +64,35 @@ impl ControllerContext {
     }
 }
 
-/// Reads the external resource through `R::Observe`.
-///
-/// When a path parameter derived from the resource itself (its external name) is
-/// not set yet, the resource does not exist externally and no request is made. A
-/// referenced resource without an identifier is an error (`ReferenceNotReady`).
+/// Resolves the path parameters of `operation`. `Ok(None)` when one derived from the
+/// resource itself (its external name) is not set: the external resource does not
+/// exist yet. A referenced resource without an identifier is an error
+/// (`ReferenceNotReady`).
+async fn resolve_parameters(
+    context: &ControllerContext,
+    node: &Node,
+    operation: &OperationDescriptor,
+) -> Result<Option<Vec<(&'static str, String)>>, ReconcileError> {
+    let mut parameters = Vec::new();
+    for (name, expression) in operation.path_parameters {
+        let Some(value) = resolve_value(&context.kube_client, node, expression).await? else {
+            tracing::debug!(parameter = name, "external name not set");
+            return Ok(None);
+        };
+        parameters.push((*name, value));
+    }
+    Ok(Some(parameters))
+}
+
+fn as_pairs<'a>(parameters: &'a [(&'static str, String)]) -> Vec<(&'static str, &'a str)> {
+    parameters
+        .iter()
+        .map(|(name, value)| (*name, value.as_str()))
+        .collect()
+}
+
+/// Reads the external resource through `R::Observe`; see [`resolve_parameters`] for
+/// a resource without an external name.
 ///
 /// # Errors
 ///
@@ -77,29 +105,16 @@ pub async fn observe<R: ManagedResource>(
     let node = Node::of(resource)?;
     let descriptor = node.descriptor;
 
-    let mut parameters = Vec::new();
-    for (name, expression) in descriptor.observe.path_parameters {
-        let Some(value) = resolve_value(&context.kube_client, &node, expression).await? else {
-            tracing::debug!(
-                parameter = name,
-                "external name not set; resource does not exist yet"
-            );
-            return Ok(Observation {
-                exists: false,
-                at_provider: None,
-            });
-        };
-        parameters.push((*name, value));
-    }
-    let parameters: Vec<(&str, &str)> = parameters
-        .iter()
-        .map(|(name, value)| (*name, value.as_str()))
-        .collect();
-
+    let Some(parameters) = resolve_parameters(context, &node, &descriptor.observe).await? else {
+        return Ok(Observation {
+            exists: false,
+            at_provider: None,
+        });
+    };
     let auth = resolve_credentials(&context.kube_client, &node).await?;
     let response = context
         .provider_client
-        .send::<R::Observe>(&auth, &parameters, None)
+        .send::<R::Observe>(&auth, &as_pairs(&parameters), None)
         .await?;
 
     let at_provider = match &response {
@@ -110,6 +125,34 @@ pub async fn observe<R: ManagedResource>(
         exists: response.is_some(),
         at_provider,
     })
+}
+
+/// Deletes the external resource through `R::Delete`. `Ok(false)` when it was
+/// already gone.
+///
+/// # Errors
+///
+/// Returns [`ReconcileError`] when the resource has no delete operation, a
+/// reference or the credentials cannot be resolved, or the request fails.
+pub async fn delete<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+) -> Result<bool, ReconcileError> {
+    let node = Node::of(resource)?;
+    let operation = node.descriptor.delete.as_ref().ok_or_else(|| {
+        ResolveValueError::Missing(format!(
+            "{} has no delete operation; set deletionPolicy: Orphan",
+            node.descriptor.kind
+        ))
+    })?;
+    let Some(parameters) = resolve_parameters(context, &node, operation).await? else {
+        return Ok(false);
+    };
+    let auth = resolve_credentials(&context.kube_client, &node).await?;
+    Ok(context
+        .provider_client
+        .send_discarding::<R::Delete>(&auth, &as_pairs(&parameters), None)
+        .await?)
 }
 
 /// Observes the external resource and records the result in the status. On failure
@@ -162,6 +205,24 @@ async fn reconcile_inner<R: ManagedResource>(
     resource: &R,
     context: &ControllerContext,
 ) -> Result<Action, ReconcileError> {
+    let deleting = resource.meta().deletion_timestamp.is_some();
+    if !deleting {
+        // Before anything can be created externally, so deletion is never missed.
+        finalizer::ensure(&context.kube_client, resource).await?;
+    } else if policy::orphans_on_delete(resource.management()) {
+        tracing::info!("external resource orphaned");
+        publish(
+            context,
+            resource,
+            EventType::Normal,
+            "Orphaned",
+            "External resource kept (orphaned)",
+        )
+        .await;
+        finalizer::remove(&context.kube_client, resource).await?;
+        return Ok(Action::await_change());
+    }
+
     let observation = observe(context, resource).await?;
     let decision = policy::decide(
         State {
@@ -169,7 +230,7 @@ async fn reconcile_inner<R: ManagedResource>(
             // Drift detection arrives in L4; until then an existing resource is
             // considered up to date.
             up_to_date: true,
-            deleting: resource.meta().deletion_timestamp.is_some(),
+            deleting,
         },
         resource.management(),
     )?;
@@ -177,11 +238,46 @@ async fn reconcile_inner<R: ManagedResource>(
 
     match decision.action {
         PolicyAction::None => {}
-        // Executed from L2 (delete, finalize), L3 (create) and L4 (update) on.
-        PolicyAction::Create
-        | PolicyAction::Update
-        | PolicyAction::Delete
-        | PolicyAction::Finalize => {
+        PolicyAction::Delete => {
+            let existed = delete(context, resource).await?;
+            tracing::info!(existed, "external resource deleted");
+            set_conditions(
+                &context.kube_client,
+                resource,
+                vec![
+                    ConditionSpec::deleting(),
+                    ConditionSpec::reconcile_success(),
+                ],
+            )
+            .await?;
+            publish(
+                context,
+                resource,
+                EventType::Normal,
+                "Deleted",
+                "External resource deleted",
+            )
+            .await;
+            // Confirm on the next reconcile that it is gone, then release.
+            return Ok(Action::requeue(CONFIRM_DELETION));
+        }
+        PolicyAction::Finalize => {
+            if observation.exists {
+                tracing::info!("external resource orphaned");
+                publish(
+                    context,
+                    resource,
+                    EventType::Normal,
+                    "Orphaned",
+                    "External resource kept (orphaned)",
+                )
+                .await;
+            }
+            finalizer::remove(&context.kube_client, resource).await?;
+            return Ok(Action::await_change());
+        }
+        // Executed from L3 (create) and L4 (update) on.
+        PolicyAction::Create | PolicyAction::Update => {
             tracing::info!(action = ?decision.action, "action planned but not implemented yet");
         }
     }
