@@ -140,7 +140,6 @@ fn generate_descriptor(
         .api_version
         .split_once('/')
         .ok_or_else(|| GeneratorError::InvalidApiVersion(resource.api_version.clone()))?;
-    let external_name_annotation = format!("{group}/external-name");
 
     let identifiers = resource.identifiers.iter().map(|(identifier, expression)| {
         let expression = value_expr(expression);
@@ -184,7 +183,7 @@ fn generate_descriptor(
     } else {
         quote!(None)
     };
-    let finalizer = format!("{group}/finalizer");
+    let create = create_descriptor(ir, name, resource)?;
 
     Ok(quote! {
         fn api_resource() -> kube::api::ApiResource {
@@ -194,12 +193,12 @@ fn generate_descriptor(
         pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
             kind: #kind,
             api_resource,
-            external_name_annotation: #external_name_annotation,
-            finalizer: #finalizer,
+            group: #group,
             identifiers: &[#(#identifiers),*],
             references: &[#(#references),*],
             credentials: #credentials,
             observe: #observe,
+            create: #create,
             delete: #delete,
         };
     })
@@ -257,17 +256,21 @@ fn generate_managed_resource(
         )));
     }
     let observe = operation_ident(&resource.lifecycle.observe)?;
-    let delete = if let Some(id) = &resource.lifecycle.delete {
+    let operation_type = |id: Option<&OperationId>| -> Result<TokenStream, GeneratorError> {
+        let Some(id) = id else {
+            return Ok(quote!(koof::http::Unsupported));
+        };
         let ident = operation_ident(id)?;
-        quote!(crate::generated::operations::#ident)
-    } else {
-        quote!(koof::http::Unsupported)
+        Ok(quote!(crate::generated::operations::#ident))
     };
+    let create = operation_type(resource.lifecycle.create.as_ref())?;
+    let delete = operation_type(resource.lifecycle.delete.as_ref())?;
 
     Ok(quote! {
         impl koof::ManagedResource for #resource_ident {
             type AtProvider = #at_provider_type;
             type Observe = crate::generated::operations::#observe;
+            type Create = #create;
             type Delete = #delete;
 
             fn descriptor() -> &'static koof::ResourceDescriptor {
@@ -282,6 +285,65 @@ fn generate_managed_resource(
                 &self.spec.management
             }
         }
+    })
+}
+
+/// `Some(koof::resource::CreateDescriptor { .. })` or `None`.
+fn create_descriptor(
+    ir: &ProviderIr,
+    name: &ResourceName,
+    resource: &ResourceIr,
+) -> Result<TokenStream, GeneratorError> {
+    let Some(id) = &resource.lifecycle.create else {
+        return Ok(quote!(None));
+    };
+    let operation = ir
+        .operations
+        .get(id)
+        .ok_or_else(|| GeneratorError::InvalidIr(format!("unknown operation {}", id.0)))?;
+
+    // The identifier backed by the external name annotation must come back in the
+    // create response, otherwise the new resource cannot be tracked.
+    let identifier = resource
+        .identifiers
+        .iter()
+        .find(|(_, expression)| matches!(expression, ValueExpr::ExternalName))
+        .map(|(identifier, _)| identifier)
+        .ok_or_else(|| {
+            GeneratorError::InvalidIr(format!(
+                "resource {} can be created but has no identifier of type external_name",
+                name.0
+            ))
+        })?;
+    let external_name = operation
+        .result_identifiers
+        .get(identifier)
+        .and_then(|path| path.strip_prefix("response.body."))
+        .ok_or_else(|| {
+            GeneratorError::InvalidIr(format!(
+                "create operation {} must declare result.identifiers.{identifier}: \
+                 response.body.<path>",
+                id.0
+            ))
+        })?;
+
+    let mapping = operation.request_mapping.clone().unwrap_or_default();
+    let from = &mapping.from.0;
+    let set = mapping.set.iter().map(|(path, expression)| {
+        let expression = value_expr(expression);
+        quote!((#path, #expression))
+    });
+    let operation = operation_descriptor(ir, id)?;
+
+    Ok(quote! {
+        Some(koof::resource::CreateDescriptor {
+            operation: #operation,
+            request: koof::resource::RequestMapping {
+                from: #from,
+                set: &[#(#set),*],
+            },
+            external_name: #external_name,
+        })
     })
 }
 

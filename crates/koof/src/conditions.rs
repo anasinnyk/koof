@@ -29,6 +29,16 @@ impl ConditionSpec {
     }
 
     #[must_use]
+    pub fn creating() -> Self {
+        Self::new(
+            READY,
+            "False",
+            "Creating",
+            "External resource is being created",
+        )
+    }
+
+    #[must_use]
     pub fn deleting() -> Self {
         Self::new(
             READY,
