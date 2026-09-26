@@ -63,6 +63,15 @@ actions:
       x-kube-operation:
         resource: account
         lifecycle: update
+        # The update body is the full account: id and type are required but are
+        # not part of forProvider.
+        request:
+          set:
+            id:
+              type: external_name
+            type:
+              type: field
+              path: status.atProvider.type
         path_parameters:
           account_id:
             type: external_name

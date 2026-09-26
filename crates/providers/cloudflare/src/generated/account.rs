@@ -76,6 +76,19 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         },
         external_name: "result.id",
     }),
+    update: Some(koof::resource::UpdateDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
+            response_path: "",
+        },
+        request: koof::resource::RequestMapping {
+            from: "spec.forProvider",
+            set: &[
+                ("id", koof::resource::ValueExpr::ExternalName),
+                ("type", koof::resource::ValueExpr::Field("status.atProvider.type")),
+            ],
+        },
+    }),
     delete: Some(koof::resource::OperationDescriptor {
         path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
         response_path: "",
@@ -85,6 +98,7 @@ impl koof::ManagedResource for Account {
     type AtProvider = crate::generated::types::AccountAtProvider;
     type Observe = crate::generated::operations::AccountObserve;
     type Create = crate::generated::operations::AccountCreate;
+    type Update = crate::generated::operations::AccountUpdate;
     type Delete = crate::generated::operations::AccountDelete;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR

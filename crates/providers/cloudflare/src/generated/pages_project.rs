@@ -105,6 +105,34 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         },
         external_name: "result.name",
     }),
+    update: Some(koof::resource::UpdateDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[
+                (
+                    "account_id",
+                    koof::resource::ValueExpr::RelatedIdentifier {
+                        via: &["account"],
+                        name: "external_id",
+                    },
+                ),
+                (
+                    "project_name",
+                    koof::resource::ValueExpr::Coalesce(
+                        &[
+                            koof::resource::ValueExpr::ExternalName,
+                            koof::resource::ValueExpr::Field("spec.resourceName"),
+                            koof::resource::ValueExpr::Field("metadata.name"),
+                        ],
+                    ),
+                ),
+            ],
+            response_path: "",
+        },
+        request: koof::resource::RequestMapping {
+            from: "spec.forProvider",
+            set: &[],
+        },
+    }),
     delete: Some(koof::resource::OperationDescriptor {
         path_parameters: &[
             (
@@ -132,6 +160,7 @@ impl koof::ManagedResource for PagesProject {
     type AtProvider = crate::generated::types::PagesProjectAtProvider;
     type Observe = crate::generated::operations::PagesProjectObserve;
     type Create = crate::generated::operations::PagesProjectCreate;
+    type Update = crate::generated::operations::PagesProjectUpdate;
     type Delete = crate::generated::operations::PagesProjectDelete;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR

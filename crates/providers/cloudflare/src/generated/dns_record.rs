@@ -96,6 +96,25 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         },
         external_name: "result.id",
     }),
+    update: Some(koof::resource::UpdateDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[
+                ("dns_record_id", koof::resource::ValueExpr::ExternalName),
+                (
+                    "zone_id",
+                    koof::resource::ValueExpr::RelatedIdentifier {
+                        via: &["zone"],
+                        name: "external_id",
+                    },
+                ),
+            ],
+            response_path: "",
+        },
+        request: koof::resource::RequestMapping {
+            from: "spec.forProvider",
+            set: &[],
+        },
+    }),
     delete: Some(koof::resource::OperationDescriptor {
         path_parameters: &[
             ("dns_record_id", koof::resource::ValueExpr::ExternalName),
@@ -114,6 +133,7 @@ impl koof::ManagedResource for DNSRecord {
     type AtProvider = crate::generated::types::DnsRecordAtProvider;
     type Observe = crate::generated::operations::DnsRecordObserve;
     type Create = crate::generated::operations::DnsRecordCreate;
+    type Update = crate::generated::operations::DnsRecordUpdate;
     type Delete = crate::generated::operations::DnsRecordDelete;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR

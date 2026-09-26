@@ -87,6 +87,16 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         },
         external_name: "result.id",
     }),
+    update: Some(koof::resource::UpdateDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[("zone_id", koof::resource::ValueExpr::ExternalName)],
+            response_path: "",
+        },
+        request: koof::resource::RequestMapping {
+            from: "spec.forProvider",
+            set: &[],
+        },
+    }),
     delete: Some(koof::resource::OperationDescriptor {
         path_parameters: &[("zone_id", koof::resource::ValueExpr::ExternalName)],
         response_path: "",
@@ -96,6 +106,7 @@ impl koof::ManagedResource for Zone {
     type AtProvider = crate::generated::types::ZoneAtProvider;
     type Observe = crate::generated::operations::ZoneObserve;
     type Create = crate::generated::operations::ZoneCreate;
+    type Update = crate::generated::operations::ZoneUpdate;
     type Delete = crate::generated::operations::ZoneDelete;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR

@@ -1,6 +1,7 @@
 pub mod app;
 pub mod conditions;
 pub mod create;
+pub mod drift;
 pub mod error;
 pub mod finalizer;
 pub mod http;
@@ -8,6 +9,7 @@ pub mod managed;
 pub mod policy;
 pub mod reconciler;
 pub mod reference;
+pub mod request;
 pub mod resolve;
 pub mod resource;
 pub mod schema;
