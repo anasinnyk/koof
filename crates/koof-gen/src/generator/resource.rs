@@ -67,12 +67,20 @@ fn generate_spec(
     let for_provider_ident = kind_ident(&format!("{kind}ForProviderSpec"))?;
     let fields_type = types.path(&format!("{kind}ForProvider"))?;
 
+    let validations = validation_tokens(resource);
     let mut fields = generate_reference_fields(resource)?;
     if let Some(credentials) = generate_credential_field(resource)? {
         fields.push(credentials);
     }
 
     Ok(quote! {
+        /// CRD schema of `spec.forProvider`: unions flattened for kube, then the
+        /// overlay's CEL validations.
+        fn for_provider_schema(schema: &mut schemars::Schema) {
+            koof::schema::flatten_object_unions(schema);
+            koof::schema::add_validations(schema, &[#(#validations),*]);
+        }
+
         /// `spec.forProvider`: the generated API fields plus references and
         /// credentials.
         #[derive(
@@ -83,7 +91,7 @@ fn generate_spec(
             serde::Deserialize,
             schemars::JsonSchema
         )]
-        #[schemars(transform = koof::schema::flatten_object_unions)]
+        #[schemars(transform = for_provider_schema)]
         pub struct #for_provider_ident {
             #[serde(flatten)]
             pub fields: #fields_type,
@@ -116,6 +124,37 @@ fn generate_spec(
                 koof::managed::ManagedResourceSpec,
         }
     })
+}
+
+/// `koof::schema::Validation`s from `validations` and `immutable`. An immutable
+/// field gets `self == oldSelf` on itself (cannot change) and
+/// `!has(oldSelf.f) || has(self.f)` on its parent (cannot be removed); setting it
+/// the first time (e.g. by late initialization) stays allowed.
+fn validation_tokens(resource: &ResourceIr) -> Vec<TokenStream> {
+    let validation = |rule: &str, message: &str, field: &str| {
+        quote! {
+            koof::schema::Validation { rule: #rule, message: #message, field: #field }
+        }
+    };
+    let mut tokens: Vec<TokenStream> = resource
+        .validations
+        .iter()
+        .map(|rule| validation(&rule.rule, &rule.message, &rule.field))
+        .collect();
+    for field in &resource.immutable {
+        let (parent, leaf) = field.rsplit_once('.').unwrap_or(("", field));
+        tokens.push(validation(
+            "self == oldSelf",
+            &format!("{field} is immutable"),
+            field,
+        ));
+        tokens.push(validation(
+            &format!("!has(oldSelf.{leaf}) || has(self.{leaf})"),
+            &format!("{field} cannot be removed once set"),
+            parent,
+        ));
+    }
+    tokens
 }
 
 fn generate_status(

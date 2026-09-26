@@ -12,6 +12,9 @@ actions:
         kind: Zone
         scope: Namespaced
 
+        # A zone cannot be renamed; a new name is a new zone.
+        immutable: [name]
+
         identifiers:
           external_id:
             type: external_name

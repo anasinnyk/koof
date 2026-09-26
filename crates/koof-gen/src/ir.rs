@@ -73,6 +73,23 @@ pub struct ResourceIr {
     pub references: BTreeMap<String, ReferenceIr>,
     pub credentials: Option<CredentialsIr>,
     pub lifecycle: LifecycleIr,
+    /// CEL rules added to the CRD schema (`x-kubernetes-validations`).
+    #[serde(default)]
+    pub validations: Vec<ValidationIr>,
+    /// `forProvider` fields that cannot change or be removed once set.
+    #[serde(default)]
+    pub immutable: Vec<String>,
+}
+
+/// A CEL rule from `x-kube-resource.validations`.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ValidationIr {
+    pub rule: String,
+    pub message: String,
+    /// Dot path relative to `spec.forProvider` where the rule applies (`self`);
+    /// empty for `forProvider` itself.
+    #[serde(default)]
+    pub field: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
