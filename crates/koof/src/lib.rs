@@ -7,6 +7,7 @@ pub mod finalizer;
 pub mod http;
 pub mod late_init;
 pub mod managed;
+pub mod metrics;
 pub mod object;
 pub mod policy;
 pub mod reconciler;
@@ -17,6 +18,6 @@ pub mod resource;
 pub mod schema;
 pub mod status;
 
-pub use app::{App, ProviderInfo};
+pub use app::{App, AppError, ProviderInfo};
 pub use http::Operation;
 pub use resource::{ManagedResource, ResourceDescriptor};

@@ -4,7 +4,7 @@ use cloudflare_provider::generated::{
 };
 
 #[tokio::main]
-async fn main() -> Result<(), kube::Error> {
+async fn main() -> Result<(), koof::AppError> {
     koof::App::new(&PROVIDER)
         .controller::<Account>()
         .controller::<Zone>()

@@ -8,13 +8,14 @@ use crate::{
     finalizer,
     http::{HttpClient, extract},
     late_init,
+    metrics::Metrics,
     policy::{self, Action as PolicyAction, State},
     reference::value_at,
     resolve::{Node, resolve_credentials, resolve_value},
     resource::{EXTERNAL_NAME, ManagedResource, OperationDescriptor},
     status::{record_failure, set_conditions, update_status},
 };
-use futures::StreamExt as _;
+use futures::{StreamExt as _, TryStreamExt as _};
 use kube::runtime::{
     Controller, Predicate as _, PredicateConfig, WatchStreamExt as _,
     controller::Action,
@@ -48,19 +49,47 @@ pub struct ControllerContext {
     pub kube_client: kube::Client,
     pub provider_client: HttpClient,
     pub recorder: Recorder,
+    pub metrics: Arc<Metrics>,
     /// Consecutive failures per object, for exponential backoff.
     failures: Mutex<HashMap<String, u32>>,
+    /// Kinds whose controllers finished their initial sync.
+    synced: Mutex<std::collections::BTreeSet<&'static str>>,
 }
 
 impl ControllerContext {
     #[must_use]
-    pub fn new(kube_client: kube::Client, provider_client: HttpClient, recorder: Recorder) -> Self {
+    pub fn new(
+        kube_client: kube::Client,
+        provider_client: HttpClient,
+        recorder: Recorder,
+        metrics: Arc<Metrics>,
+    ) -> Self {
         Self {
             kube_client,
             provider_client,
             recorder,
+            metrics,
             failures: Mutex::default(),
+            synced: Mutex::default(),
         }
+    }
+
+    fn mark_synced(&self, kind: &'static str) {
+        let newly = self
+            .synced
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .insert(kind);
+        if newly {
+            tracing::info!(resource = kind, "initial sync complete");
+        }
+    }
+
+    /// Whether the controllers of all `kinds` finished their initial sync.
+    #[must_use]
+    pub fn is_synced(&self, kinds: &[&'static str]) -> bool {
+        let synced = self.synced.lock().unwrap_or_else(PoisonError::into_inner);
+        kinds.iter().all(|kind| synced.contains(kind))
     }
 
     fn failures(&self) -> std::sync::MutexGuard<'_, HashMap<String, u32>> {
@@ -230,15 +259,21 @@ pub async fn reconcile<R: ManagedResource>(
         generation = resource.meta().generation,
     );
     async {
-        match reconcile_inner(resource.as_ref(), &context).await {
+        let started = std::time::Instant::now();
+        let result = reconcile_inner(resource.as_ref(), &context).await;
+        context.metrics.reconciled(
+            R::descriptor().kind,
+            if result.is_ok() { "success" } else { "error" },
+            started.elapsed(),
+        );
+        match result {
             Ok(action) => {
                 context.failures().remove(&object_key(resource.as_ref()));
                 Ok(action)
             }
             Err(error) => {
                 tracing::warn!(%error, retry = ?error.retry(), "reconcile failed");
-                if let Err(status_error) =
-                    record_failure(&context.kube_client, resource.as_ref(), &error).await
+                if let Err(status_error) = record_failure(&context, resource.as_ref(), &error).await
                 {
                     tracing::warn!(error = %status_error, "cannot record failure in status");
                 }
@@ -290,6 +325,9 @@ async fn reconcile_inner<R: ManagedResource>(
         resource.management(),
     )?;
     tracing::debug!(?decision, ?drifted_fields, "decided");
+    if !drifted_fields.is_empty() {
+        context.metrics.drift_detected(R::descriptor().kind);
+    }
 
     if decision.late_initialize
         && let Some(observed) = &observation.at_provider
@@ -299,6 +337,7 @@ async fn reconcile_inner<R: ManagedResource>(
             late_init::apply(&context.kube_client, resource, &fields).await?;
             let names: Vec<&str> = fields.keys().map(String::as_str).collect();
             tracing::info!(fields = ?names, "late-initialized");
+            context.metrics.late_initialized(R::descriptor().kind);
             publish(
                 context,
                 resource,
@@ -334,7 +373,7 @@ async fn reconcile_inner<R: ManagedResource>(
         }
     }
 
-    let change = update_status(&context.kube_client, resource, &observation).await?;
+    let change = update_status(context, resource, &observation).await?;
     if change.became_ready {
         publish(
             context,
@@ -361,8 +400,9 @@ async fn delete_external<R: ManagedResource>(
 ) -> Result<Action, ReconcileError> {
     let existed = delete(context, resource).await?;
     tracing::info!(existed, "external resource deleted");
+    context.metrics.action(R::descriptor().kind, "deleted");
     set_conditions(
-        &context.kube_client,
+        context,
         resource,
         vec![
             ConditionSpec::deleting(),
@@ -389,6 +429,7 @@ async fn release<R: ManagedResource>(
 ) -> Result<Action, ReconcileError> {
     if orphaned {
         tracing::info!("external resource orphaned");
+        context.metrics.action(R::descriptor().kind, "orphaned");
         publish(
             context,
             resource,
@@ -399,6 +440,9 @@ async fn release<R: ManagedResource>(
         .await;
     }
     finalizer::remove(&context.kube_client, resource).await?;
+    context
+        .metrics
+        .object_state(&object_key(resource), R::descriptor().kind, None);
     Ok(Action::await_change())
 }
 
@@ -412,6 +456,7 @@ async fn update_external<R: ManagedResource>(
 ) -> Result<Action, ReconcileError> {
     update(context, resource).await?;
     tracing::info!(?drifted_fields, "external resource updated");
+    context.metrics.action(R::descriptor().kind, "updated");
     publish(
         context,
         resource,
@@ -437,7 +482,7 @@ async fn update_external<R: ManagedResource>(
         )
         .await;
     }
-    update_status(&context.kube_client, resource, &observation).await?;
+    update_status(context, resource, &observation).await?;
     Ok(Action::requeue(RESYNC))
 }
 
@@ -459,7 +504,7 @@ async fn create_external<R: ManagedResource>(
     if state.recently_succeeded(jiff::Timestamp::now()) {
         tracing::debug!("created recently and not visible yet; waiting");
         set_conditions(
-            &context.kube_client,
+            context,
             resource,
             vec![
                 ConditionSpec::creating(),
@@ -472,6 +517,7 @@ async fn create_external<R: ManagedResource>(
 
     let external_name = create::create(context, resource).await?;
     tracing::info!(%external_name, "external resource created");
+    context.metrics.action(R::descriptor().kind, "created");
     publish(
         context,
         resource,
@@ -514,7 +560,7 @@ fn backoff(attempts: u32) -> Duration {
     BACKOFF_BASE.saturating_mul(1 << exponent).min(RESYNC)
 }
 
-fn object_key<R: ManagedResource>(resource: &R) -> String {
+pub(crate) fn object_key<R: ManagedResource>(resource: &R) -> String {
     format!(
         "{}/{}/{}",
         R::descriptor().kind,
@@ -568,9 +614,17 @@ pub async fn run<R: ManagedResource>(context: Arc<ControllerContext>) {
     };
     let deleting = |resource: &R| resource.meta().deletion_timestamp.as_ref().map(|_| 1_u64);
     let (reader, writer) = reflector::store();
+    // Readiness from the stream itself: `Store::wait_until_ready` wakes only one
+    // waiter (the controller's), so a second waiter would never be woken.
+    let sync_context = context.clone();
     let stream = watcher(api, watcher::Config::default())
         .default_backoff()
         .reflect(writer)
+        .inspect_ok(move |event| {
+            if matches!(event, watcher::Event::InitDone) {
+                sync_context.mark_synced(kind);
+            }
+        })
         .applied_objects()
         .predicate_filter(
             predicates::generation
