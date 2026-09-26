@@ -46,6 +46,8 @@ actions:
       x-kube-operation:
         resource: zone_ruleset
         lifecycle: observe
+        response:
+          path: result
         path_parameters:
           zone_id:
             type: related_identifier

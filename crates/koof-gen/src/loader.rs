@@ -48,6 +48,16 @@ pub enum LoaderError {
 /// Returns an error when a file cannot be read or parsed, an overlay action matches
 /// nothing, or the resulting document cannot be converted to [`ProviderIr`].
 pub fn load(openapi_path: &Path, overlay_paths: &[PathBuf]) -> Result<ProviderIr> {
+    Ok(extract(&load_document(openapi_path, overlay_paths)?)?)
+}
+
+/// Reads an `OpenAPI` document and applies overlays in the given order.
+///
+/// # Errors
+///
+/// Returns an error when a file cannot be read or parsed, or an overlay action
+/// matches nothing.
+pub fn load_document(openapi_path: &Path, overlay_paths: &[PathBuf]) -> Result<Value> {
     let source = fs::read_to_string(openapi_path)
         .with_context(|| format!("cannot read {}", openapi_path.display()))?;
 
@@ -67,5 +77,5 @@ pub fn load(openapi_path: &Path, overlay_paths: &[PathBuf]) -> Result<ProviderIr
             .map_err(|error| anyhow::anyhow!("cannot apply {}: {error}", overlay_path.display()))?;
     }
 
-    Ok(extract(&openapi)?)
+    Ok(openapi)
 }
