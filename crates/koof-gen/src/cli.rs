@@ -1,4 +1,9 @@
-use crate::{generator::generate, loader::load, validation::validate};
+use crate::{
+    generator::generate,
+    loader::{load, load_document},
+    spec,
+    validation::validate,
+};
 use anyhow::{Context, Result, bail};
 use clap::Parser;
 use std::{
@@ -21,6 +26,11 @@ pub struct Args {
     /// Directory for generated files.
     #[arg(short = 'o', long, value_name = "DIRECTORY")]
     output: PathBuf,
+
+    /// Also write the preprocessed document (pruned, normalized, with synthesized
+    /// `forProvider` / `atProvider` schemas) as JSON, for inspection.
+    #[arg(long, value_name = "FILE")]
+    preprocessed_spec: Option<PathBuf>,
 }
 
 /// Runs the generator CLI.
@@ -31,6 +41,12 @@ pub struct Args {
 /// cannot be written.
 pub fn run() -> Result<()> {
     let args = Args::parse();
+
+    if let Some(path) = &args.preprocessed_spec {
+        let document = spec::preprocess(&load_document(&args.openapi, &args.overlay)?)?;
+        fs::write(path, serde_json::to_string_pretty(&document)?)
+            .with_context(|| format!("cannot write {}", path.display()))?;
+    }
 
     let ir = load(&args.openapi, &args.overlay)?;
 

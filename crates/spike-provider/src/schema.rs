@@ -18,7 +18,9 @@ fn flatten(node: &mut Map<String, Value>) {
         visit(value);
     }
     for key in ["oneOf", "anyOf"] {
-        let Some(Value::Array(variants)) = node.get(key) else { continue };
+        let Some(Value::Array(variants)) = node.get(key) else {
+            continue;
+        };
         let objects: Vec<&Map<String, Value>> = variants
             .iter()
             .filter_map(Value::as_object)
@@ -52,7 +54,10 @@ fn flatten(node: &mut Map<String, Value>) {
                 .unwrap_or_default();
             required = Some(match required {
                 None => variant_required,
-                Some(current) => current.into_iter().filter(|r| variant_required.contains(r)).collect(),
+                Some(current) => current
+                    .into_iter()
+                    .filter(|r| variant_required.contains(r))
+                    .collect(),
             });
         }
         node.remove(key);
@@ -79,9 +84,14 @@ fn visit(value: &mut Value) {
 
 /// Two different schemas for the same property: keep what both agree on.
 fn relax(existing: &mut Value, incoming: &Value) {
-    let (Some(a), Some(b)) = (existing.as_object_mut(), incoming.as_object()) else { return };
+    let (Some(a), Some(b)) = (existing.as_object_mut(), incoming.as_object()) else {
+        return;
+    };
     let same_type = a.get("type") == b.get("type");
-    let enum_union = match (a.get("enum").and_then(Value::as_array), b.get("enum").and_then(Value::as_array)) {
+    let enum_union = match (
+        a.get("enum").and_then(Value::as_array),
+        b.get("enum").and_then(Value::as_array),
+    ) {
         (Some(x), Some(y)) if same_type => {
             let mut values = x.clone();
             values.extend(y.iter().filter(|v| !x.contains(v)).cloned());
@@ -89,7 +99,8 @@ fn relax(existing: &mut Value, incoming: &Value) {
         }
         _ => None,
     };
-    let nullable = a.get("nullable") == Some(&Value::Bool(true)) || b.get("nullable") == Some(&Value::Bool(true));
+    let nullable = a.get("nullable") == Some(&Value::Bool(true))
+        || b.get("nullable") == Some(&Value::Bool(true));
     let mut relaxed = Map::new();
     if same_type {
         if let Some(t) = a.get("type") {
@@ -98,16 +109,23 @@ fn relax(existing: &mut Value, incoming: &Value) {
         if let Some(values) = enum_union {
             relaxed.insert("enum".into(), Value::Array(values));
         }
-        if a.get("type") == Some(&Value::String("array".into())) && a.get("items") == b.get("items") {
+        if a.get("type") == Some(&Value::String("array".into())) && a.get("items") == b.get("items")
+        {
             if let Some(items) = a.get("items") {
                 relaxed.insert("items".into(), items.clone());
             }
         }
         if a.get("type") == Some(&Value::String("object".into())) {
-            relaxed.insert("x-kubernetes-preserve-unknown-fields".into(), Value::Bool(true));
+            relaxed.insert(
+                "x-kubernetes-preserve-unknown-fields".into(),
+                Value::Bool(true),
+            );
         }
     } else {
-        relaxed.insert("x-kubernetes-preserve-unknown-fields".into(), Value::Bool(true));
+        relaxed.insert(
+            "x-kubernetes-preserve-unknown-fields".into(),
+            Value::Bool(true),
+        );
     }
     if nullable {
         relaxed.insert("nullable".into(), Value::Bool(true));

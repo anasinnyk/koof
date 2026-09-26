@@ -55,6 +55,8 @@ actions:
       x-kube-operation:
         resource: pages_project
         lifecycle: observe
+        response:
+          path: result
         path_parameters:
           account_id:
             type: related_identifier

@@ -17,8 +17,33 @@ macro_rules! crd {
     };
 }
 
-crd!(AccountSpec, "Account", "cloudflare.kube.nas1k.dev", crate::types::AccountForProvider);
-crd!(ZoneSpec, "Zone", "cloudflare.kube.nas1k.dev", crate::types::ZoneForProvider);
-crd!(DnsRecordSpec, "DNSRecord", "zones.cloudflare.kube.nas1k.dev", crate::types::DnsRecordForProvider);
-crd!(RulesetSpec, "Ruleset", "rulesets.cloudflare.kube.nas1k.dev", crate::types::RulesetForProvider);
-crd!(PagesProjectSpec, "PagesProject", "cloudflare.kube.nas1k.dev", crate::types::PagesProjectForProvider);
+crd!(
+    AccountSpec,
+    "Account",
+    "cloudflare.kube.nas1k.dev",
+    crate::types::AccountForProvider
+);
+crd!(
+    ZoneSpec,
+    "Zone",
+    "cloudflare.kube.nas1k.dev",
+    crate::types::ZoneForProvider
+);
+crd!(
+    DnsRecordSpec,
+    "DNSRecord",
+    "zones.cloudflare.kube.nas1k.dev",
+    crate::types::DnsRecordForProvider
+);
+crd!(
+    RulesetSpec,
+    "Ruleset",
+    "rulesets.cloudflare.kube.nas1k.dev",
+    crate::types::RulesetForProvider
+);
+crd!(
+    PagesProjectSpec,
+    "PagesProject",
+    "cloudflare.kube.nas1k.dev",
+    crate::types::PagesProjectForProvider
+);

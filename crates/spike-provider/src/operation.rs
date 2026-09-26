@@ -50,7 +50,10 @@ pub struct HttpClient {
 
 impl HttpClient {
     pub fn new(http: reqwest::Client, base_url: impl Into<String>) -> Self {
-        Self { http, base_url: base_url.into() }
+        Self {
+            http,
+            base_url: base_url.into(),
+        }
     }
 
     /// `404` becomes `Ok(None)`; any other non-2xx is an error carrying the body.
@@ -118,7 +121,10 @@ mod tests {
 
     #[test]
     fn renders_and_encodes_path() {
-        let path = render_path("/zones/{zone_id}/dns_records/{id}", &[("zone_id", "a/b"), ("id", "1")]);
+        let path = render_path(
+            "/zones/{zone_id}/dns_records/{id}",
+            &[("zone_id", "a/b"), ("id", "1")],
+        );
         assert_eq!(path.ok().as_deref(), Some("/zones/a%2Fb/dns_records/1"));
     }
 

@@ -63,6 +63,8 @@ actions:
       x-kube-operation:
         resource: dns_record
         lifecycle: observe
+        response:
+          path: result
         path_parameters:
           zone_id:
             type: related_identifier

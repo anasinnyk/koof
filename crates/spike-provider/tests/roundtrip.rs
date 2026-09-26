@@ -24,7 +24,10 @@ spec:
     proxied: true
 "#,
     );
-    assert!(matches!(record.spec.for_provider, DnsRecordForProvider::ARecord(_)));
+    assert!(matches!(
+        record.spec.for_provider,
+        DnsRecordForProvider::ARecord(_)
+    ));
     assert_eq!(input["spec"], output["spec"]);
 }
 
@@ -63,5 +66,8 @@ spec:
 "#;
     let input: serde_json::Value = serde_yaml::from_str(yaml).expect("yaml");
     let result = serde_json::from_value::<DNSRecord>(input);
-    println!("invalid A record -> {:?}", result.as_ref().map(|r| &r.spec.for_provider));
+    println!(
+        "invalid A record -> {:?}",
+        result.as_ref().map(|r| &r.spec.for_provider)
+    );
 }

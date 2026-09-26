@@ -41,6 +41,8 @@ actions:
       x-kube-operation:
         resource: account
         lifecycle: observe
+        response:
+          path: result
         path_parameters:
           account_id:
             type: field

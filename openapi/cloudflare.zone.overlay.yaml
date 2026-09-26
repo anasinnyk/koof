@@ -58,6 +58,8 @@ actions:
       x-kube-operation:
         resource: zone
         lifecycle: observe
+        response:
+          path: result
         path_parameters:
           zone_id:
             type: field
