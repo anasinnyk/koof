@@ -104,12 +104,29 @@ pub async fn record_failure<R: ManagedResource>(
     resource: &R,
     error: &ReconcileError,
 ) -> Result<(), ReconcileError> {
+    set_conditions(
+        client,
+        resource,
+        vec![ConditionSpec::reconcile_error(error.to_string())],
+    )
+    .await
+}
+
+/// Sets the given conditions, keeping everything else in the status.
+///
+/// # Errors
+///
+/// Returns [`ReconcileError`] when the resource has no namespace or the patch fails.
+pub async fn set_conditions<R: ManagedResource>(
+    client: &kube::Client,
+    resource: &R,
+    specs: Vec<ConditionSpec>,
+) -> Result<(), ReconcileError> {
     let current = current_conditions(resource);
-    let conditions = conditions::set(
-        &current,
-        ConditionSpec::reconcile_error(error.to_string()),
-        resource.meta().generation,
-    );
+    let generation = resource.meta().generation;
+    let conditions = specs.into_iter().fold(current.clone(), |conditions, spec| {
+        conditions::set(&conditions, spec, generation)
+    });
     if conditions == current {
         return Ok(());
     }

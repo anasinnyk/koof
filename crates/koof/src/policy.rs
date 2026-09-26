@@ -48,6 +48,15 @@ pub enum PolicyError {
     ObserveNotAllowed,
 }
 
+/// Whether deleting the managed resource keeps the external one: `Delete` is not
+/// allowed or `deletionPolicy` is `Orphan`. Then no external call is needed to
+/// release it — which also unblocks a resource whose observe keeps failing.
+#[must_use]
+pub fn orphans_on_delete(management: &ManagedResourceSpec) -> bool {
+    !management.allows(ManagementAction::Delete)
+        || management.deletion_policy == DeletionPolicy::Orphan
+}
+
 /// Decides what to do; see the module table.
 ///
 /// # Errors
@@ -64,11 +73,7 @@ pub fn decide(state: State, management: &ManagedResourceSpec) -> Result<Decision
             deleting: true,
             exists: true,
             ..
-        } if allowed(ManagementAction::Delete)
-            && management.deletion_policy == DeletionPolicy::Delete =>
-        {
-            Action::Delete
-        }
+        } if !orphans_on_delete(management) => Action::Delete,
         State { deleting: true, .. } => Action::Finalize,
         State { exists: false, .. } if allowed(ManagementAction::Create) => Action::Create,
         State {

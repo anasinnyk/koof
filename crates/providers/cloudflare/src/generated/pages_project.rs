@@ -49,6 +49,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "PagesProject",
     api_resource,
     external_name_annotation: "cloudflare.kube.nas1k.dev/external-name",
+    finalizer: "cloudflare.kube.nas1k.dev/finalizer",
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     references: &[
         koof::resource::Reference {
@@ -86,10 +87,33 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         ],
         response_path: "result",
     },
+    delete: Some(koof::resource::OperationDescriptor {
+        path_parameters: &[
+            (
+                "account_id",
+                koof::resource::ValueExpr::RelatedIdentifier {
+                    via: &["account"],
+                    name: "external_id",
+                },
+            ),
+            (
+                "project_name",
+                koof::resource::ValueExpr::Coalesce(
+                    &[
+                        koof::resource::ValueExpr::ExternalName,
+                        koof::resource::ValueExpr::Field("spec.resourceName"),
+                        koof::resource::ValueExpr::Field("metadata.name"),
+                    ],
+                ),
+            ),
+        ],
+        response_path: "",
+    }),
 };
 impl koof::ManagedResource for PagesProject {
     type AtProvider = crate::generated::types::PagesProjectAtProvider;
     type Observe = crate::generated::operations::PagesProjectObserve;
+    type Delete = crate::generated::operations::PagesProjectDelete;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }
