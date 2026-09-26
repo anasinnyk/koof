@@ -36,3 +36,30 @@ actions:
     remove: true
   - target: $.components.responses.rulesets_RulesetOrDryRun.content['application/json'].schema.allOf[1].properties.errors.enum
     remove: true
+
+  # Spec bugs: string defaults on array fields; typify rejects them. A primitive
+  # cannot be removed directly, so the property is replaced without its default.
+  - target: $.components.schemas.healthchecks_http_config.properties.expected_codes
+    remove: true
+  - target: $.components.schemas.healthchecks_http_config.properties
+    update:
+      expected_codes:
+        description: The expected HTTP response codes (e.g. "200") or code ranges (e.g. "2xx" for all codes starting with 2) of the health check.
+        type: array
+        items:
+          type: string
+        nullable: true
+  - target: $.components.schemas['load-balancing_session_affinity_attributes'].properties.headers
+    remove: true
+  - target: $.components.schemas['load-balancing_session_affinity_attributes'].properties
+    update:
+      headers:
+        description: Names of HTTP headers to base session affinity on when header `session_affinity` is enabled.
+        type: array
+        items:
+          description: An HTTP header name.
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[a-zA-Z0-9_-]+$
+        uniqueItems: true

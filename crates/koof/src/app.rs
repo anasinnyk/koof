@@ -45,6 +45,13 @@ impl App {
         }
     }
 
+    /// Applies a registration function, e.g. a provider's generated
+    /// `controllers` (all its resources).
+    #[must_use]
+    pub fn with(self, register: fn(Self) -> Self) -> Self {
+        register(self)
+    }
+
     /// Adds the controller for `R`.
     #[must_use]
     pub fn controller<R: ManagedResource>(mut self) -> Self {

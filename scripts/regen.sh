@@ -1,22 +1,40 @@
 #!/usr/bin/env bash
-# Regenerates the Cloudflare provider from OpenAPI + overlays.
-# Usage: scripts/regen.sh [output-dir]   (default: crates/providers/cloudflare)
+# Regenerates providers from their OpenAPI document and overlays, listed in
+# crates/providers/<provider>/openapi/sources (document first, then overlays in order).
+#
+# Usage: scripts/regen.sh [provider [output-dir]]
+#   no arguments      — every provider in place
+#   provider          — one provider in place
+#   provider output   — one provider into output-dir (used by check-generated.sh)
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
-provider="$root/crates/providers/cloudflare"
-output="${1:-$provider}"
 
-cargo run --quiet --manifest-path "$root/Cargo.toml" -p koof-gen -- \
-  --openapi "$provider/openapi/cloudflare.yaml" \
-  --overlay "$provider/openapi/cloudflare.provider.overlay.yaml" \
-  --overlay "$provider/openapi/cloudflare.account.overlay.yaml" \
-  --overlay "$provider/openapi/cloudflare.zone.overlay.yaml" \
-  --overlay "$provider/openapi/cloudflare.dns-record.overlay.yaml" \
-  --overlay "$provider/openapi/cloudflare.ruleset.overlay.yaml" \
-  --overlay "$provider/openapi/cloudflare.pages-project.overlay.yaml" \
-  --overlay "$provider/openapi/cloudflare.typify.overlay.yaml" \
-  --output "$output"
+regen() {
+  local provider="$1" output="$2"
+  local dir="$root/crates/providers/$provider/openapi"
+  local sources=()
+  while IFS= read -r line; do
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    sources+=("$dir/$line")
+  done < "$dir/sources"
+
+  local args=(--openapi "${sources[0]}")
+  for overlay in "${sources[@]:1}"; do
+    args+=(--overlay "$overlay")
+  done
+
+  cargo run --quiet --manifest-path "$root/Cargo.toml" -p koof-gen -- "${args[@]}" --output "$output"
+}
+
+if [[ $# -ge 1 ]]; then
+  regen "$1" "${2:-$root/crates/providers/$1}"
+else
+  for dir in "$root"/crates/providers/*/; do
+    provider="$(basename "$dir")"
+    [[ -f "$dir/openapi/sources" ]] && regen "$provider" "$dir"
+  done
+fi
 
 # Generated files are formatted by prettyplease inside koof-gen; rustfmt is not
 # idempotent on typify's block doc comments, so it is intentionally not run here.

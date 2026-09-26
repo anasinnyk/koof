@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
-# Fails when tracked generated code differs from a fresh regeneration.
+# Fails when tracked generated code of any provider differs from a fresh regeneration.
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 
-"$root/scripts/regen.sh" "$tmp"
-diff -ru "$root/crates/providers/cloudflare/src/generated" "$tmp/src/generated"
+for dir in "$root"/crates/providers/*/; do
+  provider="$(basename "$dir")"
+  [[ -f "$dir/openapi/sources" ]] || continue
+  "$root/scripts/regen.sh" "$provider" "$tmp/$provider"
+  diff -ru "$dir/src/generated" "$tmp/$provider/src/generated"
+done

@@ -3,7 +3,7 @@
 /// CRD schema of `spec.forProvider`: unions flattened for kube, then the
 /// overlay's CEL validations.
 fn for_provider_schema(schema: &mut schemars::Schema) {
-    koof::schema::flatten_object_unions(schema);
+    koof::schema::flatten_unions(schema);
     koof::schema::add_validations(
         schema,
         &[

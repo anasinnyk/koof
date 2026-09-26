@@ -1,0 +1,89 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare Tunnel
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # The create request body is the resource schema: forProvider gets its writable
+  # fields, atProvider every field of the observe response.
+  - target: $.paths['/accounts/{account_id}/cfd_tunnel'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: tunnel
+        apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+        kind: Tunnel
+        scope: Namespaced
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          account:
+            from: spec.forProvider.accountRef
+            target: account
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: api_token
+          source:
+            type: related
+            via: [account]
+
+        fields:
+          mode: all
+
+  - target: $.paths['/accounts/{account_id}/cfd_tunnel/{tunnel_id}'].get
+    update:
+      x-kube-operation:
+        resource: tunnel
+        lifecycle: observe
+        response:
+          path: result
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          tunnel_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/cfd_tunnel'].post
+    update:
+      x-kube-operation:
+        resource: tunnel
+        lifecycle: create
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/accounts/{account_id}/cfd_tunnel/{tunnel_id}'].patch
+    update:
+      x-kube-operation:
+        resource: tunnel
+        lifecycle: update
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          tunnel_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/cfd_tunnel/{tunnel_id}'].delete
+    update:
+      x-kube-operation:
+        resource: tunnel
+        lifecycle: delete
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          tunnel_id:
+            type: external_name

@@ -78,7 +78,7 @@ fn generate_spec(
         /// CRD schema of `spec.forProvider`: unions flattened for kube, then the
         /// overlay's CEL validations.
         fn for_provider_schema(schema: &mut schemars::Schema) {
-            koof::schema::flatten_object_unions(schema);
+            koof::schema::flatten_unions(schema);
             koof::schema::add_validations(schema, &[#(#validations),*]);
         }
 
@@ -581,6 +581,15 @@ pub fn generate_mod_file(ir: &ProviderIr) -> Result<GeneratedFile, GeneratorErro
 
     let provider = &ir.provider;
     let base_url = &ir.base_url;
+    let kinds = ir
+        .resources
+        .iter()
+        .map(|(name, resource)| {
+            let module = field_ident(&name.0)?;
+            let kind = kind_ident(&resource.kind)?;
+            Ok(quote!(#module::#kind))
+        })
+        .collect::<Result<Vec<_>, GeneratorError>>()?;
     let content = quote! {
         pub mod operations;
         pub mod types;
@@ -593,6 +602,18 @@ pub fn generate_mod_file(ir: &ProviderIr) -> Result<GeneratedFile, GeneratorErro
             name: #provider,
             base_url: #base_url,
         };
+
+        /// Registers the controllers of every resource of this provider.
+        #[must_use]
+        pub fn controllers(app: koof::App) -> koof::App {
+            app #(.controller::<#kinds>())*
+        }
+
+        /// `CustomResourceDefinition`s of every resource of this provider.
+        #[must_use]
+        pub fn crds() -> Vec<k8s_openapi::apiextensions_apiserver::pkg::apis::apiextensions::v1::CustomResourceDefinition> {
+            vec![#(<#kinds as kube::CustomResourceExt>::crd()),*]
+        }
     };
 
     Ok(GeneratedFile {
@@ -608,7 +629,7 @@ pub fn generate_types_file(types: &GeneratedTypes) -> Result<GeneratedFile, Gene
     let tokens = &types.tokens;
     let content = quote! {
         #![doc = " This file is generated. Do not edit manually."]
-        #![allow(clippy::all, clippy::pedantic, clippy::unwrap_used, clippy::expect_used)]
+        #![allow(dead_code, clippy::all, clippy::pedantic, clippy::unwrap_used, clippy::expect_used)]
 
         #tokens
     };

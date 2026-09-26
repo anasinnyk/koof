@@ -13,12 +13,10 @@ use serde::{Deserialize, Serialize};
 /// `status` of a managed resource; `A` is the generated `atProvider` type.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize, JsonSchema)]
 pub struct ManagedStatus<A> {
-    #[serde(
-        rename = "atProvider",
-        default,
-        skip_serializing_if = "Option::is_none"
-    )]
-    #[schemars(transform = crate::schema::flatten_object_unions)]
+    // No `default`: serde would then require `A: Default`; a missing `Option` is
+    // `None` anyway.
+    #[serde(rename = "atProvider", skip_serializing_if = "Option::is_none")]
+    #[schemars(transform = crate::schema::flatten_unions)]
     pub at_provider: Option<A>,
 
     #[serde(

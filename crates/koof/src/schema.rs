@@ -2,15 +2,20 @@
 
 use serde_json::{Map, Value};
 
-/// `#[schemars(transform = koof::schema::flatten_object_unions)]`.
+/// `#[schemars(transform = koof::schema::flatten_unions)]`.
 ///
-/// kube's structural-schema rewriter requires a property that appears in several
-/// `oneOf` / `anyOf` variants to have the same schema in each of them, which tagged
-/// unions (e.g. DNS records keyed by `type`) never satisfy. This merges object
-/// variants into the node itself: identical properties are kept, conflicting ones are
-/// relaxed (enums of the same type are unioned, otherwise only the shared `type` is
-/// kept), and `required` becomes the intersection over all variants.
-pub fn flatten_object_unions(schema: &mut schemars::Schema) {
+/// A structural CRD schema allows no types or descriptions inside `oneOf` /
+/// `anyOf`, and kube's rewriter only merges variants whose shared properties are
+/// identical — which tagged unions (DNS records keyed by `type`), scalar unions
+/// (`integer | string` ports) and mixed unions never satisfy. Every union is
+/// replaced by one schema:
+/// - object variants are merged: identical properties kept, conflicting ones
+///   relaxed, `required` = intersection;
+/// - scalars of one type become that type (enums unioned, `nullable` kept);
+/// - `integer | string` becomes `x-kubernetes-int-or-string`;
+/// - anything else becomes `x-kubernetes-preserve-unknown-fields` (validated by the
+///   provider API instead of the API server).
+pub fn flatten_unions(schema: &mut schemars::Schema) {
     if let Some(node) = schema.as_object_mut() {
         flatten(node);
     }
@@ -22,7 +27,7 @@ fn flatten(node: &mut Map<String, Value>) {
     }
 
     for keyword in ["oneOf", "anyOf"] {
-        let Some(Value::Array(variants)) = node.get(keyword) else {
+        let Some(Value::Array(variants)) = node.remove(keyword) else {
             continue;
         };
         let objects: Vec<&Map<String, Value>> = variants
@@ -30,58 +35,108 @@ fn flatten(node: &mut Map<String, Value>) {
             .filter_map(Value::as_object)
             .filter(|variant| variant.contains_key("properties"))
             .collect();
-        if objects.is_empty() || objects.len() != variants.len() {
-            continue;
+        if !objects.is_empty() && objects.len() == variants.len() {
+            merge_objects(node, &objects);
+        } else if node.get("type").is_none() {
+            merge_scalars(node, &variants);
         }
+    }
+}
 
-        let mut properties = node
+fn merge_objects(node: &mut Map<String, Value>, objects: &[&Map<String, Value>]) {
+    let mut properties = node
+        .get("properties")
+        .and_then(Value::as_object)
+        .cloned()
+        .unwrap_or_default();
+    let mut required: Option<Vec<Value>> = None;
+
+    for variant in objects {
+        for (name, schema) in variant
             .get("properties")
             .and_then(Value::as_object)
+            .into_iter()
+            .flatten()
+        {
+            match properties.get_mut(name) {
+                None => {
+                    properties.insert(name.clone(), schema.clone());
+                }
+                Some(existing) if existing == schema => {}
+                Some(existing) => relax(existing, schema),
+            }
+        }
+
+        let variant_required = variant
+            .get("required")
+            .and_then(Value::as_array)
             .cloned()
             .unwrap_or_default();
-        let mut required: Option<Vec<Value>> = None;
-
-        for variant in &objects {
-            for (name, schema) in variant
-                .get("properties")
-                .and_then(Value::as_object)
+        required = Some(match required {
+            None => variant_required,
+            Some(current) => current
                 .into_iter()
-                .flatten()
-            {
-                match properties.get_mut(name) {
-                    None => {
-                        properties.insert(name.clone(), schema.clone());
-                    }
-                    Some(existing) if existing == schema => {}
-                    Some(existing) => relax(existing, schema),
+                .filter(|name| variant_required.contains(name))
+                .collect(),
+        });
+    }
+
+    node.insert("type".to_owned(), Value::String("object".to_owned()));
+    node.insert("properties".to_owned(), Value::Object(properties));
+    match required {
+        Some(required) if !required.is_empty() => {
+            node.insert("required".to_owned(), Value::Array(required));
+        }
+        _ => {
+            node.remove("required");
+        }
+    }
+}
+
+/// Non-object (or mixed) union → one schema at `node`, per the rules above.
+fn merge_scalars(node: &mut Map<String, Value>, variants: &[Value]) {
+    let mut types = std::collections::BTreeSet::new();
+    let mut nullable = false;
+    let mut mixed = false;
+    for variant in variants {
+        match variant.get("type").and_then(Value::as_str) {
+            Some("null") => nullable = true,
+            Some(scalar @ ("string" | "integer" | "number" | "boolean")) => {
+                types.insert(scalar);
+            }
+            _ => mixed = true,
+        }
+        nullable |= variant.get("nullable") == Some(&Value::Bool(true));
+    }
+
+    if !mixed && types.len() == 1 {
+        let scalar = types.iter().next().copied().unwrap_or("string");
+        node.insert("type".to_owned(), Value::String(scalar.to_owned()));
+        let enums: Option<Vec<&Vec<Value>>> = variants
+            .iter()
+            .filter(|variant| variant.get("type").and_then(Value::as_str) != Some("null"))
+            .map(|variant| variant.get("enum").and_then(Value::as_array))
+            .collect();
+        if let Some(enums) = enums {
+            let mut values: Vec<Value> = Vec::new();
+            for value in enums.into_iter().flatten() {
+                if !values.contains(value) {
+                    values.push(value.clone());
                 }
             }
-
-            let variant_required = variant
-                .get("required")
-                .and_then(Value::as_array)
-                .cloned()
-                .unwrap_or_default();
-            required = Some(match required {
-                None => variant_required,
-                Some(current) => current
-                    .into_iter()
-                    .filter(|name| variant_required.contains(name))
-                    .collect(),
-            });
+            node.insert("enum".to_owned(), Value::Array(values));
         }
-
-        node.remove(keyword);
-        node.insert("type".to_owned(), Value::String("object".to_owned()));
-        node.insert("properties".to_owned(), Value::Object(properties));
-        match required {
-            Some(required) if !required.is_empty() => {
-                node.insert("required".to_owned(), Value::Array(required));
-            }
-            _ => {
-                node.remove("required");
-            }
-        }
+    } else if !mixed && types.iter().all(|t| matches!(*t, "integer" | "string")) && types.len() == 2
+    {
+        node.insert("x-kubernetes-int-or-string".to_owned(), Value::Bool(true));
+    } else {
+        node.insert(
+            "x-kubernetes-preserve-unknown-fields".to_owned(),
+            Value::Bool(true),
+        );
+    }
+    if nullable {
+        node.insert("nullable".to_owned(), Value::Bool(true));
     }
 }
 
@@ -119,7 +174,13 @@ fn relax(existing: &mut Value, incoming: &Value) {
                     relaxed.insert("items".to_owned(), items.clone());
                 }
             }
-            Some("array" | "object") => {
+            Some("array") => {
+                relaxed.insert(
+                    "items".to_owned(),
+                    serde_json::json!({ "x-kubernetes-preserve-unknown-fields": true }),
+                );
+            }
+            Some("object") => {
                 relaxed.insert(
                     "x-kubernetes-preserve-unknown-fields".to_owned(),
                     Value::Bool(true),
@@ -149,7 +210,7 @@ pub struct Validation {
 }
 
 /// Adds `validations` as `x-kubernetes-validations` to the schema nodes they name.
-/// Run after [`flatten_object_unions`], so that union properties exist. A rule whose
+/// Run after [`flatten_unions`], so that union properties exist. A rule whose
 /// field is not in the schema is skipped with a warning (the CRD would otherwise
 /// fail in a less obvious way).
 pub fn add_validations(schema: &mut schemars::Schema, validations: &[Validation]) {
