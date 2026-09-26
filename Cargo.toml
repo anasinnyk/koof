@@ -14,3 +14,11 @@ unwrap_used = "deny"
 expect_used = "deny"
 todo = "deny"
 dbg_macro = "deny"
+
+# Debug info for dependencies (and the ~27k-line generated types) dominates the
+# size of target/; line tables keep backtraces useful.
+[profile.dev]
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+debug = false
