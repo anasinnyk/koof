@@ -9,6 +9,7 @@ output="${1:-$provider}"
 
 cargo run --quiet --manifest-path "$root/Cargo.toml" -p koof-gen -- \
   --openapi "$provider/openapi/cloudflare.yaml" \
+  --overlay "$provider/openapi/cloudflare.provider.overlay.yaml" \
   --overlay "$provider/openapi/cloudflare.account.overlay.yaml" \
   --overlay "$provider/openapi/cloudflare.zone.overlay.yaml" \
   --overlay "$provider/openapi/cloudflare.dns-record.overlay.yaml" \

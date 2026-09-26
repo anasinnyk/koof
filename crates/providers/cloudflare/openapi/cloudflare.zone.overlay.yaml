@@ -14,8 +14,7 @@ actions:
 
         identifiers:
           external_id:
-            type: field
-            path: status.atProvider.id
+            type: external_name
 
         references:
           account:
@@ -62,8 +61,7 @@ actions:
           path: result
         path_parameters:
           zone_id:
-            type: field
-            path: status.atProvider.id
+            type: external_name
         result:
           identifiers:
             external_id: response.body.result.id
@@ -84,8 +82,7 @@ actions:
         lifecycle: update
         path_parameters:
           zone_id:
-            type: field
-            path: status.atProvider.id
+            type: external_name
         result:
           identifiers:
             external_id: response.body.result.id
@@ -97,8 +94,7 @@ actions:
         lifecycle: delete
         path_parameters:
           zone_id:
-            type: field
-            path: status.atProvider.id
+            type: external_name
         result:
           identifiers:
             external_id: response.body.result.id

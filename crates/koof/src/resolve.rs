@@ -56,6 +56,10 @@ pub fn resolve_value<'a>(
     Box::pin(async move {
         match expression {
             ValueExpr::Field(path) => scalar_at(&node.value, path),
+            ValueExpr::ExternalName => Ok(node
+                .descriptor
+                .external_name(&node.value)
+                .map(str::to_owned)),
             ValueExpr::Literal(value) => Ok(Some((*value).to_owned())),
             ValueExpr::Coalesce(values) => {
                 for value in *values {
@@ -73,7 +77,21 @@ pub fn resolve_value<'a>(
                         target.descriptor.kind
                     ))
                 })?;
-                resolve_value(client, &target, identifier).await
+                // The related resource exists but has no identifier yet (e.g. it is
+                // still being created): wait for it instead of treating the value as
+                // unset.
+                resolve_value(client, &target, identifier)
+                    .await?
+                    .map_or_else(
+                        || {
+                            Err(ResolveValueError::ReferenceNotReady(format!(
+                                "{} referenced via {} has no {name} yet",
+                                target.descriptor.kind,
+                                via.join(".")
+                            )))
+                        },
+                        |value| Ok(Some(value)),
+                    )
             }
         }
     })

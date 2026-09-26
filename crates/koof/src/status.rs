@@ -1,7 +1,12 @@
 //! Status shared by every managed resource.
 
-use crate::{error::ReconcileError, reconciler::Observation, resource::ManagedResource};
-use k8s_openapi::apimachinery::pkg::apis::meta::v1::{Condition, Time};
+use crate::{
+    conditions::{self, ConditionSpec},
+    error::{ReconcileError, ResolveValueError},
+    reconciler::Observation,
+    resource::ManagedResource,
+};
+use k8s_openapi::apimachinery::pkg::apis::meta::v1::Condition;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -37,8 +42,15 @@ impl<A> Default for ManagedStatus<A> {
     }
 }
 
-/// Writes `atProvider`, `observedGeneration` and the `Ready` condition; skips the
-/// patch when the status would not change.
+/// Outcome of a status update, for events.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct StatusChange {
+    /// `Ready` switched to `True` with this update.
+    pub became_ready: bool,
+}
+
+/// After a successful observe: writes `atProvider`, `observedGeneration`, `Ready`
+/// and `Synced=True`; skips the patch when nothing changes.
 ///
 /// # Errors
 ///
@@ -48,64 +60,87 @@ pub async fn update_status<R: ManagedResource>(
     client: &kube::Client,
     resource: &R,
     observation: &Observation,
-) -> Result<(), ReconcileError> {
-    let namespace = kube::ResourceExt::namespace(resource).ok_or_else(|| {
-        crate::error::ResolveValueError::Missing(format!(
-            "{} has no namespace",
-            R::descriptor().kind
-        ))
-    })?;
-    let name = kube::ResourceExt::name_any(resource);
-
+) -> Result<StatusChange, ReconcileError> {
     let at_provider: Option<R::AtProvider> = observation
         .at_provider
         .clone()
         .map(serde_json::from_value)
         .transpose()?;
-
-    let (status, reason, message) = if observation.exists {
-        ("True", "Available", "External resource exists")
-    } else {
-        ("False", "NotFound", "External resource does not exist")
-    };
     let generation = resource.meta().generation;
+    let current = current_conditions(resource);
 
-    let last_transition_time = resource
-        .status()
-        .and_then(|current| {
-            current
-                .conditions
-                .iter()
-                .find(|condition| condition.type_ == "Ready")
-        })
-        .filter(|condition| condition.status == status && condition.reason == reason)
-        .map_or_else(
-            || Time::from(jiff::Timestamp::now()),
-            |condition| condition.last_transition_time.clone(),
-        );
+    let ready = if observation.exists {
+        ConditionSpec::available()
+    } else {
+        ConditionSpec::unavailable("External resource does not exist")
+    };
+    let conditions = conditions::set(&current, ready, generation);
+    let conditions = conditions::set(&conditions, ConditionSpec::reconcile_success(), generation);
+    let change = StatusChange {
+        became_ready: !conditions::is_true(&current, conditions::READY)
+            && conditions::is_true(&conditions, conditions::READY),
+    };
 
     let desired = ManagedStatus {
         at_provider,
         observed_generation: generation,
-        conditions: vec![Condition {
-            type_: "Ready".into(),
-            status: status.into(),
-            reason: reason.into(),
-            message: message.into(),
-            observed_generation: generation,
-            last_transition_time,
-        }],
+        conditions,
     };
-
     if serde_json::to_value(resource.status())? == serde_json::to_value(Some(&desired))? {
+        return Ok(change);
+    }
+    patch_status(client, resource, &serde_json::json!({ "status": desired })).await?;
+    Ok(change)
+}
+
+/// After a failed reconcile: sets `Synced=False` with the error, keeping everything
+/// else in the status.
+///
+/// # Errors
+///
+/// Returns [`ReconcileError`] when the resource has no namespace or the patch fails.
+pub async fn record_failure<R: ManagedResource>(
+    client: &kube::Client,
+    resource: &R,
+    error: &ReconcileError,
+) -> Result<(), ReconcileError> {
+    let current = current_conditions(resource);
+    let conditions = conditions::set(
+        &current,
+        ConditionSpec::reconcile_error(error.to_string()),
+        resource.meta().generation,
+    );
+    if conditions == current {
         return Ok(());
     }
+    patch_status(
+        client,
+        resource,
+        &serde_json::json!({ "status": { "conditions": conditions } }),
+    )
+    .await
+}
 
+fn current_conditions<R: ManagedResource>(resource: &R) -> Vec<Condition> {
+    resource
+        .status()
+        .map(|status| status.conditions.clone())
+        .unwrap_or_default()
+}
+
+async fn patch_status<R: ManagedResource>(
+    client: &kube::Client,
+    resource: &R,
+    patch: &serde_json::Value,
+) -> Result<(), ReconcileError> {
+    let namespace = kube::ResourceExt::namespace(resource).ok_or_else(|| {
+        ResolveValueError::Missing(format!("{} has no namespace", R::descriptor().kind))
+    })?;
     kube::Api::<R>::namespaced(client.clone(), &namespace)
         .patch_status(
-            &name,
+            &kube::ResourceExt::name_any(resource),
             &kube::api::PatchParams::default(),
-            &kube::api::Patch::Merge(&serde_json::json!({ "status": desired })),
+            &kube::api::Patch::Merge(patch),
         )
         .await?;
     Ok(())

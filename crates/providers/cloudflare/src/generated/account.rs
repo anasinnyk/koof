@@ -52,9 +52,8 @@ fn api_resource() -> kube::api::ApiResource {
 pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "Account",
     api_resource,
-    identifiers: &[
-        ("external_id", koof::resource::ValueExpr::Field("status.atProvider.id")),
-    ],
+    external_name_annotation: "cloudflare.kube.nas1k.dev/external-name",
+    identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     references: &[],
     credentials: Some(koof::resource::Credentials {
         source: koof::resource::CredentialSource::Secret {
@@ -63,9 +62,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         auth: koof::resource::AuthScheme::Bearer,
     }),
     observe: koof::resource::OperationDescriptor {
-        path_parameters: &[
-            ("account_id", koof::resource::ValueExpr::Field("status.atProvider.id")),
-        ],
+        path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
         response_path: "result",
     },
 };

@@ -258,7 +258,7 @@ fn validate_expression(
             }
         }
 
-        ValueExpr::Field { .. } | ValueExpr::Literal { .. } => {}
+        ValueExpr::Field { .. } | ValueExpr::ExternalName | ValueExpr::Literal { .. } => {}
     }
 }
 

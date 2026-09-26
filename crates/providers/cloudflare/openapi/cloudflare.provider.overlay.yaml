@@ -1,0 +1,10 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare provider
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  - target: $
+    update:
+      x-kube-provider:
+        name: cloudflare

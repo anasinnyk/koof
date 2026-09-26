@@ -1,11 +1,15 @@
 //! Generic HTTP access to a provider API. Generated code describes each operation
 //! with an [`Operation`] impl (data only); [`HttpClient::send`] does the rest.
 
+use crate::error::Retry;
 use serde::{Serialize, de::DeserializeOwned};
-use std::fmt;
+use std::{fmt, time::Duration};
+use tracing::Instrument as _;
 
 /// One provider API operation, as emitted by `koof-gen`.
 pub trait Operation {
+    /// `<resource>.<lifecycle>`, e.g. `dns_record.observe`; used in traces and metrics.
+    const NAME: &'static str;
     const METHOD: reqwest::Method;
     /// Path template relative to the base URL, e.g. `/zones/{zone_id}`.
     const PATH: &'static str;
@@ -47,6 +51,8 @@ pub enum HttpError {
         path: String,
         status: reqwest::StatusCode,
         body: String,
+        /// Parsed `Retry-After` (seconds form) of a `429` / `503`.
+        retry_after: Option<Duration>,
     },
 
     #[error("failed to decode response: {0}")]
@@ -83,6 +89,40 @@ impl HttpClient {
         parameters: &[(&str, &str)],
         body: Option<&O::Request>,
     ) -> Result<Option<O::Response>, HttpError> {
+        let span = tracing::debug_span!(
+            "http",
+            operation = O::NAME,
+            method = %O::METHOD,
+            path = O::PATH,
+            status = tracing::field::Empty,
+            duration_ms = tracing::field::Empty,
+        );
+        async {
+            let started = std::time::Instant::now();
+            let result = self.execute::<O>(auth, parameters, body).await;
+            let span = tracing::Span::current();
+            span.record("duration_ms", started.elapsed().as_millis());
+            match &result {
+                Ok(Some(_)) => span.record("status", "ok"),
+                Ok(None) => span.record("status", "not_found"),
+                Err(HttpError::Status { status, .. }) => span.record("status", status.as_u16()),
+                Err(_) => span.record("status", "error"),
+            };
+            if let Err(error) = &result {
+                tracing::debug!(%error, "provider request failed");
+            }
+            result
+        }
+        .instrument(span)
+        .await
+    }
+
+    async fn execute<O: Operation>(
+        &self,
+        auth: &Auth,
+        parameters: &[(&str, &str)],
+        body: Option<&O::Request>,
+    ) -> Result<Option<O::Response>, HttpError> {
         let path = render_path(O::PATH, parameters)?;
         let url = format!("{}{path}", self.base_url.trim_end_matches('/'));
 
@@ -102,6 +142,12 @@ impl HttpClient {
         if status == reqwest::StatusCode::NOT_FOUND {
             return Ok(None);
         }
+        let retry_after = response
+            .headers()
+            .get(reqwest::header::RETRY_AFTER)
+            .and_then(|value| value.to_str().ok())
+            .and_then(|value| value.trim().parse::<u64>().ok())
+            .map(Duration::from_secs);
         let bytes = response.bytes().await?;
         if !status.is_success() {
             return Err(HttpError::Status {
@@ -109,10 +155,30 @@ impl HttpClient {
                 path,
                 status,
                 body: String::from_utf8_lossy(&bytes).into_owned(),
+                retry_after,
             });
         }
         let bytes: &[u8] = if bytes.is_empty() { b"null" } else { &bytes };
         Ok(Some(serde_json::from_slice(bytes)?))
+    }
+}
+
+impl HttpError {
+    /// `429` and `5xx` (and transport failures) are transient; other statuses and
+    /// decoding errors are permanent.
+    #[must_use]
+    pub fn retry(&self) -> Retry {
+        match self {
+            Self::Transport(_) => Retry::Transient(None),
+            Self::Status {
+                status,
+                retry_after,
+                ..
+            } if *status == reqwest::StatusCode::TOO_MANY_REQUESTS || status.is_server_error() => {
+                Retry::Transient(*retry_after)
+            }
+            Self::Status { .. } | Self::MissingParameter(_) | Self::Decode(_) => Retry::Permanent,
+        }
     }
 }
 

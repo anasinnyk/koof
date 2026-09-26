@@ -14,8 +14,7 @@ actions:
 
         identifiers:
           external_id:
-            type: field
-            path: status.atProvider.id
+            type: external_name
 
         references:
           zone:
@@ -54,8 +53,7 @@ actions:
             via: [zone]
             name: external_id
           ruleset_id:
-            type: field
-            path: status.atProvider.id
+            type: external_name
         result:
           identifiers:
             external_id: response.body.result.id
@@ -85,8 +83,7 @@ actions:
             via: [zone]
             name: external_id
           ruleset_id:
-            type: field
-            path: status.atProvider.id
+            type: external_name
         result:
           identifiers:
             external_id: response.body.result.id
@@ -102,8 +99,7 @@ actions:
             via: [zone]
             name: external_id
           ruleset_id:
-            type: field
-            path: status.atProvider.id
+            type: external_name
         result:
           identifiers:
             external_id: response.body.result.id

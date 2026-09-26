@@ -48,9 +48,8 @@ fn api_resource() -> kube::api::ApiResource {
 pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "PagesProject",
     api_resource,
-    identifiers: &[
-        ("external_id", koof::resource::ValueExpr::Field("status.atProvider.id")),
-    ],
+    external_name_annotation: "cloudflare.kube.nas1k.dev/external-name",
+    identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     references: &[
         koof::resource::Reference {
             name: "account",
@@ -78,7 +77,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
                 "project_name",
                 koof::resource::ValueExpr::Coalesce(
                     &[
-                        koof::resource::ValueExpr::Field("status.atProvider.id"),
+                        koof::resource::ValueExpr::ExternalName,
                         koof::resource::ValueExpr::Field("spec.resourceName"),
                         koof::resource::ValueExpr::Field("metadata.name"),
                     ],
