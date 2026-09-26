@@ -11,7 +11,7 @@ workspace = true
 futures = "0.3.34"
 jiff = "0.2.37"
 k8s-openapi = { version = "0.28.0", features = ["schemars", "v1_36"] }
-kube = { version = "4.2.0", features = ["client", "derive", "runtime", "rustls-tls"] }
+kube = { version = "4.2.0", features = ["client", "derive", "runtime", "rustls-tls", "unstable-runtime"] }
 reqwest = { version = "0.13.5", features = ["json"] }
 rustls = "0.23.45"
 schemars = "1.2.2"

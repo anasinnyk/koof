@@ -3,16 +3,17 @@
 use crate::{
     error::{ReconcileError, Retry},
     http::{HttpClient, extract},
+    policy::{self, Action as PolicyAction, State},
     resolve::{Node, resolve_credentials, resolve_value},
     resource::ManagedResource,
     status::{record_failure, update_status},
 };
 use futures::StreamExt as _;
 use kube::runtime::{
-    Controller,
+    Controller, Predicate as _, PredicateConfig, WatchStreamExt as _,
     controller::Action,
     events::{Event, EventType, Recorder},
-    watcher,
+    predicates, reflector, watcher,
 };
 use std::{
     collections::HashMap,
@@ -162,6 +163,29 @@ async fn reconcile_inner<R: ManagedResource>(
     context: &ControllerContext,
 ) -> Result<Action, ReconcileError> {
     let observation = observe(context, resource).await?;
+    let decision = policy::decide(
+        State {
+            exists: observation.exists,
+            // Drift detection arrives in L4; until then an existing resource is
+            // considered up to date.
+            up_to_date: true,
+            deleting: resource.meta().deletion_timestamp.is_some(),
+        },
+        resource.management(),
+    )?;
+    tracing::debug!(?decision, "decided");
+
+    match decision.action {
+        PolicyAction::None => {}
+        // Executed from L2 (delete, finalize), L3 (create) and L4 (update) on.
+        PolicyAction::Create
+        | PolicyAction::Update
+        | PolicyAction::Delete
+        | PolicyAction::Finalize => {
+            tracing::info!(action = ?decision.action, "action planned but not implemented yet");
+        }
+    }
+
     let change = update_status(&context.kube_client, resource, &observation).await?;
     if change.became_ready {
         publish(
@@ -174,7 +198,6 @@ async fn reconcile_inner<R: ManagedResource>(
         .await;
     }
 
-    // TODO(L1–L3): act on a missing external resource; only reported for now.
     Ok(Action::requeue(if observation.exists {
         RESYNC
     } else {
@@ -250,7 +273,23 @@ pub async fn run<R: ManagedResource>(context: Arc<ControllerContext>) {
     let api = kube::Api::<R>::all(context.kube_client.clone());
     tracing::info!(resource = kind, "starting controller");
 
-    Controller::new(api, watcher::Config::default())
+    // Reconcile on spec (generation), annotation (external name), finalizer and
+    // deletion changes only — not on the controller's own status updates.
+    let deleting = |resource: &R| resource.meta().deletion_timestamp.as_ref().map(|_| 1_u64);
+    let (reader, writer) = reflector::store();
+    let stream = watcher(api, watcher::Config::default())
+        .default_backoff()
+        .reflect(writer)
+        .applied_objects()
+        .predicate_filter(
+            predicates::generation
+                .combine(predicates::annotations)
+                .combine(predicates::finalizers)
+                .combine(deleting),
+            PredicateConfig::default(),
+        );
+
+    Controller::for_stream(stream, reader)
         .shutdown_on_signal()
         .run(reconcile::<R>, error_policy::<R>, context)
         .for_each(|result| async move {

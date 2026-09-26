@@ -1,7 +1,7 @@
 //! What `koof-gen` emits per resource: a static [`ResourceDescriptor`] and a
 //! [`ManagedResource`] impl. Everything else is generic runtime code.
 
-use crate::{http::Operation, status::ManagedStatus};
+use crate::{http::Operation, managed::ManagedResourceSpec, status::ManagedStatus};
 use kube::core::NamespaceResourceScope;
 use schemars::JsonSchema;
 use serde::{Serialize, de::DeserializeOwned};
@@ -34,6 +34,9 @@ pub trait ManagedResource:
     fn descriptor() -> &'static ResourceDescriptor;
 
     fn status(&self) -> Option<&ManagedStatus<Self::AtProvider>>;
+
+    /// `managementPolicies` and `deletionPolicy` from the spec.
+    fn management(&self) -> &ManagedResourceSpec;
 }
 
 /// Static description of a resource: how to find its identifiers, related
