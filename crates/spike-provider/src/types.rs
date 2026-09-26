@@ -1,6 +1,13 @@
 #![allow(clippy::all, clippy::pedantic)]
 ///`AccountForProvider`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct AccountForProvider {
     ///Account name
     pub name: AccountForProviderName,
@@ -8,7 +15,17 @@ pub struct AccountForProvider {
     pub settings: ::std::option::Option<AccountForProviderSettings>,
 }
 ///Account name
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct AccountForProviderName(::std::string::String);
 impl ::std::ops::Deref for AccountForProviderName {
@@ -62,7 +79,15 @@ impl<'de> ::serde::Deserialize<'de> for AccountForProviderName {
     }
 }
 ///Account settings
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct AccountForProviderSettings {
     ///Sets an abuse contact email to notify for abuse reports.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -83,7 +108,8 @@ Two-Factor Authentication is enabled*/
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum Action {
     #[serde(rename = "bypass")]
@@ -142,7 +168,8 @@ impl ::std::convert::TryFrom<::std::string::String> for Action {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum AddCacheTagsExpressionOperation {
     #[serde(rename = "add")]
@@ -193,7 +220,8 @@ impl ::std::convert::TryFrom<::std::string::String> for AddCacheTagsExpressionOp
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum AddCacheTagsValuesOperation {
     #[serde(rename = "add")]
@@ -244,7 +272,8 @@ impl ::std::convert::TryFrom<::std::string::String> for AddCacheTagsValuesOperat
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum AddDynamicHeaderOperation {
     #[serde(rename = "add")]
@@ -295,7 +324,8 @@ impl ::std::convert::TryFrom<::std::string::String> for AddDynamicHeaderOperatio
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum AddStaticHeaderOperation {
     #[serde(rename = "add")]
@@ -336,7 +366,15 @@ impl ::std::convert::TryFrom<::std::string::String> for AddStaticHeaderOperation
     }
 }
 ///Compression algorithm to enable.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct Algorithm {
     ///Name of the compression algorithm to enable.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -353,7 +391,8 @@ pub struct Algorithm {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum AlgorithmName {
     #[serde(rename = "none")]
@@ -414,7 +453,17 @@ impl ::std::convert::TryFrom<::std::string::String> for AlgorithmName {
     }
 }
 ///A cache tag value.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct CacheTag(::std::string::String);
 impl ::std::ops::Deref for CacheTag {
@@ -468,7 +517,14 @@ impl<'de> ::serde::Deserialize<'de> for CacheTag {
     }
 }
 ///A category-level override.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct CategoryOverride {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsRuleAction>,
@@ -479,7 +535,17 @@ pub struct CategoryOverride {
     pub sensitivity_level: ::std::option::Option<RulesetsExecuteSensitivityLevel>,
 }
 ///The characteristic of the request.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Characteristic(::std::string::String);
 impl ::std::ops::Deref for Characteristic {
@@ -533,7 +599,17 @@ impl<'de> ::serde::Deserialize<'de> for Characteristic {
     }
 }
 ///The content to return.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Content(::std::string::String);
 impl ::std::ops::Deref for Content {
@@ -587,7 +663,17 @@ impl<'de> ::serde::Deserialize<'de> for Content {
     }
 }
 ///The type of the content to return.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ContentType(::std::string::String);
 impl ::std::ops::Deref for ContentType {
@@ -641,13 +727,30 @@ impl<'de> ::serde::Deserialize<'de> for ContentType {
     }
 }
 ///The cookie field to log.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct CookieField {
     ///The name of the cookie.
     pub name: CookieName,
 }
 ///The name of the cookie.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct CookieName(::std::string::String);
 impl ::std::ops::Deref for CookieName {
@@ -701,7 +804,17 @@ impl<'de> ::serde::Deserialize<'de> for CookieName {
     }
 }
 ///An expression that defines when the rate limit counter should be incremented. It defaults to the same as the rule's expression.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct CountingExpression(::std::string::String);
 impl ::std::ops::Deref for CountingExpression {
@@ -755,7 +868,17 @@ impl<'de> ::serde::Deserialize<'de> for CountingExpression {
     }
 }
 ///A text description of this message.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Description(::std::string::String);
 impl ::std::ops::Deref for Description {
@@ -809,108 +932,351 @@ impl<'de> ::serde::Deserialize<'de> for Description {
     }
 }
 ///`DnsRecordForProvider`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProvider {
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum DnsRecordForProvider {
+    ARecord(DnsRecordForProviderARecord),
+    AaaaRecord(DnsRecordForProviderAaaaRecord),
+    CnameRecord(DnsRecordForProviderCnameRecord),
+    MxRecord(DnsRecordForProviderMxRecord),
+    NsRecord(DnsRecordForProviderNsRecord),
+    OpenpgpkeyRecord(DnsRecordForProviderOpenpgpkeyRecord),
+    PtrRecord(DnsRecordForProviderPtrRecord),
+    TxtRecord(DnsRecordForProviderTxtRecord),
+    CaaRecord(DnsRecordForProviderCaaRecord),
+    CertRecord(DnsRecordForProviderCertRecord),
+    DnskeyRecord(DnsRecordForProviderDnskeyRecord),
+    DsRecord(DnsRecordForProviderDsRecord),
+    HttpsRecord(DnsRecordForProviderHttpsRecord),
+    LocRecord(DnsRecordForProviderLocRecord),
+    NaptrRecord(DnsRecordForProviderNaptrRecord),
+    SmimeaRecord(DnsRecordForProviderSmimeaRecord),
+    SrvRecord(DnsRecordForProviderSrvRecord),
+    SshfpRecord(DnsRecordForProviderSshfpRecord),
+    SvcbRecord(DnsRecordForProviderSvcbRecord),
+    TlsaRecord(DnsRecordForProviderTlsaRecord),
+    UriRecord(DnsRecordForProviderUriRecord),
+}
+impl ::std::convert::From<DnsRecordForProviderARecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderARecord) -> Self {
+        Self::ARecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderAaaaRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderAaaaRecord) -> Self {
+        Self::AaaaRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderCnameRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderCnameRecord) -> Self {
+        Self::CnameRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderMxRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderMxRecord) -> Self {
+        Self::MxRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderNsRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderNsRecord) -> Self {
+        Self::NsRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderOpenpgpkeyRecord>
+for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderOpenpgpkeyRecord) -> Self {
+        Self::OpenpgpkeyRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderPtrRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderPtrRecord) -> Self {
+        Self::PtrRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderTxtRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderTxtRecord) -> Self {
+        Self::TxtRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderCaaRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderCaaRecord) -> Self {
+        Self::CaaRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderCertRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderCertRecord) -> Self {
+        Self::CertRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderDnskeyRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderDnskeyRecord) -> Self {
+        Self::DnskeyRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderDsRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderDsRecord) -> Self {
+        Self::DsRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderHttpsRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderHttpsRecord) -> Self {
+        Self::HttpsRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderLocRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderLocRecord) -> Self {
+        Self::LocRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderNaptrRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderNaptrRecord) -> Self {
+        Self::NaptrRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderSmimeaRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderSmimeaRecord) -> Self {
+        Self::SmimeaRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderSrvRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderSrvRecord) -> Self {
+        Self::SrvRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderSshfpRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderSshfpRecord) -> Self {
+        Self::SshfpRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderSvcbRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderSvcbRecord) -> Self {
+        Self::SvcbRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderTlsaRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderTlsaRecord) -> Self {
+        Self::TlsaRecord(value)
+    }
+}
+impl ::std::convert::From<DnsRecordForProviderUriRecord> for DnsRecordForProvider {
+    fn from(value: DnsRecordForProviderUriRecord) -> Self {
+        Self::UriRecord(value)
+    }
+}
+///`DnsRecordForProviderARecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderARecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A valid IPv4 address.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<DnsRecordForProviderContent>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderData>,
+    pub content: ::std::option::Option<::std::net::Ipv4Addr>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<DnsRecordsName>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<DnsRecordsPriority>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub proxied: ::std::option::Option<DnsRecordsProxied>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordForProviderSettings>,
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub tags: ::std::option::Option<DnsRecordsTags>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
     #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderType>,
+    pub type_: ::std::option::Option<DnsRecordForProviderARecordType>,
 }
-///`DnsRecordForProviderContent`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderContent {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<::std::net::Ipv4Addr>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<::std::net::Ipv6Addr>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_2: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_3: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_4: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_5: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_6: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_7: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_8: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_9: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_10: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_11: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_12: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_13: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_14: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_15: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_16: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_17: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_18: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_19: ::std::option::Option<::std::string::String>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_20: ::std::option::Option<::std::string::String>,
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderARecordType {
+    A,
 }
-///`DnsRecordForProviderData`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderData {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<DnsRecordForProviderDataSubtype0>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<DnsRecordForProviderDataSubtype1>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_2: ::std::option::Option<DnsRecordForProviderDataSubtype2>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_3: ::std::option::Option<DnsRecordForProviderDataSubtype3>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_4: ::std::option::Option<DnsRecordForProviderDataSubtype4>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_5: ::std::option::Option<DnsRecordForProviderDataSubtype5>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_6: ::std::option::Option<DnsRecordForProviderDataSubtype6>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_7: ::std::option::Option<DnsRecordForProviderDataSubtype7>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_8: ::std::option::Option<DnsRecordForProviderDataSubtype8>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_9: ::std::option::Option<DnsRecordForProviderDataSubtype9>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_10: ::std::option::Option<DnsRecordForProviderDataSubtype10>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_11: ::std::option::Option<DnsRecordForProviderDataSubtype11>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_12: ::std::option::Option<DnsRecordForProviderDataSubtype12>,
+impl ::std::fmt::Display for DnsRecordForProviderARecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::A => f.write_str("A"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderARecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "A" => Ok(Self::A),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderARecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for DnsRecordForProviderARecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderAaaaRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderAaaaRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A valid IPv6 address.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::net::Ipv6Addr>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderAaaaRecordType>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderAaaaRecordType {
+    #[serde(rename = "AAAA")]
+    Aaaa,
+}
+impl ::std::fmt::Display for DnsRecordForProviderAaaaRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Aaaa => f.write_str("AAAA"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderAaaaRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "AAAA" => Ok(Self::Aaaa),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderAaaaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderAaaaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderCaaRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderCaaRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted CAA content. See 'data' to set CAA properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderCaaRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderCaaRecordType>,
 }
 ///Components of a CAA record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype0 {
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderCaaRecordData {
     ///Flags for the CAA record.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub flags: ::std::option::Option<f64>,
@@ -921,9 +1287,102 @@ pub struct DnsRecordForProviderDataSubtype0 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub value: ::std::option::Option<::std::string::String>,
 }
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderCaaRecordType {
+    #[serde(rename = "CAA")]
+    Caa,
+}
+impl ::std::fmt::Display for DnsRecordForProviderCaaRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Caa => f.write_str("CAA"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderCaaRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "CAA" => Ok(Self::Caa),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderCaaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderCaaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderCertRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderCertRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted CERT content. See 'data' to set CERT properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderCertRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderCertRecordType>,
+}
 ///Components of a CERT record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype1 {
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderCertRecordData {
     ///Algorithm.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub algorithm: ::std::option::Option<f64>,
@@ -937,48 +1396,218 @@ pub struct DnsRecordForProviderDataSubtype1 {
     #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<f64>,
 }
-///Components of a SVCB record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype10 {
-    ///Priority.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<f64>,
-    ///Target.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub target: ::std::option::Option<::std::string::String>,
-    ///Value.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub value: ::std::option::Option<::std::string::String>,
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderCertRecordType {
+    #[serde(rename = "CERT")]
+    Cert,
 }
-///Components of a TLSA record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype11 {
-    ///Certificate.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub certificate: ::std::option::Option<::std::string::String>,
-    ///Matching Type.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub matching_type: ::std::option::Option<f64>,
-    ///Selector.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub selector: ::std::option::Option<f64>,
-    ///Usage.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub usage: ::std::option::Option<f64>,
+impl ::std::fmt::Display for DnsRecordForProviderCertRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Cert => f.write_str("CERT"),
+        }
+    }
 }
-///Components of a URI record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype12 {
-    ///The record content.
+impl ::std::str::FromStr for DnsRecordForProviderCertRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "CERT" => Ok(Self::Cert),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderCertRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderCertRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderCnameRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderCnameRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub target: ::std::option::Option<::std::string::String>,
-    ///The record weight.
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A valid hostname. Must not match the record's name.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub weight: ::std::option::Option<f64>,
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordForProviderCnameRecordSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderCnameRecordType>,
+}
+///`DnsRecordForProviderCnameRecordSettings`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderCnameRecordSettings {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<
+        DnsRecordForProviderCnameRecordSettingsSubtype1,
+    >,
+}
+///`DnsRecordForProviderCnameRecordSettingsSubtype1`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderCnameRecordSettingsSubtype1 {
+    ///If enabled, causes the CNAME record to be resolved externally and the resulting address records (e.g., A and AAAA) to be returned instead of the CNAME record itself. This setting is unavailable for proxied records, since they are always flattened.
+    #[serde(default)]
+    pub flatten_cname: bool,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderCnameRecordType {
+    #[serde(rename = "CNAME")]
+    Cname,
+}
+impl ::std::fmt::Display for DnsRecordForProviderCnameRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Cname => f.write_str("CNAME"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderCnameRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "CNAME" => Ok(Self::Cname),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderCnameRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderCnameRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderDnskeyRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderDnskeyRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted DNSKEY content. See 'data' to set DNSKEY properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderDnskeyRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderDnskeyRecordType>,
 }
 ///Components of a DNSKEY record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype2 {
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderDnskeyRecordData {
     ///Algorithm.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub algorithm: ::std::option::Option<f64>,
@@ -992,9 +1621,102 @@ pub struct DnsRecordForProviderDataSubtype2 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub public_key: ::std::option::Option<::std::string::String>,
 }
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderDnskeyRecordType {
+    #[serde(rename = "DNSKEY")]
+    Dnskey,
+}
+impl ::std::fmt::Display for DnsRecordForProviderDnskeyRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Dnskey => f.write_str("DNSKEY"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderDnskeyRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "DNSKEY" => Ok(Self::Dnskey),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderDnskeyRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderDnskeyRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderDsRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderDsRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted DS content. See 'data' to set DS properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderDsRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderDsRecordType>,
+}
 ///Components of a DS record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype3 {
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderDsRecordData {
     ///Algorithm.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub algorithm: ::std::option::Option<f64>,
@@ -1008,9 +1730,102 @@ pub struct DnsRecordForProviderDataSubtype3 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub key_tag: ::std::option::Option<f64>,
 }
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderDsRecordType {
+    #[serde(rename = "DS")]
+    Ds,
+}
+impl ::std::fmt::Display for DnsRecordForProviderDsRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Ds => f.write_str("DS"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderDsRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "DS" => Ok(Self::Ds),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderDsRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderDsRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderHttpsRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderHttpsRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted HTTPS content. See 'data' to set HTTPS properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderHttpsRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderHttpsRecordType>,
+}
 ///Components of a HTTPS record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype4 {
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderHttpsRecordData {
     ///Priority.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub priority: ::std::option::Option<f64>,
@@ -1021,9 +1836,102 @@ pub struct DnsRecordForProviderDataSubtype4 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub value: ::std::option::Option<::std::string::String>,
 }
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderHttpsRecordType {
+    #[serde(rename = "HTTPS")]
+    Https,
+}
+impl ::std::fmt::Display for DnsRecordForProviderHttpsRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Https => f.write_str("HTTPS"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderHttpsRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "HTTPS" => Ok(Self::Https),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderHttpsRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderHttpsRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderLocRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderLocRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted LOC content. See 'data' to set LOC properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderLocRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderLocRecordType>,
+}
 ///Components of a LOC record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype5 {
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderLocRecordData {
     ///Altitude of location in meters.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub altitude: ::std::option::Option<f64>,
@@ -1033,7 +1941,7 @@ pub struct DnsRecordForProviderDataSubtype5 {
     ///Latitude direction.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub lat_direction: ::std::option::Option<
-        DnsRecordForProviderDataSubtype5LatDirection,
+        DnsRecordForProviderLocRecordDataLatDirection,
     >,
     ///Minutes of latitude.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -1047,7 +1955,7 @@ pub struct DnsRecordForProviderDataSubtype5 {
     ///Longitude direction.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub long_direction: ::std::option::Option<
-        DnsRecordForProviderDataSubtype5LongDirection,
+        DnsRecordForProviderLocRecordDataLongDirection,
     >,
     ///Minutes of longitude.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -1076,13 +1984,14 @@ pub struct DnsRecordForProviderDataSubtype5 {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
-pub enum DnsRecordForProviderDataSubtype5LatDirection {
+pub enum DnsRecordForProviderLocRecordDataLatDirection {
     N,
     S,
 }
-impl ::std::fmt::Display for DnsRecordForProviderDataSubtype5LatDirection {
+impl ::std::fmt::Display for DnsRecordForProviderLocRecordDataLatDirection {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::N => f.write_str("N"),
@@ -1090,7 +1999,7 @@ impl ::std::fmt::Display for DnsRecordForProviderDataSubtype5LatDirection {
         }
     }
 }
-impl ::std::str::FromStr for DnsRecordForProviderDataSubtype5LatDirection {
+impl ::std::str::FromStr for DnsRecordForProviderLocRecordDataLatDirection {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -1102,7 +2011,7 @@ impl ::std::str::FromStr for DnsRecordForProviderDataSubtype5LatDirection {
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderDataSubtype5LatDirection {
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderLocRecordDataLatDirection {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -1111,7 +2020,7 @@ impl ::std::convert::TryFrom<&str> for DnsRecordForProviderDataSubtype5LatDirect
     }
 }
 impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderDataSubtype5LatDirection {
+for DnsRecordForProviderLocRecordDataLatDirection {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -1130,13 +2039,14 @@ for DnsRecordForProviderDataSubtype5LatDirection {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
-pub enum DnsRecordForProviderDataSubtype5LongDirection {
+pub enum DnsRecordForProviderLocRecordDataLongDirection {
     E,
     W,
 }
-impl ::std::fmt::Display for DnsRecordForProviderDataSubtype5LongDirection {
+impl ::std::fmt::Display for DnsRecordForProviderLocRecordDataLongDirection {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::E => f.write_str("E"),
@@ -1144,7 +2054,7 @@ impl ::std::fmt::Display for DnsRecordForProviderDataSubtype5LongDirection {
         }
     }
 }
-impl ::std::str::FromStr for DnsRecordForProviderDataSubtype5LongDirection {
+impl ::std::str::FromStr for DnsRecordForProviderLocRecordDataLongDirection {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -1156,7 +2066,7 @@ impl ::std::str::FromStr for DnsRecordForProviderDataSubtype5LongDirection {
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderDataSubtype5LongDirection {
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderLocRecordDataLongDirection {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -1165,7 +2075,7 @@ impl ::std::convert::TryFrom<&str> for DnsRecordForProviderDataSubtype5LongDirec
     }
 }
 impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderDataSubtype5LongDirection {
+for DnsRecordForProviderLocRecordDataLongDirection {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -1173,9 +2083,187 @@ for DnsRecordForProviderDataSubtype5LongDirection {
         value.parse()
     }
 }
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderLocRecordType {
+    #[serde(rename = "LOC")]
+    Loc,
+}
+impl ::std::fmt::Display for DnsRecordForProviderLocRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Loc => f.write_str("LOC"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderLocRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "LOC" => Ok(Self::Loc),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderLocRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderLocRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderMxRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderMxRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A valid mail server hostname.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<DnsRecordsPriority>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderMxRecordType>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderMxRecordType {
+    #[serde(rename = "MX")]
+    Mx,
+}
+impl ::std::fmt::Display for DnsRecordForProviderMxRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Mx => f.write_str("MX"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderMxRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "MX" => Ok(Self::Mx),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderMxRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderMxRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderNaptrRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderNaptrRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted NAPTR content. See 'data' to set NAPTR properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderNaptrRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderNaptrRecordType>,
+}
 ///Components of a NAPTR record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype6 {
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderNaptrRecordData {
     ///Flags.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub flags: ::std::option::Option<::std::string::String>,
@@ -1195,9 +2283,351 @@ pub struct DnsRecordForProviderDataSubtype6 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub service: ::std::option::Option<::std::string::String>,
 }
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderNaptrRecordType {
+    #[serde(rename = "NAPTR")]
+    Naptr,
+}
+impl ::std::fmt::Display for DnsRecordForProviderNaptrRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Naptr => f.write_str("NAPTR"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderNaptrRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "NAPTR" => Ok(Self::Naptr),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderNaptrRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderNaptrRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderNsRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderNsRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A valid name server host name.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderNsRecordType>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderNsRecordType {
+    #[serde(rename = "NS")]
+    Ns,
+}
+impl ::std::fmt::Display for DnsRecordForProviderNsRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Ns => f.write_str("NS"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderNsRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "NS" => Ok(Self::Ns),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderNsRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderNsRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderOpenpgpkeyRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderOpenpgpkeyRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderOpenpgpkeyRecordType>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderOpenpgpkeyRecordType {
+    #[serde(rename = "OPENPGPKEY")]
+    Openpgpkey,
+}
+impl ::std::fmt::Display for DnsRecordForProviderOpenpgpkeyRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Openpgpkey => f.write_str("OPENPGPKEY"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderOpenpgpkeyRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "OPENPGPKEY" => Ok(Self::Openpgpkey),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderOpenpgpkeyRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderOpenpgpkeyRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderPtrRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderPtrRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Domain name pointing to the address.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderPtrRecordType>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderPtrRecordType {
+    #[serde(rename = "PTR")]
+    Ptr,
+}
+impl ::std::fmt::Display for DnsRecordForProviderPtrRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Ptr => f.write_str("PTR"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderPtrRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "PTR" => Ok(Self::Ptr),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderPtrRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderPtrRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderSmimeaRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderSmimeaRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted SMIMEA content. See 'data' to set SMIMEA properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderSmimeaRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderSmimeaRecordType>,
+}
 ///Components of a SMIMEA record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype7 {
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderSmimeaRecordData {
     ///Certificate.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub certificate: ::std::option::Option<::std::string::String>,
@@ -1211,9 +2641,102 @@ pub struct DnsRecordForProviderDataSubtype7 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub usage: ::std::option::Option<f64>,
 }
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum DnsRecordForProviderSmimeaRecordType {
+    #[serde(rename = "SMIMEA")]
+    Smimea,
+}
+impl ::std::fmt::Display for DnsRecordForProviderSmimeaRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Smimea => f.write_str("SMIMEA"),
+        }
+    }
+}
+impl ::std::str::FromStr for DnsRecordForProviderSmimeaRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "SMIMEA" => Ok(Self::Smimea),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderSmimeaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for DnsRecordForProviderSmimeaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderSrvRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderSrvRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Priority, weight, port, and SRV target. See 'data' for setting the individual component values.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderSrvRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderSrvRecordType>,
+}
 ///Components of a SRV record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype8 {
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderSrvRecordData {
     ///The port of the service.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub port: ::std::option::Option<f64>,
@@ -1226,80 +2749,6 @@ pub struct DnsRecordForProviderDataSubtype8 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub weight: ::std::option::Option<f64>,
 }
-///Components of a SSHFP record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderDataSubtype9 {
-    ///Algorithm.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub algorithm: ::std::option::Option<f64>,
-    ///Fingerprint.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub fingerprint: ::std::option::Option<::std::string::String>,
-    ///Type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<f64>,
-}
-///`DnsRecordForProviderSettings`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderSettings {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<DnsRecordForProviderSettingsSubtype1>,
-}
-///`DnsRecordForProviderSettingsSubtype1`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderSettingsSubtype1 {
-    ///If enabled, causes the CNAME record to be resolved externally and the resulting address records (e.g., A and AAAA) to be returned instead of the CNAME record itself. This setting is unavailable for proxied records, since they are always flattened.
-    #[serde(default)]
-    pub flatten_cname: bool,
-}
-///`DnsRecordForProviderType`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordForProviderType {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<DnsRecordForProviderTypeSubtype0>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<DnsRecordForProviderTypeSubtype1>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_2: ::std::option::Option<DnsRecordForProviderTypeSubtype2>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_3: ::std::option::Option<DnsRecordForProviderTypeSubtype3>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_4: ::std::option::Option<DnsRecordForProviderTypeSubtype4>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_5: ::std::option::Option<DnsRecordForProviderTypeSubtype5>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_6: ::std::option::Option<DnsRecordForProviderTypeSubtype6>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_7: ::std::option::Option<DnsRecordForProviderTypeSubtype7>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_8: ::std::option::Option<DnsRecordForProviderTypeSubtype8>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_9: ::std::option::Option<DnsRecordForProviderTypeSubtype9>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_10: ::std::option::Option<DnsRecordForProviderTypeSubtype10>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_11: ::std::option::Option<DnsRecordForProviderTypeSubtype11>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_12: ::std::option::Option<DnsRecordForProviderTypeSubtype12>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_13: ::std::option::Option<DnsRecordForProviderTypeSubtype13>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_14: ::std::option::Option<DnsRecordForProviderTypeSubtype14>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_15: ::std::option::Option<DnsRecordForProviderTypeSubtype15>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_16: ::std::option::Option<DnsRecordForProviderTypeSubtype16>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_17: ::std::option::Option<DnsRecordForProviderTypeSubtype17>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_18: ::std::option::Option<DnsRecordForProviderTypeSubtype18>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_19: ::std::option::Option<DnsRecordForProviderTypeSubtype19>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_20: ::std::option::Option<DnsRecordForProviderTypeSubtype20>,
-}
 ///Record type.
 #[derive(
     ::serde::Deserialize,
@@ -1311,435 +2760,21 @@ pub struct DnsRecordForProviderType {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
-pub enum DnsRecordForProviderTypeSubtype0 {
-    A,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype0 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::A => f.write_str("A"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype0 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "A" => Ok(Self::A),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype0 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype0 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype1 {
-    #[serde(rename = "AAAA")]
-    Aaaa,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype1 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Aaaa => f.write_str("AAAA"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype1 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "AAAA" => Ok(Self::Aaaa),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype1 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype1 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype10 {
-    #[serde(rename = "DNSKEY")]
-    Dnskey,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype10 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Dnskey => f.write_str("DNSKEY"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype10 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "DNSKEY" => Ok(Self::Dnskey),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype10 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype10 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype11 {
-    #[serde(rename = "DS")]
-    Ds,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype11 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Ds => f.write_str("DS"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype11 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "DS" => Ok(Self::Ds),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype11 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype11 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype12 {
-    #[serde(rename = "HTTPS")]
-    Https,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype12 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Https => f.write_str("HTTPS"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype12 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "HTTPS" => Ok(Self::Https),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype12 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype12 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype13 {
-    #[serde(rename = "LOC")]
-    Loc,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype13 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Loc => f.write_str("LOC"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype13 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "LOC" => Ok(Self::Loc),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype13 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype13 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype14 {
-    #[serde(rename = "NAPTR")]
-    Naptr,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype14 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Naptr => f.write_str("NAPTR"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype14 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "NAPTR" => Ok(Self::Naptr),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype14 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype14 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype15 {
-    #[serde(rename = "SMIMEA")]
-    Smimea,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype15 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Smimea => f.write_str("SMIMEA"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype15 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "SMIMEA" => Ok(Self::Smimea),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype15 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype15 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype16 {
+pub enum DnsRecordForProviderSrvRecordType {
     #[serde(rename = "SRV")]
     Srv,
 }
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype16 {
+impl ::std::fmt::Display for DnsRecordForProviderSrvRecordType {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Srv => f.write_str("SRV"),
         }
     }
 }
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype16 {
+impl ::std::str::FromStr for DnsRecordForProviderSrvRecordType {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -1750,7 +2785,7 @@ impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype16 {
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype16 {
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderSrvRecordType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -1759,13 +2794,66 @@ impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype16 {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype16 {
+for DnsRecordForProviderSrvRecordType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///`DnsRecordForProviderSshfpRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderSshfpRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted SSHFP content. See 'data' to set SSHFP properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderSshfpRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderSshfpRecordType>,
+}
+///Components of a SSHFP record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderSshfpRecordData {
+    ///Algorithm.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub algorithm: ::std::option::Option<f64>,
+    ///Fingerprint.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub fingerprint: ::std::option::Option<::std::string::String>,
+    ///Type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<f64>,
 }
 ///Record type.
 #[derive(
@@ -1778,20 +2866,21 @@ for DnsRecordForProviderTypeSubtype16 {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
-pub enum DnsRecordForProviderTypeSubtype17 {
+pub enum DnsRecordForProviderSshfpRecordType {
     #[serde(rename = "SSHFP")]
     Sshfp,
 }
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype17 {
+impl ::std::fmt::Display for DnsRecordForProviderSshfpRecordType {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Sshfp => f.write_str("SSHFP"),
         }
     }
 }
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype17 {
+impl ::std::str::FromStr for DnsRecordForProviderSshfpRecordType {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -1802,7 +2891,7 @@ impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype17 {
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype17 {
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderSshfpRecordType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -1811,13 +2900,66 @@ impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype17 {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype17 {
+for DnsRecordForProviderSshfpRecordType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///`DnsRecordForProviderSvcbRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderSvcbRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted SVCB content. See 'data' to set SVCB properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderSvcbRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderSvcbRecordType>,
+}
+///Components of a SVCB record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderSvcbRecordData {
+    ///Priority.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<f64>,
+    ///Target.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub target: ::std::option::Option<::std::string::String>,
+    ///Value.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
 }
 ///Record type.
 #[derive(
@@ -1830,20 +2972,21 @@ for DnsRecordForProviderTypeSubtype17 {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
-pub enum DnsRecordForProviderTypeSubtype18 {
+pub enum DnsRecordForProviderSvcbRecordType {
     #[serde(rename = "SVCB")]
     Svcb,
 }
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype18 {
+impl ::std::fmt::Display for DnsRecordForProviderSvcbRecordType {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Svcb => f.write_str("SVCB"),
         }
     }
 }
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype18 {
+impl ::std::str::FromStr for DnsRecordForProviderSvcbRecordType {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -1854,7 +2997,7 @@ impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype18 {
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype18 {
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderSvcbRecordType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -1863,13 +3006,69 @@ impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype18 {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype18 {
+for DnsRecordForProviderSvcbRecordType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///`DnsRecordForProviderTlsaRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderTlsaRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted TLSA content. See 'data' to set TLSA properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderTlsaRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderTlsaRecordType>,
+}
+///Components of a TLSA record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderTlsaRecordData {
+    ///Certificate.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub certificate: ::std::option::Option<::std::string::String>,
+    ///Matching Type.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub matching_type: ::std::option::Option<f64>,
+    ///Selector.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub selector: ::std::option::Option<f64>,
+    ///Usage.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub usage: ::std::option::Option<f64>,
 }
 ///Record type.
 #[derive(
@@ -1882,20 +3081,21 @@ for DnsRecordForProviderTypeSubtype18 {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
-pub enum DnsRecordForProviderTypeSubtype19 {
+pub enum DnsRecordForProviderTlsaRecordType {
     #[serde(rename = "TLSA")]
     Tlsa,
 }
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype19 {
+impl ::std::fmt::Display for DnsRecordForProviderTlsaRecordType {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Tlsa => f.write_str("TLSA"),
         }
     }
 }
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype19 {
+impl ::std::str::FromStr for DnsRecordForProviderTlsaRecordType {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -1906,7 +3106,7 @@ impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype19 {
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype19 {
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTlsaRecordType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -1915,13 +3115,45 @@ impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype19 {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype19 {
+for DnsRecordForProviderTlsaRecordType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///`DnsRecordForProviderTxtRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderTxtRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    /**Text content for the record. The content must consist of quoted "character strings" (RFC 1035), each with a length of up to 255 bytes. Strings exceeding this allowed maximum length are automatically split.
+
+Learn more at <https://www.cloudflare.com/learning/dns/dns-records/dns-txt-record/>.*/
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderTxtRecordType>,
 }
 ///Record type.
 #[derive(
@@ -1934,332 +3166,21 @@ for DnsRecordForProviderTypeSubtype19 {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
-pub enum DnsRecordForProviderTypeSubtype2 {
-    #[serde(rename = "CNAME")]
-    Cname,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype2 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Cname => f.write_str("CNAME"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype2 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "CNAME" => Ok(Self::Cname),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype2 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype2 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype20 {
-    #[serde(rename = "URI")]
-    Uri,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype20 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Uri => f.write_str("URI"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype20 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "URI" => Ok(Self::Uri),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype20 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype20 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype3 {
-    #[serde(rename = "MX")]
-    Mx,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype3 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Mx => f.write_str("MX"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype3 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "MX" => Ok(Self::Mx),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype3 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype3 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype4 {
-    #[serde(rename = "NS")]
-    Ns,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype4 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Ns => f.write_str("NS"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype4 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "NS" => Ok(Self::Ns),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype4 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype4 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype5 {
-    #[serde(rename = "OPENPGPKEY")]
-    Openpgpkey,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype5 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Openpgpkey => f.write_str("OPENPGPKEY"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype5 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "OPENPGPKEY" => Ok(Self::Openpgpkey),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype5 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype5 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype6 {
-    #[serde(rename = "PTR")]
-    Ptr,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype6 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Ptr => f.write_str("PTR"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype6 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "PTR" => Ok(Self::Ptr),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype6 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype6 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype7 {
+pub enum DnsRecordForProviderTxtRecordType {
     #[serde(rename = "TXT")]
     Txt,
 }
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype7 {
+impl ::std::fmt::Display for DnsRecordForProviderTxtRecordType {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
             Self::Txt => f.write_str("TXT"),
         }
     }
 }
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype7 {
+impl ::std::str::FromStr for DnsRecordForProviderTxtRecordType {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
@@ -2270,7 +3191,7 @@ impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype7 {
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype7 {
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTxtRecordType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -2279,13 +3200,65 @@ impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype7 {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype7 {
+for DnsRecordForProviderTxtRecordType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///`DnsRecordForProviderUriRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderUriRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted URI content. See 'data' to set URI properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<DnsRecordForProviderUriRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<DnsRecordsPriority>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<DnsRecordForProviderUriRecordType>,
+}
+///Components of a URI record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct DnsRecordForProviderUriRecordData {
+    ///The record content.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub target: ::std::option::Option<::std::string::String>,
+    ///The record weight.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub weight: ::std::option::Option<f64>,
 }
 ///Record type.
 #[derive(
@@ -2298,31 +3271,32 @@ for DnsRecordForProviderTypeSubtype7 {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
-pub enum DnsRecordForProviderTypeSubtype8 {
-    #[serde(rename = "CAA")]
-    Caa,
+pub enum DnsRecordForProviderUriRecordType {
+    #[serde(rename = "URI")]
+    Uri,
 }
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype8 {
+impl ::std::fmt::Display for DnsRecordForProviderUriRecordType {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
-            Self::Caa => f.write_str("CAA"),
+            Self::Uri => f.write_str("URI"),
         }
     }
 }
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype8 {
+impl ::std::str::FromStr for DnsRecordForProviderUriRecordType {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         match value {
-            "CAA" => Ok(Self::Caa),
+            "URI" => Ok(Self::Uri),
             _ => Err("invalid value".into()),
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype8 {
+impl ::std::convert::TryFrom<&str> for DnsRecordForProviderUriRecordType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -2331,59 +3305,7 @@ impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype8 {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype8 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd
-)]
-pub enum DnsRecordForProviderTypeSubtype9 {
-    #[serde(rename = "CERT")]
-    Cert,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTypeSubtype9 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Cert => f.write_str("CERT"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTypeSubtype9 {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "CERT" => Ok(Self::Cert),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTypeSubtype9 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTypeSubtype9 {
+for DnsRecordForProviderUriRecordType {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -2392,7 +3314,15 @@ for DnsRecordForProviderTypeSubtype9 {
     }
 }
 ///`DnsRecordsARecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsARecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -2427,7 +3357,8 @@ pub struct DnsRecordsARecord {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsARecordType {
     A,
@@ -2467,7 +3398,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsARecordType {
     }
 }
 ///`DnsRecordsAaaaRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsAaaaRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -2502,7 +3441,8 @@ pub struct DnsRecordsAaaaRecord {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsAaaaRecordType {
     #[serde(rename = "AAAA")]
@@ -2543,7 +3483,14 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsAaaaRecordType
     }
 }
 ///`DnsRecordsApiResponseCommon`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsApiResponseCommon {
     pub errors: DnsRecordsMessages,
     pub messages: DnsRecordsMessages,
@@ -2551,7 +3498,14 @@ pub struct DnsRecordsApiResponseCommon {
     pub success: bool,
 }
 ///`DnsRecordsApiResponseSingle`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct DnsRecordsApiResponseSingle(pub DnsRecordsApiResponseCommon);
 impl ::std::ops::Deref for DnsRecordsApiResponseSingle {
@@ -2571,7 +3525,15 @@ impl ::std::convert::From<DnsRecordsApiResponseCommon> for DnsRecordsApiResponse
     }
 }
 ///`DnsRecordsCaaRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsCaaRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -2595,7 +3557,15 @@ pub struct DnsRecordsCaaRecord {
     pub type_: ::std::option::Option<DnsRecordsCaaRecordType>,
 }
 ///Components of a CAA record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsCaaRecordData {
     ///Flags for the CAA record.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -2618,7 +3588,8 @@ pub struct DnsRecordsCaaRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsCaaRecordType {
     #[serde(rename = "CAA")]
@@ -2659,7 +3630,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsCaaRecordType 
     }
 }
 ///`DnsRecordsCertRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsCertRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -2683,7 +3662,15 @@ pub struct DnsRecordsCertRecord {
     pub type_: ::std::option::Option<DnsRecordsCertRecordType>,
 }
 ///Components of a CERT record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsCertRecordData {
     ///Algorithm.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -2709,7 +3696,8 @@ pub struct DnsRecordsCertRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsCertRecordType {
     #[serde(rename = "CERT")]
@@ -2750,7 +3738,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsCertRecordType
     }
 }
 ///`DnsRecordsCnameRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsCnameRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -2772,7 +3768,15 @@ pub struct DnsRecordsCnameRecord {
     pub type_: ::std::option::Option<DnsRecordsCnameRecordType>,
 }
 ///`DnsRecordsCnameRecordSettings`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsCnameRecordSettings {
     ///If enabled, causes the CNAME record to be resolved externally and the resulting address records (e.g., A and AAAA) to be returned instead of the CNAME record itself. This setting is unavailable for proxied records, since they are always flattened.
     #[serde(default)]
@@ -2795,7 +3799,8 @@ pub struct DnsRecordsCnameRecordSettings {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsCnameRecordType {
     #[serde(rename = "CNAME")]
@@ -2845,7 +3850,8 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsCnameRecordTyp
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 #[serde(transparent)]
 pub struct DnsRecordsComment(pub ::std::string::String);
@@ -2877,7 +3883,15 @@ impl ::std::str::FromStr for DnsRecordsComment {
     }
 }
 ///`DnsRecordsDnsRecordPatch`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordPatch {
     #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
     pub subtype_0: ::std::option::Option<DnsRecordsDnsRecordWithoutData>,
@@ -2885,7 +3899,15 @@ pub struct DnsRecordsDnsRecordPatch {
     pub subtype_1: ::std::option::Option<DnsRecordsDnsRecordWithData>,
 }
 ///`DnsRecordsDnsRecordPost`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordPost {
     #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
     pub subtype_0: ::std::option::Option<DnsRecordsDnsRecordWithoutData>,
@@ -2893,7 +3915,14 @@ pub struct DnsRecordsDnsRecordPost {
     pub subtype_1: ::std::option::Option<DnsRecordsDnsRecordWithData>,
 }
 ///`DnsRecordsDnsRecordResponse`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum DnsRecordsDnsRecordResponse {
     Variant0(DnsRecordsDnsRecordResponseVariant0),
@@ -2922,12 +3951,20 @@ for DnsRecordsDnsRecordResponse {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 #[serde(deny_unknown_fields)]
 pub enum DnsRecordsDnsRecordResponseVariant0 {}
 ///`DnsRecordsDnsRecordResponseVariant1`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum DnsRecordsDnsRecordResponseVariant1 {
     Variant0 {
@@ -3350,7 +4387,15 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
     },
 }
 ///Components of a CAA record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant0Data {
     ///Flags for the CAA record.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -3363,7 +4408,15 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant0Data {
     pub value: ::std::option::Option<::std::string::String>,
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant0Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -3393,7 +4446,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant0Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant0Type {
     #[serde(rename = "CAA")]
@@ -3435,7 +4489,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant0Type {
     }
 }
 ///Components of a SVCB record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant10Data {
     ///Priority.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -3448,7 +4510,15 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant10Data {
     pub value: ::std::option::Option<::std::string::String>,
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant10Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -3478,7 +4548,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant10Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant10Type {
     #[serde(rename = "SVCB")]
@@ -3520,7 +4591,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant10Type {
     }
 }
 ///Components of a TLSA record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant11Data {
     ///Certificate.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -3536,7 +4615,15 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant11Data {
     pub usage: ::std::option::Option<f64>,
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant11Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -3566,7 +4653,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant11Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant11Type {
     #[serde(rename = "TLSA")]
@@ -3608,7 +4696,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant11Type {
     }
 }
 ///Components of a URI record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant12Data {
     ///The record content.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -3618,7 +4714,15 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant12Data {
     pub weight: ::std::option::Option<f64>,
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant12Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -3648,7 +4752,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant12Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant12Type {
     #[serde(rename = "URI")]
@@ -3690,7 +4795,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant12Type {
     }
 }
 ///Components of a CERT record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant1Data {
     ///Algorithm.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -3706,7 +4819,15 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant1Data {
     pub type_: ::std::option::Option<f64>,
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant1Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -3736,7 +4857,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant1Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant1Type {
     #[serde(rename = "CERT")]
@@ -3778,7 +4900,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant1Type {
     }
 }
 ///Components of a DNSKEY record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant2Data {
     ///Algorithm.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -3794,7 +4924,15 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant2Data {
     pub public_key: ::std::option::Option<::std::string::String>,
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant2Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -3824,7 +4962,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant2Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant2Type {
     #[serde(rename = "DNSKEY")]
@@ -3866,7 +5005,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant2Type {
     }
 }
 ///Components of a DS record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant3Data {
     ///Algorithm.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -3882,7 +5029,15 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant3Data {
     pub key_tag: ::std::option::Option<f64>,
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant3Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -3912,7 +5067,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant3Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant3Type {
     #[serde(rename = "DS")]
@@ -3954,7 +5110,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant3Type {
     }
 }
 ///Components of a HTTPS record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant4Data {
     ///Priority.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -3967,7 +5131,15 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant4Data {
     pub value: ::std::option::Option<::std::string::String>,
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant4Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -3997,7 +5169,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant4Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant4Type {
     #[serde(rename = "HTTPS")]
@@ -4039,7 +5212,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant4Type {
     }
 }
 ///Components of a LOC record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant5Data {
     ///Altitude of location in meters.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -4093,7 +5274,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant5Data {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant5DataLatDirection {
     N,
@@ -4150,7 +5332,8 @@ for DnsRecordsDnsRecordResponseVariant1Variant5DataLatDirection {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant5DataLongDirection {
     E,
@@ -4197,7 +5380,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant5DataLongDirection {
     }
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant5Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -4227,7 +5418,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant5Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant5Type {
     #[serde(rename = "LOC")]
@@ -4269,7 +5461,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant5Type {
     }
 }
 ///Components of a NAPTR record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant6Data {
     ///Flags.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -4291,7 +5491,15 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant6Data {
     pub service: ::std::option::Option<::std::string::String>,
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant6Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -4321,7 +5529,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant6Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant6Type {
     #[serde(rename = "NAPTR")]
@@ -4363,7 +5572,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant6Type {
     }
 }
 ///Components of a SMIMEA record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant7Data {
     ///Certificate.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -4379,7 +5596,15 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant7Data {
     pub usage: ::std::option::Option<f64>,
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant7Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -4409,7 +5634,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant7Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant7Type {
     #[serde(rename = "SMIMEA")]
@@ -4451,7 +5677,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant7Type {
     }
 }
 ///Components of a SRV record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant8Data {
     ///The port of the service.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -4466,7 +5700,15 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant8Data {
     pub weight: ::std::option::Option<f64>,
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant8Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -4496,7 +5738,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant8Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant8Type {
     #[serde(rename = "SRV")]
@@ -4538,7 +5781,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant8Type {
     }
 }
 ///Components of a SSHFP record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant9Data {
     ///Algorithm.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -4551,7 +5802,15 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant9Data {
     pub type_: ::std::option::Option<f64>,
 }
 ///Extra Cloudflare-specific metadata about the record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordResponseVariant1Variant9Meta {
     /**Whether this glue record is not served because a shallower NS delegation takes precedence over the deeper delegation that needs it. Present only when true; reachable glue carries only `is_glue`. See [Unreachable glue records](https://developers.cloudflare.com/dns/manage-dns-records/reference/shadowed-records#unreachable-glue-records).
 */
@@ -4581,7 +5840,8 @@ pub struct DnsRecordsDnsRecordResponseVariant1Variant9Meta {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnsRecordResponseVariant1Variant9Type {
     #[serde(rename = "SSHFP")]
@@ -4623,7 +5883,15 @@ for DnsRecordsDnsRecordResponseVariant1Variant9Type {
     }
 }
 ///`DnsRecordsDnsRecordSharedFields`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsRecordSharedFields {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -4639,7 +5907,14 @@ pub struct DnsRecordsDnsRecordSharedFields {
     pub ttl: ::std::option::Option<DnsRecordsTtl>,
 }
 ///`DnsRecordsDnsRecordWithData`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum DnsRecordsDnsRecordWithData {
     CaaRecord(DnsRecordsCaaRecord),
@@ -4722,7 +5997,14 @@ impl ::std::convert::From<DnsRecordsUriRecord> for DnsRecordsDnsRecordWithData {
     }
 }
 ///`DnsRecordsDnsRecordWithoutData`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum DnsRecordsDnsRecordWithoutData {
     ARecord(DnsRecordsARecord),
@@ -4776,7 +6058,14 @@ impl ::std::convert::From<DnsRecordsTxtRecord> for DnsRecordsDnsRecordWithoutDat
     }
 }
 ///`DnsRecordsDnsResponseSingle`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnsResponseSingle {
     pub errors: DnsRecordsMessages,
     pub messages: DnsRecordsMessages,
@@ -4786,7 +6075,15 @@ pub struct DnsRecordsDnsResponseSingle {
     pub success: bool,
 }
 ///`DnsRecordsDnskeyRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnskeyRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -4810,7 +6107,15 @@ pub struct DnsRecordsDnskeyRecord {
     pub type_: ::std::option::Option<DnsRecordsDnskeyRecordType>,
 }
 ///Components of a DNSKEY record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDnskeyRecordData {
     ///Algorithm.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -4836,7 +6141,8 @@ pub struct DnsRecordsDnskeyRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDnskeyRecordType {
     #[serde(rename = "DNSKEY")]
@@ -4877,7 +6183,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsDnskeyRecordTy
     }
 }
 ///`DnsRecordsDsRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDsRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -4901,7 +6215,15 @@ pub struct DnsRecordsDsRecord {
     pub type_: ::std::option::Option<DnsRecordsDsRecordType>,
 }
 ///Components of a DS record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsDsRecordData {
     ///Algorithm.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -4927,7 +6249,8 @@ pub struct DnsRecordsDsRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsDsRecordType {
     #[serde(rename = "DS")]
@@ -4968,7 +6291,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsDsRecordType {
     }
 }
 ///`DnsRecordsHttpsRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsHttpsRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -4992,7 +6323,15 @@ pub struct DnsRecordsHttpsRecord {
     pub type_: ::std::option::Option<DnsRecordsHttpsRecordType>,
 }
 ///Components of a HTTPS record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsHttpsRecordData {
     ///Priority.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -5015,7 +6354,8 @@ pub struct DnsRecordsHttpsRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsHttpsRecordType {
     #[serde(rename = "HTTPS")]
@@ -5056,7 +6396,17 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsHttpsRecordTyp
     }
 }
 ///Identifier.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct DnsRecordsIdentifier(::std::string::String);
 impl ::std::ops::Deref for DnsRecordsIdentifier {
@@ -5110,7 +6460,15 @@ impl<'de> ::serde::Deserialize<'de> for DnsRecordsIdentifier {
     }
 }
 ///`DnsRecordsLocRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsLocRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -5134,7 +6492,15 @@ pub struct DnsRecordsLocRecord {
     pub type_: ::std::option::Option<DnsRecordsLocRecordType>,
 }
 ///Components of a LOC record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsLocRecordData {
     ///Altitude of location in meters.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -5184,7 +6550,8 @@ pub struct DnsRecordsLocRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsLocRecordDataLatDirection {
     N,
@@ -5238,7 +6605,8 @@ for DnsRecordsLocRecordDataLatDirection {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsLocRecordDataLongDirection {
     E,
@@ -5292,7 +6660,8 @@ for DnsRecordsLocRecordDataLongDirection {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsLocRecordType {
     #[serde(rename = "LOC")]
@@ -5333,7 +6702,14 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsLocRecordType 
     }
 }
 ///`DnsRecordsMessages`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct DnsRecordsMessages(pub ::std::vec::Vec<DnsRecordsMessagesItem>);
 impl ::std::ops::Deref for DnsRecordsMessages {
@@ -5355,7 +6731,14 @@ for DnsRecordsMessages {
     }
 }
 ///`DnsRecordsMessagesItem`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsMessagesItem {
     pub code: i64,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -5365,13 +6748,29 @@ pub struct DnsRecordsMessagesItem {
     pub source: ::std::option::Option<DnsRecordsMessagesItemSource>,
 }
 ///`DnsRecordsMessagesItemSource`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsMessagesItemSource {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub pointer: ::std::option::Option<::std::string::String>,
 }
 ///`DnsRecordsMxRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsMxRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -5405,7 +6804,8 @@ pub struct DnsRecordsMxRecord {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsMxRecordType {
     #[serde(rename = "MX")]
@@ -5446,7 +6846,17 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsMxRecordType {
     }
 }
 ///Complete DNS record name, including the zone name, in Punycode.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct DnsRecordsName(::std::string::String);
 impl ::std::ops::Deref for DnsRecordsName {
@@ -5503,7 +6913,15 @@ impl<'de> ::serde::Deserialize<'de> for DnsRecordsName {
     }
 }
 ///`DnsRecordsNaptrRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsNaptrRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -5527,7 +6945,15 @@ pub struct DnsRecordsNaptrRecord {
     pub type_: ::std::option::Option<DnsRecordsNaptrRecordType>,
 }
 ///Components of a NAPTR record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsNaptrRecordData {
     ///Flags.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -5559,7 +6985,8 @@ pub struct DnsRecordsNaptrRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsNaptrRecordType {
     #[serde(rename = "NAPTR")]
@@ -5600,7 +7027,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsNaptrRecordTyp
     }
 }
 ///`DnsRecordsNsRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsNsRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -5632,7 +7067,8 @@ pub struct DnsRecordsNsRecord {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsNsRecordType {
     #[serde(rename = "NS")]
@@ -5673,7 +7109,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsNsRecordType {
     }
 }
 ///`DnsRecordsOpenpgpkeyRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsOpenpgpkeyRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -5705,7 +7149,8 @@ pub struct DnsRecordsOpenpgpkeyRecord {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsOpenpgpkeyRecordType {
     #[serde(rename = "OPENPGPKEY")]
@@ -5746,22 +7191,29 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsOpenpgpkeyReco
     }
 }
 ///Required for MX and URI records; ignored for other record types (but may still be returned by the API). Records with lower priorities are preferred. This field is to be deprecated in favor of the priority field within the data map.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
-pub struct DnsRecordsPriority(pub f64);
+pub struct DnsRecordsPriority(pub u16);
 impl ::std::ops::Deref for DnsRecordsPriority {
-    type Target = f64;
-    fn deref(&self) -> &f64 {
+    type Target = u16;
+    fn deref(&self) -> &u16 {
         &self.0
     }
 }
-impl ::std::convert::From<DnsRecordsPriority> for f64 {
+impl ::std::convert::From<DnsRecordsPriority> for u16 {
     fn from(value: DnsRecordsPriority) -> Self {
         value.0
     }
 }
-impl ::std::convert::From<f64> for DnsRecordsPriority {
-    fn from(value: f64) -> Self {
+impl ::std::convert::From<u16> for DnsRecordsPriority {
+    fn from(value: u16) -> Self {
         Self(value)
     }
 }
@@ -5771,25 +7223,32 @@ impl ::std::fmt::Display for DnsRecordsPriority {
     }
 }
 impl ::std::str::FromStr for DnsRecordsPriority {
-    type Err = <f64 as ::std::str::FromStr>::Err;
+    type Err = <u16 as ::std::str::FromStr>::Err;
     fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
         Ok(Self(value.parse()?))
     }
 }
 impl ::std::convert::TryFrom<&str> for DnsRecordsPriority {
-    type Error = <f64 as ::std::str::FromStr>::Err;
+    type Error = <u16 as ::std::str::FromStr>::Err;
     fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
         value.parse()
     }
 }
 impl ::std::convert::TryFrom<String> for DnsRecordsPriority {
-    type Error = <f64 as ::std::str::FromStr>::Err;
+    type Error = <u16 as ::std::str::FromStr>::Err;
     fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
         value.parse()
     }
 }
 ///Whether the record is receiving the performance and security benefits of Cloudflare.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct DnsRecordsProxied(pub bool);
 impl ::std::ops::Deref for DnsRecordsProxied {
@@ -5832,7 +7291,15 @@ impl ::std::convert::TryFrom<String> for DnsRecordsProxied {
     }
 }
 ///`DnsRecordsPtrRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsPtrRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -5864,7 +7331,8 @@ pub struct DnsRecordsPtrRecord {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsPtrRecordType {
     #[serde(rename = "PTR")]
@@ -5905,7 +7373,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsPtrRecordType 
     }
 }
 ///Settings for the DNS record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsSettings {
     ///When enabled, only A records will be generated, and AAAA records will not be created. This setting is intended for exceptional cases. Note that this option only applies to proxied records and it has no effect on whether Cloudflare communicates with the origin using IPv4 or IPv6.
     #[serde(default)]
@@ -5915,7 +7391,15 @@ pub struct DnsRecordsSettings {
     pub ipv6_only: bool,
 }
 ///`DnsRecordsSmimeaRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsSmimeaRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -5939,7 +7423,15 @@ pub struct DnsRecordsSmimeaRecord {
     pub type_: ::std::option::Option<DnsRecordsSmimeaRecordType>,
 }
 ///Components of a SMIMEA record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsSmimeaRecordData {
     ///Certificate.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -5965,7 +7457,8 @@ pub struct DnsRecordsSmimeaRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsSmimeaRecordType {
     #[serde(rename = "SMIMEA")]
@@ -6006,7 +7499,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsSmimeaRecordTy
     }
 }
 ///`DnsRecordsSrvRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsSrvRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -6030,7 +7531,15 @@ pub struct DnsRecordsSrvRecord {
     pub type_: ::std::option::Option<DnsRecordsSrvRecordType>,
 }
 ///Components of a SRV record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsSrvRecordData {
     ///The port of the service.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -6055,7 +7564,8 @@ pub struct DnsRecordsSrvRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsSrvRecordType {
     #[serde(rename = "SRV")]
@@ -6096,7 +7606,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsSrvRecordType 
     }
 }
 ///`DnsRecordsSshfpRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsSshfpRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -6120,7 +7638,15 @@ pub struct DnsRecordsSshfpRecord {
     pub type_: ::std::option::Option<DnsRecordsSshfpRecordType>,
 }
 ///Components of a SSHFP record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsSshfpRecordData {
     ///Algorithm.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -6143,7 +7669,8 @@ pub struct DnsRecordsSshfpRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsSshfpRecordType {
     #[serde(rename = "SSHFP")]
@@ -6184,7 +7711,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsSshfpRecordTyp
     }
 }
 ///`DnsRecordsSvcbRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsSvcbRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -6208,7 +7743,15 @@ pub struct DnsRecordsSvcbRecord {
     pub type_: ::std::option::Option<DnsRecordsSvcbRecordType>,
 }
 ///Components of a SVCB record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsSvcbRecordData {
     ///Priority.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -6231,7 +7774,8 @@ pub struct DnsRecordsSvcbRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsSvcbRecordType {
     #[serde(rename = "SVCB")]
@@ -6272,7 +7816,14 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsSvcbRecordType
     }
 }
 ///Custom tags for the DNS record. This field has no effect on DNS responses.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct DnsRecordsTags(pub ::std::vec::Vec<::std::string::String>);
 impl ::std::ops::Deref for DnsRecordsTags {
@@ -6292,7 +7843,15 @@ impl ::std::convert::From<::std::vec::Vec<::std::string::String>> for DnsRecords
     }
 }
 ///`DnsRecordsTlsaRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsTlsaRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -6316,7 +7875,15 @@ pub struct DnsRecordsTlsaRecord {
     pub type_: ::std::option::Option<DnsRecordsTlsaRecordType>,
 }
 ///Components of a TLSA record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsTlsaRecordData {
     ///Certificate.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -6342,7 +7909,8 @@ pub struct DnsRecordsTlsaRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsTlsaRecordType {
     #[serde(rename = "TLSA")]
@@ -6383,51 +7951,65 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsTlsaRecordType
     }
 }
 ///Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'. Value must be between 60 and 86400, with the minimum reduced to 30 for Enterprise zones.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
-pub struct DnsRecordsTtl {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<f64>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<DnsRecordsTtlSubtype1>,
-}
-///`DnsRecordsTtlSubtype1`
-#[derive(::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
-pub struct DnsRecordsTtlSubtype1(f64);
-impl ::std::ops::Deref for DnsRecordsTtlSubtype1 {
-    type Target = f64;
-    fn deref(&self) -> &f64 {
+pub struct DnsRecordsTtl(pub ::std::num::NonZeroU64);
+impl ::std::ops::Deref for DnsRecordsTtl {
+    type Target = ::std::num::NonZeroU64;
+    fn deref(&self) -> &::std::num::NonZeroU64 {
         &self.0
     }
 }
-impl ::std::convert::From<DnsRecordsTtlSubtype1> for f64 {
-    fn from(value: DnsRecordsTtlSubtype1) -> Self {
+impl ::std::convert::From<DnsRecordsTtl> for ::std::num::NonZeroU64 {
+    fn from(value: DnsRecordsTtl) -> Self {
         value.0
     }
 }
-impl ::std::convert::TryFrom<f64> for DnsRecordsTtlSubtype1 {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: f64,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if ![1_f64].contains(&value) {
-            Err("invalid value".into())
-        } else {
-            Ok(Self(value))
-        }
+impl ::std::convert::From<::std::num::NonZeroU64> for DnsRecordsTtl {
+    fn from(value: ::std::num::NonZeroU64) -> Self {
+        Self(value)
     }
 }
-impl<'de> ::serde::Deserialize<'de> for DnsRecordsTtlSubtype1 {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        Self::try_from(<f64>::deserialize(deserializer)?)
-            .map_err(|e| { <D::Error as ::serde::de::Error>::custom(e.to_string()) })
+impl ::std::fmt::Display for DnsRecordsTtl {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for DnsRecordsTtl {
+    type Err = <::std::num::NonZeroU64 as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for DnsRecordsTtl {
+    type Error = <::std::num::NonZeroU64 as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for DnsRecordsTtl {
+    type Error = <::std::num::NonZeroU64 as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
     }
 }
 ///`DnsRecordsTxtRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsTxtRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -6461,7 +8043,8 @@ Learn more at <https://www.cloudflare.com/learning/dns/dns-records/dns-txt-recor
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsTxtRecordType {
     #[serde(rename = "TXT")]
@@ -6502,7 +8085,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsTxtRecordType 
     }
 }
 ///`DnsRecordsUriRecord`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsUriRecord {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<DnsRecordsComment>,
@@ -6528,7 +8119,15 @@ pub struct DnsRecordsUriRecord {
     pub type_: ::std::option::Option<DnsRecordsUriRecordType>,
 }
 ///Components of a URI record.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct DnsRecordsUriRecordData {
     ///The record content.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -6548,7 +8147,8 @@ pub struct DnsRecordsUriRecordData {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum DnsRecordsUriRecordType {
     #[serde(rename = "URI")]
@@ -6589,7 +8189,15 @@ impl ::std::convert::TryFrom<::std::string::String> for DnsRecordsUriRecordType 
     }
 }
 ///Which query string parameters to exclude from the cache key.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct Exclude {
     ///Whether to exclude all query string parameters from the cache key.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -6599,7 +8207,17 @@ pub struct Exclude {
     pub list: ::std::option::Option<::std::vec::Vec<ParameterName>>,
 }
 ///The expression defining which traffic will match the rule.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Expression(::std::string::String);
 impl ::std::ops::Deref for Expression {
@@ -6653,7 +8271,17 @@ impl<'de> ::serde::Deserialize<'de> for Expression {
     }
 }
 ///The name of the header to check for the presence of.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Header(::std::string::String);
 impl ::std::ops::Deref for Header {
@@ -6707,7 +8335,17 @@ impl<'de> ::serde::Deserialize<'de> for Header {
     }
 }
 ///The name of the response header.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct HeaderName(::std::string::String);
 impl ::std::ops::Deref for HeaderName {
@@ -6761,7 +8399,17 @@ impl<'de> ::serde::Deserialize<'de> for HeaderName {
     }
 }
 ///The header value to match against.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct HeaderValue(::std::string::String);
 impl ::std::ops::Deref for HeaderValue {
@@ -6815,7 +8463,17 @@ impl<'de> ::serde::Deserialize<'de> for HeaderValue {
     }
 }
 ///A resolved host to route to.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Host(::std::string::String);
 impl ::std::ops::Deref for Host {
@@ -6869,7 +8527,14 @@ impl<'de> ::serde::Deserialize<'de> for Host {
     }
 }
 ///`IamAccount`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct IamAccount {
     ///Timestamp for the creation of the account
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -6885,7 +8550,15 @@ pub struct IamAccount {
     pub type_: IamAccountType,
 }
 ///Parent container details
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct IamAccountManagedBy {
     ///ID of the parent Organization, if one exists
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -6895,7 +8568,17 @@ pub struct IamAccountManagedBy {
     pub parent_org_name: ::std::option::Option<::std::string::String>,
 }
 ///ID of the parent Organization, if one exists
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct IamAccountManagedByParentOrgId(::std::string::String);
 impl ::std::ops::Deref for IamAccountManagedByParentOrgId {
@@ -6949,7 +8632,17 @@ impl<'de> ::serde::Deserialize<'de> for IamAccountManagedByParentOrgId {
     }
 }
 ///Account name
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct IamAccountName(::std::string::String);
 impl ::std::ops::Deref for IamAccountName {
@@ -7003,7 +8696,15 @@ impl<'de> ::serde::Deserialize<'de> for IamAccountName {
     }
 }
 ///Account settings
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct IamAccountSettings {
     ///Sets an abuse contact email to notify for abuse reports.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -7024,7 +8725,8 @@ Two-Factor Authentication is enabled*/
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum IamAccountType {
     #[serde(rename = "standard")]
@@ -7069,7 +8771,14 @@ impl ::std::convert::TryFrom<::std::string::String> for IamAccountType {
     }
 }
 ///`IamApiResponseCommon`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct IamApiResponseCommon {
     pub errors: IamMessages2,
     pub messages: IamMessages2,
@@ -7077,7 +8786,14 @@ pub struct IamApiResponseCommon {
     pub success: bool,
 }
 ///`IamApiResponseSingle`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct IamApiResponseSingle(pub IamApiResponseCommon);
 impl ::std::ops::Deref for IamApiResponseSingle {
@@ -7097,7 +8813,14 @@ impl ::std::convert::From<IamApiResponseCommon> for IamApiResponseSingle {
     }
 }
 ///`IamApiResponseSingleId`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct IamApiResponseSingleId {
     pub errors: IamMessages2,
     pub messages: IamMessages2,
@@ -7107,12 +8830,29 @@ pub struct IamApiResponseSingleId {
     pub success: bool,
 }
 ///`IamApiResponseSingleIdResult`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct IamApiResponseSingleIdResult {
     pub id: IamCommonComponentsSchemasIdentifier,
 }
 ///Identifier
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct IamCommonComponentsSchemasIdentifier(::std::string::String);
 impl ::std::ops::Deref for IamCommonComponentsSchemasIdentifier {
@@ -7171,7 +8911,14 @@ impl<'de> ::serde::Deserialize<'de> for IamCommonComponentsSchemasIdentifier {
     }
 }
 ///`IamComponentsSchemasAccount`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct IamComponentsSchemasAccount(pub IamAccount);
 impl ::std::ops::Deref for IamComponentsSchemasAccount {
@@ -7191,7 +8938,14 @@ impl ::std::convert::From<IamAccount> for IamComponentsSchemasAccount {
     }
 }
 ///`IamCreateAccount`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct IamCreateAccount {
     ///Account name
     pub name: ::std::string::String,
@@ -7201,14 +8955,29 @@ pub struct IamCreateAccount {
     pub unit: ::std::option::Option<IamCreateAccountUnit>,
 }
 ///information related to the tenant unit, and optionally, an id of the unit to create the account on. see https://developers.cloudflare.com/tenant/how-to/manage-accounts/
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct IamCreateAccountUnit {
     ///Tenant unit ID
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<::std::string::String>,
 }
 ///`IamMessages2`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct IamMessages2(pub ::std::vec::Vec<IamMessages2Item>);
 impl ::std::ops::Deref for IamMessages2 {
@@ -7228,7 +8997,14 @@ impl ::std::convert::From<::std::vec::Vec<IamMessages2Item>> for IamMessages2 {
     }
 }
 ///`IamMessages2Item`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct IamMessages2Item {
     pub code: i64,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -7238,13 +9014,28 @@ pub struct IamMessages2Item {
     pub source: ::std::option::Option<IamMessages2ItemSource>,
 }
 ///`IamMessages2ItemSource`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct IamMessages2ItemSource {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub pointer: ::std::option::Option<::std::string::String>,
 }
 ///`IamResponseSingleAccount`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct IamResponseSingleAccount {
     pub errors: IamMessages2,
     pub messages: IamMessages2,
@@ -7254,7 +9045,15 @@ pub struct IamResponseSingleAccount {
     pub success: bool,
 }
 ///Which query string parameters to include in the cache key.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct Include {
     ///Whether to include all query string parameters in the cache key.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -7264,7 +9063,17 @@ pub struct Include {
     pub list: ::std::option::Option<::std::vec::Vec<ParameterName>>,
 }
 ///A language tag to normalize against. Must be printable ASCII.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Language(::std::string::String);
 impl ::std::ops::Deref for Language {
@@ -7326,7 +9135,17 @@ impl<'de> ::serde::Deserialize<'de> for Language {
     }
 }
 ///The name of the list to match against.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ListName(::std::string::String);
 impl ::std::ops::Deref for ListName {
@@ -7382,7 +9201,17 @@ impl<'de> ::serde::Deserialize<'de> for ListName {
     }
 }
 ///An expression that evaluates to the list lookup key.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct LookupKey(::std::string::String);
 impl ::std::ops::Deref for LookupKey {
@@ -7436,7 +9265,17 @@ impl<'de> ::serde::Deserialize<'de> for LookupKey {
     }
 }
 ///URL pattern for the Use-As-Dictionary match field. This pattern specifies which URLs can use this response as a dictionary.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct MatchPattern(::std::string::String);
 impl ::std::ops::Deref for MatchPattern {
@@ -7493,7 +9332,17 @@ impl<'de> ::serde::Deserialize<'de> for MatchPattern {
     }
 }
 ///A media type to normalize against. Must be printable ASCII.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct MediaType(::std::string::String);
 impl ::std::ops::Deref for MediaType {
@@ -7565,7 +9414,8 @@ impl<'de> ::serde::Deserialize<'de> for MediaType {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum Mode {
     #[serde(rename = "on")]
@@ -7614,7 +9464,17 @@ impl ::std::convert::TryFrom<::std::string::String> for Mode {
     }
 }
 ///The human-readable name of the ruleset.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Name(::std::string::String);
 impl ::std::ops::Deref for Name {
@@ -7668,7 +9528,14 @@ impl<'de> ::serde::Deserialize<'de> for Name {
     }
 }
 ///`PagesApiResponseCommon`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesApiResponseCommon {
     pub errors: PagesMessages,
     pub messages: PagesMessages,
@@ -7676,7 +9543,14 @@ pub struct PagesApiResponseCommon {
     pub success: bool,
 }
 ///Configs for the project build process.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesBuildConfig {
     ///Enable build caching for the project.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -7698,7 +9572,14 @@ pub struct PagesBuildConfig {
     pub web_analytics_token: ::std::option::Option<::std::string::String>,
 }
 ///`PagesDeployment`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeployment {
     ///A list of alias URLs pointing to this deployment.
     #[serde(deserialize_with = "::std::option::Option::deserialize")]
@@ -7735,7 +9616,14 @@ pub struct PagesDeployment {
     pub uses_functions: ::std::option::Option<bool>,
 }
 ///`PagesDeploymentConfigValues`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValues {
     ///Constellation bindings used for Pages Functions.
     #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
@@ -7833,64 +9721,141 @@ pub struct PagesDeploymentConfigValues {
     pub wrangler_config_hash: ::std::option::Option<::std::string::String>,
 }
 ///AI binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesAiBindingsValue {
     pub project_id: ::std::string::String,
 }
 ///Analytics Engine binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesAnalyticsEngineDatasetsValue {
     ///Name of the dataset.
     pub dataset: ::std::string::String,
 }
 ///D1 binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesD1DatabasesValue {
     ///UUID of the D1 database.
     pub id: ::std::string::String,
 }
 ///Durable Object binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesDurableObjectNamespacesValue {
     ///ID of the Durable Object namespace.
     pub namespace_id: ::std::string::String,
 }
 ///Hyperdrive binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesHyperdriveBindingsValue {
     pub id: ::std::string::String,
 }
 ///KV namespace binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesKvNamespacesValue {
     ///ID of the KV namespace.
     pub namespace_id: ::std::string::String,
 }
 ///Limits for Pages Functions.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesLimits {
     ///CPU time limit in milliseconds.
     pub cpu_ms: i64,
 }
 ///mTLS binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesMtlsCertificatesValue {
     pub certificate_id: ::std::string::String,
 }
 ///Placement setting used for Pages Functions.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesPlacement {
     ///Placement mode.
     pub mode: ::std::string::String,
 }
 ///Queue Producer binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesQueueProducersValue {
     ///Name of the Queue.
     pub name: ::std::string::String,
 }
 ///R2 binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesR2BucketsValue {
     ///Jurisdiction of the R2 bucket.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -7899,7 +9864,14 @@ pub struct PagesDeploymentConfigValuesR2BucketsValue {
     pub name: ::std::string::String,
 }
 ///`PagesDeploymentConfigValuesRequest`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequest {
     ///Constellation bindings used for Pages Functions.
     #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
@@ -8040,30 +10012,65 @@ impl ::std::default::Default for PagesDeploymentConfigValuesRequest {
     }
 }
 ///AI binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestAiBindingsValue {
     pub project_id: ::std::string::String,
 }
 ///Analytics Engine binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestAnalyticsEngineDatasetsValue {
     ///Name of the dataset.
     pub dataset: ::std::string::String,
 }
 ///D1 binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestD1DatabasesValue {
     ///UUID of the D1 database.
     pub id: ::std::string::String,
 }
 ///Durable Object binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestDurableObjectNamespacesValue {
     ///ID of the Durable Object namespace.
     pub namespace_id: ::std::string::String,
 }
 ///`PagesDeploymentConfigValuesRequestEnvVarsValue`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum PagesDeploymentConfigValuesRequestEnvVarsValue {
     PlainTextEnvVar(PagesPlainTextEnvVar),
@@ -8082,41 +10089,90 @@ for PagesDeploymentConfigValuesRequestEnvVarsValue {
     }
 }
 ///Hyperdrive binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestHyperdriveBindingsValue {
     pub id: ::std::string::String,
 }
 ///KV namespace binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestKvNamespacesValue {
     ///ID of the KV namespace.
     pub namespace_id: ::std::string::String,
 }
 ///Limits for Pages Functions.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestLimits {
     ///CPU time limit in milliseconds.
     pub cpu_ms: i64,
 }
 ///mTLS binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestMtlsCertificatesValue {
     pub certificate_id: ::std::string::String,
 }
 ///Placement setting used for Pages Functions.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestPlacement {
     ///Placement mode.
     pub mode: ::std::string::String,
 }
 ///Queue Producer binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestQueueProducersValue {
     ///Name of the Queue.
     pub name: ::std::string::String,
 }
 ///R2 binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestR2BucketsValue {
     ///Jurisdiction of the R2 bucket.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -8125,7 +10181,14 @@ pub struct PagesDeploymentConfigValuesRequestR2BucketsValue {
     pub name: ::std::string::String,
 }
 ///Service binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestServicesValue {
     ///The entrypoint to bind to.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -8147,7 +10210,8 @@ pub struct PagesDeploymentConfigValuesRequestServicesValue {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum PagesDeploymentConfigValuesRequestUsageModel {
     #[serde(rename = "standard")]
@@ -8202,12 +10266,26 @@ impl ::std::default::Default for PagesDeploymentConfigValuesRequestUsageModel {
     }
 }
 ///Vectorize binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesRequestVectorizeBindingsValue {
     pub index_name: ::std::string::String,
 }
 ///Service binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesServicesValue {
     ///The entrypoint to bind to.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -8228,7 +10306,8 @@ pub struct PagesDeploymentConfigValuesServicesValue {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum PagesDeploymentConfigValuesUsageModel {
     #[serde(rename = "standard")]
@@ -8278,12 +10357,26 @@ for PagesDeploymentConfigValuesUsageModel {
     }
 }
 ///Vectorize binding.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentConfigValuesVectorizeBindingsValue {
     pub index_name: ::std::string::String,
 }
 ///Info about what caused the deployment.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentDeploymentTrigger {
     pub metadata: PagesDeploymentDeploymentTriggerMetadata,
     ///What caused the deployment.
@@ -8291,7 +10384,14 @@ pub struct PagesDeploymentDeploymentTrigger {
     pub type_: PagesDeploymentDeploymentTriggerType,
 }
 ///Additional info about the trigger.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesDeploymentDeploymentTriggerMetadata {
     ///Where the trigger happened.
     pub branch: ::std::string::String,
@@ -8313,7 +10413,8 @@ pub struct PagesDeploymentDeploymentTriggerMetadata {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum PagesDeploymentDeploymentTriggerType {
     #[serde(rename = "github:push")]
@@ -8373,7 +10474,8 @@ for PagesDeploymentDeploymentTriggerType {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum PagesDeploymentEnvironment {
     #[serde(rename = "preview")]
@@ -8428,7 +10530,8 @@ impl ::std::convert::TryFrom<::std::string::String> for PagesDeploymentEnvironme
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum PagesDeploymentSkipReason {
     #[serde(rename = "commit_message")]
@@ -8493,7 +10596,14 @@ impl ::std::convert::TryFrom<::std::string::String> for PagesDeploymentSkipReaso
     }
 }
 ///Environment variables used for builds and Pages Functions.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct PagesEnvVars(
     pub ::std::option::Option<
@@ -8552,7 +10662,14 @@ impl ::std::convert::From<
     }
 }
 ///`PagesEnvVarsInnerValue`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum PagesEnvVarsInnerValue {
     PlainTextEnvVar(PagesPlainTextEnvVar),
@@ -8569,7 +10686,14 @@ impl ::std::convert::From<PagesSecretTextEnvVar> for PagesEnvVarsInnerValue {
     }
 }
 ///`PagesMessages`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct PagesMessages(pub ::std::vec::Vec<PagesMessagesItem>);
 impl ::std::ops::Deref for PagesMessages {
@@ -8589,7 +10713,14 @@ impl ::std::convert::From<::std::vec::Vec<PagesMessagesItem>> for PagesMessages 
     }
 }
 ///`PagesMessagesItem`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesMessagesItem {
     pub code: i64,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -8599,13 +10730,28 @@ pub struct PagesMessagesItem {
     pub source: ::std::option::Option<PagesMessagesItemSource>,
 }
 ///`PagesMessagesItemSource`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesMessagesItemSource {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub pointer: ::std::option::Option<::std::string::String>,
 }
 ///A plaintext environment variable.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct PagesPlainTextEnvVar(pub ::std::option::Option<PagesPlainTextEnvVarInner>);
 impl ::std::ops::Deref for PagesPlainTextEnvVar {
@@ -8627,7 +10773,14 @@ for PagesPlainTextEnvVar {
     }
 }
 ///A plaintext environment variable.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesPlainTextEnvVarInner {
     #[serde(rename = "type")]
     pub type_: PagesPlainTextEnvVarInnerType,
@@ -8645,7 +10798,8 @@ pub struct PagesPlainTextEnvVarInner {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum PagesPlainTextEnvVarInnerType {
     #[serde(rename = "plain_text")]
@@ -8686,7 +10840,14 @@ impl ::std::convert::TryFrom<::std::string::String> for PagesPlainTextEnvVarInne
     }
 }
 ///`PagesProject`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesProject {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub build_config: ::std::option::Option<PagesBuildConfig>,
@@ -8721,7 +10882,14 @@ pub struct PagesProject {
     pub uses_functions: ::std::option::Option<bool>,
 }
 ///Configs for deployments in a project.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesProjectDeploymentConfigs {
     ///Configs for preview deploys.
     pub preview: PagesDeploymentConfigValues,
@@ -8729,7 +10897,14 @@ pub struct PagesProjectDeploymentConfigs {
     pub production: PagesDeploymentConfigValues,
 }
 ///`PagesProjectForProvider`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesProjectForProvider {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub build_config: ::std::option::Option<PagesBuildConfig>,
@@ -8741,7 +10916,14 @@ pub struct PagesProjectForProvider {
     pub source: ::std::option::Option<PagesSource>,
 }
 ///Configs for deployments in a project.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesProjectForProviderDeploymentConfigs {
     ///Configs for preview deploys.
     pub preview: PagesDeploymentConfigValues,
@@ -8749,7 +10931,17 @@ pub struct PagesProjectForProviderDeploymentConfigs {
     pub production: PagesDeploymentConfigValues,
 }
 ///Name of the project.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct PagesProjectName(::std::string::String);
 impl ::std::ops::Deref for PagesProjectName {
@@ -8805,7 +10997,14 @@ impl<'de> ::serde::Deserialize<'de> for PagesProjectName {
     }
 }
 ///An encrypted environment variable.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct PagesSecretTextEnvVar(pub ::std::option::Option<PagesSecretTextEnvVarInner>);
 impl ::std::ops::Deref for PagesSecretTextEnvVar {
@@ -8827,7 +11026,14 @@ for PagesSecretTextEnvVar {
     }
 }
 ///An encrypted environment variable.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesSecretTextEnvVarInner {
     #[serde(rename = "type")]
     pub type_: PagesSecretTextEnvVarInnerType,
@@ -8845,7 +11051,8 @@ pub struct PagesSecretTextEnvVarInner {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum PagesSecretTextEnvVarInnerType {
     #[serde(rename = "secret_text")]
@@ -8886,7 +11093,14 @@ impl ::std::convert::TryFrom<::std::string::String> for PagesSecretTextEnvVarInn
     }
 }
 ///Configs for the project source control.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesSource {
     pub config: PagesSourceConfig,
     ///The source control management provider.
@@ -8894,7 +11108,14 @@ pub struct PagesSource {
     pub type_: PagesSourceType,
 }
 ///`PagesSourceConfig`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesSourceConfig {
     /**Whether to enable automatic deployments when pushing to the source repository.
 When disabled, no deployments (production or preview) will be triggered automatically.
@@ -8936,7 +11157,8 @@ When disabled, no deployments (production or preview) will be triggered automati
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum PagesSourceConfigPreviewDeploymentSetting {
     #[serde(rename = "all")]
@@ -8996,7 +11218,8 @@ for PagesSourceConfigPreviewDeploymentSetting {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum PagesSourceType {
     #[serde(rename = "github")]
@@ -9041,7 +11264,14 @@ impl ::std::convert::TryFrom<::std::string::String> for PagesSourceType {
     }
 }
 ///The status of the deployment.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct PagesStage {
     ///When the stage ended.
     #[serde(deserialize_with = "::std::option::Option::deserialize")]
@@ -9065,7 +11295,8 @@ pub struct PagesStage {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum PagesStageName {
     #[serde(rename = "queued")]
@@ -9132,7 +11363,8 @@ impl ::std::convert::TryFrom<::std::string::String> for PagesStageName {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum PagesStageStatus {
     #[serde(rename = "success")]
@@ -9189,7 +11421,17 @@ impl ::std::convert::TryFrom<::std::string::String> for PagesStageStatus {
     }
 }
 ///The name of the query string parameter to exclude.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ParameterName(::std::string::String);
 impl ::std::ops::Deref for ParameterName {
@@ -9243,7 +11485,17 @@ impl<'de> ::serde::Deserialize<'de> for ParameterName {
     }
 }
 ///An expression that selects the password used in the credentials check.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct PasswordExpression(::std::string::String);
 impl ::std::ops::Deref for PasswordExpression {
@@ -9297,7 +11549,17 @@ impl<'de> ::serde::Deserialize<'de> for PasswordExpression {
     }
 }
 ///An expression that evaluates to a value to rewrite the URI path to.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct PathExpression(::std::string::String);
 impl ::std::ops::Deref for PathExpression {
@@ -9351,7 +11613,17 @@ impl<'de> ::serde::Deserialize<'de> for PathExpression {
     }
 }
 ///A value to rewrite the URI path to.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct PathValue(::std::string::String);
 impl ::std::ops::Deref for PathValue {
@@ -9405,7 +11677,17 @@ impl<'de> ::serde::Deserialize<'de> for PathValue {
     }
 }
 ///A JSON pointer to the field that is the source of the message.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Pointer(::std::string::String);
 impl ::std::ops::Deref for Pointer {
@@ -9469,7 +11751,8 @@ impl<'de> ::serde::Deserialize<'de> for Pointer {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum Polish {
     #[serde(rename = "off")]
@@ -9532,7 +11815,8 @@ impl ::std::convert::TryFrom<::std::string::String> for Polish {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum Product {
     #[serde(rename = "bic")]
@@ -9597,7 +11881,17 @@ impl ::std::convert::TryFrom<::std::string::String> for Product {
     }
 }
 ///The public key to encrypt matched data logs with.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct PublicKey(::std::string::String);
 impl ::std::ops::Deref for PublicKey {
@@ -9651,7 +11945,17 @@ impl<'de> ::serde::Deserialize<'de> for PublicKey {
     }
 }
 ///A header name to qualify the directive.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Qualifier(::std::string::String);
 impl ::std::ops::Deref for Qualifier {
@@ -9705,7 +12009,17 @@ impl<'de> ::serde::Deserialize<'de> for Qualifier {
     }
 }
 ///An expression that evaluates to a value to rewrite the URI query to.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct QueryExpression(::std::string::String);
 impl ::std::ops::Deref for QueryExpression {
@@ -9759,13 +12073,27 @@ impl<'de> ::serde::Deserialize<'de> for QueryExpression {
     }
 }
 ///The raw request field to log.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RawRequestField {
     ///The name of the header.
     pub name: HeaderName,
 }
 ///The raw response field to log.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RawResponseField {
     ///The name of the response header.
     pub name: HeaderName,
@@ -9774,7 +12102,17 @@ pub struct RawResponseField {
     pub preserve_duplicates: bool,
 }
 ///An expression that evaluates to a URL to redirect the request to.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RedirectExpression(::std::string::String);
 impl ::std::ops::Deref for RedirectExpression {
@@ -9828,7 +12166,17 @@ impl<'de> ::serde::Deserialize<'de> for RedirectExpression {
     }
 }
 ///A URL to redirect the request to.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RedirectValue(::std::string::String);
 impl ::std::ops::Deref for RedirectValue {
@@ -9882,7 +12230,17 @@ impl<'de> ::serde::Deserialize<'de> for RedirectValue {
     }
 }
 ///The reference of the rule (the rule's ID by default).
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Ref(::std::string::String);
 impl ::std::ops::Deref for Ref {
@@ -9946,7 +12304,8 @@ impl<'de> ::serde::Deserialize<'de> for Ref {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RemoveCacheTagsExpressionOperation {
     #[serde(rename = "remove")]
@@ -9998,7 +12357,8 @@ for RemoveCacheTagsExpressionOperation {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RemoveCacheTagsValuesOperation {
     #[serde(rename = "remove")]
@@ -10049,7 +12409,8 @@ impl ::std::convert::TryFrom<::std::string::String> for RemoveCacheTagsValuesOpe
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RemoveDirectiveOperation {
     #[serde(rename = "remove")]
@@ -10100,7 +12461,8 @@ impl ::std::convert::TryFrom<::std::string::String> for RemoveDirectiveOperation
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RemoveHeaderOperation {
     #[serde(rename = "remove")]
@@ -10151,7 +12513,8 @@ impl ::std::convert::TryFrom<::std::string::String> for RemoveHeaderOperation {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RequestBodyBuffering {
     #[serde(rename = "none")]
@@ -10200,7 +12563,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RequestBodyBuffering {
     }
 }
 ///The response to show when the block is applied.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct Response {
     ///The content to return.
     pub content: Content,
@@ -10220,7 +12590,8 @@ pub struct Response {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum ResponseBodyBuffering {
     #[serde(rename = "none")]
@@ -10265,7 +12636,14 @@ impl ::std::convert::TryFrom<::std::string::String> for ResponseBodyBuffering {
     }
 }
 ///A rule-level override.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RuleOverride {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsRuleAction>,
@@ -10279,7 +12657,15 @@ pub struct RuleOverride {
     pub sensitivity_level: ::std::option::Option<RulesetsExecuteSensitivityLevel>,
 }
 ///`RulesetForProvider`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetForProvider {
     ///An informative description of the ruleset.
     #[serde(default)]
@@ -10289,7 +12675,14 @@ pub struct RulesetForProvider {
     pub name: ::std::option::Option<Name>,
 }
 ///`RulesetsBlockRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsBlockRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsBlockRuleAction>,
@@ -10333,7 +12726,8 @@ pub struct RulesetsBlockRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsBlockRuleAction {
     #[serde(rename = "block")]
@@ -10374,13 +12768,28 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsBlockRuleAction 
     }
 }
 ///`RulesetsBlockRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsBlockRuleActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub response: ::std::option::Option<Response>,
 }
 ///`RulesetsChallengeRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsChallengeRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsChallengeRuleAction>,
@@ -10425,7 +12834,8 @@ pub struct RulesetsChallengeRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsChallengeRuleAction {
     #[serde(rename = "challenge")]
@@ -10466,7 +12876,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsChallengeRuleAct
     }
 }
 ///`RulesetsCompressResponseRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsCompressResponseRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsCompressResponseRuleAction>,
@@ -10512,7 +12929,8 @@ pub struct RulesetsCompressResponseRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsCompressResponseRuleAction {
     #[serde(rename = "compress_response")]
@@ -10554,13 +12972,27 @@ for RulesetsCompressResponseRuleAction {
     }
 }
 ///`RulesetsCompressResponseRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsCompressResponseRuleActionParameters {
     ///Custom order for compression algorithms.
     pub algorithms: ::std::vec::Vec<Algorithm>,
 }
 ///`RulesetsDDoSDynamicRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsDDoSDynamicRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsDDoSDynamicRuleAction>,
@@ -10605,7 +13037,8 @@ pub struct RulesetsDDoSDynamicRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsDDoSDynamicRuleAction {
     #[serde(rename = "ddos_dynamic")]
@@ -10646,7 +13079,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsDDoSDynamicRuleA
     }
 }
 ///A list of error messages.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsErrors(pub ::std::vec::Vec<RulesetsMessage>);
 impl ::std::ops::Deref for RulesetsErrors {
@@ -10666,7 +13106,14 @@ impl ::std::convert::From<::std::vec::Vec<RulesetsMessage>> for RulesetsErrors {
     }
 }
 ///A list of category-level overrides. This option has the second-highest precedence after rule-level overrides.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsExecuteCategoryOverrides(pub ::std::vec::Vec<CategoryOverride>);
 impl ::std::ops::Deref for RulesetsExecuteCategoryOverrides {
@@ -10688,13 +13135,28 @@ for RulesetsExecuteCategoryOverrides {
     }
 }
 ///The configuration to use for matched data logging.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsExecuteMatchedData {
     ///The public key to encrypt matched data logs with.
     pub public_key: PublicKey,
 }
 ///A set of overrides to apply to the target ruleset.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsExecuteOverrides {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsRuleAction>,
@@ -10708,7 +13170,14 @@ pub struct RulesetsExecuteOverrides {
     pub sensitivity_level: ::std::option::Option<RulesetsExecuteSensitivityLevel>,
 }
 ///`RulesetsExecuteRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsExecuteRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsExecuteRuleAction>,
@@ -10752,7 +13221,8 @@ pub struct RulesetsExecuteRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsExecuteRuleAction {
     #[serde(rename = "execute")]
@@ -10793,7 +13263,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsExecuteRuleActio
     }
 }
 ///`RulesetsExecuteRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsExecuteRuleActionParameters {
     pub id: RulesetsRulesetId,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -10802,7 +13279,14 @@ pub struct RulesetsExecuteRuleActionParameters {
     pub overrides: ::std::option::Option<RulesetsExecuteOverrides>,
 }
 ///A list of rule-level overrides. This option has the highest precedence.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsExecuteRuleOverrides(pub ::std::vec::Vec<RuleOverride>);
 impl ::std::ops::Deref for RulesetsExecuteRuleOverrides {
@@ -10834,7 +13318,8 @@ for RulesetsExecuteRuleOverrides {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsExecuteSensitivityLevel {
     #[serde(rename = "default")]
@@ -10887,7 +13372,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsExecuteSensitivi
     }
 }
 ///`RulesetsForceConnectionCloseRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsForceConnectionCloseRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsForceConnectionCloseRuleAction>,
@@ -10932,7 +13424,8 @@ pub struct RulesetsForceConnectionCloseRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsForceConnectionCloseRuleAction {
     #[serde(rename = "force_connection_close")]
@@ -10974,7 +13467,14 @@ for RulesetsForceConnectionCloseRuleAction {
     }
 }
 ///`RulesetsJsChallengeRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsJsChallengeRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsJsChallengeRuleAction>,
@@ -11019,7 +13519,8 @@ pub struct RulesetsJsChallengeRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsJsChallengeRuleAction {
     #[serde(rename = "js_challenge")]
@@ -11060,7 +13561,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsJsChallengeRuleA
     }
 }
 ///The cookie fields to log.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsLogCustomFieldCookieFields(pub ::std::vec::Vec<CookieField>);
 impl ::std::ops::Deref for RulesetsLogCustomFieldCookieFields {
@@ -11082,7 +13590,14 @@ for RulesetsLogCustomFieldCookieFields {
     }
 }
 ///The raw response fields to log.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsLogCustomFieldRawResponseFields(
     pub ::std::vec::Vec<RawResponseField>,
@@ -11106,7 +13621,14 @@ for RulesetsLogCustomFieldRawResponseFields {
     }
 }
 ///The raw request fields to log.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsLogCustomFieldRequestFields(pub ::std::vec::Vec<RawRequestField>);
 impl ::std::ops::Deref for RulesetsLogCustomFieldRequestFields {
@@ -11128,7 +13650,14 @@ for RulesetsLogCustomFieldRequestFields {
     }
 }
 ///The transformed response fields to log.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsLogCustomFieldResponseFields(
     pub ::std::vec::Vec<TransformedResponseField>,
@@ -11152,7 +13681,14 @@ for RulesetsLogCustomFieldResponseFields {
     }
 }
 ///`RulesetsLogCustomFieldRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsLogCustomFieldRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsLogCustomFieldRuleAction>,
@@ -11198,7 +13734,8 @@ pub struct RulesetsLogCustomFieldRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsLogCustomFieldRuleAction {
     #[serde(rename = "log_custom_field")]
@@ -11240,7 +13777,15 @@ for RulesetsLogCustomFieldRuleAction {
     }
 }
 ///`RulesetsLogCustomFieldRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsLogCustomFieldRuleActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub cookie_fields: ::std::option::Option<RulesetsLogCustomFieldCookieFields>,
@@ -11258,7 +13803,14 @@ pub struct RulesetsLogCustomFieldRuleActionParameters {
     >,
 }
 ///The transformed request fields to log.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsLogCustomFieldTransformedRequestFields(
     pub ::std::vec::Vec<TransformedRequestField>,
@@ -11282,7 +13834,14 @@ for RulesetsLogCustomFieldTransformedRequestFields {
     }
 }
 ///`RulesetsLogRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsLogRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsLogRuleAction>,
@@ -11327,7 +13886,8 @@ pub struct RulesetsLogRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsLogRuleAction {
     #[serde(rename = "log")]
@@ -11368,7 +13928,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsLogRuleAction {
     }
 }
 ///`RulesetsManagedChallengeRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsManagedChallengeRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsManagedChallengeRuleAction>,
@@ -11413,7 +13980,8 @@ pub struct RulesetsManagedChallengeRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsManagedChallengeRuleAction {
     #[serde(rename = "managed_challenge")]
@@ -11455,7 +14023,14 @@ for RulesetsManagedChallengeRuleAction {
     }
 }
 ///A message.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsMessage {
     ///A unique code for this message.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -11466,7 +14041,14 @@ pub struct RulesetsMessage {
     pub source: ::std::option::Option<Source>,
 }
 ///A list of warning messages.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsMessages(pub ::std::vec::Vec<RulesetsMessage>);
 impl ::std::ops::Deref for RulesetsMessages {
@@ -11486,7 +14068,14 @@ impl ::std::convert::From<::std::vec::Vec<RulesetsMessage>> for RulesetsMessages
     }
 }
 ///A redirect based on a bulk list lookup.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRedirectFromList {
     ///An expression that evaluates to the list lookup key.
     pub key: LookupKey,
@@ -11494,18 +14083,32 @@ pub struct RulesetsRedirectFromList {
     pub name: ListName,
 }
 ///A redirect based on the request properties.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRedirectFromValue {
     ///Whether to keep the query string of the original request.
     #[serde(default)]
     pub preserve_query_string: bool,
-    ///The status code to use for the redirect.
+    ///The status code to use for the redirect (301, 302, 303, 307 or 308).
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub status_code: ::std::option::Option<StatusCode>,
+    pub status_code: ::std::option::Option<i64>,
     pub target_url: TargetUrl,
 }
 ///`RulesetsRedirectRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRedirectRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsRedirectRuleAction>,
@@ -11549,7 +14152,8 @@ pub struct RulesetsRedirectRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsRedirectRuleAction {
     #[serde(rename = "redirect")]
@@ -11590,7 +14194,15 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsRedirectRuleActi
     }
 }
 ///`RulesetsRedirectRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRedirectRuleActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub from_list: ::std::option::Option<RulesetsRedirectFromList>,
@@ -11598,7 +14210,14 @@ pub struct RulesetsRedirectRuleActionParameters {
     pub from_value: ::std::option::Option<RulesetsRedirectFromValue>,
 }
 ///`RulesetsRequestRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum RulesetsRequestRule {
     BlockRule(RulesetsBlockRule),
@@ -11729,7 +14348,14 @@ impl ::std::convert::From<RulesetsTransformResponseHtmlRule> for RulesetsRequest
     }
 }
 ///The list of rules in the ruleset.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsRequestRules(pub ::std::vec::Vec<RulesetsRequestRule>);
 impl ::std::ops::Deref for RulesetsRequestRules {
@@ -11751,7 +14377,14 @@ for RulesetsRequestRules {
     }
 }
 ///A response object.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponse {
     pub errors: RulesetsErrors,
     pub messages: RulesetsMessages,
@@ -11761,7 +14394,14 @@ pub struct RulesetsResponse {
     pub success: bool,
 }
 ///`RulesetsResponseRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum RulesetsResponseRule {
     Variant0 {
@@ -12400,7 +15040,8 @@ pub enum RulesetsResponseRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant0Action {
     #[serde(rename = "block")]
@@ -12442,7 +15083,15 @@ for RulesetsResponseRuleVariant0Action {
     }
 }
 ///`RulesetsResponseRuleVariant0ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant0ActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub response: ::std::option::Option<Response>,
@@ -12458,7 +15107,8 @@ pub struct RulesetsResponseRuleVariant0ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant10Action {
     #[serde(rename = "redirect")]
@@ -12500,7 +15150,15 @@ for RulesetsResponseRuleVariant10Action {
     }
 }
 ///`RulesetsResponseRuleVariant10ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant10ActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub from_list: ::std::option::Option<RulesetsRedirectFromList>,
@@ -12518,7 +15176,8 @@ pub struct RulesetsResponseRuleVariant10ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant11Action {
     #[serde(rename = "rewrite")]
@@ -12560,7 +15219,15 @@ for RulesetsResponseRuleVariant11Action {
     }
 }
 ///`RulesetsResponseRuleVariant11ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant11ActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub headers: ::std::option::Option<RulesetsRewriteHeaders>,
@@ -12578,7 +15245,8 @@ pub struct RulesetsResponseRuleVariant11ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant12Action {
     #[serde(rename = "route")]
@@ -12620,7 +15288,15 @@ for RulesetsResponseRuleVariant12Action {
     }
 }
 ///`RulesetsResponseRuleVariant12ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant12ActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub host_header: ::std::option::Option<RulesetsRouteHostHeader>,
@@ -12640,7 +15316,8 @@ pub struct RulesetsResponseRuleVariant12ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant13Action {
     #[serde(rename = "score")]
@@ -12682,7 +15359,14 @@ for RulesetsResponseRuleVariant13Action {
     }
 }
 ///`RulesetsResponseRuleVariant13ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant13ActionParameters {
     pub increment: RulesetsScoreIncrement,
 }
@@ -12697,7 +15381,8 @@ pub struct RulesetsResponseRuleVariant13ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant14Action {
     #[serde(rename = "serve_error")]
@@ -12739,7 +15424,14 @@ for RulesetsResponseRuleVariant14Action {
     }
 }
 ///`RulesetsResponseRuleVariant14ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum RulesetsResponseRuleVariant14ActionParameters {
     Variant0 {
@@ -12766,7 +15458,8 @@ pub enum RulesetsResponseRuleVariant14ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant15Action {
     #[serde(rename = "set_cache_control")]
@@ -12808,7 +15501,15 @@ for RulesetsResponseRuleVariant15Action {
     }
 }
 ///`RulesetsResponseRuleVariant15ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant15ActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub immutable: ::std::option::Option<RulesetsSetCacheControlDirective>,
@@ -12868,7 +15569,8 @@ pub struct RulesetsResponseRuleVariant15ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant16Action {
     #[serde(rename = "set_cache_settings")]
@@ -12910,7 +15612,15 @@ for RulesetsResponseRuleVariant16Action {
     }
 }
 ///`RulesetsResponseRuleVariant16ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant16ActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub additional_cacheable_ports: ::std::option::Option<
@@ -12972,7 +15682,8 @@ pub struct RulesetsResponseRuleVariant16ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant17Action {
     #[serde(rename = "set_cache_tags")]
@@ -13014,7 +15725,14 @@ for RulesetsResponseRuleVariant17Action {
     }
 }
 ///`RulesetsResponseRuleVariant17ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum RulesetsResponseRuleVariant17ActionParameters {
     AddCacheTagsValues {
@@ -13053,7 +15771,8 @@ pub enum RulesetsResponseRuleVariant17ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant18Action {
     #[serde(rename = "set_config")]
@@ -13095,7 +15814,15 @@ for RulesetsResponseRuleVariant18Action {
     }
 }
 ///`RulesetsResponseRuleVariant18ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant18ActionParameters {
     ///Whether to enable Automatic HTTPS Rewrites.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -13174,7 +15901,8 @@ pub struct RulesetsResponseRuleVariant18ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant19Action {
     #[serde(rename = "skip")]
@@ -13216,7 +15944,15 @@ for RulesetsResponseRuleVariant19Action {
     }
 }
 ///`RulesetsResponseRuleVariant19ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant19ActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub phase: ::std::option::Option<RulesetsSkipPhase>,
@@ -13242,7 +15978,8 @@ pub struct RulesetsResponseRuleVariant19ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant1Action {
     #[serde(rename = "challenge")]
@@ -13294,7 +16031,8 @@ for RulesetsResponseRuleVariant1Action {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant20Action {
     #[serde(rename = "transform_response_html")]
@@ -13336,7 +16074,14 @@ for RulesetsResponseRuleVariant20Action {
     }
 }
 ///`RulesetsResponseRuleVariant20ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant20ActionParameters {
     ///Enables the link maze transformation on the response.
     pub link_maze: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
@@ -13352,7 +16097,8 @@ pub struct RulesetsResponseRuleVariant20ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant2Action {
     #[serde(rename = "compress_response")]
@@ -13394,7 +16140,14 @@ for RulesetsResponseRuleVariant2Action {
     }
 }
 ///`RulesetsResponseRuleVariant2ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant2ActionParameters {
     ///Custom order for compression algorithms.
     pub algorithms: ::std::vec::Vec<Algorithm>,
@@ -13410,7 +16163,8 @@ pub struct RulesetsResponseRuleVariant2ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant3Action {
     #[serde(rename = "ddos_dynamic")]
@@ -13462,7 +16216,8 @@ for RulesetsResponseRuleVariant3Action {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant4Action {
     #[serde(rename = "execute")]
@@ -13504,7 +16259,14 @@ for RulesetsResponseRuleVariant4Action {
     }
 }
 ///`RulesetsResponseRuleVariant4ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant4ActionParameters {
     pub id: RulesetsRulesetId,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -13523,7 +16285,8 @@ pub struct RulesetsResponseRuleVariant4ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant5Action {
     #[serde(rename = "force_connection_close")]
@@ -13575,7 +16338,8 @@ for RulesetsResponseRuleVariant5Action {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant6Action {
     #[serde(rename = "js_challenge")]
@@ -13627,7 +16391,8 @@ for RulesetsResponseRuleVariant6Action {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant7Action {
     #[serde(rename = "log")]
@@ -13679,7 +16444,8 @@ for RulesetsResponseRuleVariant7Action {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant8Action {
     #[serde(rename = "log_custom_field")]
@@ -13721,7 +16487,15 @@ for RulesetsResponseRuleVariant8Action {
     }
 }
 ///`RulesetsResponseRuleVariant8ActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsResponseRuleVariant8ActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub cookie_fields: ::std::option::Option<RulesetsLogCustomFieldCookieFields>,
@@ -13749,7 +16523,8 @@ pub struct RulesetsResponseRuleVariant8ActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsResponseRuleVariant9Action {
     #[serde(rename = "managed_challenge")]
@@ -13791,7 +16566,14 @@ for RulesetsResponseRuleVariant9Action {
     }
 }
 ///The list of rules in the ruleset.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsResponseRules(pub ::std::vec::Vec<RulesetsResponseRule>);
 impl ::std::ops::Deref for RulesetsResponseRules {
@@ -13813,7 +16595,17 @@ for RulesetsResponseRules {
     }
 }
 ///An expression that evaluates to a value for the header.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsRewriteHeaderExpression(::std::string::String);
 impl ::std::ops::Deref for RulesetsRewriteHeaderExpression {
@@ -13876,7 +16668,8 @@ impl<'de> ::serde::Deserialize<'de> for RulesetsRewriteHeaderExpression {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 #[serde(transparent)]
 pub struct RulesetsRewriteHeaderOperation(pub ::std::string::String);
@@ -13908,7 +16701,17 @@ impl ::std::str::FromStr for RulesetsRewriteHeaderOperation {
     }
 }
 ///A static value for the header.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsRewriteHeaderValue(::std::string::String);
 impl ::std::ops::Deref for RulesetsRewriteHeaderValue {
@@ -13962,7 +16765,14 @@ impl<'de> ::serde::Deserialize<'de> for RulesetsRewriteHeaderValue {
     }
 }
 ///A map of headers to rewrite.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsRewriteHeaders(
     pub ::std::collections::HashMap<::std::string::String, RulesetsRewriteHeadersValue>,
@@ -14000,7 +16810,14 @@ impl ::std::convert::From<
     }
 }
 ///`RulesetsRewriteHeadersValue`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum RulesetsRewriteHeadersValue {
     AddStaticHeader {
@@ -14022,7 +16839,14 @@ pub enum RulesetsRewriteHeadersValue {
     RemoveHeader { operation: RemoveHeaderOperation },
 }
 ///`RulesetsRewriteRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRewriteRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsRewriteRuleAction>,
@@ -14066,7 +16890,8 @@ pub struct RulesetsRewriteRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsRewriteRuleAction {
     #[serde(rename = "rewrite")]
@@ -14107,7 +16932,15 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsRewriteRuleActio
     }
 }
 ///`RulesetsRewriteRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRewriteRuleActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub headers: ::std::option::Option<RulesetsRewriteHeaders>,
@@ -14115,7 +16948,14 @@ pub struct RulesetsRewriteRuleActionParameters {
     pub uri: ::std::option::Option<RulesetsRewriteUri>,
 }
 ///`RulesetsRewriteUri`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum RulesetsRewriteUri {
     Variant0 {
@@ -14132,7 +16972,15 @@ pub enum RulesetsRewriteUri {
     },
 }
 ///A URI path rewrite.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRewriteUriPath {
     ///An expression that evaluates to a value to rewrite the URI path to.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -14142,7 +16990,15 @@ pub struct RulesetsRewriteUriPath {
     pub value: ::std::option::Option<PathValue>,
 }
 ///A URI query rewrite.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRewriteUriQuery {
     ///An expression that evaluates to a value to rewrite the URI query to.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -14152,7 +17008,17 @@ pub struct RulesetsRewriteUriQuery {
     pub value: ::std::option::Option<::std::string::String>,
 }
 ///A value to rewrite the HTTP host header to.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsRouteHostHeader(::std::string::String);
 impl ::std::ops::Deref for RulesetsRouteHostHeader {
@@ -14206,7 +17072,15 @@ impl<'de> ::serde::Deserialize<'de> for RulesetsRouteHostHeader {
     }
 }
 ///An origin to route to.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRouteOrigin {
     ///A resolved host to route to.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -14216,7 +17090,14 @@ pub struct RulesetsRouteOrigin {
     pub port: ::std::option::Option<::std::num::NonZeroU64>,
 }
 ///`RulesetsRouteRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRouteRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsRouteRuleAction>,
@@ -14260,7 +17141,8 @@ pub struct RulesetsRouteRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsRouteRuleAction {
     #[serde(rename = "route")]
@@ -14301,7 +17183,15 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsRouteRuleAction 
     }
 }
 ///`RulesetsRouteRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRouteRuleActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub host_header: ::std::option::Option<RulesetsRouteHostHeader>,
@@ -14311,13 +17201,27 @@ pub struct RulesetsRouteRuleActionParameters {
     pub sni: ::std::option::Option<RulesetsRouteSni>,
 }
 ///A Server Name Indication (SNI) override.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRouteSni {
     ///A value to override the SNI to.
     pub value: Value,
 }
 ///`RulesetsRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsRuleAction>,
@@ -14353,7 +17257,17 @@ pub struct RulesetsRule {
     pub version: Version,
 }
 ///The action to perform when the rule matches.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsRuleAction(::std::string::String);
 impl ::std::ops::Deref for RulesetsRuleAction {
@@ -14409,7 +17323,14 @@ impl<'de> ::serde::Deserialize<'de> for RulesetsRuleAction {
     }
 }
 ///The categories of the rule.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsRuleCategories(pub ::std::vec::Vec<RulesetsRuleCategory>);
 impl ::std::ops::Deref for RulesetsRuleCategories {
@@ -14431,7 +17352,17 @@ for RulesetsRuleCategories {
     }
 }
 ///The category of a rule.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsRuleCategory(::std::string::String);
 impl ::std::ops::Deref for RulesetsRuleCategory {
@@ -14485,7 +17416,14 @@ impl<'de> ::serde::Deserialize<'de> for RulesetsRuleCategory {
     }
 }
 ///Whether the rule should be executed.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsRuleEnabled(pub bool);
 impl ::std::ops::Deref for RulesetsRuleEnabled {
@@ -14528,7 +17466,14 @@ impl ::std::convert::TryFrom<String> for RulesetsRuleEnabled {
     }
 }
 ///Configuration for exposed credential checking.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRuleExposedCredentialCheck {
     ///An expression that selects the password used in the credentials check.
     pub password_expression: PasswordExpression,
@@ -14536,7 +17481,17 @@ pub struct RulesetsRuleExposedCredentialCheck {
     pub username_expression: UsernameExpression,
 }
 ///The unique ID of the rule.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsRuleId(::std::string::String);
 impl ::std::ops::Deref for RulesetsRuleId {
@@ -14592,13 +17547,27 @@ impl<'de> ::serde::Deserialize<'de> for RulesetsRuleId {
     }
 }
 ///An object configuring the rule's logging behavior.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRuleLogging {
     ///Whether to generate a log when the rule matches.
     pub enabled: bool,
 }
 ///An object configuring the rule's rate limit behavior.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRuleRatelimit {
     ///Characteristics of the request on which the rate limit counter will be incremented.
     pub characteristics: ::std::vec::Vec<Characteristic>,
@@ -14624,7 +17593,14 @@ pub struct RulesetsRuleRatelimit {
     pub score_response_header_name: ::std::option::Option<ScoreResponseHeaderName>,
 }
 ///A ruleset object.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsRuleset {
     ///An informative description of the ruleset.
     #[serde(default)]
@@ -14638,7 +17614,17 @@ pub struct RulesetsRuleset {
     pub version: RulesetsRulesetVersion,
 }
 ///The unique ID of the ruleset.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsRulesetId(::std::string::String);
 impl ::std::ops::Deref for RulesetsRulesetId {
@@ -14704,7 +17690,8 @@ impl<'de> ::serde::Deserialize<'de> for RulesetsRulesetId {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsRulesetKind {
     #[serde(rename = "managed")]
@@ -14767,7 +17754,8 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsRulesetKind {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsRulesetPhase {
     #[serde(rename = "ddos_l4")]
@@ -14912,7 +17900,17 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsRulesetPhase {
     }
 }
 ///The version of the ruleset.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsRulesetVersion(::std::string::String);
 impl ::std::ops::Deref for RulesetsRulesetVersion {
@@ -14968,7 +17966,14 @@ impl<'de> ::serde::Deserialize<'de> for RulesetsRulesetVersion {
     }
 }
 ///A delta to change the score by, which can be either positive or negative.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsScoreIncrement(pub i64);
 impl ::std::ops::Deref for RulesetsScoreIncrement {
@@ -15011,7 +18016,14 @@ impl ::std::convert::TryFrom<String> for RulesetsScoreIncrement {
     }
 }
 ///`RulesetsScoreRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsScoreRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsScoreRuleAction>,
@@ -15055,7 +18067,8 @@ pub struct RulesetsScoreRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsScoreRuleAction {
     #[serde(rename = "score")]
@@ -15096,12 +18109,29 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsScoreRuleAction 
     }
 }
 ///`RulesetsScoreRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsScoreRuleActionParameters {
     pub increment: RulesetsScoreIncrement,
 }
 ///The name of a custom asset to serve as the error response.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsServeErrorAssetName(::std::string::String);
 impl ::std::ops::Deref for RulesetsServeErrorAssetName {
@@ -15155,7 +18185,17 @@ impl<'de> ::serde::Deserialize<'de> for RulesetsServeErrorAssetName {
     }
 }
 ///The response content.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsServeErrorContent(::std::string::String);
 impl ::std::ops::Deref for RulesetsServeErrorContent {
@@ -15219,7 +18259,8 @@ impl<'de> ::serde::Deserialize<'de> for RulesetsServeErrorContent {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsServeErrorContentType {
     #[serde(rename = "application/json")]
@@ -15272,7 +18313,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsServeErrorConten
     }
 }
 ///`RulesetsServeErrorRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsServeErrorRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsServeErrorRuleAction>,
@@ -15316,7 +18364,8 @@ pub struct RulesetsServeErrorRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsServeErrorRuleAction {
     #[serde(rename = "serve_error")]
@@ -15357,7 +18406,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsServeErrorRuleAc
     }
 }
 ///`RulesetsServeErrorRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum RulesetsServeErrorRuleActionParameters {
     Variant0 {
@@ -15374,7 +18430,14 @@ pub enum RulesetsServeErrorRuleActionParameters {
     },
 }
 ///The status code to use for the error.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsServeErrorStatusCode(pub i64);
 impl ::std::ops::Deref for RulesetsServeErrorStatusCode {
@@ -15417,7 +18480,14 @@ impl ::std::convert::TryFrom<String> for RulesetsServeErrorStatusCode {
     }
 }
 ///Whether the directive should only be applied to the Cloudflare CDN cache.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheControlCloudflareOnly(pub bool);
 impl ::std::ops::Deref for RulesetsSetCacheControlCloudflareOnly {
@@ -15460,7 +18530,14 @@ impl ::std::convert::TryFrom<String> for RulesetsSetCacheControlCloudflareOnly {
     }
 }
 ///A cache-control directive configuration.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum RulesetsSetCacheControlDirective {
     SetDirective {
@@ -15475,7 +18552,14 @@ pub enum RulesetsSetCacheControlDirective {
     },
 }
 ///A cache-control directive configuration that accepts optional qualifiers (header names).
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum RulesetsSetCacheControlDirectiveWithQualifiers {
     SetDirective {
@@ -15493,7 +18577,14 @@ pub enum RulesetsSetCacheControlDirectiveWithQualifiers {
     },
 }
 ///A cache-control directive configuration that accepts a duration value in seconds.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum RulesetsSetCacheControlDirectiveWithValue {
     SetDirective {
@@ -15520,7 +18611,8 @@ pub enum RulesetsSetCacheControlDirectiveWithValue {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsSetCacheControlOperation {
     #[serde(rename = "set")]
@@ -15566,7 +18658,14 @@ for RulesetsSetCacheControlOperation {
     }
 }
 ///`RulesetsSetCacheControlRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheControlRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsSetCacheControlRuleAction>,
@@ -15612,7 +18711,8 @@ pub struct RulesetsSetCacheControlRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsSetCacheControlRuleAction {
     #[serde(rename = "set_cache_control")]
@@ -15654,7 +18754,15 @@ for RulesetsSetCacheControlRuleAction {
     }
 }
 ///`RulesetsSetCacheControlRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheControlRuleActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub immutable: ::std::option::Option<RulesetsSetCacheControlDirective>,
@@ -15704,7 +18812,14 @@ pub struct RulesetsSetCacheControlRuleActionParameters {
     >,
 }
 ///A list of additional ports that caching should be enabled on.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheSettingsAdditionalCacheablePorts(
     pub ::std::vec::Vec<::std::num::NonZeroU64>,
@@ -15728,7 +18843,14 @@ for RulesetsSetCacheSettingsAdditionalCacheablePorts {
     }
 }
 ///How long client browsers should cache the response. Cloudflare cache purge will not purge content cached on client browsers, so high browser TTLs may lead to stale content.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsBrowserTtl {
     ///The browser TTL (in seconds) if you choose the "override_origin" mode.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -15737,7 +18859,14 @@ pub struct RulesetsSetCacheSettingsBrowserTtl {
     pub mode: TtlMode,
 }
 ///Whether the request's response from the origin is eligible for caching. Caching itself will still depend on the cache control header and your other caching configurations.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheSettingsCache(pub bool);
 impl ::std::ops::Deref for RulesetsSetCacheSettingsCache {
@@ -15780,7 +18909,15 @@ impl ::std::convert::TryFrom<String> for RulesetsSetCacheSettingsCache {
     }
 }
 ///Which components of the request are included in or excluded from the cache key Cloudflare uses to store the response in cache.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsCacheKey {
     ///Whether to separate cached content based on the visitor's device type.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -15795,7 +18932,14 @@ pub struct RulesetsSetCacheSettingsCacheKey {
     pub ignore_query_strings_order: ::std::option::Option<bool>,
 }
 ///Settings to determine whether the request's response from origin is eligible for Cache Reserve (requires a Cache Reserve add-on plan).
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsCacheReserve {
     ///Whether Cache Reserve is enabled. If this is true and a request meets eligibility criteria, Cloudflare will write the resource to Cache Reserve.
     pub eligible: bool,
@@ -15804,7 +18948,15 @@ pub struct RulesetsSetCacheSettingsCacheReserve {
     pub minimum_file_size: ::std::option::Option<u64>,
 }
 ///Which components of the request are included or excluded from the cache key.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsCustomCacheKey {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub cookie: ::std::option::Option<RulesetsSetCacheSettingsCustomCacheKeyCookie>,
@@ -15820,7 +18972,15 @@ pub struct RulesetsSetCacheSettingsCustomCacheKey {
     pub user: ::std::option::Option<RulesetsSetCacheSettingsCustomCacheKeyUser>,
 }
 ///Which cookies to include in the cache key.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsCustomCacheKeyCookie {
     ///A list of cookies to check for the presence of. The presence of these cookies is included in the cache key.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -15830,7 +18990,15 @@ pub struct RulesetsSetCacheSettingsCustomCacheKeyCookie {
     pub include: ::std::option::Option<::std::vec::Vec<CookieName>>,
 }
 ///Which headers to include in the cache key.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsCustomCacheKeyHeader {
     ///A list of headers to check for the presence of. The presence of these headers is included in the cache key.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -15849,14 +19017,30 @@ pub struct RulesetsSetCacheSettingsCustomCacheKeyHeader {
     pub include: ::std::option::Option<::std::vec::Vec<Header>>,
 }
 ///How to use the host in the cache key.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsCustomCacheKeyHost {
     ///Whether to use the resolved host in the cache key.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub resolved: ::std::option::Option<bool>,
 }
 ///Which query string parameters to include in or exclude from the cache key.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsCustomCacheKeyQueryString {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub exclude: ::std::option::Option<Exclude>,
@@ -15864,7 +19048,15 @@ pub struct RulesetsSetCacheSettingsCustomCacheKeyQueryString {
     pub include: ::std::option::Option<Include>,
 }
 ///How to use characteristics of the request user agent in the cache key.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsCustomCacheKeyUser {
     ///Whether to use the user agent's device type in the cache key.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -15877,7 +19069,14 @@ pub struct RulesetsSetCacheSettingsCustomCacheKeyUser {
     pub lang: ::std::option::Option<bool>,
 }
 ///How long the Cloudflare edge network should cache the response.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsEdgeTtl {
     ///The edge TTL (in seconds) if you choose the "override_origin" mode.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -15888,7 +19087,14 @@ pub struct RulesetsSetCacheSettingsEdgeTtl {
     pub status_code_ttl: ::std::option::Option<RulesetsSetCacheSettingsStatusCodeTtl>,
 }
 ///Whether Cloudflare will aim to strictly adhere to RFC 7234.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheSettingsOriginCacheControl(pub bool);
 impl ::std::ops::Deref for RulesetsSetCacheSettingsOriginCacheControl {
@@ -15931,7 +19137,14 @@ impl ::std::convert::TryFrom<String> for RulesetsSetCacheSettingsOriginCacheCont
     }
 }
 ///Whether to generate Cloudflare error pages for issues from the origin server.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheSettingsOriginErrorPagePassthru(pub bool);
 impl ::std::ops::Deref for RulesetsSetCacheSettingsOriginErrorPagePassthru {
@@ -15975,13 +19188,27 @@ for RulesetsSetCacheSettingsOriginErrorPagePassthru {
     }
 }
 ///Controls whether Cloudflare fetches a large asset from the origin as a series of range requests instead of one whole-body request.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsOriginRangeRequests {
     ///Whether to use range requests. `default` is the behaviour the zone gets without this rule.
     pub mode: Mode,
 }
 ///A timeout value between two successive read operations to use for your origin server. Historically, the timeout value between two read options from Cloudflare to an origin server is 100 seconds. If you are attempting to reduce HTTP 524 errors because of timeouts from an origin server, try increasing this timeout value.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheSettingsReadTimeout(pub i64);
 impl ::std::ops::Deref for RulesetsSetCacheSettingsReadTimeout {
@@ -16024,7 +19251,14 @@ impl ::std::convert::TryFrom<String> for RulesetsSetCacheSettingsReadTimeout {
     }
 }
 ///Whether Cloudflare should respect strong ETag (entity tag) headers. If false, Cloudflare converts strong ETag headers to weak ETag headers.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheSettingsRespectStrongEtags(pub bool);
 impl ::std::ops::Deref for RulesetsSetCacheSettingsRespectStrongEtags {
@@ -16067,7 +19301,14 @@ impl ::std::convert::TryFrom<String> for RulesetsSetCacheSettingsRespectStrongEt
     }
 }
 ///`RulesetsSetCacheSettingsRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsSetCacheSettingsRuleAction>,
@@ -16113,7 +19354,8 @@ pub struct RulesetsSetCacheSettingsRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsSetCacheSettingsRuleAction {
     #[serde(rename = "set_cache_settings")]
@@ -16155,7 +19397,15 @@ for RulesetsSetCacheSettingsRuleAction {
     }
 }
 ///`RulesetsSetCacheSettingsRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsRuleActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub additional_cacheable_ports: ::std::option::Option<
@@ -16207,20 +19457,42 @@ pub struct RulesetsSetCacheSettingsRuleActionParameters {
     pub vary: ::std::option::Option<RulesetsSetCacheSettingsVary>,
 }
 ///When to serve stale content from cache.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsServeStale {
     ///Whether Cloudflare should disable serving stale content while getting the latest content from the origin.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub disable_stale_while_updating: ::std::option::Option<bool>,
 }
 ///Configuration for shared dictionary compression. When set, Cloudflare injects Use-As-Dictionary headers on matching cacheable responses.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsSharedDictionary {
     ///URL pattern for the Use-As-Dictionary match field. This pattern specifies which URLs can use this response as a dictionary.
     pub match_pattern: MatchPattern,
 }
 ///A list of TTLs to apply to specific status codes or status code ranges.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheSettingsStatusCodeTtl(
     pub ::std::vec::Vec<RulesetsSetCacheSettingsStatusCodeTtlItem>,
@@ -16244,7 +19516,14 @@ for RulesetsSetCacheSettingsStatusCodeTtl {
     }
 }
 ///`RulesetsSetCacheSettingsStatusCodeTtlItem`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsStatusCodeTtlItem {
     ///A single status code to apply the TTL to.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -16255,7 +19534,14 @@ pub struct RulesetsSetCacheSettingsStatusCodeTtlItem {
     pub value: i64,
 }
 ///Whether to strip ETag headers from the origin response before caching.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheSettingsStripETags(pub bool);
 impl ::std::ops::Deref for RulesetsSetCacheSettingsStripETags {
@@ -16298,7 +19584,14 @@ impl ::std::convert::TryFrom<String> for RulesetsSetCacheSettingsStripETags {
     }
 }
 ///Whether to strip Last-Modified headers from the origin response before caching.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheSettingsStripLastModified(pub bool);
 impl ::std::ops::Deref for RulesetsSetCacheSettingsStripLastModified {
@@ -16341,7 +19634,14 @@ impl ::std::convert::TryFrom<String> for RulesetsSetCacheSettingsStripLastModifi
     }
 }
 ///Whether to strip Set-Cookie headers from the origin response before caching.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheSettingsStripSetCookie(pub bool);
 impl ::std::ops::Deref for RulesetsSetCacheSettingsStripSetCookie {
@@ -16384,7 +19684,15 @@ impl ::std::convert::TryFrom<String> for RulesetsSetCacheSettingsStripSetCookie 
     }
 }
 ///Controls how cached responses vary based on request headers. `default` is required by the API and applies to any Vary response header that does not have a per-header override.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsVary {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub default: ::std::option::Option<RulesetsSetCacheSettingsVaryDefault>,
@@ -16396,13 +19704,27 @@ pub struct RulesetsSetCacheSettingsVary {
     >,
 }
 ///Controls how response Vary headers without a per-header override contribute to the cache key.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsVaryDefault {
     ///How the header value is treated when building the cache key.
     pub action: Action,
 }
 ///Controls how a single request header contributes to the cache key.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheSettingsVaryHeader {
     ///How the header value is treated when building the cache key.
     pub action: Action,
@@ -16414,7 +19736,17 @@ pub struct RulesetsSetCacheSettingsVaryHeader {
     pub media_types: ::std::vec::Vec<MediaType>,
 }
 ///An expression that evaluates to an array of cache tag values.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheTagsExpression(::std::string::String);
 impl ::std::ops::Deref for RulesetsSetCacheTagsExpression {
@@ -16478,7 +19810,8 @@ impl<'de> ::serde::Deserialize<'de> for RulesetsSetCacheTagsExpression {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsSetCacheTagsOperation {
     #[serde(rename = "add")]
@@ -16527,7 +19860,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsSetCacheTagsOper
     }
 }
 ///`RulesetsSetCacheTagsRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetCacheTagsRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsSetCacheTagsRuleAction>,
@@ -16573,7 +19913,8 @@ pub struct RulesetsSetCacheTagsRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsSetCacheTagsRuleAction {
     #[serde(rename = "set_cache_tags")]
@@ -16614,7 +19955,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsSetCacheTagsRule
     }
 }
 ///`RulesetsSetCacheTagsRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(untagged)]
 pub enum RulesetsSetCacheTagsRuleActionParameters {
     AddCacheTagsValues {
@@ -16643,7 +19991,14 @@ pub enum RulesetsSetCacheTagsRuleActionParameters {
     },
 }
 ///A list of cache tag values.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSetCacheTagsValues(pub ::std::vec::Vec<CacheTag>);
 impl ::std::ops::Deref for RulesetsSetCacheTagsValues {
@@ -16663,7 +20018,15 @@ impl ::std::convert::From<::std::vec::Vec<CacheTag>> for RulesetsSetCacheTagsVal
     }
 }
 ///Which file extensions to minify automatically.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetConfigAutominify {
     ///Whether to minify CSS files.
     #[serde(default)]
@@ -16676,7 +20039,14 @@ pub struct RulesetsSetConfigAutominify {
     pub js: bool,
 }
 ///`RulesetsSetConfigRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetConfigRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsSetConfigRuleAction>,
@@ -16720,7 +20090,8 @@ pub struct RulesetsSetConfigRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsSetConfigRuleAction {
     #[serde(rename = "set_config")]
@@ -16761,7 +20132,15 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsSetConfigRuleAct
     }
 }
 ///`RulesetsSetConfigRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSetConfigRuleActionParameters {
     ///Whether to enable Automatic HTTPS Rewrites.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -16840,7 +20219,8 @@ pub struct RulesetsSetConfigRuleActionParameters {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsSkipPhase {
     #[serde(rename = "current")]
@@ -16881,7 +20261,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsSkipPhase {
     }
 }
 ///A list of phases to skip the execution of. This option is incompatible with the rulesets option.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSkipPhases(pub ::std::vec::Vec<RulesetsRulesetPhase>);
 impl ::std::ops::Deref for RulesetsSkipPhases {
@@ -16901,7 +20288,14 @@ impl ::std::convert::From<::std::vec::Vec<RulesetsRulesetPhase>> for RulesetsSki
     }
 }
 ///A list of legacy security products to skip the execution of.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSkipProducts(pub ::std::vec::Vec<Product>);
 impl ::std::ops::Deref for RulesetsSkipProducts {
@@ -16921,7 +20315,14 @@ impl ::std::convert::From<::std::vec::Vec<Product>> for RulesetsSkipProducts {
     }
 }
 ///`RulesetsSkipRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSkipRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsSkipRuleAction>,
@@ -16965,7 +20366,8 @@ pub struct RulesetsSkipRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsSkipRuleAction {
     #[serde(rename = "skip")]
@@ -17006,7 +20408,15 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsSkipRuleAction {
     }
 }
 ///`RulesetsSkipRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsSkipRuleActionParameters {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub phase: ::std::option::Option<RulesetsSkipPhase>,
@@ -17022,7 +20432,14 @@ pub struct RulesetsSkipRuleActionParameters {
     pub rulesets: ::std::option::Option<RulesetsSkipRulesets>,
 }
 ///A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the execution of. This option is incompatible with the ruleset option.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSkipRules(
     pub ::std::collections::HashMap<
@@ -17073,7 +20490,8 @@ impl ::std::convert::From<
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsSkipRuleset {
     #[serde(rename = "current")]
@@ -17114,7 +20532,14 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsSkipRuleset {
     }
 }
 ///A list of ruleset IDs to skip the execution of. This option is incompatible with the ruleset and phases options.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct RulesetsSkipRulesets(pub ::std::vec::Vec<RulesetsRulesetId>);
 impl ::std::ops::Deref for RulesetsSkipRulesets {
@@ -17134,7 +20559,14 @@ impl ::std::convert::From<::std::vec::Vec<RulesetsRulesetId>> for RulesetsSkipRu
     }
 }
 ///`RulesetsTransformResponseHtmlRule`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsTransformResponseHtmlRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub action: ::std::option::Option<RulesetsTransformResponseHtmlRuleAction>,
@@ -17180,7 +20612,8 @@ pub struct RulesetsTransformResponseHtmlRule {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum RulesetsTransformResponseHtmlRuleAction {
     #[serde(rename = "transform_response_html")]
@@ -17222,13 +20655,30 @@ for RulesetsTransformResponseHtmlRuleAction {
     }
 }
 ///`RulesetsTransformResponseHtmlRuleActionParameters`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct RulesetsTransformResponseHtmlRuleActionParameters {
     ///Enables the link maze transformation on the response.
     pub link_maze: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
 }
 ///A response header name provided by the origin, which contains the score to increment rate limit counter with.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ScoreResponseHeaderName(::std::string::String);
 impl ::std::ops::Deref for ScoreResponseHeaderName {
@@ -17292,7 +20742,8 @@ impl<'de> ::serde::Deserialize<'de> for ScoreResponseHeaderName {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum SecurityLevel {
     #[serde(rename = "off")]
@@ -17363,7 +20814,8 @@ impl ::std::convert::TryFrom<::std::string::String> for SecurityLevel {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum SetCacheTagsExpressionOperation {
     #[serde(rename = "set")]
@@ -17414,7 +20866,8 @@ impl ::std::convert::TryFrom<::std::string::String> for SetCacheTagsExpressionOp
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum SetCacheTagsValuesOperation {
     #[serde(rename = "set")]
@@ -17465,7 +20918,8 @@ impl ::std::convert::TryFrom<::std::string::String> for SetCacheTagsValuesOperat
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum SetDirectiveOperation {
     #[serde(rename = "set")]
@@ -17516,7 +20970,8 @@ impl ::std::convert::TryFrom<::std::string::String> for SetDirectiveOperation {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum SetDynamicHeaderOperation {
     #[serde(rename = "set")]
@@ -17567,7 +21022,8 @@ impl ::std::convert::TryFrom<::std::string::String> for SetDynamicHeaderOperatio
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum SetStaticHeaderOperation {
     #[serde(rename = "set")]
@@ -17608,7 +21064,14 @@ impl ::std::convert::TryFrom<::std::string::String> for SetStaticHeaderOperation
     }
 }
 ///The source of this message.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct Source {
     ///A JSON pointer to the field that is the source of the message.
     pub pointer: Pointer,
@@ -17624,7 +21087,8 @@ pub struct Source {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum Ssl {
     #[serde(rename = "off")]
@@ -17680,44 +21144,16 @@ impl ::std::convert::TryFrom<::std::string::String> for Ssl {
         value.parse()
     }
 }
-///The status code to use for the redirect.
-#[derive(::serde::Serialize, Clone, Debug, PartialEq)]
-#[serde(transparent)]
-pub struct StatusCode(i64);
-impl ::std::ops::Deref for StatusCode {
-    type Target = i64;
-    fn deref(&self) -> &i64 {
-        &self.0
-    }
-}
-impl ::std::convert::From<StatusCode> for i64 {
-    fn from(value: StatusCode) -> Self {
-        value.0
-    }
-}
-impl ::std::convert::TryFrom<i64> for StatusCode {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: i64,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if ![301_i64, 302_i64, 303_i64, 307_i64, 308_i64].contains(&value) {
-            Err("invalid value".into())
-        } else {
-            Ok(Self(value))
-        }
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for StatusCode {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        Self::try_from(<i64>::deserialize(deserializer)?)
-            .map_err(|e| { <D::Error as ::serde::de::Error>::custom(e.to_string()) })
-    }
-}
 ///A range of status codes to apply the TTL to.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct StatusCodeRange {
     ///The lower bound of the range.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -17727,7 +21163,15 @@ pub struct StatusCodeRange {
     pub to: ::std::option::Option<i64>,
 }
 ///A URL to redirect the request to.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct TargetUrl {
     ///An expression that evaluates to a URL to redirect the request to.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -17737,13 +21181,27 @@ pub struct TargetUrl {
     pub value: ::std::option::Option<RedirectValue>,
 }
 ///The transformed request field to log.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct TransformedRequestField {
     ///The name of the header.
     pub name: HeaderName,
 }
 ///The transformed response field to log.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct TransformedResponseField {
     ///The name of the response header.
     pub name: HeaderName,
@@ -17762,7 +21220,8 @@ pub struct TransformedResponseField {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum TtlMode {
     #[serde(rename = "respect_origin")]
@@ -17815,7 +21274,17 @@ impl ::std::convert::TryFrom<::std::string::String> for TtlMode {
     }
 }
 ///An expression that selects the user ID used in the credentials check.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct UsernameExpression(::std::string::String);
 impl ::std::ops::Deref for UsernameExpression {
@@ -17869,7 +21338,17 @@ impl<'de> ::serde::Deserialize<'de> for UsernameExpression {
     }
 }
 ///A value to override the SNI to.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Value(::std::string::String);
 impl ::std::ops::Deref for Value {
@@ -17923,7 +21402,17 @@ impl<'de> ::serde::Deserialize<'de> for Value {
     }
 }
 ///The version of the rule.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct Version(::std::string::String);
 impl ::std::ops::Deref for Version {
@@ -17979,7 +21468,14 @@ impl<'de> ::serde::Deserialize<'de> for Version {
     }
 }
 ///`ZoneForProvider`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZoneForProvider {
     ///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
     pub name: ZoneForProviderName,
@@ -17992,7 +21488,17 @@ pub struct ZoneForProvider {
     pub vanity_name_servers: ::std::vec::Vec<ZoneForProviderVanityNameServersItem>,
 }
 ///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZoneForProviderName(::std::string::String);
 impl ::std::ops::Deref for ZoneForProviderName {
@@ -18059,7 +21565,17 @@ impl<'de> ::serde::Deserialize<'de> for ZoneForProviderName {
     }
 }
 ///`ZoneForProviderVanityNameServersItem`
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZoneForProviderVanityNameServersItem(::std::string::String);
 impl ::std::ops::Deref for ZoneForProviderVanityNameServersItem {
@@ -18115,7 +21631,14 @@ impl<'de> ::serde::Deserialize<'de> for ZoneForProviderVanityNameServersItem {
     }
 }
 ///`ZonesApiResponseCommon`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZonesApiResponseCommon {
     pub errors: ZonesMessages,
     pub messages: ZonesMessages,
@@ -18123,7 +21646,14 @@ pub struct ZonesApiResponseCommon {
     pub success: bool,
 }
 ///`ZonesApiResponseSingleId`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZonesApiResponseSingleId {
     pub errors: ZonesMessages,
     pub messages: ZonesMessages,
@@ -18133,12 +21663,29 @@ pub struct ZonesApiResponseSingleId {
     pub success: bool,
 }
 ///`ZonesApiResponseSingleIdResult`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZonesApiResponseSingleIdResult {
     pub id: ZonesIdentifier,
 }
 ///Identifier
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZonesIdentifier(::std::string::String);
 impl ::std::ops::Deref for ZonesIdentifier {
@@ -18192,7 +21739,14 @@ impl<'de> ::serde::Deserialize<'de> for ZonesIdentifier {
     }
 }
 ///`ZonesMessages`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZonesMessages(pub ::std::vec::Vec<ZonesMessagesItem>);
 impl ::std::ops::Deref for ZonesMessages {
@@ -18212,13 +21766,30 @@ impl ::std::convert::From<::std::vec::Vec<ZonesMessagesItem>> for ZonesMessages 
     }
 }
 ///`ZonesMessagesItem`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZonesMessagesItem {
     pub code: i64,
     pub message: ::std::string::String,
 }
 ///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZonesName(::std::string::String);
 impl ::std::ops::Deref for ZonesName {
@@ -18288,7 +21859,14 @@ impl<'de> ::serde::Deserialize<'de> for ZonesName {
 true value means the zone will not receive security or performance
 benefits.
 */
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZonesPaused(pub bool);
 impl ::std::ops::Deref for ZonesPaused {
@@ -18343,7 +21921,8 @@ typically a partner-hosted zone or a CNAME setup.
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum ZonesType {
     #[serde(rename = "full")]
@@ -18402,7 +21981,14 @@ impl ::std::default::Default for ZonesType {
 }
 /**An array of domains used for custom name servers. This is only
 available for Business and Enterprise plans.*/
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZonesVanityNameServers(pub ::std::vec::Vec<ZonesVanityNameServersItem>);
 impl ::std::ops::Deref for ZonesVanityNameServers {
@@ -18424,7 +22010,17 @@ for ZonesVanityNameServers {
     }
 }
 ///`ZonesVanityNameServersItem`
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZonesVanityNameServersItem(::std::string::String);
 impl ::std::ops::Deref for ZonesVanityNameServersItem {
@@ -18478,7 +22074,14 @@ impl<'de> ::serde::Deserialize<'de> for ZonesVanityNameServersItem {
     }
 }
 ///`ZonesZone`
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZonesZone {
     pub account: ZonesZoneAccount,
     /**The last time proof of ownership was detected and the zone was made
@@ -18539,7 +22142,15 @@ domain. If development mode has never been enabled, this value is 0.*/
     pub verification_key: ::std::option::Option<::std::string::String>,
 }
 ///The account the zone belongs to.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZonesZoneAccount {
     ///Identifier
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -18549,7 +22160,17 @@ pub struct ZonesZoneAccount {
     pub name: ::std::option::Option<::std::string::String>,
 }
 ///Identifier
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZonesZoneAccountId(::std::string::String);
 impl ::std::ops::Deref for ZonesZoneAccountId {
@@ -18603,7 +22224,17 @@ impl<'de> ::serde::Deserialize<'de> for ZonesZoneAccountId {
     }
 }
 ///Identifier
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZonesZoneId(::std::string::String);
 impl ::std::ops::Deref for ZonesZoneId {
@@ -18657,7 +22288,15 @@ impl<'de> ::serde::Deserialize<'de> for ZonesZoneId {
     }
 }
 ///Metadata about the zone.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZonesZoneMeta {
     ///The zone is only configured for CDN.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -18681,7 +22320,17 @@ pub struct ZonesZoneMeta {
     pub step: ::std::option::Option<i64>,
 }
 ///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZonesZoneName(::std::string::String);
 impl ::std::ops::Deref for ZonesZoneName {
@@ -18748,7 +22397,17 @@ impl<'de> ::serde::Deserialize<'de> for ZonesZoneName {
     }
 }
 ///DNS host at the time of switching to Cloudflare.
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZonesZoneOriginalDnshost(::std::string::String);
 impl ::std::ops::Deref for ZonesZoneOriginalDnshost {
@@ -18802,7 +22461,15 @@ impl<'de> ::serde::Deserialize<'de> for ZonesZoneOriginalDnshost {
     }
 }
 ///The owner of the zone.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZonesZoneOwner {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<ZonesIdentifier>,
@@ -18814,7 +22481,15 @@ pub struct ZonesZoneOwner {
     pub type_: ::std::option::Option<::std::string::String>,
 }
 ///A Zones subscription information.
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZonesZonePlan {
     ///States if the subscription can be activated.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -18857,7 +22532,8 @@ pub struct ZonesZonePlan {
     Hash,
     Ord,
     PartialEq,
-    PartialOrd
+    PartialOrd,
+    schemars::JsonSchema
 )]
 pub enum ZonesZoneStatus {
     #[serde(rename = "initializing")]
@@ -18910,7 +22586,15 @@ impl ::std::convert::TryFrom<::std::string::String> for ZonesZoneStatus {
     }
 }
 ///The root organizational unit that this zone belongs to (such as a tenant or organization).
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZonesZoneTenant {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<ZonesIdentifier>,
@@ -18919,13 +22603,31 @@ pub struct ZonesZoneTenant {
     pub name: ::std::option::Option<::std::string::String>,
 }
 ///The immediate parent organizational unit that this zone belongs to (such as under a tenant or sub-organization).
-#[derive(::serde::Deserialize, ::serde::Serialize, Clone, Debug, Default, PartialEq)]
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZonesZoneTenantUnit {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<ZonesIdentifier>,
 }
 ///`ZonesZoneVanityNameServersItem`
-#[derive(::serde::Serialize, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
 #[serde(transparent)]
 pub struct ZonesZoneVanityNameServersItem(::std::string::String);
 impl ::std::ops::Deref for ZonesZoneVanityNameServersItem {

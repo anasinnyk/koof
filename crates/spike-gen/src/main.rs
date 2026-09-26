@@ -32,6 +32,7 @@ fn main() -> Result<()> {
             .map_err(|e| anyhow!("overlay {path}: {e}"))?;
     }
     println!("[load+overlay] {:?}", t.elapsed());
+    check_openapiv3(&doc);
     let t = Instant::now();
     let full_components = component_count(&doc);
     let mut doc = prune_document(&doc)?;
@@ -41,71 +42,25 @@ fn main() -> Result<()> {
         component_count(&doc),
         t.elapsed()
     );
-    let before = count_extensions(&doc);
-    println!("[x-kube before roas] {before:?}");
+    let _ = count_extensions(&doc);
 
-    // 2. roas: parse as 3.0, validate, upgrade to 3.1, serialize back.
-    // WORKAROUND: roas IntegerFormat/NumberFormat have no Custom variant.
-    let stashed = stash_formats(&mut doc);
-    let dropped = drop_default_only_all_of(&mut doc);
-    println!("[workaround] dropped {dropped} allOf member(s) that only carry `default`");
-    println!("[workaround] stashed {stashed} non-standard integer/number formats");
-    let t = Instant::now();
-    let parsed: Result<roas::v3_0::spec::Spec, _> = serde_path_to_error::deserialize(doc.clone());
-    let mut doc31 = match parsed {
-        Ok(v30) => {
-            println!("[roas parse v3.0] ok in {:?}", t.elapsed());
-            let t = Instant::now();
-            let lenient: EnumSet<Options> = Options::IgnoreUnusedSchemas
-                | Options::IgnoreUnusedTags
-                | Options::IgnoreUnusedParameters
-                | Options::IgnoreUnusedResponses
-                | Options::IgnoreMissingTags;
-            match v30.validate(lenient, None) {
-                Ok(()) => println!("[roas validate v3.0] ok in {:?}", t.elapsed()),
-                Err(e) => println!("[roas validate v3.0] errors in {:?}:\n{e}", t.elapsed()),
-            }
-            let t = Instant::now();
-            let v31: roas::v3_1::spec::Spec = v30.into();
-            let value = serde_json::to_value(&v31)?;
-            println!("[roas upgrade 3.1 + serialize] {:?}", t.elapsed());
-            let mut own = doc.clone();
-            normalize_nullable(&mut own);
-            report_roundtrip_diff(&own, &value);
-            println!("[decision] roas output is lossy -> downstream uses own normalizer");
-            own
-        }
-        Err(error) => {
-            println!("[roas parse v3.0] FAILED: {error}");
-            report_roas_failures(&doc);
-            println!("[fallback] own nullable normalizer instead of roas");
-            let mut value = doc.clone();
-            normalize_nullable(&mut value);
-            value
-        }
-    };
-    restore_formats(&mut doc31);
-    let after = count_extensions(&doc31);
-    println!("[x-kube after roas] {after:?}");
-    if before != after {
-        bail!("roas lost x-kube extensions: {before:?} -> {after:?}");
-    }
+    // 2. Only normalization typify needs: OpenAPI 3.0 `nullable` -> JSON Schema.
+    //    (roas dropped: its typed round-trip is lossy, see docs/refactor-plan.md)
+    let mut doc31 = doc;
+    if std::env::var_os("SKIP_NULLABLE").is_none() { normalize_nullable(&mut doc31); } else { println!("[nullable] normalizer skipped"); }
 
-    // 3. Prune: schemas reachable from x-kube resources and x-kube operations.
+    // 3. Schemas reachable from x-kube resources and x-kube operations.
     let schemas = doc31
         .pointer("/components/schemas")
         .and_then(Value::as_object)
         .context("components.schemas")?;
     let roots = prune_roots(&doc31)?;
     let reachable = closure(schemas, roots);
-    println!(
-        "[prune] {} of {} component schemas reachable",
-        reachable.len(),
-        schemas.len()
-    );
+    println!("[prune] {} of {} component schemas reachable", reachable.len(), schemas.len());
 
-    // 3b. Synthesize <Kind>ForProvider from the explicit field list (phase 3 prototype).
-    let mut synthesized = serde_json::Map::new();
+    // 3b. Synthesize <Kind>ForProvider: a composition of variants becomes a oneOf of
+    //     per-variant filtered objects; a plain object becomes one filtered object.
+    let mut synthesized = Map::new();
     for name in &roots_resources(&doc31) {
         let schema = &schemas[name];
         let ext = &schema["x-kube-resource"];
@@ -115,105 +70,67 @@ fn main() -> Result<()> {
             .and_then(Value::as_array)
             .map(|a| a.iter().filter_map(Value::as_str).collect())
             .unwrap_or_default();
-        let mut properties = Map::new();
-        let mut required = Vec::new();
-        for field in fields {
-            let mut found = Vec::new();
-            find_property(schemas, schema, field, &mut found, &mut BTreeSet::new());
-            let mut distinct: Vec<(Value, bool)> = Vec::new();
-            for (s, r) in found {
-                if !distinct.iter().any(|(d, _)| d == &s) {
-                    distinct.push((s, r));
-                }
+
+        let mut variants = Vec::new();
+        collect_variants(schemas, schema, None, &mut variants, &mut BTreeSet::new());
+        let root = format!("{kind}ForProvider");
+        if variants.len() <= 1 {
+            let object = filter_fields(schemas, schema, &fields);
+            if object["properties"].as_object().map_or(0, Map::len) < fields.len() {
+                let missing: Vec<_> = fields.iter().filter(|f| object["properties"].get(**f).is_none()).collect();
+                bail!("{kind}: forProvider fields {missing:?} not found in {name}");
             }
-            match distinct.len() {
-                0 => bail!("{kind}: forProvider field {field} not found in {name}"),
-                1 => {
-                    let (s, r) = distinct.remove(0);
-                    if r { required.push(Value::String(field.to_owned())); }
-                    properties.insert(field.to_owned(), s);
-                }
-                n => {
-                    println!("    {kind}.{field}: {n} distinct definitions -> anyOf");
-                    let all_required = distinct.iter().all(|(_, r)| *r);
-                    if all_required { required.push(Value::String(field.to_owned())); }
-                    properties.insert(field.to_owned(), serde_json::json!({
-                        "anyOf": distinct.into_iter().map(|(s, _)| s).collect::<Vec<_>>()
-                    }));
-                }
+            synthesized.insert(root, object);
+        } else {
+            let mut refs = Vec::new();
+            let mut seen_fields = BTreeSet::new();
+            for (variant_name, variant) in &variants {
+                let object = filter_fields(schemas, variant, &fields);
+                seen_fields.extend(object["properties"].as_object().into_iter().flat_map(|p| p.keys().cloned()));
+                let short = variant_name.rsplit('_').next().unwrap_or(variant_name);
+                let def = format!("{root}{short}");
+                refs.push(serde_json::json!({"$ref": format!("#/components/schemas/{def}")}));
+                synthesized.insert(def, object);
             }
+            let missing: Vec<_> = fields.iter().filter(|f| !seen_fields.contains(**f)).collect();
+            if !missing.is_empty() {
+                bail!("{kind}: forProvider fields {missing:?} not found in any variant of {name}");
+            }
+            println!("    {kind}: {} variants -> oneOf", variants.len());
+            synthesized.insert(root, serde_json::json!({ "oneOf": refs }));
         }
-        synthesized.insert(
-            format!("{kind}ForProvider"),
-            serde_json::json!({"type": "object", "properties": properties, "required": required}),
-        );
     }
-    println!("[synthesize] {:?}", synthesized.keys().collect::<Vec<_>>());
+    println!("[synthesize] {} schemas", synthesized.len());
 
-    // 3c. CRD structural schemas straight from the synthesized OpenAPI schemas.
-    let mut crd_schemas = Map::new();
-    for (name, schema) in &synthesized {
-        crd_schemas.insert(name.clone(), k8sify(schemas, schema, &mut Vec::new()));
-    }
-    let crd_path = output_path.replace("types.rs", "crd-schemas.json");
-    fs::write(&crd_path, serde_json::to_string_pretty(&crd_schemas)?)?;
-    println!("[crd schemas] {crd_path}");
-
-    // 4. typify.
+    // 4. typify, with JsonSchema: CRDs are derived by kube from these types.
     let mut settings = typify::TypeSpaceSettings::default();
     settings
         .with_struct_builder(false)
-        // No JsonSchema: typify emits schemars-0.8 impls for numeric enums.
+        .with_derive("schemars::JsonSchema".to_owned())
         .with_derive("PartialEq".to_owned());
-    let mut space = typify::TypeSpace::new(&settings);
     let defs = reachable
         .iter()
         .map(|name| (name.clone(), schemas[name].clone()))
         .chain(synthesized.clone())
-        .map(|(name, value)| (name, value))
-        .collect::<Vec<_>>();
-    let defs = defs
-        .into_iter()
         .map(|(name, value)| {
-            let schema: schemars08::schema::Schema =
-                serde_json::from_value(strip_extensions(value))
-                    .with_context(|| format!("schemars parse {name}"))?;
-            Ok((name.clone(), schema))
+            let schema: schemars08::schema::Schema = serde_json::from_value(strip_extensions(value))
+                .with_context(|| format!("schemars parse {name}"))?;
+            Ok((name, schema))
         })
         .collect::<Result<Vec<_>>>()?;
     let t = Instant::now();
-    let mut defs = defs;
-    if let Err(error) = space.add_ref_types(defs.clone()) {
-        println!("[typify] add_ref_types failed: {error}; locating offending defaults...");
-        let stripped: Vec<_> = defs.iter().map(|(n, s)| (n.clone(), strip_key(s, "default"))).collect();
-        let mut culprits = Vec::new();
-        for index in 0..defs.len() {
-            let mut attempt = stripped.clone();
-            attempt[index] = defs[index].clone();
-            if typify::TypeSpace::new(&settings).add_ref_types(attempt).is_err() {
-                culprits.push(index);
-            }
-        }
-        for &index in &culprits {
-            println!("    WORKAROUND: dropping `default` in {}", defs[index].0);
-            defs[index] = stripped[index].clone();
-        }
-    }
-    let t = Instant::now();
-    space = typify::TypeSpace::new(&settings);
-    space.add_ref_types(defs.clone()).context("typify add_ref_types")?;
+    let mut space = typify::TypeSpace::new(&settings);
+    space.add_ref_types(defs).context("typify add_ref_types")?;
     let file: syn::File = syn::parse2(space.to_stream())?;
     let code = prettyplease::unparse(&file);
+    let manual = code.matches("impl ::schemars::JsonSchema for").count();
     println!(
-        "[typify] {} types, {} lines in {:?}",
+        "[typify] {} types, {} lines, {manual} hand-written JsonSchema impl(s) in {:?}",
         space.iter_types().count(),
         code.lines().count(),
         t.elapsed()
     );
-    fs::write(
-        &output_path,
-        format!("#![allow(clippy::all, clippy::pedantic)]\n{code}"),
-    )?;
+    fs::write(&output_path, format!("#![allow(clippy::all, clippy::pedantic)]\n{code}"))?;
     println!("[write] {output_path}");
     Ok(())
 }
@@ -807,4 +724,96 @@ fn diff_values(path: &str, a: &Value, b: &Value, out: &mut Vec<String>) {
         }
         _ => {}
     }
+}
+
+/// Read-only typed access through openapiv3: can it parse the full document, and
+/// do x-kube extensions stay reachable?
+fn check_openapiv3(doc: &Value) {
+    let t = Instant::now();
+    match serde_path_to_error::deserialize::<_, openapiv3::OpenAPI>(doc.clone()) {
+        Err(e) => println!("[openapiv3 full parse] FAILED in {:?}: {e}", t.elapsed()),
+        Ok(api) => {
+            let elapsed = t.elapsed();
+            let ops: Vec<String> = api
+                .operations()
+                .filter(|(_, _, op)| op.extensions.contains_key("x-kube-operation"))
+                .map(|(path, method, _)| format!("{} {path}", method.to_uppercase()))
+                .collect();
+            let resources = api
+                .components
+                .as_ref()
+                .map_or(0, |c| {
+                    c.schemas
+                        .values()
+                        .filter(|s| match s {
+                            openapiv3::ReferenceOr::Item(item) => {
+                                item.schema_data.extensions.contains_key("x-kube-resource")
+                            }
+                            openapiv3::ReferenceOr::Reference { .. } => false,
+                        })
+                        .count()
+                });
+            println!(
+                "[openapiv3 full parse] ok in {elapsed:?}: {} paths, {} x-kube operations, {resources} x-kube resources",
+                api.paths.paths.len(),
+                ops.len()
+            );
+        }
+    }
+}
+
+/// Flattens anyOf/oneOf (through $ref) into leaf variants, keeping the name of the
+/// component each leaf came from.
+fn collect_variants(
+    schemas: &Map<String, Value>,
+    schema: &Value,
+    name: Option<&str>,
+    out: &mut Vec<(String, Value)>,
+    visiting: &mut BTreeSet<String>,
+) {
+    if let Some(target) = ref_name(schema) {
+        if visiting.insert(target.clone()) {
+            if let Some(resolved) = schemas.get(&target) {
+                collect_variants(schemas, resolved, Some(&target), out, visiting);
+            }
+            visiting.remove(&target);
+        }
+        return;
+    }
+    let composition = schema.get("oneOf").or_else(|| schema.get("anyOf")).and_then(Value::as_array);
+    match composition {
+        Some(items) => items.iter().for_each(|item| collect_variants(schemas, item, None, out, visiting)),
+        None => out.push((name.unwrap_or("Variant").to_owned(), schema.clone())),
+    }
+}
+
+/// Object with only the listed fields found in `schema` (through $ref/allOf/...).
+fn filter_fields(schemas: &Map<String, Value>, schema: &Value, fields: &[&str]) -> Value {
+    let mut properties = Map::new();
+    let mut required = Vec::new();
+    for field in fields {
+        let mut found = Vec::new();
+        find_property(schemas, schema, field, &mut found, &mut BTreeSet::new());
+        let mut distinct: Vec<(Value, bool)> = Vec::new();
+        for (s, r) in found {
+            if !distinct.iter().any(|(d, _)| d == &s) {
+                distinct.push((s, r));
+            }
+        }
+        match distinct.len() {
+            0 => {}
+            1 => {
+                let (s, r) = distinct.remove(0);
+                if r { required.push(Value::String((*field).to_owned())); }
+                properties.insert((*field).to_owned(), s);
+            }
+            _ => {
+                if distinct.iter().all(|(_, r)| *r) { required.push(Value::String((*field).to_owned())); }
+                properties.insert((*field).to_owned(), serde_json::json!({
+                    "anyOf": distinct.into_iter().map(|(s, _)| s).collect::<Vec<_>>()
+                }));
+            }
+        }
+    }
+    serde_json::json!({"type": "object", "properties": properties, "required": required})
 }

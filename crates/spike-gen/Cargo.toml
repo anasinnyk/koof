@@ -10,6 +10,7 @@ publish = false
 anyhow = "1"
 enumset = "1.1.14"
 prettyplease = "0.3.0"
+openapiv3 = "2.2.0"
 roas = { version = "0.21.0", default-features = false, features = ["v3_0", "v3_1"] }
 roas-overlay = "0.3.0"
 schemars08 = { package = "schemars", version = "0.8.22" }
