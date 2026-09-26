@@ -6,6 +6,9 @@ pub enum CredentialError {
     #[error("{0}")]
     MissingValue(String),
 
+    #[error(transparent)]
+    Resolve(#[from] ResolveValueError),
+
     #[error("Secret {secret:?} key {key:?} is not valid UTF-8")]
     InvalidSecretUtf8 {
         secret: String,

@@ -56,20 +56,23 @@ pub async fn resolve_secret_key(
     })
 }
 
+/// Value at a dot path such as `spec.forProvider.zoneRef`.
+#[must_use]
+pub fn value_at<'a>(value: &'a serde_json::Value, path: &str) -> Option<&'a serde_json::Value> {
+    path.split('.')
+        .try_fold(value, |current, segment| current.get(segment))
+}
+
+/// Scalar at a dot path as a string; `Ok(None)` when missing or `null`.
+///
 /// # Errors
 ///
-/// Can return error when field is not resolve
-pub fn resolve_field_value(
-    resource: &impl serde::Serialize,
+/// Returns [`ResolveValueError::NonScalar`] when the value is an object or array.
+pub fn scalar_at(
+    value: &serde_json::Value,
     path: &str,
 ) -> Result<Option<String>, ResolveValueError> {
-    let value = serde_json::to_value(resource)?;
-
-    let value = path
-        .split('.')
-        .try_fold(&value, |current, segment| current.get(segment));
-
-    let Some(value) = value else {
+    let Some(value) = value_at(value, path) else {
         return Ok(None);
     };
 
