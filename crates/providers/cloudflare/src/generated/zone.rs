@@ -1,5 +1,25 @@
 //! This file is generated. Do not edit manually.
 #![allow(clippy::pedantic)]
+/// CRD schema of `spec.forProvider`: unions flattened for kube, then the
+/// overlay's CEL validations.
+fn for_provider_schema(schema: &mut schemars::Schema) {
+    koof::schema::flatten_object_unions(schema);
+    koof::schema::add_validations(
+        schema,
+        &[
+            koof::schema::Validation {
+                rule: "self == oldSelf",
+                message: "name is immutable",
+                field: "name",
+            },
+            koof::schema::Validation {
+                rule: "!has(oldSelf.name) || has(self.name)",
+                message: "name cannot be removed once set",
+                field: "",
+            },
+        ],
+    );
+}
 /// `spec.forProvider`: the generated API fields plus references and
 /// credentials.
 #[derive(
@@ -10,7 +30,7 @@
     serde::Deserialize,
     schemars::JsonSchema
 )]
-#[schemars(transform = koof::schema::flatten_object_unions)]
+#[schemars(transform = for_provider_schema)]
 pub struct ZoneForProviderSpec {
     #[serde(flatten)]
     pub fields: crate::generated::types::ZoneForProvider,

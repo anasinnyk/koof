@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use crate::ir::{
     ApiKeyLocationIr, CredentialsIr, FieldSelectionIr, HttpMethod, LifecycleIr, OperationId,
     OperationIr, ProviderIr, ReferenceIr, RequestMappingIr, ResourceIr, ResourceName, SchemaName,
-    SecuritySchemeIr, SecuritySchemeName, ValueExpr,
+    SecuritySchemeIr, SecuritySchemeName, ValidationIr, ValueExpr,
 };
 use crate::loader::LoaderError;
 use openapiv3::{
@@ -25,6 +25,10 @@ struct ResourceExtension {
     #[serde(default)]
     references: BTreeMap<String, ReferenceIr>,
     credentials: Option<CredentialsIr>,
+    #[serde(default)]
+    validations: Vec<ValidationIr>,
+    #[serde(default)]
+    immutable: Vec<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -212,6 +216,8 @@ fn extract_resources(api: &OpenAPI) -> Result<BTreeMap<ResourceName, ResourceIr>
             field_selection: extension.fields,
             references: extension.references,
             credentials: extension.credentials,
+            validations: extension.validations,
+            immutable: extension.immutable,
             lifecycle: LifecycleIr {
                 observe: OperationId(String::new()),
                 create: None,

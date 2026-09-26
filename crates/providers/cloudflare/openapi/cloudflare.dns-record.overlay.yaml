@@ -12,6 +12,10 @@ actions:
         kind: DNSRecord
         scope: Namespaced
 
+        validations:
+          - rule: "!has(self.ttl) || self.ttl == 1 || (self.ttl >= 30 && self.ttl <= 86400)"
+            message: "ttl must be 1 (automatic) or between 30 and 86400 seconds"
+
         identifiers:
           external_id:
             type: external_name

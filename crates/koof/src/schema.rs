@@ -138,3 +138,55 @@ fn relax(existing: &mut Value, incoming: &Value) {
     }
     *existing = Value::Object(relaxed);
 }
+
+/// A CEL rule for `x-kubernetes-validations`, placed at `field` (dot path of
+/// properties below the transformed schema; empty for its root).
+#[derive(Debug)]
+pub struct Validation {
+    pub rule: &'static str,
+    pub message: &'static str,
+    pub field: &'static str,
+}
+
+/// Adds `validations` as `x-kubernetes-validations` to the schema nodes they name.
+/// Run after [`flatten_object_unions`], so that union properties exist. A rule whose
+/// field is not in the schema is skipped with a warning (the CRD would otherwise
+/// fail in a less obvious way).
+pub fn add_validations(schema: &mut schemars::Schema, validations: &[Validation]) {
+    for validation in validations {
+        let Some(node) = schema
+            .as_object_mut()
+            .and_then(|root| node_mut(root, validation.field))
+        else {
+            tracing::warn!(
+                field = validation.field,
+                rule = validation.rule,
+                "validation field not found in the schema; rule skipped"
+            );
+            continue;
+        };
+        let rules = node
+            .entry("x-kubernetes-validations")
+            .or_insert_with(|| Value::Array(Vec::new()));
+        if let Value::Array(rules) = rules {
+            rules.push(serde_json::json!({
+                "rule": validation.rule,
+                "message": validation.message,
+            }));
+        }
+    }
+}
+
+fn node_mut<'a>(
+    root: &'a mut Map<String, Value>,
+    path: &str,
+) -> Option<&'a mut Map<String, Value>> {
+    let mut current = root;
+    for segment in path.split('.').filter(|segment| !segment.is_empty()) {
+        current = current
+            .get_mut("properties")?
+            .get_mut(segment)?
+            .as_object_mut()?;
+    }
+    Some(current)
+}

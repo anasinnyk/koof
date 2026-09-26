@@ -1,5 +1,20 @@
 //! This file is generated. Do not edit manually.
 #![allow(clippy::pedantic)]
+/// CRD schema of `spec.forProvider`: unions flattened for kube, then the
+/// overlay's CEL validations.
+fn for_provider_schema(schema: &mut schemars::Schema) {
+    koof::schema::flatten_object_unions(schema);
+    koof::schema::add_validations(
+        schema,
+        &[
+            koof::schema::Validation {
+                rule: "!has(self.ttl) || self.ttl == 1 || (self.ttl >= 30 && self.ttl <= 86400)",
+                message: "ttl must be 1 (automatic) or between 30 and 86400 seconds",
+                field: "",
+            },
+        ],
+    );
+}
 /// `spec.forProvider`: the generated API fields plus references and
 /// credentials.
 #[derive(
@@ -10,7 +25,7 @@
     serde::Deserialize,
     schemars::JsonSchema
 )]
-#[schemars(transform = koof::schema::flatten_object_unions)]
+#[schemars(transform = for_provider_schema)]
 pub struct DNSRecordForProviderSpec {
     #[serde(flatten)]
     pub fields: crate::generated::types::DnsRecordForProvider,
