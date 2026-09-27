@@ -1,0 +1,37 @@
+overlay: 1.1.0
+info:
+  title: Sentry schema fixes for typify
+  version: 0.0.1
+extends: ./sentry.json
+actions:
+  # typify panics on this enum: values such as "Etc/GMT+0" and "GMT+0" map to the
+  # same Rust identifier. The field stays a string.
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/monitors/'].post.requestBody.content['application/json'].schema.properties.config.allOf[0].properties.timezone.enum
+    remove: true
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/'].put.requestBody.content['application/json'].schema.properties.config.allOf[0].properties.timezone.enum
+    remove: true
+
+  # typify: `isGlobal` and its legacy duplicate `is_global` become the same Rust
+  # field. Keep the camelCase one (property and its `required` entry; a list entry
+  # cannot be removed on its own, so `required` is replaced).
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.properties.orgRoleList.items.properties.is_global
+    remove: true
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.properties.orgRoleList.items.required
+    remove: true
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.properties.orgRoleList.items
+    update:
+      required: [allowed, desc, id, isAllowed, isGlobal, isRetired, isTeamRolesAllowed, minimumTeamRole, name, scopes]
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.properties.orgRoleList.items.properties.is_global
+    remove: true
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.properties.orgRoleList.items.required
+    remove: true
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.properties.orgRoleList.items
+    update:
+      required: [allowed, desc, id, isAllowed, isGlobal, isRetired, isTeamRolesAllowed, minimumTeamRole, name, scopes]
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/'].put.responses['200'].content['application/json'].schema.properties.orgRoleList.items.properties.is_global
+    remove: true
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/'].put.responses['200'].content['application/json'].schema.properties.orgRoleList.items.required
+    remove: true
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/'].put.responses['200'].content['application/json'].schema.properties.orgRoleList.items
+    update:
+      required: [allowed, desc, id, isAllowed, isGlobal, isRetired, isTeamRolesAllowed, minimumTeamRole, name, scopes]

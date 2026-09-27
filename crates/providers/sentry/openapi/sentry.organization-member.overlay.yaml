@@ -1,0 +1,86 @@
+overlay: 1.1.0
+info:
+  title: Sentry OrganizationMember
+  version: 0.0.1
+extends: ./sentry.json
+actions:
+  # The create request body is the resource schema.
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: organization_member
+        apiVersion: sentry.kube.nas1k.dev/v1alpha1
+        kind: OrganizationMember
+        scope: Namespaced
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          organization:
+            from: spec.forProvider.organizationRef
+            target: organization
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: auth_token
+          source:
+            type: related
+            via: [organization]
+
+        fields:
+          mode: all
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get
+    update:
+      x-kube-operation:
+        resource: organization_member
+        lifecycle: observe
+        path_parameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [organization]
+            name: external_id
+          member_id:
+            type: external_name
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/'].post
+    update:
+      x-kube-operation:
+        resource: organization_member
+        lifecycle: create
+        path_parameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [organization]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.id
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put
+    update:
+      x-kube-operation:
+        resource: organization_member
+        lifecycle: update
+        path_parameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [organization]
+            name: external_id
+          member_id:
+            type: external_name
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].delete
+    update:
+      x-kube-operation:
+        resource: organization_member
+        lifecycle: delete
+        path_parameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [organization]
+            name: external_id
+          member_id:
+            type: external_name

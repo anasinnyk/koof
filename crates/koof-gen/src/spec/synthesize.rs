@@ -1,4 +1,4 @@
-use super::{SpecError, schema_ref_name};
+use super::{SpecError, schema_ref_name, schemas_mut};
 use crate::ir::{FieldPath, FieldSelectionIr, FieldSelectionModeIr};
 use serde::Deserialize;
 use serde_json::{Map, Value, json};
@@ -44,12 +44,9 @@ struct ResponseExtension {
 /// selected field does not exist, the observe response path cannot be resolved, or a
 /// synthesized name collides with an existing schema.
 pub fn synthesize(document: &mut Value) -> Result<(), SpecError> {
-    let schemas = document
-        .pointer("/components/schemas")
-        .and_then(Value::as_object)
-        .cloned()
-        .ok_or_else(|| SpecError::Missing("components.schemas".to_owned()))?;
+    let schemas = schemas_mut(document)?.clone();
     let observe_responses = observe_responses(document)?;
+    let creatable = creatable_resources(document);
 
     let mut synthesized = Map::new();
     for (schema_name, schema) in &schemas {
@@ -67,7 +64,10 @@ pub fn synthesize(document: &mut Value) -> Result<(), SpecError> {
             extension: &extension,
         };
 
-        resource.for_provider(schema_name, schema, &mut synthesized)?;
+        // `required` matters for the create body only; a resource that cannot be
+        // created (import only) should not force fields on the user.
+        let creatable = creatable.contains(&extension.name);
+        resource.for_provider(schema_name, schema, creatable, &mut synthesized)?;
         match observe_responses.get(&extension.name) {
             Some(response) => resource.at_provider(response, &mut synthesized)?,
             None if extension.fields.at_provider.is_empty() => {}
@@ -79,10 +79,7 @@ pub fn synthesize(document: &mut Value) -> Result<(), SpecError> {
         }
     }
 
-    let target = document
-        .pointer_mut("/components/schemas")
-        .and_then(Value::as_object_mut)
-        .ok_or_else(|| SpecError::Missing("components.schemas".to_owned()))?;
+    let target = schemas_mut(document)?;
     for (name, schema) in synthesized {
         if target.contains_key(&name) {
             return Err(SpecError::Resource {
@@ -105,6 +102,7 @@ impl Resource<'_> {
         &self,
         schema_name: &str,
         schema: &Value,
+        keep_required: bool,
         out: &mut Map<String, Value>,
     ) -> Result<(), SpecError> {
         let fields = match self.extension.fields.mode {
@@ -116,7 +114,7 @@ impl Resource<'_> {
                 .collect(),
         };
         let root = format!("{}ForProvider", self.extension.kind);
-        self.filtered(&root, schema_name, schema, &fields, true, out)
+        self.filtered(&root, schema_name, schema, &fields, keep_required, out)
     }
 
     fn at_provider(&self, response: &Value, out: &mut Map<String, Value>) -> Result<(), SpecError> {
@@ -342,6 +340,22 @@ fn names(paths: &[FieldPath]) -> Vec<String> {
     paths.iter().map(|path| path.0.clone()).collect()
 }
 
+/// Resources with an `x-kube-operation` of lifecycle `create`.
+fn creatable_resources(document: &Value) -> BTreeSet<String> {
+    document
+        .get("paths")
+        .and_then(Value::as_object)
+        .into_iter()
+        .flat_map(|paths| paths.values())
+        .filter_map(Value::as_object)
+        .flat_map(|item| item.values())
+        .filter_map(|operation| operation.get("x-kube-operation"))
+        .filter(|extension| extension.get("lifecycle").and_then(Value::as_str) == Some("create"))
+        .filter_map(|extension| extension.get("resource").and_then(Value::as_str))
+        .map(str::to_owned)
+        .collect()
+}
+
 /// Observe response schemas per resource name, descended to `response.path`.
 fn observe_responses(document: &Value) -> Result<BTreeMap<String, Value>, SpecError> {
     let schemas = document
@@ -556,6 +570,10 @@ mod tests {
 openapi: 3.0.3
 info: {{ title: test, version: '1' }}
 paths:
+  /records:
+    post:
+      x-kube-operation: {{ resource: record, lifecycle: create }}
+      responses: {{ '200': {{ description: ok }} }}
   /records/{{id}}:
     get:
       x-kube-operation: {{ resource: record, lifecycle: observe, response: {{ path: result }} }}
@@ -665,7 +683,11 @@ components:
             r"
 openapi: 3.0.3
 info: { title: test, version: '1' }
-paths: {}
+paths:
+  /records:
+    post:
+      x-kube-operation: { resource: record, lifecycle: create }
+      responses: { '200': { description: ok } }
 components:
   schemas:
     dns_ARecord:

@@ -18,6 +18,63 @@ use serde_json::{Map, Value};
 pub fn flatten_unions(schema: &mut schemars::Schema) {
     if let Some(node) = schema.as_object_mut() {
         flatten(node);
+        fill_untyped(node);
+    }
+}
+
+/// Keywords that give a schema node a shape even without `type`.
+const SHAPED: [&str; 7] = [
+    "type",
+    "properties",
+    "items",
+    "anyOf",
+    "oneOf",
+    "allOf",
+    "x-kubernetes-int-or-string",
+];
+
+/// Final touches on every schema node (properties, items, additionalProperties —
+/// never data such as defaults): "any value" nodes (`true`, `{}`, only a
+/// description; `serde_json::Value` in the generated types) have no `type`, which a
+/// structural schema forbids, so they get `x-kubernetes-preserve-unknown-fields`;
+/// `null` is dropped from enums in favour of `nullable`.
+fn fill_untyped(node: &mut Map<String, Value>) {
+    for key in ["items", "additionalProperties"] {
+        if let Some(child) = node.get_mut(key) {
+            fill_untyped_value(child);
+        }
+    }
+    if let Some(Value::Object(properties)) = node.get_mut("properties") {
+        properties.values_mut().for_each(fill_untyped_value);
+    }
+    // `null` in an enum trips kubectl's client-side validation; `nullable` already
+    // lets the API server accept null before the enum is checked.
+    if let Some(Value::Array(values)) = node.get_mut("enum")
+        && values.iter().any(Value::is_null)
+    {
+        values.retain(|value| !value.is_null());
+        if values.is_empty() {
+            node.remove("enum");
+        }
+        node.insert("nullable".to_owned(), Value::Bool(true));
+    }
+    if !SHAPED.iter().any(|key| node.contains_key(*key))
+        && !node.contains_key("x-kubernetes-preserve-unknown-fields")
+    {
+        node.insert(
+            "x-kubernetes-preserve-unknown-fields".to_owned(),
+            Value::Bool(true),
+        );
+    }
+}
+
+fn fill_untyped_value(value: &mut Value) {
+    match value {
+        Value::Bool(true) => {
+            *value = serde_json::json!({ "x-kubernetes-preserve-unknown-fields": true });
+        }
+        Value::Object(node) => fill_untyped(node),
+        _ => {}
     }
 }
 

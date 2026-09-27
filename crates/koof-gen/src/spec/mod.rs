@@ -69,6 +69,26 @@ pub fn preprocess(document: &Value) -> Result<Value, SpecError> {
     for_codegen(&prepare(document)?)
 }
 
+/// `components.schemas` of `document`, created when missing (a fully
+/// dereferenced document may have no component schemas left after pruning).
+///
+/// # Errors
+///
+/// Returns [`SpecError::Missing`] when the document or `components` is not an object.
+fn schemas_mut(document: &mut Value) -> Result<&mut Map<String, Value>, SpecError> {
+    document
+        .as_object_mut()
+        .ok_or_else(|| SpecError::Missing("document".to_owned()))?
+        .entry("components")
+        .or_insert_with(|| Value::Object(Map::new()))
+        .as_object_mut()
+        .ok_or_else(|| SpecError::Missing("components".to_owned()))?
+        .entry("schemas")
+        .or_insert_with(|| Value::Object(Map::new()))
+        .as_object_mut()
+        .ok_or_else(|| SpecError::Missing("components.schemas".to_owned()))
+}
+
 /// The JSON media type of a `content` map: `application/json`, else any `*+json`.
 fn json_media_mut(content: &mut Map<String, Value>) -> Option<&mut Value> {
     let key = if content.contains_key("application/json") {
