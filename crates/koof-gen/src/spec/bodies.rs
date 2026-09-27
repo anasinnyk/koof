@@ -1,4 +1,4 @@
-use super::{COMPONENT_SCHEMA_PREFIX, SpecError, json_media_mut};
+use super::{COMPONENT_SCHEMA_PREFIX, SpecError, json_media_mut, schemas_mut};
 use heck::ToUpperCamelCase;
 use serde::Deserialize;
 use serde_json::{Map, Value, json};
@@ -76,10 +76,7 @@ pub fn hoist_operation_bodies(document: &mut Value) -> Result<(), SpecError> {
         }
     }
 
-    let schemas = document
-        .pointer_mut("/components/schemas")
-        .and_then(Value::as_object_mut)
-        .ok_or_else(|| SpecError::Missing("components.schemas".to_owned()))?;
+    let schemas = schemas_mut(document)?;
     for (name, schema) in hoisted {
         if schemas.contains_key(&name) {
             return Err(SpecError::Resource {

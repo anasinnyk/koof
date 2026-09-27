@@ -1,0 +1,12 @@
+# koof-gen inputs: the OpenAPI document, then overlays in order.
+sentry.json
+sentry.provider.overlay.yaml
+sentry.organization.overlay.yaml
+sentry.team.overlay.yaml
+sentry.project.overlay.yaml
+sentry.project-key.overlay.yaml
+sentry.organization-member.overlay.yaml
+sentry.monitor.overlay.yaml
+sentry.dashboard.overlay.yaml
+sentry.service-hook.overlay.yaml
+sentry.typify.overlay.yaml
