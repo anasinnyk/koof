@@ -5,10 +5,10 @@
 //!
 //! Top-level `forProvider` fields only: a partially set object is left alone.
 
-use crate::{error::ReconcileError, reference::value_at, resource::ManagedResource};
+use crate::{error::ReconcileError, json_path, object, resource::ManagedResource};
 use serde_json::{Map, Value};
 
-const FOR_PROVIDER: &str = "forProvider";
+const FOR_PROVIDER: &str = "spec.forProvider";
 
 /// Observed values for late-initializable fields that are unset in the spec. A
 /// value that does not fit the spec's type (schemas of request and response can
@@ -22,7 +22,7 @@ pub fn candidates<R: ManagedResource>(
     observed: &Value,
 ) -> Result<Map<String, Value>, ReconcileError> {
     let value = serde_json::to_value(resource)?;
-    let desired = value_at(&value, "spec.forProvider");
+    let desired = json_path::get(&value, FOR_PROVIDER);
     let mut fields = Map::new();
 
     for field in R::descriptor().late_initialize {
@@ -50,10 +50,8 @@ pub fn candidates<R: ManagedResource>(
 /// Whether `resource` still deserializes with `field` set to `candidate`.
 fn fits<R: ManagedResource>(resource: &Value, field: &str, candidate: &Value) -> bool {
     let mut trial = resource.clone();
-    let Some(for_provider) = trial
-        .get_mut("spec")
-        .and_then(|spec| spec.get_mut(FOR_PROVIDER))
-        .and_then(Value::as_object_mut)
+    let Some(for_provider) =
+        json_path::get_mut(&mut trial, FOR_PROVIDER).and_then(Value::as_object_mut)
     else {
         return false;
     };
@@ -65,17 +63,15 @@ fn fits<R: ManagedResource>(resource: &Value, field: &str, candidate: &Value) ->
 ///
 /// # Errors
 ///
-/// Returns [`ReconcileError`] when the resource has no namespace or the patch fails
-/// (including a conflict with a concurrent change).
+/// Returns [`ReconcileError`] when the patch fails (including a conflict with a
+/// concurrent change).
 pub async fn apply<R: ManagedResource>(
     client: &kube::Client,
     resource: &R,
     fields: &Map<String, Value>,
 ) -> Result<(), ReconcileError> {
-    let patch = serde_json::json!({
-        "metadata": { "resourceVersion": kube::ResourceExt::resource_version(resource) },
-        "spec": { FOR_PROVIDER: fields },
-    });
-    crate::object::patch(client, resource, &patch).await?;
+    let mut patch = Value::Null;
+    json_path::set(&mut patch, FOR_PROVIDER, Value::Object(fields.clone()));
+    object::patch_guarded(client, resource, patch).await?;
     Ok(())
 }

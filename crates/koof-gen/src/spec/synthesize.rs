@@ -1,34 +1,18 @@
-use super::{SpecError, schema_ref_name, schemas_mut};
-use crate::ir::{FieldPath, FieldSelectionIr, FieldSelectionModeIr};
-use serde::Deserialize;
+use super::{
+    SpecError,
+    extensions::{
+        FieldExtension, FieldSelectionMode, LifecycleAction, ResourceExtension, kube_operations,
+        kube_resources,
+    },
+    resolve_ref, schema_ref_name, schemas_mut, success_json_schema,
+};
+use crate::ir::{FieldPath, ResourceName};
 use serde_json::{Map, Value, json};
 use std::collections::{BTreeMap, BTreeSet};
 
-#[derive(Debug, Deserialize)]
-struct ResourceExtension {
-    name: String,
-    kind: String,
-    #[serde(default)]
-    fields: FieldSelectionIr,
-}
-
-#[derive(Debug, Deserialize)]
-struct OperationExtension {
-    resource: String,
-    lifecycle: String,
-    #[serde(default)]
-    response: Option<ResponseExtension>,
-}
-
-/// Where the resource lives inside the observe response body, as a dot path
-/// (e.g. `result` for `{ "success": true, "result": { ... } }`).
-#[derive(Debug, Deserialize)]
-struct ResponseExtension {
-    path: String,
-}
-
 /// Adds `<Kind>ForProvider` and `<Kind>AtProvider` schemas to `components.schemas`
-/// for every schema with `x-kube-resource`.
+/// for every schema with `x-kube-resource`; returns, per resource, the top-level
+/// `forProvider` fields that may be late-initialized.
 ///
 /// Fields come from the resource's `fields` selection: `explicit` takes the listed
 /// names, `all` takes every property (minus `readOnly` and `x-kube-field.ignored`
@@ -43,31 +27,34 @@ struct ResponseExtension {
 /// Returns [`SpecError`] when an `x-kube-*` extension is malformed, an explicitly
 /// selected field does not exist, the observe response path cannot be resolved, or a
 /// synthesized name collides with an existing schema.
-pub fn synthesize(document: &mut Value) -> Result<(), SpecError> {
-    let schemas = schemas_mut(document)?.clone();
-    let observe_responses = observe_responses(document)?;
-    let creatable = creatable_resources(document);
+pub fn synthesize(
+    document: &mut Value,
+) -> Result<BTreeMap<ResourceName, Vec<String>>, SpecError> {
+    schemas_mut(document)?;
+    let snapshot = document.clone();
+    let schemas = snapshot
+        .pointer("/components/schemas")
+        .and_then(Value::as_object)
+        .ok_or_else(|| SpecError::Missing("components.schemas".to_owned()))?;
+    let observe_responses = observe_responses(&snapshot, schemas)?;
+    let creatable = creatable_resources(&snapshot)?;
 
     let mut synthesized = Map::new();
-    for (schema_name, schema) in &schemas {
-        let Some(extension) = schema.get("x-kube-resource") else {
-            continue;
-        };
-        let extension: ResourceExtension =
-            serde_json::from_value(extension.clone()).map_err(|source| SpecError::Extension {
-                extension: "x-kube-resource",
-                location: format!("components.schemas.{schema_name}"),
-                source,
-            })?;
-        let resource = Resource {
-            schemas: &schemas,
-            extension: &extension,
-        };
+    let mut kinds = BTreeMap::new();
+    for kube_resource in kube_resources(&snapshot) {
+        let kube_resource = kube_resource?;
+        let extension = &kube_resource.extension;
+        let resource = Resource { schemas, extension };
 
         // `required` matters for the create body only; a resource that cannot be
         // created (import only) should not force fields on the user.
         let creatable = creatable.contains(&extension.name);
-        resource.for_provider(schema_name, schema, creatable, &mut synthesized)?;
+        resource.for_provider(
+            kube_resource.schema_name,
+            kube_resource.schema,
+            creatable,
+            &mut synthesized,
+        )?;
         match observe_responses.get(&extension.name) {
             Some(response) => resource.at_provider(response, &mut synthesized)?,
             None if extension.fields.at_provider.is_empty() => {}
@@ -77,6 +64,7 @@ pub fn synthesize(document: &mut Value) -> Result<(), SpecError> {
                 ));
             }
         }
+        kinds.insert(extension.name.clone(), extension.kind.clone());
     }
 
     let target = schemas_mut(document)?;
@@ -89,7 +77,49 @@ pub fn synthesize(document: &mut Value) -> Result<(), SpecError> {
         }
         target.insert(name, schema);
     }
-    Ok(())
+
+    kinds
+        .into_iter()
+        .map(|(name, kind)| Ok((name, late_initialize_fields(target, &kind)?)))
+        .collect()
+}
+
+/// Top-level fields of the synthesized `<Kind>ForProvider` (all variants of a
+/// union), minus those marked `x-kube-field: { late_initialize: false }`.
+fn late_initialize_fields(
+    schemas: &Map<String, Value>,
+    kind: &str,
+) -> Result<Vec<String>, SpecError> {
+    let Some(root) = schemas.get(&format!("{kind}ForProvider")) else {
+        return Ok(Vec::new());
+    };
+    let objects: Vec<&Value> = match root.get("oneOf").and_then(Value::as_array) {
+        Some(variants) => variants
+            .iter()
+            .filter_map(|variant| schemas.get(&schema_ref_name(variant)?))
+            .collect(),
+        None => vec![root],
+    };
+
+    let mut fields = Vec::new();
+    for (name, property) in objects
+        .iter()
+        .filter_map(|object| object.get("properties").and_then(Value::as_object))
+        .flatten()
+    {
+        let late_initialize = [property, resolve_ref(schemas, property)]
+            .into_iter()
+            .map(|schema| FieldExtension::of(schema, &format!("{kind}ForProvider.{name}")))
+            .collect::<Result<Vec<_>, _>>()?
+            .iter()
+            .all(|field| field.late_initialize);
+        if late_initialize {
+            fields.push(name.clone());
+        }
+    }
+    fields.sort();
+    fields.dedup();
+    Ok(fields)
 }
 
 struct Resource<'a> {
@@ -106,12 +136,16 @@ impl Resource<'_> {
         out: &mut Map<String, Value>,
     ) -> Result<(), SpecError> {
         let fields = match self.extension.fields.mode {
-            FieldSelectionModeIr::Explicit => names(&self.extension.fields.for_provider),
-            FieldSelectionModeIr::All => self
-                .all_property_names(schema)
-                .into_iter()
-                .filter(|name| !self.is_excluded_from_for_provider(schema, name))
-                .collect(),
+            FieldSelectionMode::Explicit => names(&self.extension.fields.for_provider),
+            FieldSelectionMode::All => {
+                let mut fields = Vec::new();
+                for name in self.all_property_names(schema) {
+                    if !self.is_excluded_from_for_provider(schema, &name)? {
+                        fields.push(name);
+                    }
+                }
+                fields
+            }
         };
         let root = format!("{}ForProvider", self.extension.kind);
         self.filtered(&root, schema_name, schema, &fields, keep_required, out)
@@ -119,8 +153,8 @@ impl Resource<'_> {
 
     fn at_provider(&self, response: &Value, out: &mut Map<String, Value>) -> Result<(), SpecError> {
         let fields = match self.extension.fields.mode {
-            FieldSelectionModeIr::Explicit => names(&self.extension.fields.at_provider),
-            FieldSelectionModeIr::All => self.all_property_names(response),
+            FieldSelectionMode::Explicit => names(&self.extension.fields.at_provider),
+            FieldSelectionMode::All => self.all_property_names(response),
         };
         let root = format!("{}AtProvider", self.extension.kind);
         self.filtered(&root, "observe response", response, &fields, false, out)
@@ -237,23 +271,27 @@ impl Resource<'_> {
         names.into_iter().collect()
     }
 
-    fn is_excluded_from_for_provider(&self, schema: &Value, field: &str) -> bool {
-        find_property(self.schemas, schema, field)
-            .iter()
-            .any(|(property, _)| {
-                let resolved = schema_ref_name(property)
-                    .and_then(|name| self.schemas.get(&name))
-                    .unwrap_or(property);
-                [property, resolved].iter().any(|candidate| {
-                    candidate.get("readOnly") == Some(&Value::Bool(true))
-                        || candidate.pointer("/x-kube-field/ignored") == Some(&Value::Bool(true))
-                })
-            })
+    fn is_excluded_from_for_provider(&self, schema: &Value, field: &str) -> Result<bool, SpecError> {
+        for (property, _) in find_property(self.schemas, schema, field) {
+            if property.get("readOnly") == Some(&Value::Bool(true)) {
+                return Ok(true);
+            }
+            let resolved = resolve_ref(self.schemas, &property);
+            if resolved.get("readOnly") == Some(&Value::Bool(true)) {
+                return Ok(true);
+            }
+            for candidate in [&property, resolved] {
+                if FieldExtension::of(candidate, field)?.ignored {
+                    return Ok(true);
+                }
+            }
+        }
+        Ok(false)
     }
 
     fn error(&self, message: &str) -> SpecError {
         SpecError::Resource {
-            resource: self.extension.name.clone(),
+            resource: self.extension.name.0.clone(),
             message: message.to_owned(),
         }
     }
@@ -266,11 +304,7 @@ impl Resource<'_> {
 fn merge_scalars(schemas: &Map<String, Value>, definitions: &[Value]) -> Option<Value> {
     let resolved: Vec<&Value> = definitions
         .iter()
-        .map(|definition| {
-            schema_ref_name(definition)
-                .and_then(|name| schemas.get(&name))
-                .unwrap_or(definition)
-        })
+        .map(|definition| resolve_ref(schemas, definition))
         .collect();
 
     let mut scalar_type: Option<&str> = None;
@@ -341,116 +375,65 @@ fn names(paths: &[FieldPath]) -> Vec<String> {
 }
 
 /// Resources with an `x-kube-operation` of lifecycle `create`.
-fn creatable_resources(document: &Value) -> BTreeSet<String> {
-    document
-        .get("paths")
-        .and_then(Value::as_object)
-        .into_iter()
-        .flat_map(|paths| paths.values())
-        .filter_map(Value::as_object)
-        .flat_map(|item| item.values())
-        .filter_map(|operation| operation.get("x-kube-operation"))
-        .filter(|extension| extension.get("lifecycle").and_then(Value::as_str) == Some("create"))
-        .filter_map(|extension| extension.get("resource").and_then(Value::as_str))
-        .map(str::to_owned)
-        .collect()
+fn creatable_resources(document: &Value) -> Result<BTreeSet<ResourceName>, SpecError> {
+    let mut resources = BTreeSet::new();
+    for kube_operation in kube_operations(document) {
+        let extension = kube_operation?.extension;
+        if extension.lifecycle == LifecycleAction::Create {
+            resources.insert(extension.resource);
+        }
+    }
+    Ok(resources)
 }
 
 /// Observe response schemas per resource name, descended to `response.path`.
-fn observe_responses(document: &Value) -> Result<BTreeMap<String, Value>, SpecError> {
-    let schemas = document
-        .pointer("/components/schemas")
-        .and_then(Value::as_object)
-        .cloned()
-        .unwrap_or_default();
+fn observe_responses(
+    document: &Value,
+    schemas: &Map<String, Value>,
+) -> Result<BTreeMap<ResourceName, Value>, SpecError> {
     let mut responses = BTreeMap::new();
-    let Some(paths) = document.get("paths").and_then(Value::as_object) else {
-        return Ok(responses);
-    };
-
-    for (path, item) in paths {
-        let Some(item) = item.as_object() else {
+    for kube_operation in kube_operations(document) {
+        let kube_operation = kube_operation?;
+        let extension = &kube_operation.extension;
+        if extension.lifecycle != LifecycleAction::Observe {
+            continue;
+        }
+        let Some(mut schema) = success_json_schema(document, kube_operation.operation).cloned()
+        else {
             continue;
         };
-        for (method, operation) in item {
-            let Some(extension) = operation.get("x-kube-operation") else {
-                continue;
-            };
-            let location = format!("paths.{path}.{method}");
-            let extension: OperationExtension =
-                serde_json::from_value(extension.clone()).map_err(|source| {
-                    SpecError::Extension {
-                        extension: "x-kube-operation",
-                        location: location.clone(),
-                        source,
+        if let Some(response) = &extension.response {
+            for segment in response
+                .path
+                .split('.')
+                .filter(|segment| !segment.is_empty())
+            {
+                // An envelope often declares the property twice (a generic
+                // `result` in the base schema, the concrete one in an `allOf`
+                // extension); all definitions apply, so combine them.
+                let mut definitions: Vec<Value> = find_property(schemas, &schema, segment)
+                    .into_iter()
+                    .map(|(property, _)| property)
+                    .collect();
+                schema = match definitions.len() {
+                    0 => {
+                        return Err(SpecError::Resource {
+                            resource: extension.resource.0.clone(),
+                            message: format!(
+                                "observe response at {} has no `{}`",
+                                kube_operation.location(),
+                                response.path
+                            ),
+                        });
                     }
-                })?;
-            if extension.lifecycle != "observe" {
-                continue;
+                    1 => definitions.remove(0),
+                    _ => json!({ "allOf": definitions }),
+                };
             }
-            let Some(mut schema) = success_json_schema(document, operation) else {
-                continue;
-            };
-            if let Some(response) = &extension.response {
-                for segment in response
-                    .path
-                    .split('.')
-                    .filter(|segment| !segment.is_empty())
-                {
-                    // An envelope often declares the property twice (a generic
-                    // `result` in the base schema, the concrete one in an `allOf`
-                    // extension); all definitions apply, so combine them.
-                    let mut definitions: Vec<Value> = find_property(&schemas, &schema, segment)
-                        .into_iter()
-                        .map(|(property, _)| property)
-                        .collect();
-                    schema = match definitions.len() {
-                        0 => {
-                            return Err(SpecError::Resource {
-                                resource: extension.resource.clone(),
-                                message: format!(
-                                    "observe response at {location} has no `{}`",
-                                    response.path
-                                ),
-                            });
-                        }
-                        1 => definitions.remove(0),
-                        _ => json!({ "allOf": definitions }),
-                    };
-                }
-            }
-            responses.insert(extension.resource, schema);
         }
+        responses.insert(extension.resource.clone(), schema);
     }
     Ok(responses)
-}
-
-/// JSON schema of the first 2xx response, following `$ref` to `components.responses`.
-fn success_json_schema(document: &Value, operation: &Value) -> Option<Value> {
-    let responses = operation.get("responses")?.as_object()?;
-    let mut statuses: Vec<&String> = responses
-        .keys()
-        .filter(|status| status.starts_with('2'))
-        .collect();
-    statuses.sort();
-    statuses.into_iter().find_map(|status| {
-        let mut response = &responses[status];
-        if let Some(pointer) = response
-            .get("$ref")
-            .and_then(Value::as_str)
-            .and_then(|reference| reference.strip_prefix('#'))
-        {
-            response = document.pointer(pointer)?;
-        }
-        let content = response.get("content")?.as_object()?;
-        let media = content.get("application/json").or_else(|| {
-            content
-                .iter()
-                .find(|(name, _)| name.ends_with("+json"))
-                .map(|(_, media)| media)
-        })?;
-        media.get("schema").cloned()
-    })
 }
 
 /// Every definition of property `field` reachable through `$ref` and
@@ -625,7 +608,7 @@ components:
     #[test]
     fn explicit_selection_takes_listed_fields_through_all_of() -> TestResult {
         let mut document = document(
-            "{ name: record, kind: Record, fields: { mode: explicit, forProvider: [name, ttl], atProvider: [id, name, created_on] } }",
+            "{ name: record, apiVersion: test.example.io/v1, kind: Record, fields: { mode: explicit, forProvider: [name, ttl], atProvider: [id, name, created_on] } }",
         )?;
         synthesize(&mut document)?;
 
@@ -641,7 +624,7 @@ components:
 
     #[test]
     fn all_selection_skips_read_only_and_ignored_for_provider_fields() -> TestResult {
-        let mut document = document("{ name: record, kind: Record }")?;
+        let mut document = document("{ name: record, apiVersion: test.example.io/v1, kind: Record }")?;
         synthesize(&mut document)?;
 
         assert_eq!(
@@ -666,7 +649,7 @@ components:
     #[test]
     fn unknown_explicit_field_is_an_error() -> TestResult {
         let mut document = document(
-            "{ name: record, kind: Record, fields: { mode: explicit, forProvider: [name, nope] } }",
+            "{ name: record, apiVersion: test.example.io/v1, kind: Record, fields: { mode: explicit, forProvider: [name, nope] } }",
         )?;
         let error = synthesize(&mut document).err().ok_or("expected an error")?;
         let message = error.to_string();
@@ -706,6 +689,7 @@ components:
     Record:
       x-kube-resource:
         name: record
+        apiVersion: test.example.io/v1
         kind: Record
         fields: { mode: explicit, forProvider: [type, content, priority] }
       anyOf:
@@ -761,6 +745,7 @@ components:
     Thing:
       x-kube-resource:
         name: thing
+        apiVersion: test.example.io/v1
         kind: Thing
         fields: { mode: explicit, forProvider: [name], atProvider: [id, name] }
       type: object
@@ -780,7 +765,7 @@ components:
 
     #[test]
     fn missing_response_path_is_an_error() -> TestResult {
-        let mut document = document("{ name: record, kind: Record }")?;
+        let mut document = document("{ name: record, apiVersion: test.example.io/v1, kind: Record }")?;
         if let Some(extension) =
             document.pointer_mut("/paths/~1records~1{id}/get/x-kube-operation/response")
         {

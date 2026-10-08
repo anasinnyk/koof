@@ -1,13 +1,9 @@
-use super::{COMPONENT_SCHEMA_PREFIX, SpecError, json_media_mut, schemas_mut};
+use super::{
+    COMPONENT_SCHEMA_PREFIX, SpecError, extensions::kube_operations, json_media_mut, schemas_mut,
+    success_statuses,
+};
 use heck::ToUpperCamelCase;
-use serde::Deserialize;
 use serde_json::{Map, Value, json};
-
-#[derive(Debug, Deserialize)]
-struct OperationExtension {
-    resource: String,
-    lifecycle: String,
-}
 
 /// Makes every JSON request body and first successful JSON response of an
 /// `x-kube-operation` a `components.schemas` reference, so each has a type name.
@@ -23,54 +19,38 @@ pub fn hoist_operation_bodies(document: &mut Value) -> Result<(), SpecError> {
     let snapshot = document.clone();
     let mut hoisted = Map::new();
 
-    let Some(paths) = document.get_mut("paths").and_then(Value::as_object_mut) else {
-        return Ok(());
-    };
-    for (path, item) in paths.iter_mut() {
-        let Some(item) = item.as_object_mut() else {
+    for kube_operation in kube_operations(&snapshot) {
+        let kube_operation = kube_operation?;
+        let extension = &kube_operation.extension;
+        let base = format!(
+            "{}{}",
+            extension.resource.0.to_upper_camel_case(),
+            extension.lifecycle.name().to_upper_camel_case()
+        );
+        let Some(operation) = document
+            .get_mut("paths")
+            .and_then(|paths| paths.get_mut(kube_operation.path))
+            .and_then(|item| item.get_mut(kube_operation.method))
+        else {
             continue;
         };
-        for (method, operation) in item.iter_mut() {
-            let Some(extension) = operation.get("x-kube-operation") else {
-                continue;
-            };
-            let extension: OperationExtension =
-                serde_json::from_value(extension.clone()).map_err(|source| {
-                    SpecError::Extension {
-                        extension: "x-kube-operation",
-                        location: format!("paths.{path}.{method}"),
-                        source,
-                    }
-                })?;
-            let base = format!(
-                "{}{}",
-                extension.resource.to_upper_camel_case(),
-                extension.lifecycle.to_upper_camel_case()
-            );
 
-            if let Some(body) = operation.get_mut("requestBody") {
-                inline_reference(&snapshot, body);
-                hoist(body, &format!("{base}Request"), &mut hoisted);
-            }
+        if let Some(body) = operation.get_mut("requestBody") {
+            inline_reference(&snapshot, body);
+            hoist(body, &format!("{base}Request"), &mut hoisted);
+        }
 
-            if let Some(responses) = operation
-                .get_mut("responses")
-                .and_then(Value::as_object_mut)
-            {
-                let mut statuses: Vec<String> = responses
-                    .keys()
-                    .filter(|status| status.starts_with('2'))
-                    .cloned()
-                    .collect();
-                statuses.sort();
-                for status in statuses {
-                    let Some(response) = responses.get_mut(&status) else {
-                        continue;
-                    };
-                    inline_reference(&snapshot, response);
-                    if hoist(response, &format!("{base}Response"), &mut hoisted) {
-                        break;
-                    }
+        if let Some(responses) = operation
+            .get_mut("responses")
+            .and_then(Value::as_object_mut)
+        {
+            for status in success_statuses(responses) {
+                let Some(response) = responses.get_mut(&status) else {
+                    continue;
+                };
+                inline_reference(&snapshot, response);
+                if hoist(response, &format!("{base}Response"), &mut hoisted) {
+                    break;
                 }
             }
         }

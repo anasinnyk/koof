@@ -1,6 +1,6 @@
 use crate::{
     generator::{errors::GeneratorError, naming::operation_ident, types::GeneratedTypes},
-    ir::{HttpMethod, ProviderIr},
+    ir::{HttpMethod, SchemaName, resolved::Provider},
 };
 use proc_macro2::TokenStream;
 use quote::quote;
@@ -12,24 +12,26 @@ use quote::quote;
 /// Returns [`GeneratorError`] when an operation name is not a valid identifier or its
 /// request / response schema has no generated type.
 pub fn generate_operations(
-    ir: &ProviderIr,
+    provider: &Provider<'_>,
     types: &GeneratedTypes,
 ) -> Result<TokenStream, GeneratorError> {
-    let operations = ir
+    let operations = provider
         .operations
         .iter()
-        .map(|(id, operation)| {
+        .map(|operation| {
+            let id = operation.id;
+            let operation = operation.ir;
             let ident = operation_ident(id)?;
             let name = &id.0;
             let path = &operation.path;
             let method = match operation.method {
-                HttpMethod::GET => quote!(GET),
-                HttpMethod::POST => quote!(POST),
-                HttpMethod::PUT => quote!(PUT),
-                HttpMethod::PATCH => quote!(PATCH),
-                HttpMethod::DELETE => quote!(DELETE),
+                HttpMethod::Get => quote!(GET),
+                HttpMethod::Post => quote!(POST),
+                HttpMethod::Put => quote!(PUT),
+                HttpMethod::Patch => quote!(PATCH),
+                HttpMethod::Delete => quote!(DELETE),
             };
-            let body_type = |schema: Option<&crate::ir::SchemaName>| {
+            let body_type = |schema: Option<&SchemaName>| {
                 schema.map_or_else(|| Ok(quote!(())), |schema| types.path(&schema.0))
             };
             let request = body_type(operation.request.as_ref())?;

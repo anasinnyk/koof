@@ -58,12 +58,18 @@ fn latency_histogram() -> Histogram {
     Histogram::new(exponential_buckets(0.005, 2.0, 14))
 }
 
-/// Last known state of one managed resource, for the `managed_resources` gauge.
-#[derive(Clone, Debug, PartialEq, Eq)]
-struct ObjectState {
+/// `Ready` / `Synced` of one managed resource, for the `managed_resources` gauge.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct ObjectState {
+    pub ready: bool,
+    pub synced: bool,
+}
+
+/// Last known state of one managed resource.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+struct TrackedObject {
     kind: &'static str,
-    ready: bool,
-    synced: bool,
+    state: ObjectState,
 }
 
 pub struct Metrics {
@@ -76,7 +82,7 @@ pub struct Metrics {
     requests: Family<RequestLabels, Counter>,
     request_duration: Histograms<OperationLabels>,
     managed: Family<StateLabels, Gauge>,
-    objects: Mutex<HashMap<String, ObjectState>>,
+    objects: Mutex<HashMap<String, TrackedObject>>,
 }
 
 impl Default for Metrics {
@@ -222,20 +228,13 @@ impl Metrics {
 
     /// Records the Ready / Synced state of object `key`; `None` forgets it (the
     /// managed resource is gone).
-    pub fn object_state(&self, key: &str, kind: &'static str, state: Option<(bool, bool)>) {
+    pub fn object_state(&self, key: &str, kind: &'static str, state: Option<ObjectState>) {
         let mut objects = self.objects.lock().unwrap_or_else(PoisonError::into_inner);
         let previous = match state {
-            Some((ready, synced)) => objects.insert(
-                key.to_owned(),
-                ObjectState {
-                    kind,
-                    ready,
-                    synced,
-                },
-            ),
+            Some(state) => objects.insert(key.to_owned(), TrackedObject { kind, state }),
             None => objects.remove(key),
         };
-        let current = objects.get(key).cloned();
+        let current = objects.get(key).copied();
         if previous == current {
             return;
         }
@@ -248,10 +247,10 @@ impl Metrics {
     }
 }
 
-fn state_labels(state: &ObjectState) -> StateLabels {
+fn state_labels(object: &TrackedObject) -> StateLabels {
     StateLabels {
-        kind: state.kind.to_owned(),
-        ready: state.ready.to_string(),
-        synced: state.synced.to_string(),
+        kind: object.kind.to_owned(),
+        ready: object.state.ready.to_string(),
+        synced: object.state.synced.to_string(),
     }
 }

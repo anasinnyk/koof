@@ -1,11 +1,11 @@
 //! The managed-resource finalizer: added before the controller may change anything
 //! externally, removed once the external resource is deleted or orphaned.
 //!
-//! Patches carry the full finalizer list together with `metadata.resourceVersion`,
-//! so a concurrent change to the object makes the patch fail with a conflict (a
-//! transient error, retried) instead of dropping someone else's finalizer.
+//! Patches carry the full finalizer list together with `metadata.resourceVersion`
+//! ([`crate::object::patch_guarded`]), so a concurrent change to the object makes
+//! the patch fail with a conflict instead of dropping someone else's finalizer.
 
-use crate::{error::ReconcileError, resource::ManagedResource};
+use crate::{error::ReconcileError, object, resource::ManagedResource};
 
 /// Whether `resource` carries its finalizer.
 #[must_use]
@@ -60,11 +60,10 @@ async fn patch<R: ManagedResource>(
     resource: &R,
     finalizers: &[String],
 ) -> Result<R, ReconcileError> {
-    let patch = serde_json::json!({
-        "metadata": {
-            "finalizers": finalizers,
-            "resourceVersion": kube::ResourceExt::resource_version(resource),
-        }
-    });
-    crate::object::patch(client, resource, &patch).await
+    object::patch_guarded(
+        client,
+        resource,
+        serde_json::json!({ "metadata": { "finalizers": finalizers } }),
+    )
+    .await
 }

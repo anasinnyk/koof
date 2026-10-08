@@ -2,16 +2,18 @@
 //! Related resources are read as `DynamicObject`s and handled as JSON, so this code
 //! does not depend on generated types.
 
+use super::http::Auth;
 use crate::{
     error::{CredentialError, ResolveValueError},
-    http::Auth,
-    reference::{ResourceReference, SecretReference, resolve_secret_key, scalar_at, value_at},
+    json_path,
+    reference::{ResourceReference, SecretReference},
     resource::{
         AuthScheme, CredentialSource, ManagedResource, NamespacePolicy, ResourceDescriptor,
         ValueExpr,
     },
 };
 use futures::future::BoxFuture;
+use k8s_openapi::api::core::v1::Secret;
 use kube::api::{Api, DynamicObject};
 use serde_json::Value;
 
@@ -27,8 +29,7 @@ pub struct Node {
 impl Node {
     /// # Errors
     ///
-    /// Returns [`ResolveValueError`] when the resource has no namespace or cannot be
-    /// serialized.
+    /// Returns [`ResolveValueError`] when the resource cannot be serialized.
     pub fn of<R: ManagedResource>(resource: &R) -> Result<Self, ResolveValueError> {
         Ok(Self {
             descriptor: R::descriptor(),
@@ -61,7 +62,7 @@ pub fn resolve_value<'a>(
 ) -> BoxFuture<'a, Result<Option<String>, ResolveValueError>> {
     Box::pin(async move {
         match expression {
-            ValueExpr::Field(path) => scalar_at(&node.value, path),
+            ValueExpr::Field(path) => json_path::scalar(&node.value, path),
             ValueExpr::ExternalName => Ok(node
                 .descriptor
                 .external_name(&node.value)
@@ -122,8 +123,7 @@ pub async fn traverse(
                 current.descriptor.kind
             ))
         })?;
-        let target: ResourceReference = value_at(&current.value, reference.from)
-            .filter(|value| !value.is_null())
+        let target: ResourceReference = json_path::get_non_null(&current.value, reference.from)
             .cloned()
             .map(serde_json::from_value)
             .transpose()?
@@ -195,8 +195,7 @@ pub async fn resolve_credentials(
         )));
     };
 
-    let selector: SecretReference = value_at(&terminal.value, path)
-        .filter(|value| !value.is_null())
+    let selector: SecretReference = json_path::get_non_null(&terminal.value, path)
         .cloned()
         .map(serde_json::from_value)
         .transpose()
@@ -216,5 +215,43 @@ pub async fn resolve_credentials(
             name: name.to_owned(),
             value,
         },
+    })
+}
+
+/// Reads `key` of Secret `name` in `namespace` as UTF-8.
+///
+/// # Errors
+///
+/// Returns [`CredentialError`] when the Secret cannot be read, has no such key, or
+/// the value is not UTF-8.
+pub async fn resolve_secret_key(
+    client: &kube::Client,
+    namespace: &str,
+    name: &str,
+    key: &str,
+) -> Result<String, CredentialError> {
+    let secrets: Api<Secret> = Api::namespaced(client.clone(), namespace);
+    let secret = secrets.get(name).await?;
+
+    if let Some(value) = secret.string_data.as_ref().and_then(|data| data.get(key)) {
+        return Ok(value.clone());
+    }
+
+    let bytes = secret
+        .data
+        .as_ref()
+        .and_then(|data| data.get(key))
+        .ok_or_else(|| {
+            CredentialError::MissingValue(format!(
+                "Secret {namespace}/{name} does not contain key {key:?}"
+            ))
+        })?
+        .0
+        .clone();
+
+    String::from_utf8(bytes).map_err(|source| CredentialError::InvalidSecretUtf8 {
+        secret: format!("{namespace}/{name}"),
+        key: key.to_owned(),
+        source,
     })
 }

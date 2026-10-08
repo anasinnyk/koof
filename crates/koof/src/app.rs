@@ -11,9 +11,9 @@
 //! ```
 
 use crate::{
+    controller::{ControllerContext, run},
     http::HttpClient,
     metrics::Metrics,
-    reconciler::{ControllerContext, run},
     resource::ManagedResource,
 };
 use futures::future::BoxFuture;
@@ -157,7 +157,7 @@ fn router(context: Arc<ControllerContext>, kinds: Vec<&'static str>) -> axum::Ro
         }
     }
     async fn readyz(State(state): State<ServerState>) -> (StatusCode, &'static str) {
-        if state.context.is_synced(&state.kinds) {
+        if state.context.synced.all(&state.kinds) {
             (StatusCode::OK, "ok")
         } else {
             (StatusCode::SERVICE_UNAVAILABLE, "initial sync in progress")

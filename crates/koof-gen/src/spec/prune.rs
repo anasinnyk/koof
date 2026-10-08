@@ -1,10 +1,10 @@
-use super::{SpecError, decode_segment, schema_children};
+use super::{
+    SpecError, decode_segment,
+    extensions::{HTTP_METHODS, OPERATION, RESOURCE},
+    schema_children,
+};
 use serde_json::{Map, Value};
 use std::collections::BTreeSet;
-
-const HTTP_METHODS: [&str; 8] = [
-    "get", "put", "post", "delete", "options", "head", "patch", "trace",
-];
 
 /// Returns a copy of the document that keeps only operations carrying
 /// `x-kube-operation` and the components reachable from them, from schemas with
@@ -30,7 +30,7 @@ pub fn prune(document: &Value) -> Result<Value, SpecError> {
         queue.extend(
             schemas
                 .iter()
-                .filter(|(_, schema)| schema.get("x-kube-resource").is_some())
+                .filter(|(_, schema)| schema.get(RESOURCE).is_some())
                 .map(|(name, _)| ("schemas".to_owned(), name.clone())),
         );
     }
@@ -72,7 +72,7 @@ pub fn prune(document: &Value) -> Result<Value, SpecError> {
 /// `parameters` stay); `None` when no operation is kept.
 fn keep_kube_operations(item: &Map<String, Value>) -> Option<Value> {
     let is_kube_operation = |key: &str, value: &Value| {
-        HTTP_METHODS.contains(&key) && value.get("x-kube-operation").is_some()
+        HTTP_METHODS.contains(&key) && value.get(OPERATION).is_some()
     };
     if !item
         .iter()

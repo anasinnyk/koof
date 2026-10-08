@@ -1,23 +1,17 @@
 pub mod app;
-pub mod conditions;
-pub mod create;
-pub mod drift;
+pub mod controller;
 pub mod error;
-pub mod finalizer;
-pub mod http;
-pub mod late_init;
+pub mod external;
+pub mod json_path;
 pub mod managed;
 pub mod metrics;
 pub mod object;
-pub mod policy;
-pub mod reconciler;
 pub mod reference;
-pub mod request;
-pub mod resolve;
 pub mod resource;
 pub mod schema;
 pub mod status;
 
 pub use app::{App, AppError, ProviderInfo};
+pub use external::http;
 pub use http::Operation;
 pub use resource::{ManagedResource, ResourceDescriptor};
