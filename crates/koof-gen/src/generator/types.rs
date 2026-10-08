@@ -37,14 +37,12 @@ pub fn generate_types(document: &Value) -> Result<GeneratedTypes, GeneratorError
     let schemas = document
         .pointer("/components/schemas")
         .and_then(Value::as_object)
-        .ok_or_else(|| GeneratorError::InvalidIr("missing components.schemas".into()))?;
+        .ok_or_else(|| GeneratorError::Typify("missing components.schemas".into()))?;
 
     let definitions = schemas
         .iter()
         .map(|(name, schema)| {
-            let mut schema = schema.clone();
-            drop_non_string_enums(&mut schema);
-            serde_json::from_value::<schemars08::schema::Schema>(schema)
+            serde_json::from_value::<schemars08::schema::Schema>(schema.clone())
                 .map(|schema| (name.clone(), schema))
                 .map_err(|error| GeneratorError::Typify(format!("schema {name}: {error}")))
         })
@@ -140,41 +138,4 @@ fn strip_defaults(schema: &schemars08::schema::Schema) -> schemars08::schema::Sc
     let mut value = serde_json::to_value(schema).unwrap_or(Value::Null);
     walk(&mut value);
     serde_json::from_value(value).unwrap_or_else(|_| schema.clone())
-}
-
-/// Typify limitation, not a spec fix: for an `enum` whose values are not strings
-/// (numbers, booleans, arrays, only `null`) typify emits a hand-written
-/// `JsonSchema` impl for schemars 0.8, which does not compile with schemars 1.
-/// Such enums are dropped from typify's input — the field keeps its type — and the
-/// allowed values move to the description. (A CEL rule can restore the check.)
-fn drop_non_string_enums(value: &mut Value) {
-    match value {
-        Value::Object(map) => {
-            let drop = map
-                .get("enum")
-                .and_then(Value::as_array)
-                .is_some_and(|values| {
-                    values.iter().all(Value::is_null)
-                        || values
-                            .iter()
-                            .any(|value| !value.is_string() && !value.is_null())
-                });
-            if drop && let Some(Value::Array(values)) = map.remove("enum") {
-                let allowed: Vec<String> = values.iter().map(Value::to_string).collect();
-                let note = format!("Allowed values: {}.", allowed.join(", "));
-                let description = match map.get("description").and_then(Value::as_str) {
-                    Some(existing) => format!("{existing} {note}"),
-                    None => note,
-                };
-                map.insert("description".to_owned(), Value::String(description));
-            }
-            for (key, child) in map.iter_mut() {
-                if !matches!(key.as_str(), "default" | "example" | "examples" | "const") {
-                    drop_non_string_enums(child);
-                }
-            }
-        }
-        Value::Array(items) => items.iter_mut().for_each(drop_non_string_enums),
-        _ => {}
-    }
 }

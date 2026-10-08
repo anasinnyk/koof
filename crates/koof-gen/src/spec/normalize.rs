@@ -12,6 +12,41 @@ pub fn normalize_nullable(value: &mut Value) {
     }
 }
 
+/// Typify limitation, not a spec fix: for an `enum` whose values are not strings
+/// (numbers, booleans, arrays, only `null`) typify emits a hand-written
+/// `JsonSchema` impl for schemars 0.8, which does not compile with schemars 1.
+/// Such enums are dropped — the field keeps its type — and the allowed values move
+/// to the description. (A CEL rule can restore the check.)
+pub fn drop_non_string_enums(value: &mut Value) {
+    match value {
+        Value::Object(map) => {
+            let drop = map
+                .get("enum")
+                .and_then(Value::as_array)
+                .is_some_and(|values| {
+                    values.iter().all(Value::is_null)
+                        || values
+                            .iter()
+                            .any(|value| !value.is_string() && !value.is_null())
+                });
+            if drop && let Some(Value::Array(values)) = map.remove("enum") {
+                let allowed: Vec<String> = values.iter().map(Value::to_string).collect();
+                let note = format!("Allowed values: {}.", allowed.join(", "));
+                let description = match map.get("description").and_then(Value::as_str) {
+                    Some(existing) => format!("{existing} {note}"),
+                    None => note,
+                };
+                map.insert("description".to_owned(), Value::String(description));
+            }
+            for child in schema_children_mut(map) {
+                drop_non_string_enums(child);
+            }
+        }
+        Value::Array(items) => items.iter_mut().for_each(drop_non_string_enums),
+        _ => {}
+    }
+}
+
 fn normalize_object(map: &mut Map<String, Value>) {
     for child in schema_children_mut(map) {
         normalize_nullable(child);
@@ -102,5 +137,27 @@ mod tests {
             "example": { "nullable": true, "type": "x" }
         });
         assert_eq!(normalized(value.clone()), value);
+    }
+
+    #[test]
+    fn non_string_enums_move_to_the_description() {
+        let mut value = json!({
+            "type": "object",
+            "properties": {
+                "port": { "type": "integer", "enum": [80, 443], "description": "Port." },
+                "mode": { "type": "string", "enum": ["a", "b"] }
+            }
+        });
+        drop_non_string_enums(&mut value);
+        assert_eq!(
+            value,
+            json!({
+                "type": "object",
+                "properties": {
+                    "port": { "type": "integer", "description": "Port. Allowed values: 80, 443." },
+                    "mode": { "type": "string", "enum": ["a", "b"] }
+                }
+            })
+        );
     }
 }

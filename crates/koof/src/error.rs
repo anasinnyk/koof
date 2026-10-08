@@ -62,14 +62,14 @@ pub enum ReconcileError {
     #[error(transparent)]
     Http(#[from] crate::http::HttpError),
 
-    #[error("failed to serialize provider response: {0}")]
+    #[error("JSON (de)serialization failed: {0}")]
     Serialization(#[from] serde_json::Error),
 
     #[error("Kubernetes API request failed: {0}")]
     Kubernetes(#[from] kube::Error),
 
     #[error(transparent)]
-    Policy(#[from] crate::policy::PolicyError),
+    Policy(#[from] crate::controller::policy::PolicyError),
 
     #[error("{0}")]
     Unsupported(String),

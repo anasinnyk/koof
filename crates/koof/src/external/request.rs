@@ -1,9 +1,9 @@
 //! Building provider request bodies from a managed resource.
 
+use super::resolve::{Node, resolve_value};
 use crate::{
     error::{ReconcileError, ResolveValueError},
-    reference::value_at,
-    resolve::{Node, resolve_value},
+    json_path,
     resource::RequestMapping,
 };
 use serde_json::{Map, Value};
@@ -20,7 +20,7 @@ pub async fn build<T: serde::de::DeserializeOwned>(
     node: &Node,
     mapping: &RequestMapping,
 ) -> Result<T, ReconcileError> {
-    let mut body = match value_at(&node.value, mapping.from) {
+    let mut body = match json_path::get(&node.value, mapping.from) {
         Some(Value::Object(object)) => Value::Object(object.clone()),
         None | Some(Value::Null) => Value::Object(Map::new()),
         Some(_) => {
@@ -36,7 +36,7 @@ pub async fn build<T: serde::de::DeserializeOwned>(
             .ok_or_else(|| {
                 ResolveValueError::Missing(format!("request field {path} could not be resolved"))
             })?;
-        set_path(&mut body, path, Value::String(value));
+        json_path::set(&mut body, path, Value::String(value));
     }
     serde_json::from_value(body).map_err(|error| {
         ReconcileError::InvalidRequest(format!(
@@ -44,25 +44,4 @@ pub async fn build<T: serde::de::DeserializeOwned>(
             mapping.from
         ))
     })
-}
-
-/// Writes `value` at a dot path, creating intermediate objects.
-fn set_path(target: &mut Value, path: &str, value: Value) {
-    let mut current = target;
-    let mut segments = path.split('.').peekable();
-    while let Some(segment) = segments.next() {
-        if !current.is_object() {
-            *current = Value::Object(Map::new());
-        }
-        let Value::Object(object) = current else {
-            return;
-        };
-        if segments.peek().is_none() {
-            object.insert(segment.to_owned(), value);
-            return;
-        }
-        current = object
-            .entry(segment.to_owned())
-            .or_insert_with(|| Value::Object(Map::new()));
-    }
 }

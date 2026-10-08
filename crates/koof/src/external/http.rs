@@ -265,24 +265,6 @@ impl HttpError {
     }
 }
 
-/// Value at a dot path (e.g. `result`) inside a response serialized to JSON; the
-/// empty path returns the whole value. `None` when a segment is missing or `null`.
-///
-/// # Errors
-///
-/// Returns [`serde_json::Error`] when `response` cannot be serialized.
-pub fn extract(
-    response: &impl Serialize,
-    path: &str,
-) -> Result<Option<serde_json::Value>, serde_json::Error> {
-    let value = serde_json::to_value(response)?;
-    let found = path
-        .split('.')
-        .filter(|segment| !segment.is_empty())
-        .try_fold(&value, |current, segment| current.get(segment));
-    Ok(found.filter(|value| !value.is_null()).cloned())
-}
-
 fn render_path(template: &str, parameters: &[(&str, &str)]) -> Result<String, HttpError> {
     let mut path = template.to_owned();
     for (name, value) in parameters {

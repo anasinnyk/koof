@@ -5,7 +5,29 @@
 //! `atProvider`, references such as `zoneRef`) cannot be checked and is skipped.
 //! Unset desired fields are late initialization's business, not drift.
 
+use crate::{error::ReconcileError, external::Observation, json_path, resource::ManagedResource};
 use serde_json::Value;
+
+/// Desired fields of `resource` that differ from the observation; the desired
+/// state is the update request's source (`spec.forProvider` by default).
+///
+/// # Errors
+///
+/// Returns [`ReconcileError`] when the resource cannot be serialized.
+pub fn drift<R: ManagedResource>(
+    resource: &R,
+    observation: &Observation,
+) -> Result<Vec<String>, ReconcileError> {
+    let Some(observed) = &observation.at_provider else {
+        return Ok(Vec::new());
+    };
+    let from = R::descriptor()
+        .update
+        .as_ref()
+        .map_or("spec.forProvider", |update| update.request.from);
+    let value = serde_json::to_value(resource)?;
+    Ok(json_path::get(&value, from).map_or_else(Vec::new, |desired| drifted(desired, observed)))
+}
 
 /// Dot paths of desired fields that differ from the observed state; empty when up
 /// to date.

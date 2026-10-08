@@ -1,32 +1,36 @@
-//! Generic observe / reconcile / controller loop for any [`ManagedResource`].
+//! The controller loop for any [`ManagedResource`]: observe the external resource,
+//! decide (see [`policy`]) and act through [`crate::external`], record the outcome
+//! in the status and as events.
+
+pub mod conditions;
+mod context;
+pub mod create_state;
+pub mod drift;
+pub mod finalizer;
+pub mod late_init;
+pub mod policy;
+pub mod status;
+
+pub use context::{Backoff, ControllerContext, SyncTracker};
 
 use crate::{
-    conditions::ConditionSpec,
-    create::{self, CreateState},
-    drift::drifted,
-    error::{ReconcileError, ResolveValueError, Retry},
-    finalizer,
-    http::{HttpClient, extract},
-    late_init,
-    metrics::Metrics,
-    policy::{self, Action as PolicyAction, State},
-    reference::value_at,
-    resolve::{Node, resolve_credentials, resolve_value},
-    resource::{EXTERNAL_NAME, ManagedResource, OperationDescriptor},
-    status::{record_failure, set_conditions, update_status},
+    error::{ReconcileError, Retry},
+    external,
+    resource::{EXTERNAL_NAME, ManagedResource},
 };
+use conditions::ConditionSpec;
+use create_state::CreateState;
+use drift::drift;
 use futures::{StreamExt as _, TryStreamExt as _};
 use kube::runtime::{
     Controller, Predicate as _, PredicateConfig, WatchStreamExt as _,
     controller::Action,
-    events::{Event, EventType, Recorder},
+    events::{Event, EventType},
     predicates, reflector, watcher,
 };
-use std::{
-    collections::HashMap,
-    sync::{Arc, Mutex, PoisonError},
-    time::Duration,
-};
+use policy::{Action as PolicyAction, State};
+use status::{record_failure, set_conditions, update_status};
+use std::{sync::Arc, time::Duration};
 use tracing::Instrument as _;
 
 /// Requeue interval while the external resource is in sync.
@@ -40,213 +44,12 @@ const CONFIRM: Duration = Duration::from_secs(5);
 /// First transient retry; doubles per consecutive failure up to [`RESYNC`].
 const BACKOFF_BASE: Duration = Duration::from_secs(5);
 
-pub struct Observation {
-    pub exists: bool,
-    pub at_provider: Option<serde_json::Value>,
-}
-
-pub struct ControllerContext {
-    pub kube_client: kube::Client,
-    pub provider_client: HttpClient,
-    pub recorder: Recorder,
-    pub metrics: Arc<Metrics>,
-    /// Consecutive failures per object, for exponential backoff.
-    failures: Mutex<HashMap<String, u32>>,
-    /// Kinds whose controllers finished their initial sync.
-    synced: Mutex<std::collections::BTreeSet<&'static str>>,
-}
-
-impl ControllerContext {
-    #[must_use]
-    pub fn new(
-        kube_client: kube::Client,
-        provider_client: HttpClient,
-        recorder: Recorder,
-        metrics: Arc<Metrics>,
-    ) -> Self {
-        Self {
-            kube_client,
-            provider_client,
-            recorder,
-            metrics,
-            failures: Mutex::default(),
-            synced: Mutex::default(),
-        }
-    }
-
-    fn mark_synced(&self, kind: &'static str) {
-        let newly = self
-            .synced
-            .lock()
-            .unwrap_or_else(PoisonError::into_inner)
-            .insert(kind);
-        if newly {
-            tracing::info!(resource = kind, "initial sync complete");
-        }
-    }
-
-    /// Whether the controllers of all `kinds` finished their initial sync.
-    #[must_use]
-    pub fn is_synced(&self, kinds: &[&'static str]) -> bool {
-        let synced = self.synced.lock().unwrap_or_else(PoisonError::into_inner);
-        kinds.iter().all(|kind| synced.contains(kind))
-    }
-
-    fn failures(&self) -> std::sync::MutexGuard<'_, HashMap<String, u32>> {
-        self.failures.lock().unwrap_or_else(PoisonError::into_inner)
-    }
-}
-
-/// Resolves the path parameters of `operation`. `Ok(None)` when one derived from the
-/// resource itself (its external name) is not set: the external resource does not
-/// exist yet. A referenced resource without an identifier is an error
-/// (`ReferenceNotReady`).
-async fn resolve_parameters(
-    context: &ControllerContext,
-    node: &Node,
-    operation: &OperationDescriptor,
-) -> Result<Option<Vec<(&'static str, String)>>, ReconcileError> {
-    let mut parameters = Vec::new();
-    for (name, expression) in operation.path_parameters {
-        let Some(value) = resolve_value(&context.kube_client, node, expression).await? else {
-            tracing::debug!(parameter = name, "external name not set");
-            return Ok(None);
-        };
-        parameters.push((*name, value));
-    }
-    Ok(Some(parameters))
-}
-
-fn as_pairs<'a>(parameters: &'a [(&'static str, String)]) -> Vec<(&'static str, &'a str)> {
-    parameters
-        .iter()
-        .map(|(name, value)| (*name, value.as_str()))
-        .collect()
-}
-
-/// Reads the external resource through `R::Observe`; see [`resolve_parameters`] for
-/// a resource without an external name.
-///
-/// # Errors
-///
-/// Returns [`ReconcileError`] when a reference or the credentials cannot be
-/// resolved, or the request fails.
-pub async fn observe<R: ManagedResource>(
-    context: &ControllerContext,
-    resource: &R,
-) -> Result<Observation, ReconcileError> {
-    let node = Node::of(resource)?;
-    let descriptor = node.descriptor;
-
-    let Some(parameters) = resolve_parameters(context, &node, &descriptor.observe).await? else {
-        return Ok(Observation {
-            exists: false,
-            at_provider: None,
-        });
-    };
-    let auth = resolve_credentials(&context.kube_client, &node).await?;
-    // Raw JSON: a response that does not match the generated type must not stop the
-    // controller from knowing whether the resource exists (e.g. to delete it); the
-    // mismatch surfaces when `atProvider` is written to the status.
-    let response = context
-        .provider_client
-        .send_json::<R::Observe>(&auth, &as_pairs(&parameters), None)
-        .await?;
-
-    let at_provider = match &response {
-        Some(response) => extract(response, descriptor.observe.response_path)?,
-        None => None,
-    };
-    Ok(Observation {
-        exists: response.is_some(),
-        at_provider,
-    })
-}
-
-/// Sends the desired state through `R::Update` (response body ignored).
-///
-/// # Errors
-///
-/// Returns [`ReconcileError`] when the resource has no update operation, the body
-/// cannot be built, a reference or the credentials cannot be resolved, or the
-/// request fails.
-pub async fn update<R: ManagedResource>(
-    context: &ControllerContext,
-    resource: &R,
-) -> Result<(), ReconcileError> {
-    let node = Node::of(resource)?;
-    let operation = node.descriptor.update.as_ref().ok_or_else(|| {
-        ReconcileError::Unsupported(format!("{} has no update operation", node.descriptor.kind))
-    })?;
-    let parameters = resolve_parameters(context, &node, &operation.operation)
-        .await?
-        .ok_or_else(|| {
-            ResolveValueError::Missing(format!("{} has no external name", node.descriptor.kind))
-        })?;
-    let body: <R::Update as crate::http::Operation>::Request =
-        crate::request::build(&context.kube_client, &node, &operation.request).await?;
-    let auth = resolve_credentials(&context.kube_client, &node).await?;
-    context
-        .provider_client
-        .send_discarding::<R::Update>(&auth, &as_pairs(&parameters), Some(&body))
-        .await?;
-    Ok(())
-}
-
-/// Desired fields that differ from the observation (see [`crate::drift`]).
-///
-/// # Errors
-///
-/// Returns [`ReconcileError`] when the resource cannot be serialized.
-pub fn drift<R: ManagedResource>(
-    resource: &R,
-    observation: &Observation,
-) -> Result<Vec<String>, ReconcileError> {
-    let Some(observed) = &observation.at_provider else {
-        return Ok(Vec::new());
-    };
-    let from = R::descriptor()
-        .update
-        .as_ref()
-        .map_or("spec.forProvider", |update| update.request.from);
-    let value = serde_json::to_value(resource)?;
-    Ok(value_at(&value, from).map_or_else(Vec::new, |desired| drifted(desired, observed)))
-}
-
-/// Deletes the external resource through `R::Delete`. `Ok(false)` when it was
-/// already gone.
-///
-/// # Errors
-///
-/// Returns [`ReconcileError`] when the resource has no delete operation, a
-/// reference or the credentials cannot be resolved, or the request fails.
-pub async fn delete<R: ManagedResource>(
-    context: &ControllerContext,
-    resource: &R,
-) -> Result<bool, ReconcileError> {
-    let node = Node::of(resource)?;
-    let operation = node.descriptor.delete.as_ref().ok_or_else(|| {
-        ResolveValueError::Missing(format!(
-            "{} has no delete operation; set deletionPolicy: Orphan",
-            node.descriptor.kind
-        ))
-    })?;
-    let Some(parameters) = resolve_parameters(context, &node, operation).await? else {
-        return Ok(false);
-    };
-    let auth = resolve_credentials(&context.kube_client, &node).await?;
-    Ok(context
-        .provider_client
-        .send_discarding::<R::Delete>(&auth, &as_pairs(&parameters), None)
-        .await?)
-}
-
 /// Observes the external resource and records the result in the status. On failure
 /// records `Synced=False` and a warning event before returning the error.
 ///
 /// # Errors
 ///
-/// See [`observe`] and [`update_status`].
+/// See [`external::observe`] and [`update_status`].
 pub async fn reconcile<R: ManagedResource>(
     resource: Arc<R>,
     context: Arc<ControllerContext>,
@@ -268,7 +71,7 @@ pub async fn reconcile<R: ManagedResource>(
         );
         match result {
             Ok(action) => {
-                context.failures().remove(&object_key(resource.as_ref()));
+                context.backoff.succeeded(&object_key(resource.as_ref()));
                 Ok(action)
             }
             Err(error) => {
@@ -310,7 +113,7 @@ async fn reconcile_inner<R: ManagedResource>(
         return release(context, resource, true).await;
     }
 
-    let observation = observe(context, resource).await?;
+    let observation = external::observe(context, resource).await?;
     let drifted_fields = if observation.exists && !deleting {
         drift(resource, &observation)?
     } else {
@@ -398,7 +201,7 @@ async fn delete_external<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
 ) -> Result<Action, ReconcileError> {
-    let existed = delete(context, resource).await?;
+    let existed = external::delete(context, resource).await?;
     tracing::info!(existed, "external resource deleted");
     context.metrics.action(R::descriptor().kind, "deleted");
     set_conditions(
@@ -454,7 +257,7 @@ async fn update_external<R: ManagedResource>(
     resource: &R,
     drifted_fields: &[String],
 ) -> Result<Action, ReconcileError> {
-    update(context, resource).await?;
+    external::update(context, resource).await?;
     tracing::info!(?drifted_fields, "external resource updated");
     context.metrics.action(R::descriptor().kind, "updated");
     publish(
@@ -466,7 +269,7 @@ async fn update_external<R: ManagedResource>(
     )
     .await;
 
-    let observation = observe(context, resource).await?;
+    let observation = external::observe(context, resource).await?;
     let remaining = drift(resource, &observation)?;
     if !remaining.is_empty() {
         tracing::warn!(?remaining, "drift persists after update");
@@ -496,9 +299,9 @@ async fn create_external<R: ManagedResource>(
         return Err(ReconcileError::CreateIncomplete(format!(
             "a previous create may have succeeded ({} is set, no outcome recorded); if the \
              external resource exists set {} to its ID, otherwise remove {}",
-            descriptor.annotation(create::CREATE_PENDING),
+            descriptor.annotation(create_state::CREATE_PENDING),
             descriptor.annotation(EXTERNAL_NAME),
-            descriptor.annotation(create::CREATE_PENDING),
+            descriptor.annotation(create_state::CREATE_PENDING),
         )));
     }
     if state.recently_succeeded(jiff::Timestamp::now()) {
@@ -515,7 +318,7 @@ async fn create_external<R: ManagedResource>(
         return Ok(Action::requeue(CONFIRM));
     }
 
-    let external_name = create::create(context, resource).await?;
+    let external_name = external::create(context, resource).await?;
     tracing::info!(%external_name, "external resource created");
     context.metrics.action(R::descriptor().kind, "created");
     publish(
@@ -539,15 +342,10 @@ pub fn error_policy<R: ManagedResource>(
     error: &ReconcileError,
     context: Arc<ControllerContext>,
 ) -> Action {
-    let attempts = {
-        let mut failures = context.failures();
-        let attempts = failures.entry(object_key(resource.as_ref())).or_insert(0);
-        *attempts = attempts.saturating_add(1);
-        *attempts
-    };
+    let attempts = context.backoff.failed(&object_key(resource.as_ref()));
     let delay = match error.retry() {
         Retry::Transient(Some(retry_after)) => retry_after,
-        Retry::Transient(None) => backoff(attempts),
+        Retry::Transient(None) => Backoff::delay(attempts),
         Retry::Waiting => WAITING,
         Retry::Permanent => RESYNC,
     };
@@ -555,11 +353,7 @@ pub fn error_policy<R: ManagedResource>(
     Action::requeue(delay)
 }
 
-fn backoff(attempts: u32) -> Duration {
-    let exponent = attempts.saturating_sub(1).min(16);
-    BACKOFF_BASE.saturating_mul(1 << exponent).min(RESYNC)
-}
-
+/// `<kind>/<namespace>/<name>`, the key of an object in metrics and backoff.
 pub(crate) fn object_key<R: ManagedResource>(resource: &R) -> String {
     format!(
         "{}/{}/{}",
@@ -622,7 +416,7 @@ pub async fn run<R: ManagedResource>(context: Arc<ControllerContext>) {
         .reflect(writer)
         .inspect_ok(move |event| {
             if matches!(event, watcher::Event::InitDone) {
-                sync_context.mark_synced(kind);
+                sync_context.synced.mark(kind);
             }
         })
         .applied_objects()

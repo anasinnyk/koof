@@ -6,36 +6,9 @@ use roas_overlay::{
 };
 use serde_json::Value;
 use std::{
-    fs, io,
+    fs,
     path::{Path, PathBuf},
 };
-use thiserror::Error;
-
-#[derive(Debug, Error)]
-pub enum LoaderError {
-    #[error("failed to read {path}: {source}")]
-    Read {
-        path: PathBuf,
-        #[source]
-        source: io::Error,
-    },
-
-    #[error("failed to parse YAML {path}: {source}")]
-    Yaml {
-        path: PathBuf,
-        #[source]
-        source: serde_yaml::Error,
-    },
-
-    #[error("failed to apply overlay {path}: {message}")]
-    Overlay { path: PathBuf, message: String },
-
-    #[error("failed to build ProviderIr: {0}")]
-    Ir(String),
-
-    #[error("invalid OpenAPI: {0}")]
-    InvalidOpenApi(String),
-}
 
 /// Reads an `OpenAPI` document and applies overlays in the given order.
 ///
