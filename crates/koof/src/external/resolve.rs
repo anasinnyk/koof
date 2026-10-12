@@ -1,7 +1,3 @@
-//! Resolution of [`ValueExpr`]s and credentials against live Kubernetes objects.
-//! Related resources are read as `DynamicObject`s and handled as JSON, so this code
-//! does not depend on generated types.
-
 use super::http::Auth;
 use crate::{
     error::{CredentialError, ResolveValueError},
@@ -17,11 +13,9 @@ use k8s_openapi::api::core::v1::Secret;
 use kube::api::{Api, DynamicObject};
 use serde_json::Value;
 
-/// A resource instance as JSON, with its descriptor and namespace.
 #[derive(Debug, Clone)]
 pub struct Node {
     pub descriptor: &'static ResourceDescriptor,
-    /// `None` for cluster-scoped resources.
     pub namespace: Option<String>,
     pub value: Value,
 }
@@ -84,9 +78,6 @@ pub fn resolve_value<'a>(
                         target.descriptor.kind
                     ))
                 })?;
-                // The related resource exists but has no identifier yet (e.g. it is
-                // still being created): wait for it instead of treating the value as
-                // unset.
                 resolve_value(client, &target, identifier)
                     .await?
                     .map_or_else(

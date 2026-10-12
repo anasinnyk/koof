@@ -1,20 +1,5 @@
-//! Schema helpers for CRDs derived from generated types.
-
 use serde_json::{Map, Value};
 
-/// `#[schemars(transform = koof::schema::flatten_unions)]`.
-///
-/// A structural CRD schema allows no types or descriptions inside `oneOf` /
-/// `anyOf`, and kube's rewriter only merges variants whose shared properties are
-/// identical — which tagged unions (DNS records keyed by `type`), scalar unions
-/// (`integer | string` ports) and mixed unions never satisfy. Every union is
-/// replaced by one schema:
-/// - object variants are merged: identical properties kept, conflicting ones
-///   relaxed, `required` = intersection;
-/// - scalars of one type become that type (enums unioned, `nullable` kept);
-/// - `integer | string` becomes `x-kubernetes-int-or-string`;
-/// - anything else becomes `x-kubernetes-preserve-unknown-fields` (validated by the
-///   provider API instead of the API server).
 pub fn flatten_unions(schema: &mut schemars::Schema) {
     if let Some(node) = schema.as_object_mut() {
         flatten(node);
@@ -22,7 +7,6 @@ pub fn flatten_unions(schema: &mut schemars::Schema) {
     }
 }
 
-/// Keywords that give a schema node a shape even without `type`.
 const SHAPED: [&str; 7] = [
     "type",
     "properties",
@@ -33,11 +17,6 @@ const SHAPED: [&str; 7] = [
     "x-kubernetes-int-or-string",
 ];
 
-/// Final touches on every schema node (properties, items, additionalProperties —
-/// never data such as defaults): "any value" nodes (`true`, `{}`, only a
-/// description; `serde_json::Value` in the generated types) have no `type`, which a
-/// structural schema forbids, so they get `x-kubernetes-preserve-unknown-fields`;
-/// `null` is dropped from enums in favour of `nullable`.
 fn fill_untyped(node: &mut Map<String, Value>) {
     for key in ["items", "additionalProperties"] {
         if let Some(child) = node.get_mut(key) {
@@ -47,8 +26,6 @@ fn fill_untyped(node: &mut Map<String, Value>) {
     if let Some(Value::Object(properties)) = node.get_mut("properties") {
         properties.values_mut().for_each(fill_untyped_value);
     }
-    // `null` in an enum trips kubectl's client-side validation; `nullable` already
-    // lets the API server accept null before the enum is checked.
     if let Some(Value::Array(values)) = node.get_mut("enum")
         && values.iter().any(Value::is_null)
     {
@@ -150,7 +127,6 @@ fn merge_objects(node: &mut Map<String, Value>, objects: &[&Map<String, Value>])
     }
 }
 
-/// Non-object (or mixed) union → one schema at `node`, per the rules above.
 fn merge_scalars(node: &mut Map<String, Value>, variants: &[Value]) {
     let mut types = std::collections::BTreeSet::new();
     let mut nullable = false;
@@ -205,7 +181,6 @@ fn visit(value: &mut Value) {
     }
 }
 
-/// Replaces `existing` with what it and `incoming` agree on.
 fn relax(existing: &mut Value, incoming: &Value) {
     let (Some(left), Some(right)) = (existing.as_object(), incoming.as_object()) else {
         return;
@@ -257,8 +232,6 @@ fn relax(existing: &mut Value, incoming: &Value) {
     *existing = Value::Object(relaxed);
 }
 
-/// A CEL rule for `x-kubernetes-validations`, placed at `field` (dot path of
-/// properties below the transformed schema; empty for its root).
 #[derive(Debug)]
 pub struct Validation {
     pub rule: &'static str,
@@ -266,10 +239,6 @@ pub struct Validation {
     pub field: &'static str,
 }
 
-/// Adds `validations` as `x-kubernetes-validations` to the schema nodes they name.
-/// Run after [`flatten_unions`], so that union properties exist. A rule whose
-/// field is not in the schema is skipped with a warning (the CRD would otherwise
-/// fail in a less obvious way).
 pub fn add_validations(schema: &mut schemars::Schema, validations: &[Validation]) {
     for validation in validations {
         let Some(node) = schema

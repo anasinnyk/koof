@@ -1,5 +1,3 @@
-//! State shared by all controllers of the operator.
-
 use super::{BACKOFF_BASE, RESYNC};
 use crate::{external::http::HttpClient, metrics::Metrics};
 use kube::runtime::events::Recorder;
@@ -37,15 +35,12 @@ impl ControllerContext {
     }
 }
 
-/// Consecutive failures per object, for exponential backoff.
 #[derive(Debug, Default)]
 pub struct Backoff {
     failures: Mutex<HashMap<String, u32>>,
 }
 
 impl Backoff {
-    /// Records another failure of object `key`; returns the number of consecutive
-    /// failures.
     pub fn failed(&self, key: &str) -> u32 {
         let mut failures = self.failures.lock().unwrap_or_else(PoisonError::into_inner);
         let attempts = failures.entry(key.to_owned()).or_insert(0);
@@ -53,7 +48,6 @@ impl Backoff {
         *attempts
     }
 
-    /// Forgets the failures of object `key`.
     pub fn succeeded(&self, key: &str) {
         self.failures
             .lock()
@@ -61,8 +55,6 @@ impl Backoff {
             .remove(key);
     }
 
-    /// Delay after `attempts` consecutive failures: [`BACKOFF_BASE`], doubled per
-    /// failure, at most [`RESYNC`].
     #[must_use]
     pub fn delay(attempts: u32) -> Duration {
         let exponent = attempts.saturating_sub(1).min(16);
@@ -70,14 +62,12 @@ impl Backoff {
     }
 }
 
-/// Kinds whose controllers finished their initial sync, for `/readyz`.
 #[derive(Debug, Default)]
 pub struct SyncTracker {
     synced: Mutex<BTreeSet<&'static str>>,
 }
 
 impl SyncTracker {
-    /// Records that the controller of `kind` finished its initial sync.
     pub fn mark(&self, kind: &'static str) {
         let newly = self
             .synced
@@ -89,7 +79,6 @@ impl SyncTracker {
         }
     }
 
-    /// Whether the controllers of all `kinds` finished their initial sync.
     #[must_use]
     pub fn all(&self, kinds: &[&'static str]) -> bool {
         let synced = self.synced.lock().unwrap_or_else(PoisonError::into_inner);

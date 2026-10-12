@@ -1,6 +1,3 @@
-//! Dot paths such as `spec.forProvider.zoneRef` into JSON values. Empty segments
-//! are ignored, so the empty path addresses the whole value.
-
 use crate::error::ResolveValueError;
 use serde_json::{Map, Value};
 
@@ -8,19 +5,16 @@ fn segments(path: &str) -> impl Iterator<Item = &str> {
     path.split('.').filter(|segment| !segment.is_empty())
 }
 
-/// Value at `path`.
 #[must_use]
 pub fn get<'a>(value: &'a Value, path: &str) -> Option<&'a Value> {
     segments(path).try_fold(value, |current, segment| current.get(segment))
 }
 
-/// Value at `path`; `None` when missing or `null`.
 #[must_use]
 pub fn get_non_null<'a>(value: &'a Value, path: &str) -> Option<&'a Value> {
     get(value, path).filter(|value| !value.is_null())
 }
 
-/// Mutable value at `path`.
 #[must_use]
 pub fn get_mut<'a>(value: &'a mut Value, path: &str) -> Option<&'a mut Value> {
     segments(path).try_fold(value, |current, segment| current.get_mut(segment))
@@ -43,8 +37,6 @@ pub fn scalar(value: &Value, path: &str) -> Result<Option<String>, ResolveValueE
     }
 }
 
-/// Writes `value` at `path`, creating intermediate objects (and replacing
-/// non-objects on the way).
 pub fn set(target: &mut Value, path: &str, value: Value) {
     let mut current = target;
     let mut segments = segments(path).peekable();

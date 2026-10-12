@@ -1,7 +1,3 @@
-//! Calls to the provider API for one managed resource: observe, create, update and
-//! delete through its [`Operation`]s, with path parameters, request bodies and
-//! credentials resolved from the [`crate::ResourceDescriptor`].
-
 pub mod http;
 pub mod request;
 pub mod resolve;
@@ -19,24 +15,17 @@ use http::{Auth, HttpError, Operation};
 use resolve::{Node, resolve_credentials, resolve_value};
 use serde_json::Value;
 
-/// What observing the external resource found.
 pub struct Observation {
     pub exists: bool,
-    /// The resource inside the observe response, as raw JSON.
     pub at_provider: Option<Value>,
 }
 
-/// Path parameters and credentials for one provider request.
 struct Call {
     parameters: Vec<(&'static str, String)>,
     auth: Auth,
 }
 
 impl Call {
-    /// Resolves the path parameters of `operation`, then the credentials. `Ok(None)`
-    /// when a parameter is not set: one derived from the resource itself (its
-    /// external name) is unset while the external resource does not exist yet. A
-    /// referenced resource without an identifier is an error (`ReferenceNotReady`).
     async fn prepare(
         context: &ControllerContext,
         node: &Node,
@@ -49,7 +38,6 @@ impl Call {
         Ok(Some(Self { parameters, auth }))
     }
 
-    /// Like [`prepare`](Self::prepare), but an unset parameter is an error.
     async fn prepare_required(
         context: &ControllerContext,
         node: &Node,
@@ -75,8 +63,6 @@ impl Call {
     }
 }
 
-/// Values of the path parameters of `operation`; `Err(name)` of the first one that
-/// is not set.
 async fn resolve_parameters(
     context: &ControllerContext,
     node: &Node,
@@ -117,9 +103,6 @@ pub async fn observe<R: ManagedResource>(
             at_provider: None,
         });
     };
-    // Raw JSON: a response that does not match the generated type must not stop the
-    // controller from knowing whether the resource exists (e.g. to delete it); the
-    // mismatch surfaces when `atProvider` is written to the status.
     let response = context
         .provider_client
         .send_json::<R::Observe>(&call.auth, &call.parameters(), None)
@@ -171,7 +154,6 @@ pub async fn create<R: ManagedResource>(
     {
         Ok(response) => response,
         Err(error @ HttpError::Status { .. }) => {
-            // The API answered: nothing was created, a later retry is safe.
             create_state::annotate(
                 &context.kube_client,
                 &resource,
@@ -180,7 +162,6 @@ pub async fn create<R: ManagedResource>(
             .await?;
             return Err(error.into());
         }
-        // Transport errors leave the create pending: its outcome is unknown.
         Err(error) => return Err(error.into()),
     };
 

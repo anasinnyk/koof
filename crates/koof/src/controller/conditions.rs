@@ -1,12 +1,8 @@
-//! Crossplane-style conditions: `Ready` (is the external resource there and usable)
-//! and `Synced` (did the last reconcile succeed).
-
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::{Condition, Time};
 
 pub const READY: &str = "Ready";
 pub const SYNCED: &str = "Synced";
 
-/// Longest message stored in a condition; provider error bodies can be large.
 const MAX_MESSAGE: usize = 1024;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -82,8 +78,6 @@ impl ConditionSpec {
     }
 }
 
-/// `conditions` with `spec` inserted or replaced. `lastTransitionTime` is kept when
-/// the status does not change.
 #[must_use]
 pub fn set(
     conditions: &[Condition],
@@ -119,7 +113,6 @@ pub fn set(
     result
 }
 
-/// Whether `conditions` has `type_` with status `True`.
 #[must_use]
 pub fn is_true(conditions: &[Condition], type_: &str) -> bool {
     conditions

@@ -1,9 +1,3 @@
-//! Writes to managed resources regardless of scope.
-//!
-//! A typed `Api<R>` fixes namespaced vs cluster scope at compile time; the runtime
-//! is generic over both, so it patches through `Api<DynamicObject>` with the
-//! resource's `ApiResource` and converts the result back to `R`.
-
 use crate::{error::ReconcileError, json_path, resource::ManagedResource};
 use kube::api::{Api, DynamicObject, Patch, PatchParams};
 use serde_json::Value;

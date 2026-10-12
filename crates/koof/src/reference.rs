@@ -1,5 +1,3 @@
-//! Reference fields of generated `spec.forProvider` types.
-
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 

@@ -23,6 +23,9 @@ pub mod queue;
 pub mod r2_bucket;
 pub mod spectrum_application;
 pub mod tunnel;
+pub mod tunnel_cidr_route;
+pub mod tunnel_configuration;
+pub mod tunnel_hostname_route;
 pub mod turnstile_widget;
 pub mod vectorize_index;
 pub mod waiting_room;
@@ -59,6 +62,9 @@ pub fn controllers(app: koof::App) -> koof::App {
         .controller::<r2_bucket::R2Bucket>()
         .controller::<spectrum_application::SpectrumApplication>()
         .controller::<tunnel::Tunnel>()
+        .controller::<tunnel_cidr_route::TunnelCidrRoute>()
+        .controller::<tunnel_configuration::TunnelConfiguration>()
+        .controller::<tunnel_hostname_route::TunnelHostnameRoute>()
         .controller::<turnstile_widget::TurnstileWidget>()
         .controller::<vectorize_index::VectorizeIndex>()
         .controller::<waiting_room::WaitingRoom>()
@@ -94,7 +100,10 @@ pub fn crds() -> Vec<
         ::crd(), < r2_bucket::R2Bucket as kube::CustomResourceExt > ::crd(), <
         spectrum_application::SpectrumApplication as kube::CustomResourceExt > ::crd(), <
         tunnel::Tunnel as kube::CustomResourceExt > ::crd(), <
-        turnstile_widget::TurnstileWidget as kube::CustomResourceExt > ::crd(), <
+        tunnel_cidr_route::TunnelCidrRoute as kube::CustomResourceExt > ::crd(), <
+        tunnel_configuration::TunnelConfiguration as kube::CustomResourceExt > ::crd(), <
+        tunnel_hostname_route::TunnelHostnameRoute as kube::CustomResourceExt > ::crd(),
+        < turnstile_widget::TurnstileWidget as kube::CustomResourceExt > ::crd(), <
         vectorize_index::VectorizeIndex as kube::CustomResourceExt > ::crd(), <
         waiting_room::WaitingRoom as kube::CustomResourceExt > ::crd(), <
         worker_route::WorkerRoute as kube::CustomResourceExt > ::crd(), < zone::Zone as

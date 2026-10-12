@@ -57,7 +57,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     group: "rulesets.cloudflare.kube.nas1k.dev",
     namespaced: true,
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
-    late_initialize: &["description", "name"],
+    late_initialize: &["description", "kind", "name", "phase", "rules"],
     references: &[
         koof::resource::Reference {
             name: "zone",

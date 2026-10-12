@@ -1,0 +1,59 @@
+# A remotely managed tunnel with its three kinds of routes (Networks -> Tunnels in
+# the dashboard). The routes take the account and credentials from the tunnel
+# (tunnelRef -> accountRef).
+apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+kind: Tunnel
+metadata:
+  name: home
+  namespace: default
+spec:
+  forProvider:
+    accountRef:
+      name: nas1k
+    name: home
+    config_src: cloudflare
+---
+# Published application routes: the tunnel's ingress rules, replaced as a whole.
+# The API cannot delete a configuration (it goes with the tunnel), hence Orphan.
+apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+kind: TunnelConfiguration
+metadata:
+  name: home
+  namespace: default
+spec:
+  deletionPolicy: Orphan
+  forProvider:
+    tunnelRef:
+      name: home
+    config:
+      ingress:
+        - hostname: app.nas1k.dev
+          service: http://app.default.svc.cluster.local:8080
+        # The last rule must be a catch-all without a hostname.
+        - service: http_status:404
+---
+# CIDR route: a private network reachable through the tunnel.
+apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+kind: TunnelCidrRoute
+metadata:
+  name: home-lan
+  namespace: default
+spec:
+  forProvider:
+    tunnelRef:
+      name: home
+    network: 10.0.0.0/24
+    comment: managed by koof
+---
+# Hostname route: a private hostname resolved and reached through the tunnel.
+apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+kind: TunnelHostnameRoute
+metadata:
+  name: home-nas
+  namespace: default
+spec:
+  forProvider:
+    tunnelRef:
+      name: home
+    hostname: nas.home.internal
+    comment: managed by koof

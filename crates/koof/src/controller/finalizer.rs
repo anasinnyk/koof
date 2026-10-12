@@ -1,13 +1,5 @@
-//! The managed-resource finalizer: added before the controller may change anything
-//! externally, removed once the external resource is deleted or orphaned.
-//!
-//! Patches carry the full finalizer list together with `metadata.resourceVersion`
-//! ([`crate::object::patch_guarded`]), so a concurrent change to the object makes
-//! the patch fail with a conflict instead of dropping someone else's finalizer.
-
 use crate::{error::ReconcileError, object, resource::ManagedResource};
 
-/// Whether `resource` carries its finalizer.
 #[must_use]
 pub fn has_finalizer<R: ManagedResource>(resource: &R) -> bool {
     kube::ResourceExt::finalizers(resource)

@@ -728,6 +728,86 @@ impl koof::Operation for TunnelUpdate {
     type Request = crate::generated::types::TunnelUpdateRequest;
     type Response = crate::generated::types::TunnelCfdTunnelResponseSingle;
 }
+pub struct TunnelCidrRouteCreate;
+impl koof::Operation for TunnelCidrRouteCreate {
+    const NAME: &'static str = "tunnel_cidr_route.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/accounts/{account_id}/teamnet/routes";
+    type Request = crate::generated::types::TunnelCidrRouteCreateRequest;
+    type Response = crate::generated::types::TunnelRouteResponseSingle;
+}
+pub struct TunnelCidrRouteDelete;
+impl koof::Operation for TunnelCidrRouteDelete {
+    const NAME: &'static str = "tunnel_cidr_route.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/accounts/{account_id}/teamnet/routes/{route_id}";
+    type Request = ();
+    type Response = crate::generated::types::TunnelRouteResponseSingle;
+}
+pub struct TunnelCidrRouteObserve;
+impl koof::Operation for TunnelCidrRouteObserve {
+    const NAME: &'static str = "tunnel_cidr_route.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}/teamnet/routes/{route_id}";
+    type Request = ();
+    type Response = crate::generated::types::TunnelRouteResponseSingle;
+}
+pub struct TunnelCidrRouteUpdate;
+impl koof::Operation for TunnelCidrRouteUpdate {
+    const NAME: &'static str = "tunnel_cidr_route.update";
+    const METHOD: reqwest::Method = reqwest::Method::PATCH;
+    const PATH: &'static str = "/accounts/{account_id}/teamnet/routes/{route_id}";
+    type Request = crate::generated::types::TunnelCidrRouteUpdateRequest;
+    type Response = crate::generated::types::TunnelRouteResponseSingle;
+}
+pub struct TunnelConfigurationObserve;
+impl koof::Operation for TunnelConfigurationObserve {
+    const NAME: &'static str = "tunnel_configuration.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}/cfd_tunnel/{tunnel_id}/configurations";
+    type Request = ();
+    type Response = crate::generated::types::TunnelConfigurationResponse;
+}
+pub struct TunnelConfigurationUpdate;
+impl koof::Operation for TunnelConfigurationUpdate {
+    const NAME: &'static str = "tunnel_configuration.update";
+    const METHOD: reqwest::Method = reqwest::Method::PUT;
+    const PATH: &'static str = "/accounts/{account_id}/cfd_tunnel/{tunnel_id}/configurations";
+    type Request = crate::generated::types::TunnelConfigurationUpdateRequest;
+    type Response = crate::generated::types::TunnelConfigurationResponse;
+}
+pub struct TunnelHostnameRouteCreate;
+impl koof::Operation for TunnelHostnameRouteCreate {
+    const NAME: &'static str = "tunnel_hostname_route.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/accounts/{account_id}/zerotrust/routes/hostname";
+    type Request = crate::generated::types::TunnelHostnameRouteCreateRequest;
+    type Response = crate::generated::types::TunnelHostnameRouteResponseSingle;
+}
+pub struct TunnelHostnameRouteDelete;
+impl koof::Operation for TunnelHostnameRouteDelete {
+    const NAME: &'static str = "tunnel_hostname_route.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}";
+    type Request = ();
+    type Response = crate::generated::types::TunnelHostnameRouteResponseSingle;
+}
+pub struct TunnelHostnameRouteObserve;
+impl koof::Operation for TunnelHostnameRouteObserve {
+    const NAME: &'static str = "tunnel_hostname_route.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}";
+    type Request = ();
+    type Response = crate::generated::types::TunnelHostnameRouteResponseSingle;
+}
+pub struct TunnelHostnameRouteUpdate;
+impl koof::Operation for TunnelHostnameRouteUpdate {
+    const NAME: &'static str = "tunnel_hostname_route.update";
+    const METHOD: reqwest::Method = reqwest::Method::PATCH;
+    const PATH: &'static str = "/accounts/{account_id}/zerotrust/routes/hostname/{hostname_route_id}";
+    type Request = crate::generated::types::TunnelHostnameRouteUpdateRequest;
+    type Response = crate::generated::types::TunnelHostnameRouteResponseSingle;
+}
 pub struct TurnstileWidgetCreate;
 impl koof::Operation for TurnstileWidgetCreate {
     const NAME: &'static str = "turnstile_widget.create";

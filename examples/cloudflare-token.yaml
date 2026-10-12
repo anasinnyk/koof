@@ -1,0 +1,10 @@
+# API token for the Account below. Create it with:
+#   kubectl create secret generic cf-token --from-literal=token="$CF_TOKEN"
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cf-token
+  namespace: default
+type: Opaque
+stringData:
+  token: replace-with-a-cloudflare-api-token

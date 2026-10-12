@@ -74,7 +74,6 @@ fn validate_unique_kinds(
     }
 }
 
-/// Checks and resolves one resource, recording what is wrong.
 struct Checker<'a, 'e> {
     ir: &'a ProviderIr,
     name: &'a ResourceName,
@@ -83,7 +82,6 @@ struct Checker<'a, 'e> {
 }
 
 impl<'a> Checker<'a, '_> {
-    /// The resolved resource; `None` when anything is wrong (errors recorded).
     fn resolve(&mut self, late_initialize: &'a [String]) -> Option<Resource<'a>> {
         let resource = self.resource;
         let errors_before = self.errors.len();
@@ -229,8 +227,6 @@ impl<'a> Checker<'a, '_> {
         })
     }
 
-    /// The `forProvider` field a reference or Secret selector lives in:
-    /// `spec.forProvider.<field>`, not nested.
     fn for_provider_field(&mut self, location: &str, path: &'a FieldPath) -> Option<&'a str> {
         let Some(field) = path.0.strip_prefix("spec.forProvider.") else {
             self.error(
@@ -252,8 +248,6 @@ impl<'a> Checker<'a, '_> {
     fn create(&mut self) -> Option<Create<'a>> {
         let operation = self.operation("create", self.resource.lifecycle.create.as_ref())?;
 
-        // The identifier backed by the external name annotation must come back in the
-        // create response, otherwise the new resource cannot be tracked.
         let Some(identifier) = self
             .resource
             .identifiers
@@ -289,7 +283,6 @@ impl<'a> Checker<'a, '_> {
         })
     }
 
-    /// The lifecycle operation `id`, with its path parameters checked.
     fn operation(&mut self, action: &str, id: Option<&'a OperationId>) -> Option<Operation<'a>> {
         let id = id?;
         let Some(operation) = self.ir.operations.get(id) else {

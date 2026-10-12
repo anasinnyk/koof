@@ -1,6 +1,3 @@
-//! The static `koof::ResourceDescriptor` of a resource and its
-//! `koof::ManagedResource` impl.
-
 use crate::{
     generator::{
         errors::GeneratorError,
@@ -82,7 +79,6 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
     })
 }
 
-/// `Some(<tokens>)` or `None`.
 fn optional(tokens: Option<TokenStream>) -> TokenStream {
     tokens.map_or_else(|| quote!(None), |tokens| quote!(Some(#tokens)))
 }
@@ -145,7 +141,6 @@ pub fn generate_managed_resource(
     })
 }
 
-/// `koof::resource::CreateDescriptor { .. }`.
 fn create_descriptor(create: Create<'_>) -> TokenStream {
     let request = request_mapping(create.operation);
     let operation = operation_descriptor(create.operation);
@@ -159,7 +154,6 @@ fn create_descriptor(create: Create<'_>) -> TokenStream {
     }
 }
 
-/// `koof::resource::UpdateDescriptor { .. }`.
 fn update_descriptor(operation: Operation<'_>) -> TokenStream {
     let request = request_mapping(operation);
     let operation = operation_descriptor(operation);
@@ -171,7 +165,6 @@ fn update_descriptor(operation: Operation<'_>) -> TokenStream {
     }
 }
 
-/// `koof::resource::RequestMapping { .. }`; defaults to `from: spec.forProvider`.
 fn request_mapping(operation: Operation<'_>) -> TokenStream {
     let mapping = operation.ir.request_mapping.clone().unwrap_or_default();
     let from = &mapping.from.0;
@@ -187,7 +180,6 @@ fn request_mapping(operation: Operation<'_>) -> TokenStream {
     }
 }
 
-/// `koof::resource::OperationDescriptor { .. }`.
 fn operation_descriptor(operation: Operation<'_>) -> TokenStream {
     let path_parameters = operation
         .ir

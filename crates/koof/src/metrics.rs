@@ -1,5 +1,3 @@
-//! Prometheus metrics of the operator, served on `/metrics` by [`crate::App`].
-
 use prometheus_client::{
     encoding::EncodeLabelSet,
     metrics::{
@@ -54,18 +52,15 @@ struct StateLabels {
 type Histograms<L> = Family<L, Histogram, fn() -> Histogram>;
 
 fn latency_histogram() -> Histogram {
-    // 5 ms … ~41 s
     Histogram::new(exponential_buckets(0.005, 2.0, 14))
 }
 
-/// `Ready` / `Synced` of one managed resource, for the `managed_resources` gauge.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct ObjectState {
     pub ready: bool,
     pub synced: bool,
 }
 
-/// Last known state of one managed resource.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 struct TrackedObject {
     kind: &'static str,
@@ -211,7 +206,6 @@ impl Metrics {
             .inc();
     }
 
-    /// `status_class`: `2xx`, `not_found`, `4xx`, `5xx` or `error` (no response).
     pub fn request(&self, operation: &str, status_class: &str, duration: Duration) {
         self.requests
             .get_or_create(&RequestLabels {
@@ -226,8 +220,6 @@ impl Metrics {
             .observe(duration.as_secs_f64());
     }
 
-    /// Records the Ready / Synced state of object `key`; `None` forgets it (the
-    /// managed resource is gone).
     pub fn object_state(&self, key: &str, kind: &'static str, state: Option<ObjectState>) {
         let mut objects = self.objects.lock().unwrap_or_else(PoisonError::into_inner);
         let previous = match state {

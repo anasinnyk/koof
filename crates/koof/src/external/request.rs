@@ -1,5 +1,3 @@
-//! Building provider request bodies from a managed resource.
-
 use super::resolve::{Node, resolve_value};
 use crate::{
     error::{ReconcileError, ResolveValueError},

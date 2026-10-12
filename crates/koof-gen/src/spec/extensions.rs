@@ -1,7 +1,3 @@
-//! The `x-kube-*` extensions of an `OpenAPI` document, typed. Every step that reads
-//! an extension goes through this module, so all of them agree on its shape and
-//! report malformed extensions the same way.
-
 use super::SpecError;
 use crate::ir::{
     CredentialsIr, FieldPath, ReferenceIr, RequestMappingIr, ResourceName, ScopeIr, ValidationIr,
@@ -16,12 +12,10 @@ pub const OPERATION: &str = "x-kube-operation";
 pub const FIELD: &str = "x-kube-field";
 pub const PROVIDER: &str = "x-kube-provider";
 
-/// Keys of a path item that hold operations.
 pub const HTTP_METHODS: [&str; 8] = [
     "get", "put", "post", "delete", "options", "head", "patch", "trace",
 ];
 
-/// `x-kube-resource` on a `components.schemas` entry.
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ResourceExtension {
@@ -43,7 +37,6 @@ pub struct ResourceExtension {
     pub immutable: Vec<String>,
 }
 
-/// `x-kube-resource.fields`: which properties become `forProvider` / `atProvider`.
 #[derive(Debug, Clone, PartialEq, Eq, Default, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FieldSelection {
@@ -62,7 +55,6 @@ pub enum FieldSelectionMode {
     Explicit,
 }
 
-/// `x-kube-operation` on an operation.
 #[derive(Debug, Deserialize)]
 pub struct OperationExtension {
     pub resource: ResourceName,
@@ -98,27 +90,21 @@ impl LifecycleAction {
     }
 }
 
-/// Where the resource lives inside the observe response body, as a dot path
-/// (e.g. `result` for `{ "success": true, "result": { ... } }`).
 #[derive(Debug, Deserialize)]
 pub struct ResponseExtension {
     pub path: String,
 }
 
-/// Values read from the response, e.g. `identifiers.external_id: response.body.result.id`.
 #[derive(Debug, Default, Deserialize)]
 pub struct ResultExtension {
     #[serde(default)]
     pub identifiers: BTreeMap<String, String>,
 }
 
-/// `x-kube-field` on a property schema.
 #[derive(Debug, Deserialize)]
 pub struct FieldExtension {
-    /// Not part of `forProvider` (with field selection `all`).
     #[serde(default)]
     pub ignored: bool,
-    /// May be late-initialized from `atProvider`.
     #[serde(default = "enabled")]
     pub late_initialize: bool,
 }
@@ -147,7 +133,6 @@ impl FieldExtension {
     }
 }
 
-/// An operation carrying `x-kube-operation`.
 pub struct KubeOperation<'a> {
     pub path: &'a str,
     pub method: &'a str,
@@ -156,7 +141,6 @@ pub struct KubeOperation<'a> {
 }
 
 impl KubeOperation<'_> {
-    /// `paths.<path>.<method>`, for messages.
     #[must_use]
     pub fn location(&self) -> String {
         format!("paths.{}.{}", self.path, self.method)
@@ -197,7 +181,6 @@ pub fn kube_operations(
         })
 }
 
-/// A `components.schemas` entry carrying `x-kube-resource`.
 pub struct KubeResource<'a> {
     pub schema_name: &'a str,
     pub schema: &'a Value,
@@ -229,7 +212,6 @@ pub fn kube_resources(document: &Value) -> impl Iterator<Item = Result<KubeResou
         })
 }
 
-/// Extension `name` of `node`, if present.
 fn parse<T: DeserializeOwned>(
     node: &Value,
     name: &'static str,

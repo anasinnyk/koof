@@ -4,7 +4,31 @@ info:
   version: 0.0.1
 extends: ./cloudflare.yaml
 actions:
-  - target: $.components.schemas.rulesets_Ruleset
+  # The resource schema: `rulesets_Ruleset` plus the `kind`, `phase` and `rules`
+  # the API declares only on request bodies and responses. A separate schema
+  # rather than new properties on `rulesets_Ruleset`: that one is merged (allOf)
+  # with the response's `rules` (a different union of ~20 rule types), which
+  # typify cannot merge in reasonable time. Rules are managed inline: a `PUT`
+  # replaces the whole list, and single rules have no observe endpoint.
+  - target: $.components.schemas
+    update:
+      rulesets_ZoneRuleset:
+        allOf:
+          - $ref: '#/components/schemas/rulesets_Ruleset'
+          - type: object
+            properties:
+              kind:
+                $ref: '#/components/schemas/rulesets_RulesetKind'
+              phase:
+                $ref: '#/components/schemas/rulesets_RulesetPhase'
+              rules:
+                $ref: '#/components/schemas/rulesets_RequestRules'
+            required:
+              - name
+              - kind
+              - phase
+
+  - target: $.components.schemas.rulesets_ZoneRuleset
     update:
       x-kube-resource:
         name: zone_ruleset
@@ -33,10 +57,16 @@ actions:
           forProvider:
             - name
             - description
+            - kind
+            - phase
+            - rules
           atProvider:
             - id
             - name
             - description
+            - kind
+            - phase
+            - rules
             - version
             - last_updated
 

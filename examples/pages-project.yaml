@@ -1,13 +1,23 @@
-apiVersion: cloudflare.cfrs.dev/v1alpha1
+# A Pages project for direct uploads (no Git source). The deployment configs are
+# required by the API schema; these are the API's defaults.
+apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
 kind: PagesProject
 metadata:
   name: example-pages
   namespace: default
 spec:
-  accountRef:
-    name: nas1k
-  name: example-pages
-  productionBranch: main
-  buildConfig:
-    build_command: npm run build
-    destination_dir: dist
+  forProvider:
+    accountRef:
+      name: nas1k
+    name: example-pages
+    production_branch: main
+    deployment_configs:
+      preview: &config
+        always_use_latest_compatibility_date: false
+        build_image_major_version: 3
+        compatibility_date: "2025-01-01"
+        compatibility_flags: []
+        env_vars: {}
+        fail_open: true
+        usage_model: standard
+      production: *config

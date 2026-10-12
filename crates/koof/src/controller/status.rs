@@ -1,5 +1,3 @@
-//! Writing the status of a managed resource after a reconcile.
-
 use super::{
     ControllerContext,
     conditions::{self, ConditionSpec},
@@ -11,10 +9,8 @@ use crate::{
 };
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::Condition;
 
-/// Outcome of a status update, for events.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct StatusChange {
-    /// `Ready` switched to `True` with this update.
     pub became_ready: bool,
 }
 
@@ -116,7 +112,6 @@ fn current_conditions<R: ManagedResource>(resource: &R) -> Vec<Condition> {
         .unwrap_or_default()
 }
 
-/// Feeds the `managed_resources` gauge.
 fn record_state<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,

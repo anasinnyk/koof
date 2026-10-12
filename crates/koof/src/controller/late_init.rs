@@ -1,10 +1,3 @@
-//! Late initialization: copy values the provider chose for fields the user did not
-//! set (provider defaults) into `spec.forProvider`, so the spec shows the real
-//! state, drift detection does not flap on them, and a changed provider default
-//! cannot silently change the resource. Never overwrites a value the user set.
-//!
-//! Top-level `forProvider` fields only: a partially set object is left alone.
-
 use crate::{error::ReconcileError, json_path, object, resource::ManagedResource};
 use serde_json::{Map, Value};
 
@@ -12,7 +5,9 @@ const FOR_PROVIDER: &str = "spec.forProvider";
 
 /// Observed values for late-initializable fields that are unset in the spec. A
 /// value that does not fit the spec's type (schemas of request and response can
-/// differ) is skipped.
+/// differ) is skipped, and so is one that the spec type cannot represent as set
+/// (e.g. an empty list skipped when serialized): writing it would change nothing
+/// and late initialization would repeat forever.
 ///
 /// # Errors
 ///
@@ -32,31 +27,60 @@ pub fn candidates<R: ManagedResource>(
         if is_set {
             continue;
         }
-        let Some(observed_value) = observed.get(*field).filter(|value| !value.is_null()) else {
+        let Some(observed_value) = observed
+            .get(*field)
+            .filter(|value| !value.is_null())
+            .map(without_nulls)
+        else {
             continue;
         };
-        if fits::<R>(&value, field, observed_value) {
-            fields.insert((*field).to_owned(), observed_value.clone());
-        } else {
-            tracing::debug!(
+        match trial::<R>(&value, field, &observed_value) {
+            Trial::Changes => {
+                fields.insert((*field).to_owned(), observed_value);
+            }
+            Trial::NoChange => {}
+            Trial::DoesNotFit => tracing::debug!(
                 field,
                 "observed value does not fit the spec type; not late-initialized"
-            );
+            ),
         }
     }
     Ok(fields)
 }
 
-/// Whether `resource` still deserializes with `field` set to `candidate`.
-fn fits<R: ManagedResource>(resource: &Value, field: &str, candidate: &Value) -> bool {
+fn without_nulls(value: &Value) -> Value {
+    match value {
+        Value::Object(object) => Value::Object(
+            object
+                .iter()
+                .filter(|(_, member)| !member.is_null())
+                .map(|(key, member)| (key.clone(), without_nulls(member)))
+                .collect(),
+        ),
+        Value::Array(items) => Value::Array(items.iter().map(without_nulls).collect()),
+        other => other.clone(),
+    }
+}
+
+enum Trial {
+    Changes,
+    NoChange,
+    DoesNotFit,
+}
+
+fn trial<R: ManagedResource>(resource: &Value, field: &str, candidate: &Value) -> Trial {
     let mut trial = resource.clone();
     let Some(for_provider) =
         json_path::get_mut(&mut trial, FOR_PROVIDER).and_then(Value::as_object_mut)
     else {
-        return false;
+        return Trial::DoesNotFit;
     };
     for_provider.insert(field.to_owned(), candidate.clone());
-    serde_json::from_value::<R>(trial).is_ok()
+    match serde_json::from_value::<R>(trial).map(|typed| serde_json::to_value(typed)) {
+        Ok(Ok(round_tripped)) if round_tripped == *resource => Trial::NoChange,
+        Ok(Ok(_)) => Trial::Changes,
+        Ok(Err(_)) | Err(_) => Trial::DoesNotFit,
+    }
 }
 
 /// Writes `fields` into `spec.forProvider` (merge patch with `resourceVersion`).
