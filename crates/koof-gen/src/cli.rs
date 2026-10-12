@@ -15,20 +15,15 @@ use std::{
 #[command(name = "koof-gen")]
 #[command(about = "Generate Kubernetes provider code from OpenAPI")]
 pub struct Args {
-    /// Source `OpenAPI` YAML or JSON file.
     #[arg(short = 'i', long, value_name = "FILE")]
     openapi: PathBuf,
 
-    /// Overlay files applied in the specified order.
     #[arg(long, value_name = "FILE")]
     overlay: Vec<PathBuf>,
 
-    /// Directory for generated files.
     #[arg(short = 'o', long, value_name = "DIRECTORY")]
     output: PathBuf,
 
-    /// Also write the preprocessed document (pruned, normalized, with synthesized
-    /// `forProvider` / `atProvider` schemas) as JSON, for inspection.
     #[arg(long, value_name = "FILE")]
     preprocessed_spec: Option<PathBuf>,
 }

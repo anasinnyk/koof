@@ -1,13 +1,17 @@
-apiVersion: cloudflare.cfrs.dev/v1alpha1
-kind: DnsRecord
+# A fully managed record: created, kept in sync with the spec (changes made in the
+# dashboard are reverted on the next resync) and deleted with the resource.
+apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+kind: DNSRecord
 metadata:
-  name: www-example-com
+  name: www-nas1k-dev
   namespace: default
 spec:
-  zoneRef:
-    name: example-com
-  type: A
-  name: www.example.com
-  content: 192.0.2.1
-  ttl: 1
-  proxied: true
+  forProvider:
+    zoneRef:
+      name: nas1k-dev
+    type: A
+    name: www.nas1k.dev
+    content: 192.0.2.1
+    ttl: 1 # automatic
+    proxied: true
+    comment: managed by koof

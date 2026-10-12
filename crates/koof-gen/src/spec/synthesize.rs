@@ -46,8 +46,6 @@ pub fn synthesize(
         let extension = &kube_resource.extension;
         let resource = Resource { schemas, extension };
 
-        // `required` matters for the create body only; a resource that cannot be
-        // created (import only) should not force fields on the user.
         let creatable = creatable.contains(&extension.name);
         resource.for_provider(
             kube_resource.schema_name,
@@ -84,8 +82,6 @@ pub fn synthesize(
         .collect()
 }
 
-/// Top-level fields of the synthesized `<Kind>ForProvider` (all variants of a
-/// union), minus those marked `x-kube-field: { late_initialize: false }`.
 fn late_initialize_fields(
     schemas: &Map<String, Value>,
     kind: &str,
@@ -160,8 +156,6 @@ impl Resource<'_> {
         self.filtered(&root, "observe response", response, &fields, false, out)
     }
 
-    /// Inserts `root` as one filtered object, or as a `oneOf` of filtered variants
-    /// when `schema` is a union.
     fn filtered(
         &self,
         root: &str,
@@ -297,10 +291,6 @@ impl Resource<'_> {
     }
 }
 
-/// One scalar schema for several definitions of the same field when all of them are
-/// scalars of one JSON type (e.g. `type` as `enum: [A]` in one DNS record variant and
-/// `enum: [MX]` in another): enums are unioned when every definition has one,
-/// differing keywords such as `format` are dropped, `null` is kept if any allows it.
 fn merge_scalars(schemas: &Map<String, Value>, definitions: &[Value]) -> Option<Value> {
     let resolved: Vec<&Value> = definitions
         .iter()
@@ -374,7 +364,6 @@ fn names(paths: &[FieldPath]) -> Vec<String> {
     paths.iter().map(|path| path.0.clone()).collect()
 }
 
-/// Resources with an `x-kube-operation` of lifecycle `create`.
 fn creatable_resources(document: &Value) -> Result<BTreeSet<ResourceName>, SpecError> {
     let mut resources = BTreeSet::new();
     for kube_operation in kube_operations(document) {
@@ -386,7 +375,6 @@ fn creatable_resources(document: &Value) -> Result<BTreeSet<ResourceName>, SpecE
     Ok(resources)
 }
 
-/// Observe response schemas per resource name, descended to `response.path`.
 fn observe_responses(
     document: &Value,
     schemas: &Map<String, Value>,
@@ -408,9 +396,6 @@ fn observe_responses(
                 .split('.')
                 .filter(|segment| !segment.is_empty())
             {
-                // An envelope often declares the property twice (a generic
-                // `result` in the base schema, the concrete one in an `allOf`
-                // extension); all definitions apply, so combine them.
                 let mut definitions: Vec<Value> = find_property(schemas, &schema, segment)
                     .into_iter()
                     .map(|(property, _)| property)
@@ -436,8 +421,6 @@ fn observe_responses(
     Ok(responses)
 }
 
-/// Every definition of property `field` reachable through `$ref` and
-/// `allOf`/`anyOf`/`oneOf`, with whether the declaring node requires it.
 fn find_property(schemas: &Map<String, Value>, schema: &Value, field: &str) -> Vec<(Value, bool)> {
     let mut found = Vec::new();
     walk_properties(
@@ -488,8 +471,6 @@ fn walk_properties(
     }
 }
 
-/// Flattens `anyOf`/`oneOf` (through `$ref`) into leaf variants, remembering the
-/// component name each leaf came from.
 fn collect_variants(
     schemas: &Map<String, Value>,
     schema: &Value,
@@ -520,8 +501,6 @@ fn collect_variants(
     }
 }
 
-/// `dns-records_ARecord` → `ARecord`; falls back to the full name, then to
-/// `Variant<index>`, so suffixes stay unique.
 fn variant_suffix(name: Option<&str>, index: usize, used: &mut BTreeSet<String>) -> String {
     let candidates = name
         .map(|name| {

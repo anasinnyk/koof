@@ -156,9 +156,6 @@ fn extract_resources(
     Ok(resources)
 }
 
-/// `apiKey` and `http` schemes; others (`oauth2`, `openIdConnect`) are not usable
-/// for operator credentials and are skipped (validation then reports an unknown
-/// scheme for a resource selecting one).
 fn extract_security_schemes(
     document: &Value,
 ) -> Result<BTreeMap<SecuritySchemeName, SecuritySchemeIr>, ExtractError> {

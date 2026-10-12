@@ -1,15 +1,9 @@
 use std::time::Duration;
 
-/// How a failed reconcile should be retried.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Retry {
-    /// Likely to succeed soon (network, `429`, `5xx`, Kubernetes API): exponential
-    /// backoff, or the server's `Retry-After` when given.
     Transient(Option<Duration>),
-    /// Waiting for something else to happen (a referenced resource or Secret does not
-    /// exist or is not ready yet).
     Waiting,
-    /// Will not succeed without a change to the resource (invalid spec, `4xx`).
     Permanent,
 }
 
@@ -120,8 +114,6 @@ impl CredentialError {
     }
 }
 
-/// A missing object (referenced resource, Secret) is something to wait for; other
-/// Kubernetes API failures are transient.
 fn kubernetes_retry(error: &kube::Error) -> Retry {
     match error {
         kube::Error::Api(status) if status.code == 404 => Retry::Waiting,

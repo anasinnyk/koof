@@ -69,8 +69,6 @@ pub fn hoist_operation_bodies(document: &mut Value) -> Result<(), SpecError> {
     Ok(())
 }
 
-/// Replaces a `{"$ref": "#/components/..."}` request body / response with a copy of
-/// its target, so it can be changed for this operation only.
 fn inline_reference(document: &Value, value: &mut Value) {
     if let Some(target) = value
         .get("$ref")
@@ -82,8 +80,6 @@ fn inline_reference(document: &Value, value: &mut Value) {
     }
 }
 
-/// Moves an inline JSON schema of `container` (a request body or response) to
-/// `name`; returns whether the container has a JSON schema at all.
 fn hoist(container: &mut Value, name: &str, hoisted: &mut Map<String, Value>) -> bool {
     let Some(media) = container
         .get_mut("content")

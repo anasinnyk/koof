@@ -42,7 +42,6 @@ pub struct ManagedResourceSpec {
 }
 
 impl ManagedResourceSpec {
-    /// Whether `action` is allowed by `managementPolicies`.
     #[must_use]
     pub fn allows(&self, action: ManagementAction) -> bool {
         self.management_policies.contains(&ManagementAction::All)

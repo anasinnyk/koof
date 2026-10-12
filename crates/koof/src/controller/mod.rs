@@ -1,7 +1,3 @@
-//! The controller loop for any [`ManagedResource`]: observe the external resource,
-//! decide (see [`policy`]) and act through [`crate::external`], record the outcome
-//! in the status and as events.
-
 pub mod conditions;
 mod context;
 pub mod create_state;
@@ -33,15 +29,10 @@ use status::{record_failure, set_conditions, update_status};
 use std::{sync::Arc, time::Duration};
 use tracing::Instrument as _;
 
-/// Requeue interval while the external resource is in sync.
 const RESYNC: Duration = Duration::from_mins(5);
-/// Requeue interval while the external resource does not exist.
 const MISSING: Duration = Duration::from_secs(30);
-/// Retry interval while waiting for a referenced resource or Secret.
 const WAITING: Duration = Duration::from_secs(15);
-/// Delay before confirming the outcome of a create or delete.
 const CONFIRM: Duration = Duration::from_secs(5);
-/// First transient retry; doubles per consecutive failure up to [`RESYNC`].
 const BACKOFF_BASE: Duration = Duration::from_secs(5);
 
 /// Observes the external resource and records the result in the status. On failure
@@ -105,7 +96,6 @@ async fn reconcile_inner<R: ManagedResource>(
     let resource = if deleting {
         resource
     } else {
-        // Before anything can be created externally, so deletion is never missed.
         ensured = finalizer::ensure(&context.kube_client, resource).await?;
         &ensured
     };
@@ -149,8 +139,6 @@ async fn reconcile_inner<R: ManagedResource>(
                 &format!("Filled from the provider: {}", names.join(", ")),
             )
             .await;
-            // The spec change (new generation) triggers the next reconcile, which
-            // continues with the updated spec.
             return Ok(Action::requeue(CONFIRM));
         }
     }
@@ -195,8 +183,6 @@ async fn reconcile_inner<R: ManagedResource>(
     }))
 }
 
-/// Deletes, then confirms on the next reconcile that the resource is gone before
-/// releasing the managed resource.
 async fn delete_external<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
@@ -224,7 +210,6 @@ async fn delete_external<R: ManagedResource>(
     Ok(Action::requeue(CONFIRM))
 }
 
-/// Removes the finalizer; `orphaned` when the external resource is kept.
 async fn release<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
@@ -249,9 +234,6 @@ async fn release<R: ManagedResource>(
     Ok(Action::await_change())
 }
 
-/// Updates, then observes again in the same reconcile so the status is fresh. If
-/// the drift persists (the API normalises a value, or ignores a field) the next
-/// attempt waits for the regular resync instead of looping.
 async fn update_external<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
@@ -329,12 +311,9 @@ async fn create_external<R: ManagedResource>(
         &format!("External resource created: {external_name}"),
     )
     .await;
-    // The annotation patch triggers the next reconcile, which observes it.
     Ok(Action::requeue(CONFIRM))
 }
 
-/// Requeue delay after a failed reconcile, by [`Retry`] class.
-// The signature is fixed by `kube::runtime::Controller::run`.
 #[allow(clippy::needless_pass_by_value)]
 #[must_use]
 pub fn error_policy<R: ManagedResource>(
@@ -353,7 +332,6 @@ pub fn error_policy<R: ManagedResource>(
     Action::requeue(delay)
 }
 
-/// `<kind>/<namespace>/<name>`, the key of an object in metrics and backoff.
 pub(crate) fn object_key<R: ManagedResource>(resource: &R) -> String {
     format!(
         "{}/{}/{}",
@@ -386,16 +364,11 @@ async fn publish<R: ManagedResource>(
     }
 }
 
-/// Runs the controller for `R` until a shutdown signal.
 pub async fn run<R: ManagedResource>(context: Arc<ControllerContext>) {
     let kind = R::descriptor().kind;
     let api = kube::Api::<R>::all(context.kube_client.clone());
     tracing::info!(resource = kind, "starting controller");
 
-    // Reconcile on spec (generation), external name, finalizer and deletion changes
-    // only — not on the controller's own status updates or create bookkeeping
-    // annotations (those would retrigger a failing create immediately instead of
-    // honouring the error policy's backoff).
     let external_name_key = R::descriptor().annotation(EXTERNAL_NAME);
     let external_name = move |resource: &R| {
         kube::ResourceExt::annotations(resource)
@@ -408,8 +381,6 @@ pub async fn run<R: ManagedResource>(context: Arc<ControllerContext>) {
     };
     let deleting = |resource: &R| resource.meta().deletion_timestamp.as_ref().map(|_| 1_u64);
     let (reader, writer) = reflector::store();
-    // Readiness from the stream itself: `Store::wait_until_ready` wakes only one
-    // waiter (the controller's), so a second waiter would never be woken.
     let sync_context = context.clone();
     let stream = watcher(api, watcher::Config::default())
         .default_backoff()

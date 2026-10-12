@@ -1,6 +1,3 @@
-//! The custom resource types of a resource: `<Kind>Spec` (the CRD),
-//! `<Kind>ForProviderSpec` and `<Kind>Status`.
-
 use crate::{
     generator::{
         errors::GeneratorError,
@@ -84,10 +81,6 @@ pub fn generate_spec(
     })
 }
 
-/// `koof::schema::Validation`s from `validations` and `immutable`. An immutable
-/// field gets `self == oldSelf` on itself (cannot change) and
-/// `!has(oldSelf.f) || has(self.f)` on its parent (cannot be removed); setting it
-/// the first time (e.g. by late initialization) stays allowed.
 fn validation_tokens(resource: &Resource<'_>) -> Vec<TokenStream> {
     let validation = |rule: &str, message: &str, field: &str| {
         quote! {

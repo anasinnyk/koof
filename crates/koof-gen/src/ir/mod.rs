@@ -1,10 +1,3 @@
-//! The provider IR: resources and operations described by the `x-kube-*`
-//! extensions of a prepared `OpenAPI` document ([`extract`]), checked and resolved
-//! for code generation by [`validate`].
-//!
-//! Types that also appear inside the extensions derive `Deserialize`; they are
-//! the extensions' schema as well.
-
 mod extract;
 pub mod resolved;
 mod validate;
@@ -18,7 +11,6 @@ use std::collections::BTreeMap;
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ProviderIr {
     pub provider: String,
-    /// First `servers[].url` of the document.
     pub base_url: String,
     pub resources: BTreeMap<ResourceName, ResourceIr>,
     pub operations: BTreeMap<OperationId, OperationIr>,
@@ -41,13 +33,10 @@ pub struct ResourceIr {
     pub references: BTreeMap<String, ReferenceIr>,
     pub credentials: Option<CredentialsIr>,
     pub lifecycle: LifecycleIr,
-    /// CEL rules added to the CRD schema (`x-kubernetes-validations`).
     pub validations: Vec<ValidationIr>,
-    /// `forProvider` fields that cannot change or be removed once set.
     pub immutable: Vec<String>,
 }
 
-/// `x-kube-resource.scope`.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Deserialize)]
 pub enum ScopeIr {
     #[default]
@@ -55,13 +44,10 @@ pub enum ScopeIr {
     Cluster,
 }
 
-/// A CEL rule from `x-kube-resource.validations`.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct ValidationIr {
     pub rule: String,
     pub message: String,
-    /// Dot path relative to `spec.forProvider` where the rule applies (`self`);
-    /// empty for `forProvider` itself.
     #[serde(default)]
     pub field: String,
 }
@@ -102,20 +88,13 @@ pub struct OperationIr {
     pub path: String,
     pub path_parameters: BTreeMap<String, ValueExpr>,
 
-    /// `components.schemas` name of the JSON request body, if any.
     pub request: Option<SchemaName>,
-    /// `components.schemas` name of the first successful JSON response, if any.
     pub response: Option<SchemaName>,
-    /// Dot path of the resource inside the response body (e.g. `result`).
     pub response_path: Option<String>,
-    /// How the request body is built (create / update).
     pub request_mapping: Option<RequestMappingIr>,
-    /// Identifiers read from the response, e.g.
-    /// `external_id: response.body.result.id`.
     pub result_identifiers: BTreeMap<String, String>,
 }
 
-/// `x-kube-operation.request`: the object at `from` plus `set` values.
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct RequestMappingIr {
     #[serde(default = "RequestMappingIr::default_from")]
@@ -145,7 +124,6 @@ pub enum ValueExpr {
     Field {
         path: FieldPath,
     },
-    /// The resource's external name annotation (`<group>/external-name`).
     ExternalName,
     RelatedIdentifier {
         via: Vec<String>,

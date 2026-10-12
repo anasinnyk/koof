@@ -18621,15 +18621,19 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Formatted CAA content. See 'data' to set CAA properties.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant0Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant0Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant0Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -18653,15 +18657,19 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Formatted CERT content. See 'data' to set CERT properties.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant1Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant1Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant1Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -18685,15 +18693,19 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Formatted DNSKEY content. See 'data' to set DNSKEY properties.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant2Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant2Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant2Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -18717,15 +18729,19 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Formatted DS content. See 'data' to set DS properties.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant3Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant3Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant3Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -18749,15 +18765,19 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Formatted HTTPS content. See 'data' to set HTTPS properties.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant4Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant4Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant4Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -18781,15 +18801,19 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Formatted LOC content. See 'data' to set LOC properties.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant5Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant5Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant5Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -18813,15 +18837,19 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Formatted NAPTR content. See 'data' to set NAPTR properties.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant6Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant6Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant6Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -18845,15 +18873,19 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Formatted SMIMEA content. See 'data' to set SMIMEA properties.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant7Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant7Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant7Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -18877,15 +18909,19 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Priority, weight, port, and SRV target. See 'data' for setting the individual component values.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant8Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant8Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant8Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -18909,15 +18945,19 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Formatted SSHFP content. See 'data' to set SSHFP properties.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant9Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant9Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant9Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -18941,15 +18981,19 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Formatted SVCB content. See 'data' to set SVCB properties.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant10Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant10Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant10Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -18973,15 +19017,19 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Formatted TLSA content. See 'data' to set TLSA properties.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant11Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant11Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant11Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -19005,17 +19053,21 @@ pub enum DnsRecordsDnsRecordResponseVariant1 {
         ///Formatted URI content. See 'data' to set URI properties.
         content: ::std::string::String,
         ///When the record was created.
-        created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         data: DnsRecordsDnsRecordResponseVariant1Variant12Data,
         id: DnsRecordsIdentifier,
-        meta: DnsRecordsDnsRecordResponseVariant1Variant12Meta,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        meta: ::std::option::Option<DnsRecordsDnsRecordResponseVariant1Variant12Meta>,
         ///When the record was last modified.
-        modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         name: DnsRecordsName,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         priority: ::std::option::Option<DnsRecordsPriority>,
         ///Whether the record can be proxied by Cloudflare or not.
-        proxiable: bool,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        proxiable: ::std::option::Option<bool>,
         proxied: DnsRecordsProxied,
         settings: DnsRecordsSettings,
         tags: DnsRecordsTags,
@@ -38375,35 +38427,45 @@ pub struct PagesBuildConfig {
 )]
 pub struct PagesDeployment {
     ///A list of alias URLs pointing to this deployment.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub aliases: ::std::option::Option<::std::vec::Vec<::std::string::String>>,
     pub build_config: PagesBuildConfig,
     ///When the deployment was created.
-    pub created_on: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub deployment_trigger: PagesDeploymentDeploymentTrigger,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deployment_trigger: ::std::option::Option<PagesDeploymentDeploymentTrigger>,
     pub env_vars: PagesEnvVars,
     ///Type of deploy.
-    pub environment: PagesDeploymentEnvironment,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub environment: ::std::option::Option<PagesDeploymentEnvironment>,
     ///Id of the deployment.
-    pub id: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
     ///If the deployment has been skipped.
-    pub is_skipped: bool,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub is_skipped: ::std::option::Option<bool>,
     pub latest_stage: PagesStage,
     ///When the deployment was last modified.
-    pub modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     ///Id of the project.
-    pub project_id: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub project_id: ::std::option::Option<::std::string::String>,
     pub project_name: PagesProjectName,
     ///Short Id (8 character) of the deployment.
-    pub short_id: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub short_id: ::std::option::Option<::std::string::String>,
     ///Why the deployment was skipped.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub skip_reason: ::std::option::Option<PagesDeploymentSkipReason>,
     pub source: PagesSource,
     ///List of past stages.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub stages: ::std::vec::Vec<PagesStage>,
     ///The live URL to view this deployment.
-    pub url: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub url: ::std::option::Option<::std::string::String>,
     ///Whether the deployment uses functions.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub uses_functions: ::std::option::Option<bool>,
@@ -39708,34 +39770,42 @@ impl ::std::convert::TryFrom<::std::string::String> for PagesPlainTextEnvVarInne
 pub struct PagesProject {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub build_config: ::std::option::Option<PagesBuildConfig>,
-    pub canonical_deployment: PagesDeployment,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub canonical_deployment: ::std::option::Option<PagesDeployment>,
     ///When the project was created.
-    pub created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub deployment_configs: PagesProjectDeploymentConfigs,
     ///A list of associated custom domains for the project.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub domains: ::std::vec::Vec<::std::string::String>,
     ///Framework the project is using.
-    pub framework: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub framework: ::std::option::Option<::std::string::String>,
     ///Version of the framework the project is using.
-    pub framework_version: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub framework_version: ::std::option::Option<::std::string::String>,
     ///ID of the project.
-    pub id: ::std::string::String,
-    pub latest_deployment: PagesDeployment,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub latest_deployment: ::std::option::Option<PagesDeployment>,
     pub name: PagesProjectName,
     ///Name of the preview script.
-    pub preview_script_name: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub preview_script_name: ::std::option::Option<::std::string::String>,
     ///Production branch of the project. Used to identify production deployments.
     pub production_branch: ::std::string::String,
     ///Name of the production script.
-    pub production_script_name: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub production_script_name: ::std::option::Option<::std::string::String>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub source: ::std::option::Option<PagesSource>,
     ///The Cloudflare subdomain associated with the project.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub subdomain: ::std::option::Option<::std::string::String>,
     ///Whether the project uses functions.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub uses_functions: ::std::option::Option<bool>,
 }
 ///`PagesProjectAtProvider`
@@ -40769,15 +40839,16 @@ impl ::std::convert::TryFrom<::std::string::String> for PagesSourceType {
 )]
 pub struct PagesStage {
     ///When the stage ended.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub ended_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     ///The current build stage.
     pub name: PagesStageName,
     ///When the stage started.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub started_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     ///State of the current stage.
-    pub status: PagesStageStatus,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<PagesStageStatus>,
 }
 ///The current build stage.
 #[derive(
@@ -43057,12 +43128,18 @@ pub struct RulesetAtProvider {
     pub description: ::std::string::String,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRulesetId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub kind: ::std::option::Option<RulesetsRulesetKind>,
     ///The timestamp of when the ruleset was last modified.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     ///The human-readable name of the ruleset.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<Name>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub phase: ::std::option::Option<RulesetsRulesetPhase>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rules: ::std::option::Option<RulesetsResponseRules>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub version: ::std::option::Option<RulesetsRulesetVersion>,
 }
@@ -43072,7 +43149,6 @@ pub struct RulesetAtProvider {
     ::serde::Serialize,
     Clone,
     Debug,
-    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -43080,9 +43156,13 @@ pub struct RulesetForProvider {
     ///An informative description of the ruleset.
     #[serde(default)]
     pub description: ::std::string::String,
+    pub kind: RulesetsRulesetKind,
     ///The human-readable name of the ruleset.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<Name>,
+    pub phase: RulesetsRulesetPhase,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rules: ::std::option::Option<RulesetsRequestRules>,
 }
 ///`RulesetsBlockRule`
 #[derive(
@@ -43090,6 +43170,7 @@ pub struct RulesetForProvider {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -43114,7 +43195,8 @@ pub struct RulesetsBlockRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -43123,7 +43205,8 @@ pub struct RulesetsBlockRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsBlockRuleAction`
 #[derive(
@@ -43197,6 +43280,7 @@ pub struct RulesetsBlockRuleActionParameters {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -43222,7 +43306,8 @@ pub struct RulesetsChallengeRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -43231,7 +43316,8 @@ pub struct RulesetsChallengeRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsChallengeRuleAction`
 #[derive(
@@ -43291,6 +43377,7 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsChallengeRuleAct
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -43317,7 +43404,8 @@ pub struct RulesetsCompressResponseRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -43326,7 +43414,8 @@ pub struct RulesetsCompressResponseRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsCompressResponseRuleAction`
 #[derive(
@@ -43400,6 +43489,7 @@ pub struct RulesetsCompressResponseRuleActionParameters {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -43425,7 +43515,8 @@ pub struct RulesetsDDoSDynamicRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -43434,7 +43525,8 @@ pub struct RulesetsDDoSDynamicRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsDDoSDynamicRuleAction`
 #[derive(
@@ -43585,6 +43677,7 @@ pub struct RulesetsExecuteOverrides {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -43609,7 +43702,8 @@ pub struct RulesetsExecuteRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -43618,7 +43712,8 @@ pub struct RulesetsExecuteRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsExecuteRuleAction`
 #[derive(
@@ -43787,6 +43882,7 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsExecuteSensitivi
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -43812,7 +43908,8 @@ pub struct RulesetsForceConnectionCloseRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -43821,7 +43918,8 @@ pub struct RulesetsForceConnectionCloseRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsForceConnectionCloseRuleAction`
 #[derive(
@@ -43882,6 +43980,7 @@ for RulesetsForceConnectionCloseRuleAction {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -43907,7 +44006,8 @@ pub struct RulesetsJsChallengeRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -43916,7 +44016,8 @@ pub struct RulesetsJsChallengeRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsJsChallengeRuleAction`
 #[derive(
@@ -44096,6 +44197,7 @@ for RulesetsLogCustomFieldResponseFields {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -44122,7 +44224,8 @@ pub struct RulesetsLogCustomFieldRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -44131,7 +44234,8 @@ pub struct RulesetsLogCustomFieldRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsLogCustomFieldRuleAction`
 #[derive(
@@ -44249,6 +44353,7 @@ for RulesetsLogCustomFieldTransformedRequestFields {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -44274,7 +44379,8 @@ pub struct RulesetsLogRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -44283,7 +44389,8 @@ pub struct RulesetsLogRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsLogRuleAction`
 #[derive(
@@ -44343,6 +44450,7 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsLogRuleAction {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -44368,7 +44476,8 @@ pub struct RulesetsManagedChallengeRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -44377,7 +44486,8 @@ pub struct RulesetsManagedChallengeRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsManagedChallengeRuleAction`
 #[derive(
@@ -44516,6 +44626,7 @@ pub struct RulesetsRedirectFromValue {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -44540,7 +44651,8 @@ pub struct RulesetsRedirectRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -44549,7 +44661,8 @@ pub struct RulesetsRedirectRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsRedirectRuleAction`
 #[derive(
@@ -44833,7 +44946,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -44842,7 +44956,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant1 {
         action: RulesetsResponseRuleVariant1Action,
@@ -44862,7 +44977,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -44871,7 +44987,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant2 {
         action: RulesetsResponseRuleVariant2Action,
@@ -44892,7 +45009,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -44901,7 +45019,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant3 {
         action: RulesetsResponseRuleVariant3Action,
@@ -44921,7 +45040,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -44930,7 +45050,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant4 {
         action: RulesetsResponseRuleVariant4Action,
@@ -44951,7 +45072,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -44960,7 +45082,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant5 {
         action: RulesetsResponseRuleVariant5Action,
@@ -44980,7 +45103,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -44989,7 +45113,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant6 {
         action: RulesetsResponseRuleVariant6Action,
@@ -45009,7 +45134,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45018,7 +45144,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant7 {
         action: RulesetsResponseRuleVariant7Action,
@@ -45038,7 +45165,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45047,7 +45175,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant8 {
         action: RulesetsResponseRuleVariant8Action,
@@ -45068,7 +45197,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45077,7 +45207,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant9 {
         action: RulesetsResponseRuleVariant9Action,
@@ -45097,7 +45228,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45106,7 +45238,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant10 {
         action: RulesetsResponseRuleVariant10Action,
@@ -45127,7 +45260,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45136,7 +45270,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant11 {
         action: RulesetsResponseRuleVariant11Action,
@@ -45157,7 +45292,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45166,7 +45302,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant12 {
         action: RulesetsResponseRuleVariant12Action,
@@ -45187,7 +45324,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45196,7 +45334,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant13 {
         action: RulesetsResponseRuleVariant13Action,
@@ -45217,7 +45356,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45226,7 +45366,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant14 {
         action: RulesetsResponseRuleVariant14Action,
@@ -45247,7 +45388,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45256,7 +45398,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant15 {
         action: RulesetsResponseRuleVariant15Action,
@@ -45277,7 +45420,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45286,7 +45430,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant16 {
         action: RulesetsResponseRuleVariant16Action,
@@ -45307,7 +45452,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45316,7 +45462,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant17 {
         action: RulesetsResponseRuleVariant17Action,
@@ -45337,7 +45484,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45346,7 +45494,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant18 {
         action: RulesetsResponseRuleVariant18Action,
@@ -45367,7 +45516,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45376,7 +45526,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant19 {
         action: RulesetsResponseRuleVariant19Action,
@@ -45397,7 +45548,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45406,7 +45558,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
     Variant20 {
         action: RulesetsResponseRuleVariant20Action,
@@ -45427,7 +45580,8 @@ pub enum RulesetsResponseRule {
         expression: Expression,
         id: RulesetsRuleId,
         ///The timestamp of when the rule was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
         logging: ::std::option::Option<RulesetsRuleLogging>,
         #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45436,7 +45590,8 @@ pub enum RulesetsResponseRule {
         #[serde(rename = "ref")]
         ref_: Ref,
         ///The version of the rule.
-        version: Version,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<Version>,
     },
 }
 ///`RulesetsResponseRuleVariant0Action`
@@ -47254,6 +47409,7 @@ pub enum RulesetsRewriteHeadersValue {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -47278,7 +47434,8 @@ pub struct RulesetsRewriteRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -47287,7 +47444,8 @@ pub struct RulesetsRewriteRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsRewriteRuleAction`
 #[derive(
@@ -47505,6 +47663,7 @@ pub struct RulesetsRouteOrigin {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -47529,7 +47688,8 @@ pub struct RulesetsRouteRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -47538,7 +47698,8 @@ pub struct RulesetsRouteRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsRouteRuleAction`
 #[derive(
@@ -47629,6 +47790,7 @@ pub struct RulesetsRouteSni {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -47655,7 +47817,8 @@ pub struct RulesetsRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -47664,7 +47827,8 @@ pub struct RulesetsRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///The action to perform when the rule matches.
 #[derive(
@@ -48008,6 +48172,7 @@ pub struct RulesetsRuleRatelimit {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -48015,13 +48180,16 @@ pub struct RulesetsRuleset {
     ///An informative description of the ruleset.
     #[serde(default)]
     pub description: ::std::string::String,
-    pub id: RulesetsRulesetId,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<RulesetsRulesetId>,
     ///The timestamp of when the ruleset was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     ///The human-readable name of the ruleset.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<Name>,
-    pub version: RulesetsRulesetVersion,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<RulesetsRulesetVersion>,
 }
 ///The unique ID of the ruleset.
 #[derive(
@@ -48431,6 +48599,7 @@ impl ::std::convert::TryFrom<String> for RulesetsScoreIncrement {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -48455,7 +48624,8 @@ pub struct RulesetsScoreRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -48464,7 +48634,8 @@ pub struct RulesetsScoreRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsScoreRuleAction`
 #[derive(
@@ -48728,6 +48899,7 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsServeErrorConten
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -48752,7 +48924,8 @@ pub struct RulesetsServeErrorRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -48761,7 +48934,8 @@ pub struct RulesetsServeErrorRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsServeErrorRuleAction`
 #[derive(
@@ -49073,6 +49247,7 @@ for RulesetsSetCacheControlOperation {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -49099,7 +49274,8 @@ pub struct RulesetsSetCacheControlRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -49108,7 +49284,8 @@ pub struct RulesetsSetCacheControlRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsSetCacheControlRuleAction`
 #[derive(
@@ -49716,6 +49893,7 @@ impl ::std::convert::TryFrom<String> for RulesetsSetCacheSettingsRespectStrongEt
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -49742,7 +49920,8 @@ pub struct RulesetsSetCacheSettingsRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -49751,7 +49930,8 @@ pub struct RulesetsSetCacheSettingsRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsSetCacheSettingsRuleAction`
 #[derive(
@@ -50275,6 +50455,7 @@ impl ::std::convert::TryFrom<::std::string::String> for RulesetsSetCacheTagsOper
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -50301,7 +50482,8 @@ pub struct RulesetsSetCacheTagsRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -50310,7 +50492,8 @@ pub struct RulesetsSetCacheTagsRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsSetCacheTagsRuleAction`
 #[derive(
@@ -50454,6 +50637,7 @@ pub struct RulesetsSetConfigAutominify {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -50478,7 +50662,8 @@ pub struct RulesetsSetConfigRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -50487,7 +50672,8 @@ pub struct RulesetsSetConfigRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsSetConfigRuleAction`
 #[derive(
@@ -50730,6 +50916,7 @@ impl ::std::convert::From<::std::vec::Vec<Product>> for RulesetsSkipProducts {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -50754,7 +50941,8 @@ pub struct RulesetsSkipRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -50763,7 +50951,8 @@ pub struct RulesetsSkipRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsSkipRuleAction`
 #[derive(
@@ -50974,6 +51163,7 @@ impl ::std::convert::From<::std::vec::Vec<RulesetsRulesetId>> for RulesetsSkipRu
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -51000,7 +51190,8 @@ pub struct RulesetsTransformResponseHtmlRule {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<RulesetsRuleId>,
     ///The timestamp of when the rule was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logging: ::std::option::Option<RulesetsRuleLogging>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -51009,7 +51200,8 @@ pub struct RulesetsTransformResponseHtmlRule {
     #[serde(rename = "ref", skip_serializing_if = "::std::option::Option::is_none")]
     pub ref_: ::std::option::Option<Ref>,
     ///The version of the rule.
-    pub version: Version,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<Version>,
 }
 ///`RulesetsTransformResponseHtmlRuleAction`
 #[derive(
@@ -51142,6 +51334,33 @@ impl<'de> ::serde::Deserialize<'de> for RulesetsZoneId {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
     }
+}
+///`RulesetsZoneRuleset`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct RulesetsZoneRuleset {
+    ///An informative description of the ruleset.
+    #[serde(default)]
+    pub description: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<RulesetsRulesetId>,
+    pub kind: RulesetsRulesetKind,
+    ///The timestamp of when the ruleset was last modified.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    ///The human-readable name of the ruleset.
+    pub name: Name,
+    pub phase: RulesetsRulesetPhase,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rules: ::std::option::Option<RulesetsRequestRules>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<RulesetsRulesetVersion>,
 }
 ///`SaaSApplication`
 #[derive(
@@ -55889,6 +56108,21 @@ pub struct TunnelApiResponseCommon {
     ///Whether the API call was successful Allowed values: true.
     pub success: bool,
 }
+///`TunnelApiResponseCommon2`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelApiResponseCommon2 {
+    pub errors: TunnelMessages2,
+    pub messages: TunnelMessages2,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
 ///`TunnelApiResponseCommonFailure`
 #[derive(
     ::serde::Deserialize,
@@ -55908,6 +56142,57 @@ pub struct TunnelApiResponseCommonFailure {
     >,
     ///Whether the API call was successful Allowed values: false.
     pub success: bool,
+}
+///`TunnelApiResponseCommonFailure2`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelApiResponseCommonFailure2 {
+    pub errors: ::std::vec::Vec<TunnelApiResponseCommonFailure2ErrorsItem>,
+    pub messages: TunnelMessages2,
+    ///Allowed values: null.
+    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    pub result: ::std::option::Option<
+        ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    >,
+    ///Whether the API call was successful. Allowed values: false.
+    pub success: bool,
+}
+///`TunnelApiResponseCommonFailure2ErrorsItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelApiResponseCommonFailure2ErrorsItem {
+    pub code: i64,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub documentation_url: ::std::option::Option<::std::string::String>,
+    pub message: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub source: ::std::option::Option<TunnelApiResponseCommonFailure2ErrorsItemSource>,
+}
+///`TunnelApiResponseCommonFailure2ErrorsItemSource`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelApiResponseCommonFailure2ErrorsItemSource {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub pointer: ::std::option::Option<::std::string::String>,
 }
 ///`TunnelApiResponseCommonFailureErrorsItem`
 #[derive(
@@ -55949,6 +56234,33 @@ impl ::std::convert::From<::std::vec::Vec<::serde_json::Value>>
 for TunnelApiResponseCommonResult {
     fn from(value: ::std::vec::Vec<::serde_json::Value>) -> Self {
         Self::Array(value)
+    }
+}
+///`TunnelApiResponseSingle2`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelApiResponseSingle2(pub TunnelApiResponseCommon2);
+impl ::std::ops::Deref for TunnelApiResponseSingle2 {
+    type Target = TunnelApiResponseCommon2;
+    fn deref(&self) -> &TunnelApiResponseCommon2 {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelApiResponseSingle2> for TunnelApiResponseCommon2 {
+    fn from(value: TunnelApiResponseSingle2) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<TunnelApiResponseCommon2> for TunnelApiResponseSingle2 {
+    fn from(value: TunnelApiResponseCommon2) -> Self {
+        Self(value)
     }
 }
 ///`TunnelAtProvider`
@@ -56043,6 +56355,91 @@ pub struct TunnelCfdTunnelResponseSingle {
     ///Whether the API call was successful Allowed values: true.
     pub success: bool,
 }
+///`TunnelCidrRouteAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelCidrRouteAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelRouteComment>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TunnelCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deleted_at: ::std::option::Option<TunnelDeletedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<TunnelRouteId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub network: ::std::option::Option<TunnelIpNetwork>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_id: ::std::option::Option<TunnelTunnelId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_network_id: ::std::option::Option<TunnelVirtualNetworkId>,
+}
+///`TunnelCidrRouteCreateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelCidrRouteCreateRequest {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelRouteComment>,
+    pub network: TunnelIpNetwork,
+    pub tunnel_id: TunnelTunnelId,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_network_id: ::std::option::Option<
+        TunnelVirtualNetworkIdComputedOptional,
+    >,
+}
+///`TunnelCidrRouteForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelCidrRouteForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelRouteComment>,
+    pub network: TunnelIpNetwork,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_network_id: ::std::option::Option<
+        TunnelVirtualNetworkIdComputedOptional,
+    >,
+}
+///`TunnelCidrRouteUpdateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelCidrRouteUpdateRequest {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelRouteComment>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub network: ::std::option::Option<TunnelIpNetwork>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_id: ::std::option::Option<TunnelTunnelId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_network_id: ::std::option::Option<
+        TunnelVirtualNetworkIdComputedOptional,
+    >,
+}
 ///UUID of the Cloudflare Tunnel connector.
 #[derive(
     ::serde::Deserialize,
@@ -56135,6 +56532,31 @@ impl ::std::str::FromStr for TunnelColoName {
         Ok(Self(value.to_string()))
     }
 }
+///The tunnel configuration and ingress rules.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelConfig {
+    ///List of public hostname definitions. At least one ingress rule needs to be defined for the tunnel.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub ingress: ::std::vec::Vec<TunnelIngressRule>,
+    #[serde(
+        rename = "originRequest",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub origin_request: ::std::option::Option<TunnelOriginRequest>,
+    #[serde(
+        rename = "warp-routing",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub warp_routing: ::std::option::Option<TunnelConfigWarpRouting>,
+}
 ///Indicates if this is a locally or remotely configured tunnel. If `local`, manage the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the tunnel on the Zero Trust dashboard.
 #[derive(
     ::serde::Deserialize,
@@ -56195,6 +56617,215 @@ impl ::std::default::Default for TunnelConfigSrc {
     fn default() -> Self {
         TunnelConfigSrc::Local
     }
+}
+///Indicates if this is a locally or remotely configured tunnel. If `local`, manage the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the tunnel's configuration on the Zero Trust dashboard.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum TunnelConfigSrc2 {
+    #[serde(rename = "local")]
+    Local,
+    #[serde(rename = "cloudflare")]
+    Cloudflare,
+}
+impl ::std::fmt::Display for TunnelConfigSrc2 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Local => f.write_str("local"),
+            Self::Cloudflare => f.write_str("cloudflare"),
+        }
+    }
+}
+impl ::std::str::FromStr for TunnelConfigSrc2 {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "local" => Ok(Self::Local),
+            "cloudflare" => Ok(Self::Cloudflare),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for TunnelConfigSrc2 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TunnelConfigSrc2 {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///The version of the Tunnel Configuration.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelConfigVersion2(pub i64);
+impl ::std::ops::Deref for TunnelConfigVersion2 {
+    type Target = i64;
+    fn deref(&self) -> &i64 {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelConfigVersion2> for i64 {
+    fn from(value: TunnelConfigVersion2) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<i64> for TunnelConfigVersion2 {
+    fn from(value: i64) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for TunnelConfigVersion2 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for TunnelConfigVersion2 {
+    type Err = <i64 as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TunnelConfigVersion2 {
+    type Error = <i64 as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for TunnelConfigVersion2 {
+    type Error = <i64 as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+///Enable private network access from WARP users to private network routes. This is enabled if the tunnel has an assigned route.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelConfigWarpRouting {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
+}
+///Cloudflare Tunnel configuration
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelConfiguration {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub account_id: ::std::option::Option<TunnelIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub config: ::std::option::Option<TunnelConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TunnelTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub source: ::std::option::Option<TunnelConfigSrc2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_id: ::std::option::Option<TunnelTunnelId2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<TunnelConfigVersion2>,
+}
+///`TunnelConfigurationAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelConfigurationAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub config: ::std::option::Option<TunnelConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TunnelTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub source: ::std::option::Option<TunnelConfigSrc2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<TunnelConfigVersion2>,
+}
+///`TunnelConfigurationForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelConfigurationForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub config: ::std::option::Option<TunnelConfig>,
+}
+///`TunnelConfigurationResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelConfigurationResponse {
+    pub errors: TunnelMessages2,
+    pub messages: TunnelMessages2,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub result: ::std::option::Option<TunnelConfiguration>,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`TunnelConfigurationUpdateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelConfigurationUpdateRequest {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub config: ::std::option::Option<TunnelConfig>,
 }
 ///UUID of the Cloudflare Tunnel connection.
 #[derive(
@@ -56515,6 +57146,407 @@ pub struct TunnelForProvider {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub tunnel_secret: ::std::option::Option<TunnelTunnelSecret>,
 }
+///The hostname of the route.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelHostname(pub ::std::string::String);
+impl ::std::ops::Deref for TunnelHostname {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelHostname> for ::std::string::String {
+    fn from(value: TunnelHostname) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::string::String> for TunnelHostname {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for TunnelHostname {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for TunnelHostname {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
+    }
+}
+///An optional description of the hostname route.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelHostnameComment(pub ::std::string::String);
+impl ::std::ops::Deref for TunnelHostnameComment {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelHostnameComment> for ::std::string::String {
+    fn from(value: TunnelHostnameComment) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::string::String> for TunnelHostnameComment {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for TunnelHostnameComment {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for TunnelHostnameComment {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
+    }
+}
+///`TunnelHostnameRoute`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelHostnameRoute {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelHostnameComment>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TunnelCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deleted_at: ::std::option::Option<TunnelDeletedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub hostname: ::std::option::Option<TunnelHostname>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<TunnelHostnameRouteId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tun_type: ::std::option::Option<TunnelHostnameRouteTunType>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_id: ::std::option::Option<TunnelTunnelId3>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_name: ::std::option::Option<TunnelTunnelName2>,
+}
+///`TunnelHostnameRouteAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelHostnameRouteAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelHostnameComment>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TunnelCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deleted_at: ::std::option::Option<TunnelDeletedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub hostname: ::std::option::Option<TunnelHostname>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<TunnelHostnameRouteId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_id: ::std::option::Option<TunnelTunnelId3>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_name: ::std::option::Option<TunnelTunnelName2>,
+}
+///`TunnelHostnameRouteCreateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelHostnameRouteCreateRequest {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelHostnameComment>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub hostname: ::std::option::Option<TunnelHostname>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_id: ::std::option::Option<TunnelTunnelId3>,
+}
+///`TunnelHostnameRouteForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelHostnameRouteForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelHostnameComment>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub hostname: ::std::option::Option<TunnelHostname>,
+}
+///The hostname route ID.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelHostnameRouteId(pub ::uuid::Uuid);
+impl ::std::ops::Deref for TunnelHostnameRouteId {
+    type Target = ::uuid::Uuid;
+    fn deref(&self) -> &::uuid::Uuid {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelHostnameRouteId> for ::uuid::Uuid {
+    fn from(value: TunnelHostnameRouteId) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::uuid::Uuid> for TunnelHostnameRouteId {
+    fn from(value: ::uuid::Uuid) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for TunnelHostnameRouteId {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for TunnelHostnameRouteId {
+    type Err = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TunnelHostnameRouteId {
+    type Error = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for TunnelHostnameRouteId {
+    type Error = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+///`TunnelHostnameRouteResponseSingle`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelHostnameRouteResponseSingle {
+    pub errors: TunnelMessages,
+    pub messages: TunnelMessages,
+    pub result: TunnelHostnameRoute,
+    ///Whether the API call was successful Allowed values: true.
+    pub success: bool,
+}
+///`TunnelHostnameRouteTunType`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum TunnelHostnameRouteTunType {
+    #[serde(rename = "cfd_tunnel")]
+    CfdTunnel,
+    #[serde(rename = "warp_connector")]
+    WarpConnector,
+}
+impl ::std::fmt::Display for TunnelHostnameRouteTunType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::CfdTunnel => f.write_str("cfd_tunnel"),
+            Self::WarpConnector => f.write_str("warp_connector"),
+        }
+    }
+}
+impl ::std::str::FromStr for TunnelHostnameRouteTunType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "cfd_tunnel" => Ok(Self::CfdTunnel),
+            "warp_connector" => Ok(Self::WarpConnector),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for TunnelHostnameRouteTunType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TunnelHostnameRouteTunType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`TunnelHostnameRouteUpdateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelHostnameRouteUpdateRequest {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelHostnameComment>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub hostname: ::std::option::Option<TunnelHostname>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_id: ::std::option::Option<TunnelTunnelId3>,
+}
+///Identifier.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelIdentifier(::std::string::String);
+impl ::std::ops::Deref for TunnelIdentifier {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelIdentifier> for ::std::string::String {
+    fn from(value: TunnelIdentifier) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for TunnelIdentifier {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 32usize {
+            return Err("longer than 32 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TunnelIdentifier {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TunnelIdentifier {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TunnelIdentifier {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Public hostname
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelIngressRule {
+    ///Public hostname for this service.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub hostname: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "originRequest",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub origin_request: ::std::option::Option<TunnelOriginRequest>,
+    ///Requests with this path route to this public hostname.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path: ::std::option::Option<::std::string::String>,
+    /**Protocol and address of destination server. Supported protocols: http://, https://, unix://, tcp://, ssh://, rdp://, unix+tls://, smb://. Alternatively can return a HTTP status code http_status:[code] e.g. 'http_status:404'.
+*/
+    pub service: ::std::string::String,
+}
 ///`TunnelIp`
 #[derive(
     ::serde::Deserialize,
@@ -56552,6 +57584,48 @@ impl ::std::fmt::Display for TunnelIp {
     }
 }
 impl ::std::str::FromStr for TunnelIp {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
+    }
+}
+///The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelIpNetwork(pub ::std::string::String);
+impl ::std::ops::Deref for TunnelIpNetwork {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelIpNetwork> for ::std::string::String {
+    fn from(value: TunnelIpNetwork) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::string::String> for TunnelIpNetwork {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for TunnelIpNetwork {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for TunnelIpNetwork {
     type Err = ::std::convert::Infallible;
     fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
         Ok(Self(value.to_string()))
@@ -56634,6 +57708,64 @@ impl ::std::convert::From<::std::vec::Vec<TunnelMessagesItem>> for TunnelMessage
         Self(value)
     }
 }
+///`TunnelMessages2`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelMessages2(pub ::std::vec::Vec<TunnelMessages2Item>);
+impl ::std::ops::Deref for TunnelMessages2 {
+    type Target = ::std::vec::Vec<TunnelMessages2Item>;
+    fn deref(&self) -> &::std::vec::Vec<TunnelMessages2Item> {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelMessages2> for ::std::vec::Vec<TunnelMessages2Item> {
+    fn from(value: TunnelMessages2) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<TunnelMessages2Item>> for TunnelMessages2 {
+    fn from(value: ::std::vec::Vec<TunnelMessages2Item>) -> Self {
+        Self(value)
+    }
+}
+///`TunnelMessages2Item`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelMessages2Item {
+    pub code: i64,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub documentation_url: ::std::option::Option<::std::string::String>,
+    pub message: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub source: ::std::option::Option<TunnelMessages2ItemSource>,
+}
+///`TunnelMessages2ItemSource`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelMessages2ItemSource {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub pointer: ::std::option::Option<::std::string::String>,
+}
 ///`TunnelMessagesItem`
 #[derive(
     ::serde::Deserialize,
@@ -56679,6 +57811,121 @@ for TunnelMetadata {
     ) -> Self {
         Self(value)
     }
+}
+///Configuration parameters for the public hostname specific connection settings between cloudflared and origin server.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelOriginRequest {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub access: ::std::option::Option<TunnelOriginRequestAccess>,
+    ///Path to the certificate authority (CA) for the certificate of your origin. This option should be used only if your certificate is not signed by Cloudflare.
+    #[serde(rename = "caPool", skip_serializing_if = "::std::option::Option::is_none")]
+    pub ca_pool: ::std::option::Option<::std::string::String>,
+    ///Timeout for establishing a new TCP connection to your origin server. This excludes the time taken to establish TLS, which is controlled by tlsTimeout.
+    #[serde(
+        rename = "connectTimeout",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub connect_timeout: ::std::option::Option<i64>,
+    ///Disables chunked transfer encoding. Useful if you are running a WSGI server.
+    #[serde(
+        rename = "disableChunkedEncoding",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub disable_chunked_encoding: ::std::option::Option<bool>,
+    ///Attempt to connect to origin using HTTP2. Origin must be configured as https.
+    #[serde(
+        rename = "http2Origin",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub http2_origin: ::std::option::Option<bool>,
+    ///Sets the HTTP Host header on requests sent to the local service.
+    #[serde(
+        rename = "httpHostHeader",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub http_host_header: ::std::option::Option<::std::string::String>,
+    ///Maximum number of idle keepalive connections between Tunnel and your origin. This does not restrict the total number of concurrent connections.
+    #[serde(
+        rename = "keepAliveConnections",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub keep_alive_connections: ::std::option::Option<i64>,
+    ///Timeout after which an idle keepalive connection can be discarded.
+    #[serde(
+        rename = "keepAliveTimeout",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub keep_alive_timeout: ::std::option::Option<i64>,
+    ///Auto configure the Hostname on the origin server certificate.
+    #[serde(
+        rename = "matchSNItoHost",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub match_sn_ito_host: ::std::option::Option<bool>,
+    ///Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local network has misconfigured one of the protocols.
+    #[serde(
+        rename = "noHappyEyeballs",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub no_happy_eyeballs: ::std::option::Option<bool>,
+    ///Disables TLS verification of the certificate presented by your origin. Will allow any certificate from the origin to be accepted.
+    #[serde(
+        rename = "noTLSVerify",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub no_tls_verify: ::std::option::Option<bool>,
+    ///Hostname that cloudflared should expect from your origin server certificate.
+    #[serde(
+        rename = "originServerName",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub origin_server_name: ::std::option::Option<::std::string::String>,
+    /**cloudflared starts a proxy server to translate HTTP traffic into TCP when proxying, for example, SSH or RDP. This configures what type of proxy will be started. Valid options are: "" for the regular proxy and "socks" for a SOCKS5 proxy.
+*/
+    #[serde(
+        rename = "proxyType",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub proxy_type: ::std::option::Option<::std::string::String>,
+    ///The timeout after which a TCP keepalive packet is sent on a connection between Tunnel and the origin server.
+    #[serde(
+        rename = "tcpKeepAlive",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub tcp_keep_alive: ::std::option::Option<i64>,
+    ///Timeout for completing a TLS handshake to your origin server, if you have chosen to connect Tunnel to an HTTPS server.
+    #[serde(
+        rename = "tlsTimeout",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub tls_timeout: ::std::option::Option<i64>,
+}
+///For all L7 requests to this hostname, cloudflared will validate each request's Cf-Access-Jwt-Assertion request header.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelOriginRequestAccess {
+    ///Access applications that are allowed to reach this hostname for this Tunnel. Audience tags can be identified in the dashboard or via the List Access policies API.
+    #[serde(rename = "audTag")]
+    pub aud_tag: ::std::vec::Vec<::std::string::String>,
+    ///Deny traffic that has not fulfilled Access authorization.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub required: ::std::option::Option<bool>,
+    #[serde(rename = "teamName")]
+    pub team_name: ::std::string::String,
 }
 ///If `true`, the tunnel can be configured remotely from the Zero Trust dashboard. If `false`, the tunnel must be configured locally on the origin machine.
 #[derive(
@@ -56729,6 +57976,181 @@ impl ::std::convert::TryFrom<String> for TunnelRemoteConfig {
     fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
         value.parse()
     }
+}
+///`TunnelRoute`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelRoute {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelRouteComment>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TunnelCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deleted_at: ::std::option::Option<TunnelDeletedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<TunnelRouteId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub network: ::std::option::Option<TunnelIpNetwork>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_id: ::std::option::Option<TunnelTunnelId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_network_id: ::std::option::Option<TunnelVirtualNetworkId>,
+}
+///Optional remark describing the route.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelRouteComment(::std::string::String);
+impl ::std::ops::Deref for TunnelRouteComment {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelRouteComment> for ::std::string::String {
+    fn from(value: TunnelRouteComment) -> Self {
+        value.0
+    }
+}
+impl ::std::default::Default for TunnelRouteComment {
+    fn default() -> Self {
+        TunnelRouteComment("".to_string())
+    }
+}
+impl ::std::str::FromStr for TunnelRouteComment {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TunnelRouteComment {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TunnelRouteComment {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TunnelRouteComment {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///UUID of the route.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelRouteId(::std::string::String);
+impl ::std::ops::Deref for TunnelRouteId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelRouteId> for ::std::string::String {
+    fn from(value: TunnelRouteId) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for TunnelRouteId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 36usize {
+            return Err("longer than 36 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TunnelRouteId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for TunnelRouteId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for TunnelRouteId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`TunnelRouteResponseSingle`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelRouteResponseSingle {
+    pub errors: TunnelMessages,
+    pub messages: TunnelMessages,
+    pub result: TunnelRoute,
+    ///Whether the API call was successful Allowed values: true.
+    pub success: bool,
 }
 ///`TunnelSchemasConnection`
 #[derive(
@@ -56824,6 +58246,58 @@ impl ::std::convert::TryFrom<::std::string::String> for TunnelStatus {
         value.parse()
     }
 }
+///`TunnelTimestamp`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelTimestamp(pub ::chrono::DateTime<::chrono::offset::Utc>);
+impl ::std::ops::Deref for TunnelTimestamp {
+    type Target = ::chrono::DateTime<::chrono::offset::Utc>;
+    fn deref(&self) -> &::chrono::DateTime<::chrono::offset::Utc> {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelTimestamp>
+for ::chrono::DateTime<::chrono::offset::Utc> {
+    fn from(value: TunnelTimestamp) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::chrono::DateTime<::chrono::offset::Utc>>
+for TunnelTimestamp {
+    fn from(value: ::chrono::DateTime<::chrono::offset::Utc>) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for TunnelTimestamp {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for TunnelTimestamp {
+    type Err = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TunnelTimestamp {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for TunnelTimestamp {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
 ///UUID of the tunnel.
 #[derive(
     ::serde::Deserialize,
@@ -56874,6 +58348,106 @@ impl ::std::convert::TryFrom<String> for TunnelTunnelId {
         value.parse()
     }
 }
+///UUID of the tunnel.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelTunnelId2(pub ::uuid::Uuid);
+impl ::std::ops::Deref for TunnelTunnelId2 {
+    type Target = ::uuid::Uuid;
+    fn deref(&self) -> &::uuid::Uuid {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelTunnelId2> for ::uuid::Uuid {
+    fn from(value: TunnelTunnelId2) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::uuid::Uuid> for TunnelTunnelId2 {
+    fn from(value: ::uuid::Uuid) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for TunnelTunnelId2 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for TunnelTunnelId2 {
+    type Err = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TunnelTunnelId2 {
+    type Error = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for TunnelTunnelId2 {
+    type Error = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+///UUID of the tunnel.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelTunnelId3(pub ::uuid::Uuid);
+impl ::std::ops::Deref for TunnelTunnelId3 {
+    type Target = ::uuid::Uuid;
+    fn deref(&self) -> &::uuid::Uuid {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelTunnelId3> for ::uuid::Uuid {
+    fn from(value: TunnelTunnelId3) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::uuid::Uuid> for TunnelTunnelId3 {
+    fn from(value: ::uuid::Uuid) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for TunnelTunnelId3 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for TunnelTunnelId3 {
+    type Err = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TunnelTunnelId3 {
+    type Error = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for TunnelTunnelId3 {
+    type Error = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
 ///A user-friendly name for a tunnel.
 #[derive(
     ::serde::Deserialize,
@@ -56911,6 +58485,48 @@ impl ::std::fmt::Display for TunnelTunnelName {
     }
 }
 impl ::std::str::FromStr for TunnelTunnelName {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
+    }
+}
+///A user-friendly name for a tunnel.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelTunnelName2(pub ::std::string::String);
+impl ::std::ops::Deref for TunnelTunnelName2 {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelTunnelName2> for ::std::string::String {
+    fn from(value: TunnelTunnelName2) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::string::String> for TunnelTunnelName2 {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for TunnelTunnelName2 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for TunnelTunnelName2 {
     type Err = ::std::convert::Infallible;
     fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
         Ok(Self(value.to_string()))
@@ -57090,6 +58706,106 @@ impl ::std::str::FromStr for TunnelVersion {
     type Err = ::std::convert::Infallible;
     fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
         Ok(Self(value.to_string()))
+    }
+}
+///UUID of the virtual network.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelVirtualNetworkId(pub ::uuid::Uuid);
+impl ::std::ops::Deref for TunnelVirtualNetworkId {
+    type Target = ::uuid::Uuid;
+    fn deref(&self) -> &::uuid::Uuid {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelVirtualNetworkId> for ::uuid::Uuid {
+    fn from(value: TunnelVirtualNetworkId) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::uuid::Uuid> for TunnelVirtualNetworkId {
+    fn from(value: ::uuid::Uuid) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for TunnelVirtualNetworkId {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for TunnelVirtualNetworkId {
+    type Err = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TunnelVirtualNetworkId {
+    type Error = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for TunnelVirtualNetworkId {
+    type Error = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+///UUID of the virtual network.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelVirtualNetworkIdComputedOptional(pub ::uuid::Uuid);
+impl ::std::ops::Deref for TunnelVirtualNetworkIdComputedOptional {
+    type Target = ::uuid::Uuid;
+    fn deref(&self) -> &::uuid::Uuid {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelVirtualNetworkIdComputedOptional> for ::uuid::Uuid {
+    fn from(value: TunnelVirtualNetworkIdComputedOptional) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::uuid::Uuid> for TunnelVirtualNetworkIdComputedOptional {
+    fn from(value: ::uuid::Uuid) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for TunnelVirtualNetworkIdComputedOptional {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for TunnelVirtualNetworkIdComputedOptional {
+    type Err = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for TunnelVirtualNetworkIdComputedOptional {
+    type Error = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for TunnelVirtualNetworkIdComputedOptional {
+    type Error = <::uuid::Uuid as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
     }
 }
 ///`TurnstileApiResponseCommon`
@@ -61929,7 +63645,8 @@ pub struct WorkersMessagesItemSource {
     schemars::JsonSchema
 )]
 pub struct WorkersRoute {
-    pub id: WorkersIdentifier,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<WorkersIdentifier>,
     ///Pattern to match incoming requests against. [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
     pub pattern: ::std::string::String,
     ///Name of the script to run if the route matches.
@@ -65468,16 +67185,19 @@ pub struct ZoneRulesetCreateRequest {
     ///An informative description of the ruleset.
     #[serde(default)]
     pub description: ::std::string::String,
-    pub id: RulesetsRulesetId,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<RulesetsRulesetId>,
     pub kind: RulesetsRulesetKind,
     ///The timestamp of when the ruleset was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     ///The human-readable name of the ruleset.
     pub name: Name,
     pub phase: RulesetsRulesetPhase,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub rules: ::std::option::Option<RulesetsRequestRules>,
-    pub version: RulesetsRulesetVersion,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<RulesetsRulesetVersion>,
 }
 ///`ZoneRulesetCreateResponse`
 #[derive(
@@ -65509,15 +67229,18 @@ pub enum ZoneRulesetCreateResponseResult {
         ///An informative description of the ruleset.
         #[serde(default)]
         description: ::std::string::String,
-        id: RulesetsRulesetId,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<RulesetsRulesetId>,
         kind: RulesetsRulesetKind,
         ///The timestamp of when the ruleset was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         ///The human-readable name of the ruleset.
         name: Name,
         phase: RulesetsRulesetPhase,
         rules: RulesetsResponseRules,
-        version: RulesetsRulesetVersion,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<RulesetsRulesetVersion>,
     },
     Variant1(
         ::std::option::Option<
@@ -65564,15 +67287,18 @@ pub struct ZoneRulesetObserveResponseResult {
     ///An informative description of the ruleset.
     #[serde(default)]
     pub description: ::std::string::String,
-    pub id: RulesetsRulesetId,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<RulesetsRulesetId>,
     pub kind: RulesetsRulesetKind,
     ///The timestamp of when the ruleset was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     ///The human-readable name of the ruleset.
     pub name: Name,
     pub phase: RulesetsRulesetPhase,
     pub rules: RulesetsResponseRules,
-    pub version: RulesetsRulesetVersion,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<RulesetsRulesetVersion>,
 }
 ///`ZoneRulesetUpdateRequest`
 #[derive(
@@ -65580,6 +67306,7 @@ pub struct ZoneRulesetObserveResponseResult {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -65587,11 +67314,13 @@ pub struct ZoneRulesetUpdateRequest {
     ///An informative description of the ruleset.
     #[serde(default)]
     pub description: ::std::string::String,
-    pub id: RulesetsRulesetId,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<RulesetsRulesetId>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub kind: ::std::option::Option<RulesetsRulesetKind>,
     ///The timestamp of when the ruleset was last modified.
-    pub last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     ///The human-readable name of the ruleset.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<Name>,
@@ -65599,7 +67328,8 @@ pub struct ZoneRulesetUpdateRequest {
     pub phase: ::std::option::Option<RulesetsRulesetPhase>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub rules: ::std::option::Option<RulesetsRequestRules>,
-    pub version: RulesetsRulesetVersion,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<RulesetsRulesetVersion>,
 }
 ///`ZoneRulesetUpdateResponse`
 #[derive(
@@ -65631,15 +67361,18 @@ pub enum ZoneRulesetUpdateResponseResult {
         ///An informative description of the ruleset.
         #[serde(default)]
         description: ::std::string::String,
-        id: RulesetsRulesetId,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<RulesetsRulesetId>,
         kind: RulesetsRulesetKind,
         ///The timestamp of when the ruleset was last modified.
-        last_updated: ::chrono::DateTime<::chrono::offset::Utc>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
         ///The human-readable name of the ruleset.
         name: Name,
         phase: RulesetsRulesetPhase,
         rules: RulesetsResponseRules,
-        version: RulesetsRulesetVersion,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        version: ::std::option::Option<RulesetsRulesetVersion>,
     },
     Variant1(
         ::std::option::Option<
@@ -72469,37 +74202,41 @@ pub struct ZonesZone {
     pub account: ZonesZoneAccount,
     /**The last time proof of ownership was detected and the zone was made
 active.*/
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub activated_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     /**Allows the customer to use a custom apex.
 *Tenants Only Configuration*.*/
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub cname_suffix: ::std::option::Option<::std::string::String>,
     ///When the zone was created.
-    pub created_on: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     /**The interval (in seconds) from when development mode expires
 (positive integer) or last expired (negative integer) for the
 domain. If development mode has never been enabled, this value is 0.*/
-    pub development_mode: f64,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub development_mode: ::std::option::Option<f64>,
     ///Identifier
     pub id: ZonesZoneId,
     pub meta: ZonesZoneMeta,
     ///When the zone was last modified.
-    pub modified_on: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     ///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
     pub name: ZonesZoneName,
     ///The name servers Cloudflare assigns to a zone.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub name_servers: ::std::vec::Vec<::std::string::String>,
     ///DNS host at the time of switching to Cloudflare.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub original_dnshost: ::std::option::Option<ZonesZoneOriginalDnshost>,
     ///Original name servers before moving to Cloudflare.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub original_name_servers: ::std::option::Option<
         ::std::vec::Vec<::std::string::String>,
     >,
     ///Registrar for the domain at the time of switching to Cloudflare.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub original_registrar: ::std::option::Option<::std::string::String>,
     pub owner: ZonesZoneOwner,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]

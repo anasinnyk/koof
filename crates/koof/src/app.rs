@@ -1,15 +1,3 @@
-//! Operator entry point: everything a provider binary needs in one builder.
-//!
-//! ```ignore
-//! #[tokio::main]
-//! async fn main() -> anyhow::Result<()> {
-//!     koof::App::new(&my_provider::generated::PROVIDER)
-//!         .controller::<my_provider::generated::zone::Zone>()
-//!         .run()
-//!         .await
-//! }
-//! ```
-
 use crate::{
     controller::{ControllerContext, run},
     http::HttpClient,
@@ -20,12 +8,9 @@ use futures::future::BoxFuture;
 use kube::runtime::events::{Recorder, Reporter};
 use std::sync::Arc;
 
-/// Generated per provider (`crate::generated::PROVIDER`).
 #[derive(Debug)]
 pub struct ProviderInfo {
-    /// Short provider name, used as the event reporter (`koof-<name>`).
     pub name: &'static str,
-    /// Default API base URL (first `servers[].url`); `PROVIDER_BASE_URL` overrides it.
     pub base_url: &'static str,
 }
 
@@ -45,14 +30,11 @@ impl App {
         }
     }
 
-    /// Applies a registration function, e.g. a provider's generated
-    /// `controllers` (all its resources).
     #[must_use]
     pub fn with(self, register: fn(Self) -> Self) -> Self {
         register(self)
     }
 
-    /// Adds the controller for `R`.
     #[must_use]
     pub fn controller<R: ManagedResource>(mut self) -> Self {
         self.controllers
@@ -115,7 +97,6 @@ impl App {
                 .iter()
                 .map(|(_, controller)| controller(context.clone())),
         );
-        // Controllers stop on SIGINT / SIGTERM; the server stops with them.
         tokio::select! {
             _ = controllers => {}
             result = server => {

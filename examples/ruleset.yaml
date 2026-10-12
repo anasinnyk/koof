@@ -1,0 +1,23 @@
+# The zone's custom firewall ruleset (the entrypoint of the phase). Rules are
+# managed inline: the list in the spec replaces the ruleset's rules on update,
+# and rules added elsewhere are removed on the next resync.
+apiVersion: rulesets.cloudflare.kube.nas1k.dev/v1alpha1
+kind: Ruleset
+metadata:
+  name: nas1k-dev-custom-firewall
+  namespace: default
+spec:
+  forProvider:
+    zoneRef:
+      name: nas1k-dev
+    name: default
+    description: Custom firewall rules managed by koof
+    kind: zone
+    phase: http_request_firewall_custom
+    rules:
+      - description: Block the admin path
+        expression: (http.request.uri.path eq "/admin")
+        action: block
+      - description: Challenge the login page
+        expression: (http.request.uri.path eq "/login")
+        action: managed_challenge

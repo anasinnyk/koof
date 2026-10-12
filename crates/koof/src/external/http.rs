@@ -1,26 +1,16 @@
-//! Generic HTTP access to a provider API. Generated code describes each operation
-//! with an [`Operation`] impl (data only); [`HttpClient::send`] does the rest.
-
 use crate::error::Retry;
 use serde::{Serialize, de::DeserializeOwned};
 use std::{fmt, time::Duration};
 use tracing::Instrument as _;
 
-/// One provider API operation, as emitted by `koof-gen`.
 pub trait Operation {
-    /// `<resource>.<lifecycle>`, e.g. `dns_record.observe`; used in traces and metrics.
     const NAME: &'static str;
     const METHOD: reqwest::Method;
-    /// Path template relative to the base URL, e.g. `/zones/{zone_id}`.
     const PATH: &'static str;
-    /// Request body; `()` when the operation takes none.
     type Request: Serialize + Send + Sync;
-    /// Successful response body.
     type Response: DeserializeOwned + Send + Sync;
 }
 
-/// Stand-in for a lifecycle operation the API does not have (e.g. no delete).
-/// The runtime checks the descriptor before using it and never sends it.
 pub struct Unsupported;
 
 impl Operation for Unsupported {
@@ -31,12 +21,9 @@ impl Operation for Unsupported {
     type Response = ();
 }
 
-/// Credentials for one request. `Debug` never prints the secret.
 #[derive(Clone)]
 pub enum Auth {
-    /// `Authorization: Bearer <token>`.
     Bearer(String),
-    /// A custom header, e.g. an API key.
     Header { name: String, value: String },
 }
 
@@ -63,7 +50,6 @@ pub enum HttpError {
         path: String,
         status: reqwest::StatusCode,
         body: String,
-        /// Parsed `Retry-After` (seconds form) of a `429` / `503`.
         retry_after: Option<Duration>,
     },
 
@@ -87,7 +73,6 @@ impl HttpClient {
         }
     }
 
-    /// Records every request in `metrics`.
     #[must_use]
     pub fn with_metrics(mut self, metrics: std::sync::Arc<crate::metrics::Metrics>) -> Self {
         self.metrics = Some(metrics);
@@ -247,8 +232,6 @@ impl HttpClient {
 }
 
 impl HttpError {
-    /// `429` and `5xx` (and transport failures) are transient; other statuses and
-    /// decoding errors are permanent.
     #[must_use]
     pub fn retry(&self) -> Retry {
         match self {

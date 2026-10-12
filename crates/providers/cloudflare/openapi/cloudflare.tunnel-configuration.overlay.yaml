@@ -1,0 +1,85 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare Tunnel Configuration
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # The configuration of a remotely managed tunnel (config_src: cloudflare): its
+  # ingress rules are Networks -> Tunnels -> Published application routes in the
+  # dashboard. One per tunnel and replaced as a whole (PUT), so the rules are
+  # managed inline and rules added elsewhere are removed on the next resync.
+  #
+  # It exists as long as the tunnel does: observe reads it through tunnelRef, and
+  # a changed spec is written with the update. The API has no create or delete,
+  # so the resource needs deletionPolicy: Orphan (the tunnel's deletion removes
+  # the configuration).
+  - target: $.paths['/accounts/{account_id}/cfd_tunnel/{tunnel_id}/configurations'].put.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: tunnel_configuration
+        apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+        kind: TunnelConfiguration
+        scope: Namespaced
+
+        references:
+          tunnel:
+            from: spec.forProvider.tunnelRef
+            target: tunnel
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: api_token
+          source:
+            type: related
+            via: [tunnel, account]
+
+        fields:
+          mode: explicit
+          forProvider:
+            - config
+          atProvider:
+            - config
+            - source
+            - version
+            - created_at
+
+  # The last ingress rule must be a catch-all without a hostname (e.g.
+  # `service: http_status:404`), which the schema does not allow.
+  - target: $.components.schemas.tunnel_ingressRule.required
+    remove: true
+
+  - target: $.components.schemas.tunnel_ingressRule
+    update:
+      required: [service]
+
+  - target: $.paths['/accounts/{account_id}/cfd_tunnel/{tunnel_id}/configurations'].get
+    update:
+      x-kube-operation:
+        resource: tunnel_configuration
+        lifecycle: observe
+        response:
+          path: result
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [tunnel, account]
+            name: external_id
+          tunnel_id:
+            type: related_identifier
+            via: [tunnel]
+            name: external_id
+
+  - target: $.paths['/accounts/{account_id}/cfd_tunnel/{tunnel_id}/configurations'].put
+    update:
+      x-kube-operation:
+        resource: tunnel_configuration
+        lifecycle: update
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [tunnel, account]
+            name: external_id
+          tunnel_id:
+            type: related_identifier
+            via: [tunnel]
+            name: external_id

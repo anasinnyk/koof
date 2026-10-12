@@ -68,8 +68,6 @@ pub fn prune(document: &Value) -> Result<Value, SpecError> {
     Ok(pruned)
 }
 
-/// Path item with only its `x-kube-operation` operations (path-level keys such as
-/// `parameters` stay); `None` when no operation is kept.
 fn keep_kube_operations(item: &Map<String, Value>) -> Option<Value> {
     let is_kube_operation = |key: &str, value: &Value| {
         HTTP_METHODS.contains(&key) && value.get(OPERATION).is_some()
@@ -90,7 +88,6 @@ fn keep_kube_operations(item: &Map<String, Value>) -> Option<Value> {
     ))
 }
 
-/// Collects `(section, name)` for every `#/components/<section>/<name>` reference.
 fn collect_component_refs(value: &Value, out: &mut Vec<(String, String)>) {
     match value {
         Value::Object(map) => {

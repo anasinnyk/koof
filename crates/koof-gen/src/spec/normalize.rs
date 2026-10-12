@@ -1,9 +1,6 @@
 use super::schema_children_mut;
 use serde_json::{Map, Value};
 
-/// Translates `OpenAPI` 3.0 `nullable: true` into JSON Schema:
-/// `type: T` becomes `type: [T, "null"]`; an untyped schema (`$ref`, compositions)
-/// becomes `anyOf: [<schema>, {type: "null"}]`. `nullable: false` is dropped.
 pub fn normalize_nullable(value: &mut Value) {
     match value {
         Value::Object(map) => normalize_object(map),
@@ -12,11 +9,46 @@ pub fn normalize_nullable(value: &mut Value) {
     }
 }
 
-/// Typify limitation, not a spec fix: for an `enum` whose values are not strings
-/// (numbers, booleans, arrays, only `null`) typify emits a hand-written
-/// `JsonSchema` impl for schemars 0.8, which does not compile with schemars 1.
-/// Such enums are dropped — the field keeps its type — and the allowed values move
-/// to the description. (A CEL rule can restore the check.)
+pub fn relax_read_only_required(value: &mut Value) {
+    match value {
+        Value::Object(map) => {
+            for child in schema_children_mut(map) {
+                relax_read_only_required(child);
+            }
+            let read_only: Vec<String> = map
+                .get("properties")
+                .and_then(Value::as_object)
+                .into_iter()
+                .flatten()
+                .filter(|(_, property)| is_read_only(property))
+                .map(|(name, _)| name.clone())
+                .collect();
+            if read_only.is_empty() {
+                return;
+            }
+            if let Some(Value::Array(required)) = map.get_mut("required") {
+                required.retain(|name| {
+                    name.as_str()
+                        .is_none_or(|name| !read_only.iter().any(|field| field == name))
+                });
+                if required.is_empty() {
+                    map.remove("required");
+                }
+            }
+        }
+        Value::Array(items) => items.iter_mut().for_each(relax_read_only_required),
+        _ => {}
+    }
+}
+
+fn is_read_only(property: &Value) -> bool {
+    property.get("readOnly") == Some(&Value::Bool(true))
+        || property
+            .get("allOf")
+            .and_then(Value::as_array)
+            .is_some_and(|parts| parts.iter().any(is_read_only))
+}
+
 pub fn drop_non_string_enums(value: &mut Value) {
     match value {
         Value::Object(map) => {
@@ -85,6 +117,21 @@ fn normalize_object(map: &mut Map<String, Value>) {
 mod tests {
     use super::*;
     use serde_json::json;
+
+    #[test]
+    fn read_only_properties_are_not_required() {
+        let mut value = json!({
+            "type": "object",
+            "properties": {
+                "id": { "allOf": [{ "$ref": "#/components/schemas/Id" }, { "readOnly": true }] },
+                "version": { "type": "string", "readOnly": true },
+                "name": { "type": "string" }
+            },
+            "required": ["id", "version", "name"]
+        });
+        relax_read_only_required(&mut value);
+        assert_eq!(value["required"], json!(["name"]));
+    }
 
     fn normalized(mut value: Value) -> Value {
         normalize_nullable(&mut value);

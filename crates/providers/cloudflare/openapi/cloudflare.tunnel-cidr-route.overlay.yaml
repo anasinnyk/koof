@@ -1,0 +1,117 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare Tunnel CIDR Route
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # A private network route (CIDR) through a Cloudflare Tunnel: Networks -> Tunnels
+  # -> CIDR Routes in the dashboard. The tunnel comes from tunnelRef and the
+  # account from the tunnel, so tunnel_id is not part of forProvider; it is set
+  # on the request bodies instead.
+  - target: $.paths['/accounts/{account_id}/teamnet/routes'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: tunnel_cidr_route
+        apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+        kind: TunnelCidrRoute
+        scope: Namespaced
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          tunnel:
+            from: spec.forProvider.tunnelRef
+            target: tunnel
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: api_token
+          source:
+            type: related
+            via: [tunnel, account]
+
+        fields:
+          mode: explicit
+          forProvider:
+            - network
+            - comment
+            - virtual_network_id
+          atProvider:
+            - id
+            - network
+            - comment
+            - tunnel_id
+            - virtual_network_id
+            - created_at
+            - deleted_at
+
+  - target: $.paths['/accounts/{account_id}/teamnet/routes/{route_id}'].get
+    update:
+      x-kube-operation:
+        resource: tunnel_cidr_route
+        lifecycle: observe
+        response:
+          path: result
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [tunnel, account]
+            name: external_id
+          route_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/teamnet/routes'].post
+    update:
+      x-kube-operation:
+        resource: tunnel_cidr_route
+        lifecycle: create
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [tunnel, account]
+            name: external_id
+        request:
+          from: spec.forProvider
+          set:
+            tunnel_id:
+              type: related_identifier
+              via: [tunnel]
+              name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/accounts/{account_id}/teamnet/routes/{route_id}'].patch
+    update:
+      x-kube-operation:
+        resource: tunnel_cidr_route
+        lifecycle: update
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [tunnel, account]
+            name: external_id
+          route_id:
+            type: external_name
+        request:
+          from: spec.forProvider
+          set:
+            tunnel_id:
+              type: related_identifier
+              via: [tunnel]
+              name: external_id
+
+  - target: $.paths['/accounts/{account_id}/teamnet/routes/{route_id}'].delete
+    update:
+      x-kube-operation:
+        resource: tunnel_cidr_route
+        lifecycle: delete
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [tunnel, account]
+            name: external_id
+          route_id:
+            type: external_name

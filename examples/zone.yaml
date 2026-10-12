@@ -1,11 +1,17 @@
-apiVersion: cloudflare.cfrs.dev/v1alpha1
+# Imports an existing zone by its ID, read-only and kept when the resource is
+# deleted. Without the annotation and with the default management policies the
+# controller would create the zone instead.
+apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
 kind: Zone
 metadata:
-  name: example-com
+  name: nas1k-dev
   namespace: default
+  annotations:
+    cloudflare.kube.nas1k.dev/external-name: c938eb08c0412fcd3d7da8f9479d3026
 spec:
-  name: example.com
-  accountRef:
-    name: nas1k
-  type: full
-  jumpStart: true
+  managementPolicies: ["Observe", "LateInitialize"]
+  deletionPolicy: Orphan
+  forProvider:
+    name: nas1k.dev
+    accountRef:
+      name: nas1k

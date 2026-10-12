@@ -1,9 +1,3 @@
-//! Preprocessing of an `OpenAPI` document (overlays already applied) before code
-//! generation: keep only what `x-kube-*` needs, translate the `OpenAPI` 3.0 schema
-//! dialect to JSON Schema, and synthesize per-resource `forProvider` / `atProvider`
-//! schemas. Everything works on `serde_json::Value`, so schemas reach the type
-//! generator unchanged apart from these steps.
-
 mod bodies;
 pub mod extensions;
 mod normalize;
@@ -11,7 +5,7 @@ mod prune;
 mod synthesize;
 
 pub use bodies::hoist_operation_bodies;
-pub use normalize::{drop_non_string_enums, normalize_nullable};
+pub use normalize::{drop_non_string_enums, normalize_nullable, relax_read_only_required};
 pub use prune::prune;
 pub use synthesize::synthesize;
 
@@ -49,18 +43,15 @@ pub fn prepare(document: &Value) -> Result<Value, SpecError> {
     Ok(document)
 }
 
-/// The schema set for type generation, and what was learned building it.
 #[derive(Debug)]
 pub struct CodegenSpec {
-    /// The document with JSON Schema dialect and synthesized `forProvider` /
-    /// `atProvider` schemas; `components.schemas` is the input of type generation.
     pub document: Value,
-    /// Per resource: top-level `forProvider` fields that may be late-initialized.
     pub late_initialize: BTreeMap<ResourceName, Vec<String>>,
 }
 
 /// Turns a [`prepare`]d document into the schema set for type generation:
-/// [`normalize_nullable`], [`synthesize`], then [`drop_non_string_enums`].
+/// [`relax_read_only_required`], [`normalize_nullable`], [`synthesize`], then
+/// [`drop_non_string_enums`].
 ///
 /// # Errors
 ///
@@ -68,6 +59,7 @@ pub struct CodegenSpec {
 /// field selection cannot be satisfied by its schemas.
 pub fn for_codegen(prepared: &Value) -> Result<CodegenSpec, SpecError> {
     let mut document = prepared.clone();
+    relax_read_only_required(&mut document);
     normalize_nullable(&mut document);
     let late_initialize = synthesize(&mut document)?;
     schemas_mut(&mut document)?
@@ -99,7 +91,6 @@ fn schemas_mut(document: &mut Value) -> Result<&mut Map<String, Value>, SpecErro
         .ok_or_else(|| SpecError::Missing("components.schemas".to_owned()))
 }
 
-/// The JSON media type of a `content` map: `application/json`, else any `*+json`.
 fn json_media(content: &Map<String, Value>) -> Option<&Value> {
     content.get("application/json").or_else(|| {
         content
@@ -109,7 +100,6 @@ fn json_media(content: &Map<String, Value>) -> Option<&Value> {
     })
 }
 
-/// Mutable counterpart of [`json_media`].
 fn json_media_mut(content: &mut Map<String, Value>) -> Option<&mut Value> {
     let key = if content.contains_key("application/json") {
         "application/json".to_owned()
@@ -119,12 +109,10 @@ fn json_media_mut(content: &mut Map<String, Value>) -> Option<&mut Value> {
     content.get_mut(&key)
 }
 
-/// Schema of the JSON content of a request body or response.
 fn json_schema(container: &Value) -> Option<&Value> {
     json_media(container.get("content")?.as_object()?)?.get("schema")
 }
 
-/// Successful (`2xx`) statuses of a `responses` map, in order.
 fn success_statuses(responses: &Map<String, Value>) -> Vec<String> {
     let mut statuses: Vec<String> = responses
         .keys()
@@ -135,8 +123,6 @@ fn success_statuses(responses: &Map<String, Value>) -> Vec<String> {
     statuses
 }
 
-/// JSON schema of the first successful response of `operation` that has one,
-/// following a `$ref` to `components.responses`.
 fn success_json_schema<'a>(document: &'a Value, operation: &'a Value) -> Option<&'a Value> {
     let responses = operation.get("responses")?.as_object()?;
     success_statuses(responses).into_iter().find_map(|status| {
@@ -150,12 +136,8 @@ fn success_json_schema<'a>(document: &'a Value, operation: &'a Value) -> Option<
     })
 }
 
-/// Keys whose values are data, not schemas; walkers must not descend into them.
 const DATA_KEYWORDS: [&str; 5] = ["example", "examples", "default", "enum", "const"];
 
-/// Keys whose values map arbitrary names to schemas (or schema containers). Their
-/// entries are always walked, even when a name equals a data keyword (a property
-/// called `default`, a `default` response).
 const NAME_MAPS: [&str; 5] = [
     "properties",
     "patternProperties",
@@ -164,7 +146,6 @@ const NAME_MAPS: [&str; 5] = [
     "responses",
 ];
 
-/// Children of `map` that may contain schemas.
 fn schema_children(map: &Map<String, Value>) -> impl Iterator<Item = &Value> {
     map.iter().flat_map(|(key, child)| {
         let entries: Box<dyn Iterator<Item = &Value>> = match child {
@@ -178,7 +159,6 @@ fn schema_children(map: &Map<String, Value>) -> impl Iterator<Item = &Value> {
     })
 }
 
-/// Mutable counterpart of [`schema_children`].
 fn schema_children_mut(map: &mut Map<String, Value>) -> Vec<&mut Value> {
     let mut children = Vec::new();
     for (key, child) in map.iter_mut() {
@@ -195,12 +175,10 @@ fn schema_children_mut(map: &mut Map<String, Value>) -> Vec<&mut Value> {
 
 const COMPONENT_SCHEMA_PREFIX: &str = "#/components/schemas/";
 
-/// Decodes a JSON pointer segment (`~1` → `/`, `~0` → `~`).
 fn decode_segment(segment: &str) -> String {
     segment.replace("~1", "/").replace("~0", "~")
 }
 
-/// Name of the component schema a `{"$ref": "#/components/schemas/<name>"}` points to.
 fn schema_ref_name(schema: &Value) -> Option<String> {
     schema
         .get("$ref")
@@ -209,15 +187,12 @@ fn schema_ref_name(schema: &Value) -> Option<String> {
         .map(decode_segment)
 }
 
-/// The component schema `schema` refers to, or `schema` itself.
 fn resolve_ref<'a>(schemas: &'a Map<String, Value>, schema: &'a Value) -> &'a Value {
     schema_ref_name(schema)
         .and_then(|name| schemas.get(&name))
         .unwrap_or(schema)
 }
 
-/// Component schema name of the JSON request body of `operation`, if it is a
-/// `$ref` (a body that is itself a `$ref` has none).
 #[must_use]
 pub fn request_schema_name(operation: &Value) -> Option<String> {
     let body = operation.get("requestBody")?;
@@ -227,8 +202,6 @@ pub fn request_schema_name(operation: &Value) -> Option<String> {
     schema_ref_name(json_schema(body)?)
 }
 
-/// Component schema name of the first successful JSON response of `operation`,
-/// if it is a `$ref`.
 #[must_use]
 pub fn response_schema_name(document: &Value, operation: &Value) -> Option<String> {
     schema_ref_name(success_json_schema(document, operation)?)

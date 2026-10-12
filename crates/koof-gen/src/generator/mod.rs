@@ -47,8 +47,6 @@ pub fn generate(
     Ok(files)
 }
 
-/// A resource module: CRD types, the static descriptor and the
-/// `koof::ManagedResource` impl. All behaviour lives in the `koof` runtime.
 fn resource_file(
     resource: &Resource<'_>,
     types: &GeneratedTypes,
@@ -78,9 +76,6 @@ fn operations_file(
     })
 }
 
-/// `src/generated/types.rs`: typify output. Lints are relaxed for the whole file:
-/// it is third-party-generated code with upstream doc strings, and typify compiles
-/// `pattern` regexes with `unwrap()`.
 fn types_file(types: &GeneratedTypes) -> Result<GeneratedFile, GeneratorError> {
     let tokens = &types.tokens;
     let content = quote! {
@@ -146,8 +141,6 @@ fn mod_file(provider: &Provider<'_>) -> Result<GeneratedFile, GeneratorError> {
     })
 }
 
-/// Wraps generated items with the common file header. Pedantic lints are allowed
-/// because doc comments come verbatim from the upstream `OpenAPI` document.
 fn generated_file(items: &TokenStream) -> TokenStream {
     quote! {
         #![doc = " This file is generated. Do not edit manually."]
