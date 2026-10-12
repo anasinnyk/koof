@@ -18,8 +18,8 @@ RUN test -n "$PROVIDER" || (echo "--build-arg PROVIDER=<name> is required" && ex
 COPY --from=planner /src/recipe.json recipe.json
 RUN cargo chef cook --locked --release -p "${PROVIDER}-provider" --recipe-path recipe.json
 COPY . .
-RUN cargo build --locked --release -p "${PROVIDER}-provider" --bin "${PROVIDER}-provider" \
-    && cp "target/release/${PROVIDER}-provider" /provider \
+RUN cargo build --locked --release -p "${PROVIDER}-provider" --bin main \
+    && cp target/release/main /provider \
     && ! readelf -d /provider | grep -q NEEDED
 
 FROM scratch

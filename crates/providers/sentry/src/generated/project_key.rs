@@ -37,7 +37,11 @@ pub struct ProjectKeyForProviderSpec {
     version = "v1alpha1",
     kind = "ProjectKey",
     namespaced,
-    status = "ProjectKeyStatus"
+    status = "ProjectKeyStatus",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Ready\\\")].status\",\"name\":\"Ready\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Synced\\\")].status\",\"name\":\"Synced\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.annotations.sentry\\\\.kube\\\\.nas1k\\\\.dev/external-name\",\"name\":\"External-Name\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.creationTimestamp\",\"name\":\"Age\",\"type\":\"date\"}"
 )]
 pub struct ProjectKeySpec {
     #[serde(rename = "forProvider")]
@@ -72,25 +76,28 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         },
         auth: koof::resource::AuthScheme::Bearer,
     }),
-    observe: koof::resource::OperationDescriptor {
-        path_parameters: &[
-            ("key_id", koof::resource::ValueExpr::ExternalName),
-            (
-                "organization_id_or_slug",
-                koof::resource::ValueExpr::RelatedIdentifier {
-                    via: &["project", "organization"],
-                    name: "external_id",
-                },
-            ),
-            (
-                "project_id_or_slug",
-                koof::resource::ValueExpr::RelatedIdentifier {
-                    via: &["project"],
-                    name: "external_id",
-                },
-            ),
-        ],
-        response_path: "",
+    observe: koof::resource::ObserveDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[
+                ("key_id", koof::resource::ValueExpr::ExternalName),
+                (
+                    "organization_id_or_slug",
+                    koof::resource::ValueExpr::RelatedIdentifier {
+                        via: &["project", "organization"],
+                        name: "external_id",
+                    },
+                ),
+                (
+                    "project_id_or_slug",
+                    koof::resource::ValueExpr::RelatedIdentifier {
+                        via: &["project"],
+                        name: "external_id",
+                    },
+                ),
+            ],
+            response_path: "",
+        },
+        deleted_when: None,
     },
     create: Some(koof::resource::CreateDescriptor {
         operation: koof::resource::OperationDescriptor {

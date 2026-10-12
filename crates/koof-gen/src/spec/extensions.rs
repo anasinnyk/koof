@@ -91,8 +91,11 @@ impl LifecycleAction {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ResponseExtension {
     pub path: String,
+    #[serde(default)]
+    pub deleted_when: Option<String>,
 }
 
 #[derive(Debug, Default, Deserialize)]

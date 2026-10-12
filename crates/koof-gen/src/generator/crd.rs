@@ -4,7 +4,7 @@ use crate::{
         naming::{field_ident, kind_ident},
         types::GeneratedTypes,
     },
-    ir::resolved::Resource,
+    ir::{ValueExpr, resolved::Resource},
 };
 use proc_macro2::TokenStream;
 use quote::quote;
@@ -22,6 +22,7 @@ pub fn generate_spec(
     let fields_type = types.path(&format!("{kind}ForProvider"))?;
 
     let validations = validation_tokens(resource);
+    let print_columns = print_columns(resource);
     let namespaced = resource.namespaced.then(|| quote!(namespaced,));
     let mut fields = reference_fields(resource)?;
     if let Some(credentials) = credential_field(resource)? {
@@ -68,7 +69,8 @@ pub fn generate_spec(
             version = #version,
             kind = #kind,
             #namespaced
-            status = #status_name
+            status = #status_name,
+            #(#print_columns),*
         )]
         pub struct #spec_ident {
             #[serde(rename = "forProvider")]
@@ -79,6 +81,40 @@ pub fn generate_spec(
                 koof::managed::ManagedResourceSpec,
         }
     })
+}
+
+fn print_columns(resource: &Resource<'_>) -> Vec<TokenStream> {
+    let column = |name: &str, type_: &str, json_path: &str| {
+        let column =
+            serde_json::json!({ "name": name, "type": type_, "jsonPath": json_path }).to_string();
+        quote!(printcolumn = #column)
+    };
+    let mut columns = vec![
+        column(
+            "Ready",
+            "string",
+            r#".status.conditions[?(@.type=="Ready")].status"#,
+        ),
+        column(
+            "Synced",
+            "string",
+            r#".status.conditions[?(@.type=="Synced")].status"#,
+        ),
+    ];
+    if resource
+        .identifiers
+        .values()
+        .any(|expression| matches!(expression, ValueExpr::ExternalName))
+    {
+        let group = resource.group.replace('.', "\\.");
+        columns.push(column(
+            "External-Name",
+            "string",
+            &format!(".metadata.annotations.{group}/external-name"),
+        ));
+    }
+    columns.push(column("Age", "date", ".metadata.creationTimestamp"));
+    columns
 }
 
 fn validation_tokens(resource: &Resource<'_>) -> Vec<TokenStream> {

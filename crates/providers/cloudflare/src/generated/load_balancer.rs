@@ -37,7 +37,11 @@ pub struct LoadBalancerForProviderSpec {
     version = "v1alpha1",
     kind = "LoadBalancer",
     namespaced,
-    status = "LoadBalancerStatus"
+    status = "LoadBalancerStatus",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Ready\\\")].status\",\"name\":\"Ready\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Synced\\\")].status\",\"name\":\"Synced\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.annotations.loadbalancing\\\\.cloudflare\\\\.kube\\\\.nas1k\\\\.dev/external-name\",\"name\":\"External-Name\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.creationTimestamp\",\"name\":\"Age\",\"type\":\"date\"}"
 )]
 pub struct LoadBalancerSpec {
     #[serde(rename = "forProvider")]
@@ -91,18 +95,21 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         },
         auth: koof::resource::AuthScheme::Bearer,
     }),
-    observe: koof::resource::OperationDescriptor {
-        path_parameters: &[
-            ("load_balancer_id", koof::resource::ValueExpr::ExternalName),
-            (
-                "zone_id",
-                koof::resource::ValueExpr::RelatedIdentifier {
-                    via: &["zone"],
-                    name: "external_id",
-                },
-            ),
-        ],
-        response_path: "result",
+    observe: koof::resource::ObserveDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[
+                ("load_balancer_id", koof::resource::ValueExpr::ExternalName),
+                (
+                    "zone_id",
+                    koof::resource::ValueExpr::RelatedIdentifier {
+                        via: &["zone"],
+                        name: "external_id",
+                    },
+                ),
+            ],
+            response_path: "result",
+        },
+        deleted_when: None,
     },
     create: Some(koof::resource::CreateDescriptor {
         operation: koof::resource::OperationDescriptor {

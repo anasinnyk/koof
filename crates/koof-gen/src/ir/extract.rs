@@ -4,7 +4,10 @@ use super::{
 };
 use crate::spec::{
     self, SpecError,
-    extensions::{LifecycleAction, PROVIDER, ResourceExtension, kube_operations, kube_resources},
+    extensions::{
+        LifecycleAction, OperationExtension, PROVIDER, ResourceExtension, kube_operations,
+        kube_resources,
+    },
 };
 use serde_json::Value;
 use std::collections::BTreeMap;
@@ -73,6 +76,7 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
                 extension.lifecycle.name()
             )));
         }
+        let (response_path, deleted_when) = response_fields(&extension)?;
 
         operations.insert(
             id,
@@ -83,7 +87,8 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
                 request: spec::request_schema_name(kube_operation.operation).map(SchemaName),
                 response: spec::response_schema_name(prepared, kube_operation.operation)
                     .map(SchemaName),
-                response_path: extension.response.map(|response| response.path),
+                response_path,
+                deleted_when,
                 request_mapping: extension.request,
                 result_identifiers: extension.result.unwrap_or_default().identifiers,
             },
@@ -199,6 +204,21 @@ fn extract_security_schemes(
         result.insert(SecuritySchemeName(name.clone()), scheme);
     }
     Ok(result)
+}
+
+fn response_fields(
+    extension: &OperationExtension,
+) -> Result<(Option<String>, Option<String>), ExtractError> {
+    let Some(response) = &extension.response else {
+        return Ok((None, None));
+    };
+    if response.deleted_when.is_some() && extension.lifecycle != LifecycleAction::Observe {
+        return Err(ir_error(format!(
+            "resource {}: response.deleted_when is only allowed on the observe operation",
+            extension.resource.0
+        )));
+    }
+    Ok((Some(response.path.clone()), response.deleted_when.clone()))
 }
 
 fn parse_method(method: &str) -> Result<HttpMethod, ExtractError> {

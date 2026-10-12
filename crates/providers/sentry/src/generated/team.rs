@@ -41,7 +41,11 @@ pub struct TeamForProviderSpec {
     version = "v1alpha1",
     kind = "Team",
     namespaced,
-    status = "TeamStatus"
+    status = "TeamStatus",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Ready\\\")].status\",\"name\":\"Ready\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Synced\\\")].status\",\"name\":\"Synced\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.annotations.sentry\\\\.kube\\\\.nas1k\\\\.dev/external-name\",\"name\":\"External-Name\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.creationTimestamp\",\"name\":\"Age\",\"type\":\"date\"}"
 )]
 pub struct TeamSpec {
     #[serde(rename = "forProvider")]
@@ -76,18 +80,21 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         },
         auth: koof::resource::AuthScheme::Bearer,
     }),
-    observe: koof::resource::OperationDescriptor {
-        path_parameters: &[
-            (
-                "organization_id_or_slug",
-                koof::resource::ValueExpr::RelatedIdentifier {
-                    via: &["organization"],
-                    name: "external_id",
-                },
-            ),
-            ("team_id_or_slug", koof::resource::ValueExpr::ExternalName),
-        ],
-        response_path: "",
+    observe: koof::resource::ObserveDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[
+                (
+                    "organization_id_or_slug",
+                    koof::resource::ValueExpr::RelatedIdentifier {
+                        via: &["organization"],
+                        name: "external_id",
+                    },
+                ),
+                ("team_id_or_slug", koof::resource::ValueExpr::ExternalName),
+            ],
+            response_path: "",
+        },
+        deleted_when: None,
     },
     create: Some(koof::resource::CreateDescriptor {
         operation: koof::resource::OperationDescriptor {

@@ -47,7 +47,7 @@ pub struct ResourceDescriptor {
     pub late_initialize: &'static [&'static str],
     pub references: &'static [Reference],
     pub credentials: Option<Credentials>,
-    pub observe: OperationDescriptor,
+    pub observe: ObserveDescriptor,
     pub create: Option<CreateDescriptor>,
     pub update: Option<UpdateDescriptor>,
     pub delete: Option<OperationDescriptor>,
@@ -140,6 +140,12 @@ pub enum AuthScheme {
 pub struct OperationDescriptor {
     pub path_parameters: &'static [(&'static str, ValueExpr)],
     pub response_path: &'static str,
+}
+
+#[derive(Debug)]
+pub struct ObserveDescriptor {
+    pub operation: OperationDescriptor,
+    pub deleted_when: Option<&'static str>,
 }
 
 #[derive(Debug)]

@@ -78,6 +78,9 @@ actions:
 ```
 
 `lifecycle` is one of `observe` (required), `create`, `update` and `delete`.
+For APIs that soft-delete (the observe endpoint keeps answering `200`),
+`response.deleted_when: deleted_at` on `observe` treats the resource as gone once
+that field is set.
 Request bodies default to `spec.forProvider`; `request.set` adds values such as
 identifiers of referenced resources. `x-kube-field` on a property sets `ignored`
 or `late_initialize: false`.

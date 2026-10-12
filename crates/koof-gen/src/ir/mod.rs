@@ -91,6 +91,7 @@ pub struct OperationIr {
     pub request: Option<SchemaName>,
     pub response: Option<SchemaName>,
     pub response_path: Option<String>,
+    pub deleted_when: Option<String>,
     pub request_mapping: Option<RequestMappingIr>,
     pub result_identifiers: BTreeMap<String, String>,
 }
