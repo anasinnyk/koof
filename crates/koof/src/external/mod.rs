@@ -84,8 +84,7 @@ fn unsupported(kind: &str, lifecycle: &str, hint: &str) -> ReconcileError {
 }
 
 /// Reads the external resource through `R::Observe`; `exists: false` when its
-/// path parameters are not set yet (see [`Call::prepare`]) or the API answers
-/// `404`.
+/// path parameters are not set yet or the API answers `404`.
 ///
 /// # Errors
 ///

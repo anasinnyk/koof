@@ -2,6 +2,14 @@
 resolver = "3"
 members = ["crates/providers/cloudflare", "crates/providers/sentry", "crates/koof", "crates/koof-gen"]
 
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.91"
+license = "MIT"
+repository = "https://github.com/anasinnyk/openapi-operator-framework"
+homepage = "https://github.com/anasinnyk/openapi-operator-framework"
+
 [workspace.lints.rust]
 warnings = { level = "deny", priority = -1 }
 unsafe_code = "forbid"
