@@ -1,8 +1,15 @@
 [package]
 name = "koof-gen"
-version = "0.1.0"
-edition = "2024"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
 description = "Generates Kubernetes operator code from OpenAPI + overlays"
+readme = "README.md"
+keywords = ["kubernetes", "operator", "openapi", "codegen", "crd"]
+categories = ["development-tools", "command-line-utilities"]
 
 [lints]
 workspace = true
