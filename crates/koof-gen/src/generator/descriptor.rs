@@ -50,7 +50,7 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
         .as_ref()
         .map_or_else(|| quote!(None), credentials_tokens);
 
-    let observe = operation_descriptor(resource.observe);
+    let observe = observe_descriptor(resource.observe);
     let delete = optional(resource.delete.map(operation_descriptor));
     let create = optional(resource.create.map(create_descriptor));
     let namespaced = resource.namespaced;
@@ -176,6 +176,17 @@ fn request_mapping(operation: Operation<'_>) -> TokenStream {
         koof::resource::RequestMapping {
             from: #from,
             set: &[#(#set),*],
+        }
+    }
+}
+
+fn observe_descriptor(operation: Operation<'_>) -> TokenStream {
+    let descriptor = operation_descriptor(operation);
+    let deleted_when = optional(operation.ir.deleted_when.as_deref().map(|path| quote!(#path)));
+    quote! {
+        koof::resource::ObserveDescriptor {
+            operation: #descriptor,
+            deleted_when: #deleted_when,
         }
     }
 }

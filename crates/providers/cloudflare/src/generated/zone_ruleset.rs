@@ -37,7 +37,11 @@ pub struct RulesetForProviderSpec {
     version = "v1alpha1",
     kind = "Ruleset",
     namespaced,
-    status = "RulesetStatus"
+    status = "RulesetStatus",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Ready\\\")].status\",\"name\":\"Ready\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Synced\\\")].status\",\"name\":\"Synced\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.annotations.rulesets\\\\.cloudflare\\\\.kube\\\\.nas1k\\\\.dev/external-name\",\"name\":\"External-Name\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.creationTimestamp\",\"name\":\"Age\",\"type\":\"date\"}"
 )]
 pub struct RulesetSpec {
     #[serde(rename = "forProvider")]
@@ -72,18 +76,21 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         },
         auth: koof::resource::AuthScheme::Bearer,
     }),
-    observe: koof::resource::OperationDescriptor {
-        path_parameters: &[
-            ("ruleset_id", koof::resource::ValueExpr::ExternalName),
-            (
-                "zone_id",
-                koof::resource::ValueExpr::RelatedIdentifier {
-                    via: &["zone"],
-                    name: "external_id",
-                },
-            ),
-        ],
-        response_path: "result",
+    observe: koof::resource::ObserveDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[
+                ("ruleset_id", koof::resource::ValueExpr::ExternalName),
+                (
+                    "zone_id",
+                    koof::resource::ValueExpr::RelatedIdentifier {
+                        via: &["zone"],
+                        name: "external_id",
+                    },
+                ),
+            ],
+            response_path: "result",
+        },
+        deleted_when: None,
     },
     create: Some(koof::resource::CreateDescriptor {
         operation: koof::resource::OperationDescriptor {

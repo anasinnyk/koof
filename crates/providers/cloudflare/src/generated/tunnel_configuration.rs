@@ -37,7 +37,10 @@ pub struct TunnelConfigurationForProviderSpec {
     version = "v1alpha1",
     kind = "TunnelConfiguration",
     namespaced,
-    status = "TunnelConfigurationStatus"
+    status = "TunnelConfigurationStatus",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Ready\\\")].status\",\"name\":\"Ready\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Synced\\\")].status\",\"name\":\"Synced\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.creationTimestamp\",\"name\":\"Age\",\"type\":\"date\"}"
 )]
 pub struct TunnelConfigurationSpec {
     #[serde(rename = "forProvider")]
@@ -72,24 +75,27 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         },
         auth: koof::resource::AuthScheme::Bearer,
     }),
-    observe: koof::resource::OperationDescriptor {
-        path_parameters: &[
-            (
-                "account_id",
-                koof::resource::ValueExpr::RelatedIdentifier {
-                    via: &["tunnel", "account"],
-                    name: "external_id",
-                },
-            ),
-            (
-                "tunnel_id",
-                koof::resource::ValueExpr::RelatedIdentifier {
-                    via: &["tunnel"],
-                    name: "external_id",
-                },
-            ),
-        ],
-        response_path: "result",
+    observe: koof::resource::ObserveDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[
+                (
+                    "account_id",
+                    koof::resource::ValueExpr::RelatedIdentifier {
+                        via: &["tunnel", "account"],
+                        name: "external_id",
+                    },
+                ),
+                (
+                    "tunnel_id",
+                    koof::resource::ValueExpr::RelatedIdentifier {
+                        via: &["tunnel"],
+                        name: "external_id",
+                    },
+                ),
+            ],
+            response_path: "result",
+        },
+        deleted_when: None,
     },
     create: None,
     update: Some(koof::resource::UpdateDescriptor {

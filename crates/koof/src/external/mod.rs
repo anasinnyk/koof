@@ -9,7 +9,7 @@ use crate::{
     },
     error::{ReconcileError, ResolveValueError},
     json_path,
-    resource::{EXTERNAL_NAME, ManagedResource, OperationDescriptor},
+    resource::{EXTERNAL_NAME, ManagedResource, ObserveDescriptor, OperationDescriptor},
 };
 use http::{Auth, HttpError, Operation};
 use resolve::{Node, resolve_credentials, resolve_value};
@@ -84,7 +84,8 @@ fn unsupported(kind: &str, lifecycle: &str, hint: &str) -> ReconcileError {
 }
 
 /// Reads the external resource through `R::Observe`; `exists: false` when its
-/// path parameters are not set yet or the API answers `404`.
+/// path parameters are not set yet, the API answers `404` or the resource is marked
+/// deleted (`deleted_when`).
 ///
 /// # Errors
 ///
@@ -95,8 +96,8 @@ pub async fn observe<R: ManagedResource>(
     resource: &R,
 ) -> Result<Observation, ReconcileError> {
     let node = Node::of(resource)?;
-    let operation = &node.descriptor.observe;
-    let Some(call) = Call::prepare(context, &node, operation).await? else {
+    let observe = &node.descriptor.observe;
+    let Some(call) = Call::prepare(context, &node, &observe.operation).await? else {
         return Ok(Observation {
             exists: false,
             at_provider: None,
@@ -107,13 +108,28 @@ pub async fn observe<R: ManagedResource>(
         .send_json::<R::Observe>(&call.auth, &call.parameters(), None)
         .await?;
 
-    Ok(Observation {
-        exists: response.is_some(),
-        at_provider: response
+    Ok(observation(response.as_ref(), observe))
+}
+
+fn observation(response: Option<&Value>, observe: &ObserveDescriptor) -> Observation {
+    let at_provider = response
+        .and_then(|response| json_path::get_non_null(response, observe.operation.response_path))
+        .cloned();
+    let deleted = observe.deleted_when.is_some_and(|path| {
+        at_provider
             .as_ref()
-            .and_then(|response| json_path::get_non_null(response, operation.response_path))
-            .cloned(),
-    })
+            .is_some_and(|resource| json_path::get_non_null(resource, path).is_some())
+    });
+    if deleted {
+        return Observation {
+            exists: false,
+            at_provider: None,
+        };
+    }
+    Observation {
+        exists: response.is_some(),
+        at_provider,
+    }
 }
 
 /// Creates the external resource through `R::Create` and records its external name
@@ -244,4 +260,40 @@ pub async fn delete<R: ManagedResource>(
         .provider_client
         .send_discarding::<R::Delete>(&call.auth, &call.parameters(), None)
         .await?)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::observation;
+    use crate::resource::{ObserveDescriptor, OperationDescriptor};
+    use serde_json::json;
+
+    const OBSERVE: ObserveDescriptor = ObserveDescriptor {
+        operation: OperationDescriptor {
+            path_parameters: &[],
+            response_path: "result",
+        },
+        deleted_when: Some("deleted_at"),
+    };
+
+    #[test]
+    fn resource_marked_deleted_does_not_exist() {
+        let response = json!({ "result": { "id": "1", "deleted_at": "2026-10-12T17:45:03Z" } });
+        let observed = observation(Some(&response), &OBSERVE);
+        assert!(!observed.exists);
+        assert!(observed.at_provider.is_none());
+    }
+
+    #[test]
+    fn resource_without_deletion_marker_exists() {
+        let response = json!({ "result": { "id": "1", "deleted_at": null } });
+        let observed = observation(Some(&response), &OBSERVE);
+        assert!(observed.exists);
+        assert_eq!(observed.at_provider, Some(json!({ "id": "1", "deleted_at": null })));
+    }
+
+    #[test]
+    fn missing_response_does_not_exist() {
+        assert!(!observation(None, &OBSERVE).exists);
+    }
 }

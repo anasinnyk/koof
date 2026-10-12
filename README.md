@@ -17,7 +17,7 @@ overlays in `openapi/` (listed in `openapi/sources`), generated code in
 ```sh
 scripts/regen.sh cloudflare                              # regenerate
 cargo run -p cloudflare-provider --bin crdgen | kubectl apply -f -
-cargo run -p cloudflare-provider                         # run against the current kubeconfig
+cargo run -p cloudflare-provider --bin main              # run against the current kubeconfig
 ```
 
 ## Images

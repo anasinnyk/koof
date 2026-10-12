@@ -40,6 +40,7 @@ actions:
         lifecycle: observe
         response:
           path: result
+          deleted_when: deleted_at
         path_parameters:
           account_id:
             type: related_identifier
