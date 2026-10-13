@@ -1,11 +1,12 @@
 use super::{
-    ApiKeyLocationIr, HttpMethod, LifecycleIr, OperationId, OperationIr, ProviderIr, ResourceIr,
+    ApiKeyLocationIr, HttpIr, HttpMethod, LifecycleIr, OperationId, OperationIr, ProviderIr, ResourceIr,
     ResourceName, SchemaName, SecuritySchemeIr, SecuritySchemeName,
 };
 use crate::spec::{
     self, SpecError,
     extensions::{
-        LifecycleAction, OperationExtension, PROVIDER, ResourceExtension, kube_operations,
+        HttpExtension, LifecycleAction, OperationExtension, ResourceExtension, kube_operations,
+        kube_provider,
         kube_resources,
     },
 };
@@ -123,15 +124,14 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
         })
         .collect::<Result<_, ExtractError>>()?;
 
-    let provider = match prepared
-        .get(PROVIDER)
-        .and_then(|provider| provider.get("name"))
-        .or_else(|| prepared.pointer("/info/title"))
-        .and_then(Value::as_str)
-    {
+    let extension = kube_provider(prepared)?;
+    let provider = match extension.as_ref().map(|extension| extension.name.as_str()).or_else(|| {
+        prepared.pointer("/info/title").and_then(Value::as_str)
+    }) {
         Some(provider) => provider.to_owned(),
         None => return Err(ExtractError::InvalidOpenApi("missing info.title".to_owned())),
     };
+    let http = http_defaults(extension.map(|extension| extension.http).unwrap_or_default())?;
 
     let base_url = prepared
         .pointer("/servers/0/url")
@@ -142,9 +142,34 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
     Ok(ProviderIr {
         provider,
         base_url,
+        http,
         resources,
         operations,
         security_schemes: extract_security_schemes(prepared)?,
+    })
+}
+
+fn http_defaults(extension: HttpExtension) -> Result<HttpIr, ExtractError> {
+    let duration = |name: &str, value: Option<String>| {
+        value
+            .map(|value| {
+                let duration: jiff::SignedDuration = value.parse().map_err(|error| {
+                    ir_error(format!(
+                        "x-kube-provider.http.{name}: {value:?} is not a duration like 30s: {error}"
+                    ))
+                })?;
+                std::time::Duration::try_from(duration).map_err(|_| {
+                    ir_error(format!("x-kube-provider.http.{name}: {value:?} is negative"))
+                })
+            })
+            .transpose()
+    };
+    Ok(HttpIr {
+        timeout: duration("timeout", extension.timeout)?,
+        connect_timeout: duration("connect_timeout", extension.connect_timeout)?,
+        pool_idle_timeout: duration("pool_idle_timeout", extension.pool_idle_timeout)?,
+        pool_max_idle_per_host: extension.pool_max_idle_per_host,
+        user_agent: extension.user_agent,
     })
 }
 

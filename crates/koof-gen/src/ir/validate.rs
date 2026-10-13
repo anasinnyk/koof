@@ -49,6 +49,7 @@ pub fn validate<'a>(
     Ok(Provider {
         name: &ir.provider,
         base_url: &ir.base_url,
+        http: &ir.http,
         resources,
         operations: ir
             .operations

@@ -32,6 +32,13 @@ actions:
     update:
       x-kube-provider:
         name: example
+        # Optional HTTP client defaults; KOOF_HTTP_* variables override them.
+        http:
+          timeout: 30s
+          connect_timeout: 10s
+          pool_idle_timeout: 90s
+          pool_max_idle_per_host: 16
+          user_agent: example-operator
 ```
 
 A resource: `x-kube-resource` on its schema (usually the create request body)

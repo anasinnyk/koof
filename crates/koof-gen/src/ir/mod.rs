@@ -12,9 +12,19 @@ use std::collections::BTreeMap;
 pub struct ProviderIr {
     pub provider: String,
     pub base_url: String,
+    pub http: HttpIr,
     pub resources: BTreeMap<ResourceName, ResourceIr>,
     pub operations: BTreeMap<OperationId, OperationIr>,
     pub security_schemes: BTreeMap<SecuritySchemeName, SecuritySchemeIr>,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct HttpIr {
+    pub timeout: Option<std::time::Duration>,
+    pub connect_timeout: Option<std::time::Duration>,
+    pub pool_idle_timeout: Option<std::time::Duration>,
+    pub pool_max_idle_per_host: Option<usize>,
+    pub user_agent: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Deserialize)]
@@ -195,7 +205,7 @@ mod tests {
 openapi: 3.0.3
 info: { title: example, version: '1' }
 servers: [{ url: 'https://api.example.com' }]
-x-kube-provider: { name: example }
+x-kube-provider: { name: example, http: { timeout: 45s, pool_max_idle_per_host: 4 } }
 paths:
   /zones:
     post:
@@ -262,6 +272,14 @@ components:
         assert_eq!(ir.provider, "example");
         assert_eq!(ir.base_url, "https://api.example.com");
         assert_eq!(
+            ir.http,
+            HttpIr {
+                timeout: Some(std::time::Duration::from_secs(45)),
+                pool_max_idle_per_host: Some(4),
+                ..HttpIr::default()
+            }
+        );
+        assert_eq!(
             ir.security_schemes[&SecuritySchemeName("token".into())],
             SecuritySchemeIr::Http {
                 scheme: "bearer".into()
@@ -296,6 +314,15 @@ components:
                 .and_then(|credentials| credentials.secret_field),
             Some("tokenSecretRef")
         );
+        Ok(())
+    }
+
+    #[test]
+    fn invalid_http_duration_is_an_error() -> Result<(), Box<dyn std::error::Error>> {
+        let document = DOCUMENT.replace("timeout: 45s", "timeout: soon");
+        let prepared = spec::prepare(&serde_yaml::from_str(&document)?)?;
+        let error = extract(&prepared).err().ok_or("expected an error")?;
+        assert!(error.to_string().contains("http.timeout"), "{error}");
         Ok(())
     }
 

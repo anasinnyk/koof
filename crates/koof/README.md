@@ -28,12 +28,23 @@ async fn main() -> Result<(), koof::AppError> {
 
 ## Configuration
 
-| Variable            | Default                  | Purpose                                  |
-|---------------------|--------------------------|------------------------------------------|
-| `PROVIDER_BASE_URL` | the OpenAPI server URL   | Base URL of the provider API             |
-| `METRICS_ADDR`      | `0.0.0.0:8080`           | Metrics, health and readiness endpoints  |
-| `POD_NAME`          | –                        | Instance name reported on events         |
-| `RUST_LOG`          | `info`                   | Log filter                               |
+Settings are resolved in layers, later wins: built-in defaults, the provider's
+defaults from `x-kube-provider.http` in its overlay, then environment variables.
+Durations are written like `30s`, `1m30s` or `500ms`. The resolved values and the
+source of each are logged at startup; an invalid value stops the binary.
+
+| Variable                           | Default                     | Purpose                                     |
+|------------------------------------|-----------------------------|---------------------------------------------|
+| `KOOF_BASE_URL`                    | the OpenAPI server URL      | Base URL of the provider API                |
+| `KOOF_METRICS_ADDR`                | `0.0.0.0:8080`              | Metrics, health and readiness endpoints     |
+| `KOOF_POD_NAME`                    | –                           | Instance name reported on events            |
+| `KOOF_HTTP_TIMEOUT`                | `30s`                       | Whole provider API request                  |
+| `KOOF_HTTP_CONNECT_TIMEOUT`        | `10s`                       | Connecting to the provider API              |
+| `KOOF_HTTP_POOL_IDLE_TIMEOUT`      | `90s`                       | How long an idle connection is kept         |
+| `KOOF_HTTP_POOL_MAX_IDLE_PER_HOST` | `16`                        | Idle connections kept per host              |
+| `KOOF_HTTP_USER_AGENT`             | `koof-<provider>/<version>` | `User-Agent` of provider API requests       |
+| `KOOF_FAKE_ADDR`                   | `0.0.0.0:8081`              | Address of the `fake` test API binary       |
+| `RUST_LOG`                         | `info`                      | Log filter                                  |
 
 ## Compatibility
 

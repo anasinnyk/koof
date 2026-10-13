@@ -1,5 +1,5 @@
 use super::{
-    CredentialSourceIr, NamespacePolicy, OperationId, OperationIr, ResourceName, TestIr,
+    CredentialSourceIr, HttpIr, NamespacePolicy, OperationId, OperationIr, ResourceName, TestIr,
     ValidationIr, ValueExpr,
 };
 use std::collections::BTreeMap;
@@ -8,6 +8,7 @@ use std::collections::BTreeMap;
 pub struct Provider<'a> {
     pub name: &'a str,
     pub base_url: &'a str,
+    pub http: &'a HttpIr,
     pub resources: Vec<Resource<'a>>,
     pub operations: Vec<Operation<'a>>,
 }

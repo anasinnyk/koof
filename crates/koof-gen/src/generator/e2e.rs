@@ -1,4 +1,3 @@
-//! [Chainsaw](https://kyverno.github.io/chainsaw) end-to-end tests
 use super::{GeneratedFile, GeneratorError};
 use crate::ir::resolved::{Provider, Resource};
 use serde_json::{Map, Value, json};
@@ -8,11 +7,6 @@ const SECRET_KEY: &str = "token";
 const HEADER: &str =
     "# This file is generated from the x-kube-resource test fixtures. Do not edit manually.\n";
 
-/// `e2e/generated/<resource>/chainsaw-test.yaml` for every resource with a fixture.
-///
-/// # Errors
-///
-/// Returns [`GeneratorError::Yaml`] when a test cannot be serialized.
 pub fn generate_tests(provider: &Provider<'_>) -> Result<Vec<GeneratedFile>, GeneratorError> {
     provider
         .resources

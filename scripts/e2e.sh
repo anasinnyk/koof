@@ -1,13 +1,4 @@
 #!/usr/bin/env bash
-# Runs the end-to-end tests of providers (crates/providers/<provider>/e2e, generated
-# from the x-kube-resource test fixtures) with chainsaw against a kind cluster. The
-# controller and the fake provider API (koof::fake) run on the host; kind provides
-# only the Kubernetes API.
-#
-# Usage: scripts/e2e.sh [provider...] [-- chainsaw-args...]
-#   (default: every provider with e2e tests; e.g. -- --include-test-regex 'zone')
-# Needs kind, kubectl and chainsaw (all in the devenv shell). KIND_CLUSTER names
-# the cluster (default koof-e2e); it is created from cluster/k8s.yaml when missing.
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
@@ -41,9 +32,9 @@ run() {
   "$bin/crdgen" | kubectl apply --server-side --force-conflicts -f - >/dev/null
   kubectl wait --for condition=established crd --all --timeout=60s >/dev/null
 
-  FAKE_ADDR="127.0.0.1:$fake_port" "$bin/fake" >"$logs/$provider-fake.log" 2>&1 &
+  KOOF_FAKE_ADDR="127.0.0.1:$fake_port" "$bin/fake" >"$logs/$provider-fake.log" 2>&1 &
   pids+=($!)
-  PROVIDER_BASE_URL="http://127.0.0.1:$fake_port" METRICS_ADDR="127.0.0.1:$metrics_port" \
+  KOOF_BASE_URL="http://127.0.0.1:$fake_port" KOOF_METRICS_ADDR="127.0.0.1:$metrics_port" \
     "$bin/main" >"$logs/$provider-controller.log" 2>&1 &
   pids+=($!)
 

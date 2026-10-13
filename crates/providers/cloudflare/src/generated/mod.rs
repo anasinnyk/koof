@@ -35,6 +35,13 @@ pub mod zone_ruleset;
 pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo {
     name: "cloudflare",
     base_url: "https://api.cloudflare.com/client/v4",
+    http: koof::config::HttpDefaults {
+        timeout: None,
+        connect_timeout: None,
+        pool_idle_timeout: None,
+        pool_max_idle_per_host: None,
+        user_agent: None,
+    },
 };
 /// Registers the controllers of every resource of this provider.
 #[must_use]
@@ -72,7 +79,6 @@ pub fn controllers(app: koof::App) -> koof::App {
         .controller::<zone::Zone>()
         .controller::<zone_ruleset::Ruleset>()
 }
-/// In-memory API serving every resource of this provider, for end-to-end tests.
 #[must_use]
 pub fn fake() -> koof::fake::Fake {
     koof::fake::Fake::new()
