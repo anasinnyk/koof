@@ -13,6 +13,13 @@ actions:
         kind: Project
         scope: Namespaced
 
+        test:
+          forProvider:
+            name: koof e2e
+            slug: koof-e2e
+          update:
+            name: koof e2e renamed
+
         identifiers:
           external_id:
             type: external_name
@@ -66,6 +73,11 @@ actions:
         result:
           identifiers:
             external_id: response.body.slug
+
+  # The update is partial (only the fields sent change), but the document marks
+  # digest and security-token settings required, which forProvider does not have.
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].put.requestBody.content['application/json'].schema.required
+    remove: true
 
   - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].put
     update:

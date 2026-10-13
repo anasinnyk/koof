@@ -1,0 +1,91 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: turnstile-widget
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+                namespace: ($namespace)
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: TurnstileWidget
+          metadata:
+            name: turnstile-widget
+          spec:
+            forProvider:
+              accountRef:
+                name: ($namespace)
+              domains:
+              - example.com
+              mode: managed
+              name: koof e2e
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: TurnstileWidget
+          metadata:
+            name: turnstile-widget
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: TurnstileWidget
+          metadata:
+            name: turnstile-widget
+          spec:
+            forProvider:
+              mode: invisible
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: TurnstileWidget
+          metadata:
+            name: turnstile-widget
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              mode: invisible
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: TurnstileWidget
+          name: turnstile-widget

@@ -1,0 +1,42 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: organization
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: Organization
+          metadata:
+            annotations:
+              sentry.kube.nas1k.dev/external-name: ($namespace)
+            name: ($namespace)
+          spec:
+            deletionPolicy: Orphan
+            forProvider:
+              authTokenSecretRef:
+                key: token
+                name: credentials
+                namespace: ($namespace)
+              name: koof e2e
+    - assert:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: Organization
+          metadata:
+            name: ($namespace)
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'

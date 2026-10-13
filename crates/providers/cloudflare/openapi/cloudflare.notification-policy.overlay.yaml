@@ -14,6 +14,17 @@ actions:
         kind: NotificationPolicy
         scope: Namespaced
 
+        test:
+          forProvider:
+            name: koof e2e
+            alert_type: universal_ssl_event_type
+            enabled: true
+            mechanisms:
+              email:
+                - id: ops@example.com
+          update:
+            enabled: false
+
         identifiers:
           external_id:
             type: external_name

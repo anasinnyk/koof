@@ -1,0 +1,95 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: hyperdrive
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+                namespace: ($namespace)
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: storage.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Hyperdrive
+          metadata:
+            name: hyperdrive
+          spec:
+            forProvider:
+              accountRef:
+                name: ($namespace)
+              name: koof-e2e
+              origin:
+                database: app
+                host: db.example.com
+                password: koof
+                port: 5432
+                scheme: postgres
+                user: koof
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: storage.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Hyperdrive
+          metadata:
+            name: hyperdrive
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: storage.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Hyperdrive
+          metadata:
+            name: hyperdrive
+          spec:
+            forProvider:
+              origin_connection_limit: 60
+    - assert:
+        resource:
+          apiVersion: storage.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Hyperdrive
+          metadata:
+            name: hyperdrive
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              origin_connection_limit: 60
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: storage.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Hyperdrive
+          name: hyperdrive

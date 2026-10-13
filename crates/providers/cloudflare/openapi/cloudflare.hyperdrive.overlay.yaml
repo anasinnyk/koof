@@ -14,6 +14,19 @@ actions:
         kind: Hyperdrive
         scope: Namespaced
 
+        test:
+          forProvider:
+            name: koof-e2e
+            origin:
+              scheme: postgres
+              host: db.example.com
+              port: 5432
+              database: app
+              user: koof
+              password: koof
+          update:
+            origin_connection_limit: 60
+
         identifiers:
           external_id:
             type: external_name

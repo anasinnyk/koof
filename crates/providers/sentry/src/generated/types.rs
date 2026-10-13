@@ -14975,6 +14975,7 @@ pub struct ProjectObserveResponseTeamsItem {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -15041,11 +15042,17 @@ pub struct ProjectUpdateRequest {
     )]
     pub default_environment: ::std::option::Option<::std::string::String>,
     ///Maximum time in seconds to wait before sending an issue digest email.
-    #[serde(rename = "digestsMaxDelay")]
-    pub digests_max_delay: i64,
+    #[serde(
+        rename = "digestsMaxDelay",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub digests_max_delay: ::std::option::Option<i64>,
     ///Minimum time in seconds to wait before sending an issue digest email.
-    #[serde(rename = "digestsMinDelay")]
-    pub digests_min_delay: i64,
+    #[serde(
+        rename = "digestsMinDelay",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub digests_min_delay: ::std::option::Option<i64>,
     ///Per-bias toggles adjusting which transactions dynamic sampling favors retaining.
     #[serde(
         rename = "dynamicSamplingBiases",
@@ -15281,11 +15288,19 @@ E.g. `['release', 'environment']`*/
     )]
     pub secondary_grouping_expiry: ::std::option::Option<::std::num::NonZeroU64>,
     ///Token sent with security reports (CSP, Expect-CT, HPKP) so Sentry can verify their origin.
-    #[serde(rename = "securityToken")]
-    pub security_token: ProjectUpdateRequestSecurityToken,
+    #[serde(
+        rename = "securityToken",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub security_token: ::std::option::Option<ProjectUpdateRequestSecurityToken>,
     ///Name of the header carrying the security token on inbound security reports.
-    #[serde(rename = "securityTokenHeader")]
-    pub security_token_header: ProjectUpdateRequestSecurityTokenHeader,
+    #[serde(
+        rename = "securityTokenHeader",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub security_token_header: ::std::option::Option<
+        ProjectUpdateRequestSecurityTokenHeader,
+    >,
     ///Let Seer scan new issues automatically. Can be updated with **`project:read`** permission.
     #[serde(
         rename = "seerScannerAutomation",

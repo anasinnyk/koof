@@ -14,6 +14,12 @@ actions:
         kind: Queue
         scope: Namespaced
 
+        test:
+          forProvider:
+            queue_name: koof-e2e
+          update:
+            queue_name: koof-e2e-renamed
+
         identifiers:
           external_id:
             type: external_name

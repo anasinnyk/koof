@@ -15,6 +15,10 @@ actions:
         kind: Organization
         scope: Cluster
 
+        test:
+          forProvider:
+            name: koof e2e
+
         identifiers:
           external_id:
             type: external_name

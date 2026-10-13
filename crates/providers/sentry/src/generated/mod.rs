@@ -24,6 +24,19 @@ pub fn controllers(app: koof::App) -> koof::App {
         .controller::<service_hook::ServiceHook>()
         .controller::<team::Team>()
 }
+/// In-memory API serving every resource of this provider, for end-to-end tests.
+#[must_use]
+pub fn fake() -> koof::fake::Fake {
+    koof::fake::Fake::new()
+        .resource::<dashboard::Dashboard>()
+        .resource::<monitor::Monitor>()
+        .resource::<organization::Organization>()
+        .resource::<organization_member::OrganizationMember>()
+        .resource::<project::Project>()
+        .resource::<project_key::ProjectKey>()
+        .resource::<service_hook::ServiceHook>()
+        .resource::<team::Team>()
+}
 /// `CustomResourceDefinition`s of every resource of this provider.
 #[must_use]
 pub fn crds() -> Vec<

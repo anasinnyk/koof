@@ -15,6 +15,13 @@ actions:
         # A zone cannot be renamed; a new name is a new zone.
         immutable: [name]
 
+        test:
+          forProvider:
+            name: example.com
+            type: full
+          update:
+            paused: true
+
         identifiers:
           external_id:
             type: external_name

@@ -4,6 +4,7 @@ use super::{
         FieldExtension, FieldSelectionMode, LifecycleAction, ResourceExtension, kube_operations,
         kube_resources,
     },
+    normalize::is_read_only,
     resolve_ref, schema_ref_name, schemas_mut, success_json_schema,
 };
 use crate::ir::{FieldPath, ResourceName};
@@ -14,22 +15,12 @@ use std::collections::{BTreeMap, BTreeSet};
 /// for every schema with `x-kube-resource`; returns, per resource, the top-level
 /// `forProvider` fields that may be late-initialized.
 ///
-/// Fields come from the resource's `fields` selection: `explicit` takes the listed
-/// names, `all` takes every property (minus `readOnly` and `x-kube-field.ignored`
-/// for `forProvider`). Properties are looked up through `$ref`, `allOf`, `anyOf` and
-/// `oneOf`. A resource schema that is a union of variants yields a `oneOf` of
-/// per-variant filtered objects (`<Kind>ForProvider<Variant>`). `atProvider` is read
-/// from the observe response at `x-kube-operation.response.path` and has no
-/// required fields.
-///
 /// # Errors
 ///
 /// Returns [`SpecError`] when an `x-kube-*` extension is malformed, an explicitly
 /// selected field does not exist, the observe response path cannot be resolved, or a
 /// synthesized name collides with an existing schema.
-pub fn synthesize(
-    document: &mut Value,
-) -> Result<BTreeMap<ResourceName, Vec<String>>, SpecError> {
+pub fn synthesize(document: &mut Value) -> Result<BTreeMap<ResourceName, Vec<String>>, SpecError> {
     schemas_mut(document)?;
     let snapshot = document.clone();
     let schemas = snapshot
@@ -118,6 +109,15 @@ fn late_initialize_fields(
     Ok(fields)
 }
 
+/// How [`Resource::filtered`] selects the definitions of a field.
+#[derive(Clone, Copy)]
+struct Selection {
+    /// Keep a field required when every definition requires it.
+    keep_required: bool,
+    /// Skip read-only definitions (a field read-only in some union variants).
+    writable_only: bool,
+}
+
 struct Resource<'a> {
     schemas: &'a Map<String, Value>,
     extension: &'a ResourceExtension,
@@ -144,7 +144,13 @@ impl Resource<'_> {
             }
         };
         let root = format!("{}ForProvider", self.extension.kind);
-        self.filtered(&root, schema_name, schema, &fields, keep_required, out)
+        // With `all`, a field read-only in some variants of a union is kept only in
+        // the variants where it is writable.
+        let selection = Selection {
+            keep_required,
+            writable_only: self.extension.fields.mode == FieldSelectionMode::All,
+        };
+        self.filtered(&root, schema_name, schema, &fields, selection, out)
     }
 
     fn at_provider(&self, response: &Value, out: &mut Map<String, Value>) -> Result<(), SpecError> {
@@ -153,7 +159,11 @@ impl Resource<'_> {
             FieldSelectionMode::All => self.all_property_names(response),
         };
         let root = format!("{}AtProvider", self.extension.kind);
-        self.filtered(&root, "observe response", response, &fields, false, out)
+        let selection = Selection {
+            keep_required: false,
+            writable_only: false,
+        };
+        self.filtered(&root, "observe response", response, &fields, selection, out)
     }
 
     fn filtered(
@@ -162,7 +172,7 @@ impl Resource<'_> {
         source: &str,
         schema: &Value,
         fields: &[String],
-        keep_required: bool,
+        selection: Selection,
         out: &mut Map<String, Value>,
     ) -> Result<(), SpecError> {
         let mut variants = Vec::new();
@@ -176,13 +186,13 @@ impl Resource<'_> {
 
         let mut found = BTreeSet::new();
         if variants.len() <= 1 {
-            let object = self.filter_object(schema, fields, keep_required, &mut found);
+            let object = self.filter_object(schema, fields, selection, &mut found);
             out.insert(root.to_owned(), object);
         } else {
             let mut refs = Vec::new();
             let mut used = BTreeSet::new();
             for (index, (variant_name, variant)) in variants.iter().enumerate() {
-                let object = self.filter_object(variant, fields, keep_required, &mut found);
+                let object = self.filter_object(variant, fields, selection, &mut found);
                 let name = format!(
                     "{root}{}",
                     variant_suffix(variant_name.as_deref(), index, &mut used)
@@ -209,7 +219,7 @@ impl Resource<'_> {
         &self,
         schema: &Value,
         fields: &[String],
-        keep_required: bool,
+        selection: Selection,
         found: &mut BTreeSet<String>,
     ) -> Value {
         let mut properties = Map::new();
@@ -217,6 +227,9 @@ impl Resource<'_> {
         for field in fields {
             let mut definitions: Vec<(Value, bool)> = Vec::new();
             for definition in find_property(self.schemas, schema, field) {
+                if selection.writable_only && is_read_only(self.schemas, &definition.0) {
+                    continue;
+                }
                 if !definitions
                     .iter()
                     .any(|(existing, _)| existing == &definition.0)
@@ -237,7 +250,7 @@ impl Resource<'_> {
                 }
             };
             found.insert(field.clone());
-            if keep_required && is_required {
+            if selection.keep_required && is_required {
                 required.push(Value::String(field.clone()));
             }
             properties.insert(field.clone(), property);
@@ -265,22 +278,26 @@ impl Resource<'_> {
         names.into_iter().collect()
     }
 
-    fn is_excluded_from_for_provider(&self, schema: &Value, field: &str) -> Result<bool, SpecError> {
-        for (property, _) in find_property(self.schemas, schema, field) {
-            if property.get("readOnly") == Some(&Value::Bool(true)) {
-                return Ok(true);
-            }
-            let resolved = resolve_ref(self.schemas, &property);
-            if resolved.get("readOnly") == Some(&Value::Bool(true)) {
-                return Ok(true);
-            }
-            for candidate in [&property, resolved] {
+    /// Ignored anywhere, or read-only everywhere: a field read-only in some
+    /// variants of a union stays in the variants where it is writable.
+    fn is_excluded_from_for_provider(
+        &self,
+        schema: &Value,
+        field: &str,
+    ) -> Result<bool, SpecError> {
+        let definitions = find_property(self.schemas, schema, field);
+        for (property, _) in &definitions {
+            let resolved = resolve_ref(self.schemas, property);
+            for candidate in [property, resolved] {
                 if FieldExtension::of(candidate, field)?.ignored {
                     return Ok(true);
                 }
             }
         }
-        Ok(false)
+        Ok(!definitions.is_empty()
+            && definitions
+                .iter()
+                .all(|(property, _)| is_read_only(self.schemas, property)))
     }
 
     fn error(&self, message: &str) -> SpecError {
@@ -603,7 +620,8 @@ components:
 
     #[test]
     fn all_selection_skips_read_only_and_ignored_for_provider_fields() -> TestResult {
-        let mut document = document("{ name: record, apiVersion: test.example.io/v1, kind: Record }")?;
+        let mut document =
+            document("{ name: record, apiVersion: test.example.io/v1, kind: Record }")?;
         synthesize(&mut document)?;
 
         assert_eq!(
@@ -696,6 +714,50 @@ components:
     }
 
     #[test]
+    fn field_read_only_in_one_variant_stays_in_the_others() -> TestResult {
+        let mut document: Value = serde_yaml::from_str(
+            r"
+openapi: 3.0.3
+info: { title: test, version: '1' }
+paths:
+  /apps:
+    post:
+      x-kube-operation: { resource: app, lifecycle: create }
+      responses: { '200': { description: ok } }
+components:
+  schemas:
+    app_SelfHosted:
+      type: object
+      required: [type, domain]
+      properties:
+        type: { type: string, enum: [self_hosted] }
+        domain: { type: string }
+    app_Launcher:
+      type: object
+      properties:
+        type: { type: string, enum: [app_launcher] }
+        domain: { $ref: '#/components/schemas/LauncherDomain' }
+    LauncherDomain: { allOf: [{ readOnly: true }, { type: string }] }
+    App:
+      x-kube-resource: { name: app, apiVersion: test.example.io/v1, kind: App }
+      anyOf:
+        - $ref: '#/components/schemas/app_SelfHosted'
+        - $ref: '#/components/schemas/app_Launcher'
+",
+        )?;
+        synthesize(&mut document)?;
+
+        let self_hosted = schema(&document, "AppForProviderSelfHosted");
+        assert_eq!(property_names(self_hosted), ["domain", "type"]);
+        assert_eq!(self_hosted["required"], json!(["domain", "type"]));
+        assert_eq!(
+            property_names(schema(&document, "AppForProviderLauncher")),
+            ["type"]
+        );
+        Ok(())
+    }
+
+    #[test]
     fn response_path_combines_all_definitions_of_the_envelope_property() -> TestResult {
         let mut document: Value = serde_yaml::from_str(
             r"
@@ -744,7 +806,8 @@ components:
 
     #[test]
     fn missing_response_path_is_an_error() -> TestResult {
-        let mut document = document("{ name: record, apiVersion: test.example.io/v1, kind: Record }")?;
+        let mut document =
+            document("{ name: record, apiVersion: test.example.io/v1, kind: Record }")?;
         if let Some(extension) =
             document.pointer_mut("/paths/~1records~1{id}/get/x-kube-operation/response")
         {

@@ -1431,6 +1431,7 @@ dependencies = [
  "k8s-openapi",
  "kube",
  "prometheus-client",
+ "regress 0.10.5",
  "reqwest",
  "rustls",
  "schemars 1.2.2",

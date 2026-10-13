@@ -16,6 +16,13 @@ actions:
         kind: TunnelHostnameRoute
         scope: Namespaced
 
+        test:
+          forProvider:
+            hostname: nas.home.internal
+            comment: koof e2e
+          update:
+            comment: updated by koof e2e
+
         identifiers:
           external_id:
             type: external_name

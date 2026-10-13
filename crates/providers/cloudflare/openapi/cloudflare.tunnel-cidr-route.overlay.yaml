@@ -16,6 +16,13 @@ actions:
         kind: TunnelCidrRoute
         scope: Namespaced
 
+        test:
+          forProvider:
+            network: 10.0.0.0/24
+            comment: koof e2e
+          update:
+            comment: updated by koof e2e
+
         identifiers:
           external_id:
             type: external_name

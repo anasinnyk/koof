@@ -63,12 +63,9 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     late_initialize: &[
         "argo_smart_routing",
-        "created_on",
         "dns",
         "edge_ips",
-        "id",
         "ip_firewall",
-        "modified_on",
         "origin_direct",
         "origin_dns",
         "origin_port",

@@ -1,7 +1,7 @@
 use super::SpecError;
 use crate::ir::{
-    CredentialsIr, FieldPath, ReferenceIr, RequestMappingIr, ResourceName, ScopeIr, ValidationIr,
-    ValueExpr,
+    CredentialsIr, FieldPath, ReferenceIr, RequestMappingIr, ResourceName, ScopeIr, TestIr,
+    ValidationIr, ValueExpr,
 };
 use serde::{Deserialize, de::DeserializeOwned};
 use serde_json::Value;
@@ -35,6 +35,8 @@ pub struct ResourceExtension {
     pub validations: Vec<ValidationIr>,
     #[serde(default)]
     pub immutable: Vec<String>,
+    #[serde(default)]
+    pub test: Option<TestIr>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Default, Deserialize)]

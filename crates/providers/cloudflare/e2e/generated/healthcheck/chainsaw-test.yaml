@@ -1,0 +1,111 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: healthcheck
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+                namespace: ($namespace)
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Zone
+          metadata:
+            name: zone
+          spec:
+            forProvider:
+              accountRef:
+                name: ($namespace)
+              name: example.com
+              type: full
+    - apply:
+        resource:
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Healthcheck
+          metadata:
+            name: healthcheck
+          spec:
+            forProvider:
+              address: origin.example.com
+              name: koof-e2e
+              type: HTTP
+              zoneRef:
+                name: zone
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Zone
+          metadata:
+            name: zone
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Healthcheck
+          metadata:
+            name: healthcheck
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Healthcheck
+          metadata:
+            name: healthcheck
+          spec:
+            forProvider:
+              description: updated by koof e2e
+    - assert:
+        resource:
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Healthcheck
+          metadata:
+            name: healthcheck
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              description: updated by koof e2e
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Healthcheck
+          name: healthcheck

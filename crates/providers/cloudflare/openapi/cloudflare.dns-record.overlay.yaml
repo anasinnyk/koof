@@ -16,6 +16,17 @@ actions:
           - rule: "!has(self.ttl) || self.ttl == 1 || (self.ttl >= 30 && self.ttl <= 86400)"
             message: "ttl must be 1 (automatic) or between 30 and 86400 seconds"
 
+        test:
+          forProvider:
+            type: A
+            name: www.example.com
+            content: 192.0.2.1
+            ttl: 1
+            proxied: false
+          update:
+            content: 192.0.2.2
+            comment: updated by koof e2e
+
         identifiers:
           external_id:
             type: external_name

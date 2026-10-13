@@ -14,6 +14,19 @@ actions:
         kind: PageRule
         scope: Namespaced
 
+        test:
+          forProvider:
+            targets:
+              - target: url
+                constraint:
+                  operator: matches
+                  value: example.com/*
+            actions:
+              - id: always_use_https
+            status: active
+          update:
+            status: disabled
+
         identifiers:
           external_id:
             type: external_name

@@ -9,6 +9,7 @@
     k9s
     kubectl
     kind
+    kyverno-chainsaw
     vacuum-go
   ];
 

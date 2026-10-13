@@ -14,6 +14,13 @@ actions:
         kind: Tunnel
         scope: Namespaced
 
+        test:
+          forProvider:
+            name: koof-e2e
+            config_src: cloudflare
+          update:
+            name: koof-e2e-renamed
+
         identifiers:
           external_id:
             type: external_name

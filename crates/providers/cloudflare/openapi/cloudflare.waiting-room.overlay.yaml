@@ -14,6 +14,15 @@ actions:
         kind: WaitingRoom
         scope: Namespaced
 
+        test:
+          forProvider:
+            name: koof_e2e
+            host: shop.example.com
+            new_users_per_minute: 200
+            total_active_users: 300
+          update:
+            total_active_users: 400
+
         identifiers:
           external_id:
             type: external_name

@@ -13,6 +13,13 @@ actions:
         kind: Team
         scope: Namespaced
 
+        test:
+          forProvider:
+            name: koof e2e
+            slug: koof-e2e
+          update:
+            name: koof e2e renamed
+
         identifiers:
           external_id:
             type: external_name

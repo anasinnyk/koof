@@ -20,6 +20,22 @@ cargo run -p cloudflare-provider --bin crdgen | kubectl apply -f -
 cargo run -p cloudflare-provider --bin main              # run against the current kubeconfig
 ```
 
+## End-to-end tests
+
+`x-kube-resource.test` in an overlay gives a resource a fixture: `forProvider`
+values for a test object and, optionally, the fields an `update` step changes.
+`koof-gen` turns each resource with a fixture (and create + delete operations)
+into a [chainsaw](https://kyverno.github.io/chainsaw) test in
+`crates/providers/<name>/e2e/generated/`: create it together with everything it
+references, wait for `Ready`, update, delete.
+
+```sh
+scripts/e2e.sh [provider...]   # kind cluster koof-e2e, controller + fake API on the host
+```
+
+The controller talks to `koof::fake`, an in-memory API built from the same
+descriptors (`fake` binary of each provider), instead of the real provider.
+
 ## Images
 
 ```sh

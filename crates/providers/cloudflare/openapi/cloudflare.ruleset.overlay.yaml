@@ -36,6 +36,18 @@ actions:
         kind: Ruleset
         scope: Namespaced
 
+        test:
+          forProvider:
+            name: default
+            kind: zone
+            phase: http_request_firewall_custom
+            rules:
+              - description: Block the admin path
+                expression: (http.request.uri.path eq "/admin")
+                action: block
+          update:
+            description: updated by koof e2e
+
         identifiers:
           external_id:
             type: external_name
