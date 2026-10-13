@@ -11,6 +11,13 @@ pub mod team;
 pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo {
     name: "sentry",
     base_url: "https://sentry.io",
+    http: koof::config::HttpDefaults {
+        timeout: None,
+        connect_timeout: None,
+        pool_idle_timeout: None,
+        pool_max_idle_per_host: None,
+        user_agent: None,
+    },
 };
 /// Registers the controllers of every resource of this provider.
 #[must_use]
@@ -24,7 +31,6 @@ pub fn controllers(app: koof::App) -> koof::App {
         .controller::<service_hook::ServiceHook>()
         .controller::<team::Team>()
 }
-/// In-memory API serving every resource of this provider, for end-to-end tests.
 #[must_use]
 pub fn fake() -> koof::fake::Fake {
     koof::fake::Fake::new()

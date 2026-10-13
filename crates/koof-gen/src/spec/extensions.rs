@@ -17,6 +17,31 @@ pub const HTTP_METHODS: [&str; 8] = [
 ];
 
 #[derive(Debug, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ProviderExtension {
+    pub name: String,
+    #[serde(default)]
+    pub http: HttpExtension,
+}
+
+#[derive(Debug, Default, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct HttpExtension {
+    pub timeout: Option<String>,
+    pub connect_timeout: Option<String>,
+    pub pool_idle_timeout: Option<String>,
+    pub pool_max_idle_per_host: Option<usize>,
+    pub user_agent: Option<String>,
+}
+
+/// # Errors
+///
+/// Returns [`SpecError::Extension`] when the extension is malformed.
+pub fn kube_provider(document: &Value) -> Result<Option<ProviderExtension>, SpecError> {
+    parse(document, PROVIDER, "x-kube-provider")
+}
+
+#[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ResourceExtension {
     pub name: ResourceName,

@@ -172,6 +172,11 @@ impl Fake {
             .with_state(store)
     }
 
+    /// Serves on `KOOF_FAKE_ADDR` (default `0.0.0.0:8081`).
+    ///
+    /// # Errors
+    ///
+    /// Returns an error when the address cannot be bound.
     pub async fn run(self) -> std::io::Result<()> {
         let _ = tracing_subscriber::fmt()
             .with_env_filter(
@@ -179,7 +184,7 @@ impl Fake {
                     .unwrap_or_else(|_| "info".into()),
             )
             .try_init();
-        let address = std::env::var("FAKE_ADDR").unwrap_or_else(|_| "0.0.0.0:8081".to_owned());
+        let address = std::env::var("KOOF_FAKE_ADDR").unwrap_or_else(|_| "0.0.0.0:8081".to_owned());
         let listener = tokio::net::TcpListener::bind(&address).await?;
         tracing::info!(%address, resources = ?self.shapes.keys().collect::<Vec<_>>(), "fake API listening");
         axum::serve(listener, self.router())

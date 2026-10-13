@@ -1452,6 +1452,7 @@ dependencies = [
  "clap",
  "enumset",
  "heck",
+ "jiff",
  "prettyplease",
  "proc-macro2",
  "quote",
