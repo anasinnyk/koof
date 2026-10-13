@@ -1,6 +1,6 @@
-# openapi-operator-framework
+# koof
 
-Kubernetes operators generated from OpenAPI documents.
+Kubernetes OpenAPI Operator Framework: Kubernetes operators generated from OpenAPI documents.
 
 | Crate | |
 |---|---|
