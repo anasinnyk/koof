@@ -86,7 +86,7 @@ mod tests {
         let observed = json!({
             "rules": [{ "id": "1", "version": "2", "action": "block", "expression": "true" }]
         });
-        assert!(drifted(&desired, &observed).is_empty());
+        assert_eq!(drifted(&desired, &observed), Vec::<String>::new());
     }
 
     #[test]
@@ -100,11 +100,14 @@ mod tests {
     fn empty_collections_equal_null() {
         let desired = json!({ "env_vars": {}, "flags": [] });
         let observed = json!({ "env_vars": null, "flags": null });
-        assert!(drifted(&desired, &observed).is_empty());
+        assert_eq!(drifted(&desired, &observed), Vec::<String>::new());
     }
 
     #[test]
     fn numbers_compare_by_value() {
-        assert!(drifted(&json!({ "ttl": 300 }), &json!({ "ttl": 300.0 })).is_empty());
+        assert_eq!(
+            drifted(&json!({ "ttl": 300 }), &json!({ "ttl": 300.0 })),
+            Vec::<String>::new()
+        );
     }
 }

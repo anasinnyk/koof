@@ -14,4 +14,7 @@ for dir in "$root"/crates/providers/*/; do
   if [[ -d "$dir/e2e/generated" || -d "$tmp/$provider/e2e/generated" ]]; then
     diff -ru "$dir/e2e/generated" "$tmp/$provider/e2e/generated"
   fi
+  cargo run --quiet --manifest-path "$root/Cargo.toml" -p "$provider-provider" --bin manifests -- \
+    "$tmp/$provider/deploy" "ghcr.io/anasinnyk/koof-$provider"
+  diff -ru "$root/deploy/providers/$provider" "$tmp/$provider/deploy"
 done
