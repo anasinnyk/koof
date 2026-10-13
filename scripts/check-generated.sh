@@ -11,4 +11,7 @@ for dir in "$root"/crates/providers/*/; do
   [[ -f "$dir/openapi/sources" ]] || continue
   "$root/scripts/regen.sh" "$provider" "$tmp/$provider"
   diff -ru "$dir/src/generated" "$tmp/$provider/src/generated"
+  if [[ -d "$dir/e2e/generated" || -d "$tmp/$provider/e2e/generated" ]]; then
+    diff -ru "$dir/e2e/generated" "$tmp/$provider/e2e/generated"
+  fi
 done

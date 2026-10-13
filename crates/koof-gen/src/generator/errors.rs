@@ -13,4 +13,7 @@ pub enum GeneratorError {
 
     #[error(transparent)]
     Syntax(#[from] syn::Error),
+
+    #[error(transparent)]
+    Yaml(#[from] serde_yaml::Error),
 }

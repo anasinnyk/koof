@@ -21,6 +21,18 @@ actions:
         kind: TunnelConfiguration
         scope: Namespaced
 
+        test:
+          forProvider:
+            config:
+              ingress:
+                - hostname: app.example.com
+                  service: http://app.default.svc.cluster.local:8080
+                - service: http_status:404
+          update:
+            config:
+              ingress:
+                - service: http_status:404
+
         references:
           tunnel:
             from: spec.forProvider.tunnelRef

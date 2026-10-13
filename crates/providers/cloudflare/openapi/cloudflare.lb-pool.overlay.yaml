@@ -14,6 +14,16 @@ actions:
         kind: LoadBalancerPool
         scope: Namespaced
 
+        test:
+          forProvider:
+            name: koof-e2e
+            origins:
+              - name: origin
+                address: 192.0.2.10
+                enabled: true
+          update:
+            description: updated by koof e2e
+
         identifiers:
           external_id:
             type: external_name

@@ -14,6 +14,14 @@ actions:
         kind: CustomHostname
         scope: Namespaced
 
+        test:
+          forProvider:
+            hostname: app.example.com
+            ssl:
+              method: txt
+          update:
+            custom_origin_server: origin.example.com
+
         identifiers:
           external_id:
             type: external_name

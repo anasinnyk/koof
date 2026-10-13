@@ -1,0 +1,106 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: pages-project
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+                namespace: ($namespace)
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: PagesProject
+          metadata:
+            name: pages-project
+          spec:
+            forProvider:
+              accountRef:
+                name: ($namespace)
+              deployment_configs:
+                preview:
+                  always_use_latest_compatibility_date: false
+                  build_image_major_version: 3
+                  compatibility_date: 2025-01-01
+                  compatibility_flags: []
+                  env_vars: {}
+                  fail_open: true
+                  usage_model: standard
+                production:
+                  always_use_latest_compatibility_date: false
+                  build_image_major_version: 3
+                  compatibility_date: 2025-01-01
+                  compatibility_flags: []
+                  env_vars: {}
+                  fail_open: true
+                  usage_model: standard
+              name: koof-e2e
+              production_branch: main
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: PagesProject
+          metadata:
+            name: pages-project
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: PagesProject
+          metadata:
+            name: pages-project
+          spec:
+            forProvider:
+              production_branch: release
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: PagesProject
+          metadata:
+            name: pages-project
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              production_branch: release
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: PagesProject
+          name: pages-project

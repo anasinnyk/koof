@@ -1,0 +1,69 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: vectorize-index
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+                namespace: ($namespace)
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: storage.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: VectorizeIndex
+          metadata:
+            name: vectorize-index
+          spec:
+            forProvider:
+              accountRef:
+                name: ($namespace)
+              config:
+                dimensions: 768
+                metric: cosine
+              name: koof-e2e
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: storage.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: VectorizeIndex
+          metadata:
+            name: vectorize-index
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: storage.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: VectorizeIndex
+          name: vectorize-index

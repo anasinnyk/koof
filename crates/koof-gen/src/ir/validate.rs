@@ -119,6 +119,7 @@ impl<'a> Checker<'a, '_> {
             validations: &resource.validations,
             immutable: &resource.immutable,
             late_initialize,
+            test: resource.test.as_ref(),
             observe: observe?,
             create,
             update,
@@ -137,11 +138,20 @@ impl<'a> Checker<'a, '_> {
         let mut references = Vec::new();
         for (name, reference) in &self.resource.references {
             let location = format!("references.{name}");
-            if !self.ir.resources.contains_key(&reference.target) {
-                self.error(
+            match self.ir.resources.get(&reference.target) {
+                None => self.error(
                     &location,
                     format!("unknown target resource {}", reference.target.0),
-                );
+                ),
+                Some(target) if self.resource.test.is_some() && target.test.is_none() => self
+                    .error(
+                        "test",
+                        format!(
+                            "the test needs a {0} object; add a test to resource {0}",
+                            reference.target.0
+                        ),
+                    ),
+                Some(_) => {}
             }
             let Some(field) = self.for_provider_field(&location, &reference.from) else {
                 continue;

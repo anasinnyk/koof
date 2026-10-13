@@ -1,6 +1,6 @@
 use super::{
-    CredentialSourceIr, NamespacePolicy, OperationId, OperationIr, ResourceName, ValidationIr,
-    ValueExpr,
+    CredentialSourceIr, NamespacePolicy, OperationId, OperationIr, ResourceName, TestIr,
+    ValidationIr, ValueExpr,
 };
 use std::collections::BTreeMap;
 
@@ -25,6 +25,7 @@ pub struct Resource<'a> {
     pub validations: &'a [ValidationIr],
     pub immutable: &'a [String],
     pub late_initialize: &'a [String],
+    pub test: Option<&'a TestIr>,
     pub observe: Operation<'a>,
     pub create: Option<Create<'a>>,
     pub update: Option<Operation<'a>>,

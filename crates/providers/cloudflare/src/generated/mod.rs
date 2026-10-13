@@ -72,6 +72,43 @@ pub fn controllers(app: koof::App) -> koof::App {
         .controller::<zone::Zone>()
         .controller::<zone_ruleset::Ruleset>()
 }
+/// In-memory API serving every resource of this provider, for end-to-end tests.
+#[must_use]
+pub fn fake() -> koof::fake::Fake {
+    koof::fake::Fake::new()
+        .resource::<access_application::AccessApplication>()
+        .resource::<account::Account>()
+        .resource::<custom_hostname::CustomHostname>()
+        .resource::<d1_database::D1Database>()
+        .resource::<dns_record::DNSRecord>()
+        .resource::<email_routing_rule::EmailRoutingRule>()
+        .resource::<gateway_list::GatewayList>()
+        .resource::<gateway_rule::GatewayRule>()
+        .resource::<healthcheck::Healthcheck>()
+        .resource::<hyperdrive::Hyperdrive>()
+        .resource::<ip_list::IPList>()
+        .resource::<kv_namespace::KVNamespace>()
+        .resource::<lb_monitor::LoadBalancerMonitor>()
+        .resource::<lb_pool::LoadBalancerPool>()
+        .resource::<load_balancer::LoadBalancer>()
+        .resource::<logpush_job::LogpushJob>()
+        .resource::<notification_policy::NotificationPolicy>()
+        .resource::<page_rule::PageRule>()
+        .resource::<pages_project::PagesProject>()
+        .resource::<queue::Queue>()
+        .resource::<r2_bucket::R2Bucket>()
+        .resource::<spectrum_application::SpectrumApplication>()
+        .resource::<tunnel::Tunnel>()
+        .resource::<tunnel_cidr_route::TunnelCidrRoute>()
+        .resource::<tunnel_configuration::TunnelConfiguration>()
+        .resource::<tunnel_hostname_route::TunnelHostnameRoute>()
+        .resource::<turnstile_widget::TurnstileWidget>()
+        .resource::<vectorize_index::VectorizeIndex>()
+        .resource::<waiting_room::WaitingRoom>()
+        .resource::<worker_route::WorkerRoute>()
+        .resource::<zone::Zone>()
+        .resource::<zone_ruleset::Ruleset>()
+}
 /// `CustomResourceDefinition`s of every resource of this provider.
 #[must_use]
 pub fn crds() -> Vec<

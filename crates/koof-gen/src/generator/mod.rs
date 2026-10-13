@@ -8,6 +8,7 @@ use types::GeneratedTypes;
 
 mod crd;
 mod descriptor;
+mod e2e;
 mod errors;
 mod naming;
 mod operations;
@@ -20,7 +21,8 @@ pub struct GeneratedFile {
     pub content: String,
 }
 
-/// Generates `src/generated/{mod,types,operations,<resource>}.rs`.
+/// Generates `src/generated/{mod,types,operations,<resource>}.rs` and the
+/// end-to-end tests `e2e/generated/<resource>/chainsaw-test.yaml`.
 ///
 /// `document` is the schema set from [`crate::spec::for_codegen`].
 ///
@@ -43,6 +45,7 @@ pub fn generate(
     files.push(operations_file(provider, &types)?);
     files.push(types_file(&types)?);
     files.push(mod_file(provider)?);
+    files.extend(e2e::generate_tests(provider)?);
 
     Ok(files)
 }
@@ -126,6 +129,12 @@ fn mod_file(provider: &Provider<'_>) -> Result<GeneratedFile, GeneratorError> {
         #[must_use]
         pub fn controllers(app: koof::App) -> koof::App {
             app #(.controller::<#kinds>())*
+        }
+
+        /// In-memory API serving every resource of this provider, for end-to-end tests.
+        #[must_use]
+        pub fn fake() -> koof::fake::Fake {
+            koof::fake::Fake::new() #(.resource::<#kinds>())*
         }
 
         /// `CustomResourceDefinition`s of every resource of this provider.

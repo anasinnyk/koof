@@ -14,6 +14,15 @@ actions:
         kind: LoadBalancerMonitor
         scope: Namespaced
 
+        test:
+          forProvider:
+            type: https
+            path: /health
+            expected_codes: "200"
+            description: koof e2e
+          update:
+            interval: 120
+
         identifiers:
           external_id:
             type: external_name

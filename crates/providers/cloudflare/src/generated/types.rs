@@ -3871,6 +3871,7 @@ pub struct AccessApplicationForProviderVariant0 {
     pub custom_pages: ::std::option::Option<AccessCustomPages2>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub destinations: ::std::option::Option<AccessDestinations>,
+    pub domain: AccessDomain,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub eager_redirect_cookie_setting: ::std::option::Option<
         AccessEagerRedirectCookieSetting,
@@ -3883,6 +3884,8 @@ pub struct AccessApplicationForProviderVariant0 {
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -3997,6 +4000,8 @@ pub struct AccessApplicationForProviderVariant1 {
     pub custom_pages: ::std::option::Option<AccessCustomPages2>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
     ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant1PoliciesItem>,
@@ -4015,7 +4020,6 @@ pub struct AccessApplicationForProviderVariant1 {
     ::serde::Serialize,
     Clone,
     Debug,
-    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -4046,6 +4050,7 @@ pub struct AccessApplicationForProviderVariant10 {
     pub custom_pages: ::std::option::Option<AccessCustomPages2>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub destinations: ::std::option::Option<AccessDestinations>,
+    pub domain: AccessDomain,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub eager_redirect_cookie_setting: ::std::option::Option<
         AccessEagerRedirectCookieSetting,
@@ -4058,6 +4063,8 @@ pub struct AccessApplicationForProviderVariant10 {
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -4204,6 +4211,8 @@ pub struct AccessApplicationForProviderVariant11 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
@@ -4311,9 +4320,13 @@ pub struct AccessApplicationForProviderVariant12 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub destinations: ::std::option::Option<AccessDestinations>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -4482,7 +4495,6 @@ for AccessApplicationForProviderVariant1SaasApp {
     ::serde::Serialize,
     Clone,
     Debug,
-    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -4513,6 +4525,7 @@ pub struct AccessApplicationForProviderVariant2 {
     pub custom_pages: ::std::option::Option<AccessCustomPages2>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub destinations: ::std::option::Option<AccessDestinations>,
+    pub domain: AccessDomain,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub eager_redirect_cookie_setting: ::std::option::Option<
         AccessEagerRedirectCookieSetting,
@@ -4525,6 +4538,8 @@ pub struct AccessApplicationForProviderVariant2 {
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -4640,7 +4655,6 @@ pub struct AccessApplicationForProviderVariant2Type {
     ::serde::Serialize,
     Clone,
     Debug,
-    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -4671,6 +4685,7 @@ pub struct AccessApplicationForProviderVariant3 {
     pub custom_pages: ::std::option::Option<AccessCustomPages2>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub destinations: ::std::option::Option<AccessDestinations>,
+    pub domain: AccessDomain,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub eager_redirect_cookie_setting: ::std::option::Option<
         AccessEagerRedirectCookieSetting,
@@ -4683,6 +4698,8 @@ pub struct AccessApplicationForProviderVariant3 {
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -4820,11 +4837,15 @@ pub struct AccessApplicationForProviderVariant4 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub custom_pages: ::std::option::Option<AccessCustomPages2>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub footer_links: ::std::option::Option<AccessFooterLinks>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub header_bg_color: ::std::option::Option<AccessHeaderBgColor>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub landing_page_design: ::std::option::Option<AccessLandingPageDesign>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
     ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant4PoliciesItem>,
@@ -4935,6 +4956,10 @@ pub struct AccessApplicationForProviderVariant5 {
     >,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
     ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant5PoliciesItem>,
@@ -5041,6 +5066,10 @@ pub struct AccessApplicationForProviderVariant6 {
     >,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
     ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant6PoliciesItem>,
@@ -5147,6 +5176,12 @@ pub struct AccessApplicationForProviderVariant7 {
     >,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    ///The primary hostname and path secured by Access. This domain will be displayed if the app is visible in the App Launcher.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<::std::string::String>,
+    ///The name of the application.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
     ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant7PoliciesItem>,
@@ -5243,8 +5278,13 @@ pub struct AccessApplicationForProviderVariant7Type {
 pub struct AccessApplicationForProviderVariant8 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    ///The URL or domain of the bookmark.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<::std::string::String>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
     ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant8PoliciesItem>,
@@ -5325,6 +5365,8 @@ for AccessApplicationForProviderVariant8PoliciesItem {
 pub struct AccessApplicationForProviderVariant9 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub mfa_config: ::std::option::Option<AccessInfraMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
     ///The policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<AccessInfraPolicyReq>,
@@ -26417,7 +26459,8 @@ pub struct HyperdriveCreateResponseResult {
     ///Defines the creation time of the Hyperdrive configuration.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    pub id: HyperdriveIdentifier,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<HyperdriveIdentifier>,
     ///Defines the last modified time of the Hyperdrive configuration.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
@@ -26689,7 +26732,8 @@ pub struct HyperdriveHyperdriveConfig {
     ///Defines the creation time of the Hyperdrive configuration.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    pub id: HyperdriveIdentifier,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<HyperdriveIdentifier>,
     ///Defines the last modified time of the Hyperdrive configuration.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
@@ -26770,7 +26814,8 @@ pub struct HyperdriveHyperdriveConfigResponse {
     ///Defines the creation time of the Hyperdrive configuration.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    pub id: HyperdriveIdentifier,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<HyperdriveIdentifier>,
     ///Defines the last modified time of the Hyperdrive configuration.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
@@ -27208,7 +27253,8 @@ pub struct HyperdriveObserveResponseResult {
     ///Defines the creation time of the Hyperdrive configuration.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    pub id: HyperdriveIdentifier,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<HyperdriveIdentifier>,
     ///Defines the last modified time of the Hyperdrive configuration.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
@@ -27322,7 +27368,8 @@ pub struct HyperdriveUpdateResponseResult {
     ///Defines the creation time of the Hyperdrive configuration.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    pub id: HyperdriveIdentifier,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<HyperdriveIdentifier>,
     ///Defines the last modified time of the Hyperdrive configuration.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
@@ -28819,15 +28866,20 @@ impl ::std::convert::TryFrom<::std::string::String> for ListsKind {
     schemars::JsonSchema
 )]
 pub struct ListsList {
-    pub created_on: ListsCreatedOn,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<ListsCreatedOn>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<ListsDescription>,
-    pub id: ListsListId,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<ListsListId>,
     pub kind: ListsKind,
-    pub modified_on: ListsModifiedOn,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<ListsModifiedOn>,
     pub name: ListsName,
-    pub num_items: ListsNumItems,
-    pub num_referencing_filters: ListsNumReferencingFilters,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub num_items: ::std::option::Option<ListsNumItems>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub num_referencing_filters: ::std::option::Option<ListsNumReferencingFilters>,
 }
 ///`ListsListDeleteResponseCollection`
 #[derive(
@@ -28851,11 +28903,13 @@ pub struct ListsListDeleteResponseCollection {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
 pub struct ListsListDeleteResponseCollectionResult {
-    pub id: ListsListId,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<ListsListId>,
 }
 ///The unique ID of the list.
 #[derive(
@@ -38445,7 +38499,8 @@ pub struct PagesDeployment {
     ///If the deployment has been skipped.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub is_skipped: ::std::option::Option<bool>,
-    pub latest_stage: PagesStage,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub latest_stage: ::std::option::Option<PagesStage>,
     ///When the deployment was last modified.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
@@ -52163,14 +52218,11 @@ for SpectrumApplicationForProvider {
 pub struct SpectrumApplicationForProviderconfig {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub argo_smart_routing: ::std::option::Option<SpectrumConfigArgoSmartRouting>,
-    pub created_on: SpectrumConfigCreated,
     pub dns: SpectrumConfigDns,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub edge_ips: ::std::option::Option<SpectrumConfigEdgeIps>,
-    pub id: SpectrumConfigAppIdentifier,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub ip_firewall: ::std::option::Option<SpectrumConfigIpFirewall>,
-    pub modified_on: SpectrumConfigModified,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub origin_direct: ::std::option::Option<SpectrumConfigOriginDirect>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -52196,10 +52248,7 @@ pub struct SpectrumApplicationForProviderconfig {
     schemars::JsonSchema
 )]
 pub struct SpectrumApplicationForProviderspectrumConfigPaygoAppConfig {
-    pub created_on: SpectrumConfigCreated,
     pub dns: SpectrumConfigDns,
-    pub id: SpectrumConfigAppIdentifier,
-    pub modified_on: SpectrumConfigModified,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub origin_direct: ::std::option::Option<SpectrumConfigOriginDirect>,
     pub protocol: SpectrumConfigProtocol,
@@ -52342,14 +52391,17 @@ pub struct SpectrumConfigApiResponseSingleIdResult {
 pub struct SpectrumConfigAppConfig {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub argo_smart_routing: ::std::option::Option<SpectrumConfigArgoSmartRouting>,
-    pub created_on: SpectrumConfigCreated,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<SpectrumConfigCreated>,
     pub dns: SpectrumConfigDns,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub edge_ips: ::std::option::Option<SpectrumConfigEdgeIps>,
-    pub id: SpectrumConfigAppIdentifier,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<SpectrumConfigAppIdentifier>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub ip_firewall: ::std::option::Option<SpectrumConfigIpFirewall>,
-    pub modified_on: SpectrumConfigModified,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<SpectrumConfigModified>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub origin_direct: ::std::option::Option<SpectrumConfigOriginDirect>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -52515,13 +52567,17 @@ impl ::std::convert::TryFrom<String> for SpectrumConfigArgoSmartRouting {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
 pub struct SpectrumConfigBaseAppConfig {
-    pub created_on: SpectrumConfigCreated,
-    pub id: SpectrumConfigAppIdentifier,
-    pub modified_on: SpectrumConfigModified,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<SpectrumConfigCreated>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<SpectrumConfigAppIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<SpectrumConfigModified>,
 }
 ///`SpectrumConfigCreated`
 #[derive(
@@ -53359,10 +53415,13 @@ impl ::std::convert::From<::std::num::NonZeroU64> for SpectrumConfigOriginPort {
     schemars::JsonSchema
 )]
 pub struct SpectrumConfigPaygoAppConfig {
-    pub created_on: SpectrumConfigCreated,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<SpectrumConfigCreated>,
     pub dns: SpectrumConfigDns,
-    pub id: SpectrumConfigAppIdentifier,
-    pub modified_on: SpectrumConfigModified,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<SpectrumConfigAppIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<SpectrumConfigModified>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub origin_direct: ::std::option::Option<SpectrumConfigOriginDirect>,
     pub protocol: SpectrumConfigProtocol,
@@ -54139,7 +54198,8 @@ pub struct TlsCertificatesAndHostnamesCustomHostname {
     pub custom_origin_sni: ::std::option::Option<
         TlsCertificatesAndHostnamesCustomOriginSni,
     >,
-    pub hostname: TlsCertificatesAndHostnamesHostname,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub hostname: ::std::option::Option<TlsCertificatesAndHostnamesHostname>,
     pub id: TlsCertificatesAndHostnamesIdentifier,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub ownership_verification: ::std::option::Option<
@@ -56394,7 +56454,8 @@ pub struct TunnelCidrRouteCreateRequest {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub comment: ::std::option::Option<TunnelRouteComment>,
     pub network: TunnelIpNetwork,
-    pub tunnel_id: TunnelTunnelId,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_id: ::std::option::Option<TunnelTunnelId>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub virtual_network_id: ::std::option::Option<
         TunnelVirtualNetworkIdComputedOptional,
@@ -59675,11 +59736,13 @@ pub struct TurnstileWidgetDeleteResponse {
 pub struct TurnstileWidgetDetail {
     pub bot_fight_mode: TurnstileBotFightMode,
     pub clearance_level: TurnstileClearanceLevel,
-    pub created_on: TurnstileCreatedOn,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<TurnstileCreatedOn>,
     pub domains: TurnstileDomains,
     pub ephemeral_id: TurnstileEphemeralId,
     pub mode: TurnstileWidgetMode,
-    pub modified_on: TurnstileModifiedOn,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<TurnstileModifiedOn>,
     pub name: TurnstileName,
     pub offlabel: TurnstileOfflabel,
     pub region: TurnstileRegion,
@@ -63441,7 +63504,8 @@ pub struct WorkersKvMessagesItem {
     schemars::JsonSchema
 )]
 pub struct WorkersKvNamespace {
-    pub id: WorkersKvNamespaceIdentifier,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<WorkersKvNamespaceIdentifier>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub jurisdiction: ::std::option::Option<WorkersKvJurisdiction>,
     ///True if keys written on the URL will be URL-decoded before storing. For example, if set to "true", a key written on the URL as "%3F" will be stored as "?".
@@ -71997,9 +72061,11 @@ for ZonesOriginErrorPagePassThruValue {
 )]
 pub struct ZonesPageRule {
     pub actions: ZonesActions,
-    pub created_on: ZonesCreatedOn,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<ZonesCreatedOn>,
     pub id: ZonesIdentifier2,
-    pub modified_on: ZonesModifiedOn,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<ZonesModifiedOn>,
     pub priority: ZonesPriority,
     pub status: ZonesStatus,
     pub targets: ZonesTargets,

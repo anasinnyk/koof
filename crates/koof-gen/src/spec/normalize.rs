@@ -1,4 +1,4 @@
-use super::schema_children_mut;
+use super::{resolve_ref, schema_children_mut};
 use serde_json::{Map, Value};
 
 pub fn normalize_nullable(value: &mut Value) {
@@ -9,18 +9,27 @@ pub fn normalize_nullable(value: &mut Value) {
     }
 }
 
-pub fn relax_read_only_required(value: &mut Value) {
+pub fn relax_read_only_required(document: &mut Value) {
+    let schemas = document
+        .pointer("/components/schemas")
+        .and_then(Value::as_object)
+        .cloned()
+        .unwrap_or_default();
+    relax(document, &schemas);
+}
+
+fn relax(value: &mut Value, schemas: &Map<String, Value>) {
     match value {
         Value::Object(map) => {
             for child in schema_children_mut(map) {
-                relax_read_only_required(child);
+                relax(child, schemas);
             }
             let read_only: Vec<String> = map
                 .get("properties")
                 .and_then(Value::as_object)
                 .into_iter()
                 .flatten()
-                .filter(|(_, property)| is_read_only(property))
+                .filter(|(_, property)| is_read_only(schemas, property))
                 .map(|(name, _)| name.clone())
                 .collect();
             if read_only.is_empty() {
@@ -36,17 +45,29 @@ pub fn relax_read_only_required(value: &mut Value) {
                 }
             }
         }
-        Value::Array(items) => items.iter_mut().for_each(relax_read_only_required),
+        Value::Array(items) => items.iter_mut().for_each(|item| relax(item, schemas)),
         _ => {}
     }
 }
 
-fn is_read_only(property: &Value) -> bool {
-    property.get("readOnly") == Some(&Value::Bool(true))
-        || property
+pub fn is_read_only(schemas: &Map<String, Value>, schema: &Value) -> bool {
+    fn check(schemas: &Map<String, Value>, schema: &Value, depth: usize) -> bool {
+        if depth > 16 {
+            return false;
+        }
+        if schema.get("readOnly") == Some(&Value::Bool(true)) {
+            return true;
+        }
+        let resolved = resolve_ref(schemas, schema);
+        if !std::ptr::eq(resolved, schema) && check(schemas, resolved, depth + 1) {
+            return true;
+        }
+        schema
             .get("allOf")
             .and_then(Value::as_array)
-            .is_some_and(|parts| parts.iter().any(is_read_only))
+            .is_some_and(|parts| parts.iter().any(|part| check(schemas, part, depth + 1)))
+    }
+    check(schemas, schema, 0)
 }
 
 pub fn drop_non_string_enums(value: &mut Value) {
@@ -131,6 +152,28 @@ mod tests {
         });
         relax_read_only_required(&mut value);
         assert_eq!(value["required"], json!(["name"]));
+    }
+
+    #[test]
+    fn read_only_through_a_reference_is_not_required() {
+        let mut document = json!({
+            "components": { "schemas": {
+                "Created": { "allOf": [{ "readOnly": true }, { "type": "string" }] },
+                "Thing": {
+                    "type": "object",
+                    "properties": {
+                        "created_on": { "$ref": "#/components/schemas/Created" },
+                        "name": { "type": "string" }
+                    },
+                    "required": ["created_on", "name"]
+                }
+            } }
+        });
+        relax_read_only_required(&mut document);
+        assert_eq!(
+            document["components"]["schemas"]["Thing"]["required"],
+            json!(["name"])
+        );
     }
 
     fn normalized(mut value: Value) -> Value {

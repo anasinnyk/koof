@@ -14,6 +14,15 @@ actions:
         kind: GatewayList
         scope: Namespaced
 
+        test:
+          forProvider:
+            name: koof e2e
+            type: DOMAIN
+            items:
+              - value: example.com
+          update:
+            description: updated by koof e2e
+
         identifiers:
           external_id:
             type: external_name

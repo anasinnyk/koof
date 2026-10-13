@@ -14,6 +14,14 @@ actions:
         kind: LoadBalancer
         scope: Namespaced
 
+        test:
+          forProvider:
+            name: lb.example.com
+            default_pools: [17b5962d775c646f3f9725cbc7a53df4]
+            fallback_pool: 17b5962d775c646f3f9725cbc7a53df4
+          update:
+            proxied: true
+
         identifiers:
           external_id:
             type: external_name

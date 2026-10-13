@@ -4,6 +4,7 @@ pub mod app;
 pub mod controller;
 pub mod error;
 pub mod external;
+pub mod fake;
 pub mod json_path;
 pub mod managed;
 pub mod metrics;

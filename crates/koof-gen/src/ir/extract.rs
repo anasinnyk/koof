@@ -111,6 +111,7 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
                 credentials: extension.credentials,
                 validations: extension.validations,
                 immutable: extension.immutable,
+                test: extension.test,
                 lifecycle: LifecycleIr {
                     observe,
                     create: lifecycle.create,

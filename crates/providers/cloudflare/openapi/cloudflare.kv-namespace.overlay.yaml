@@ -14,6 +14,12 @@ actions:
         kind: KVNamespace
         scope: Namespaced
 
+        test:
+          forProvider:
+            title: koof-e2e
+          update:
+            title: koof-e2e-renamed
+
         identifiers:
           external_id:
             type: external_name

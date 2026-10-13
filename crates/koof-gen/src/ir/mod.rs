@@ -35,6 +35,16 @@ pub struct ResourceIr {
     pub lifecycle: LifecycleIr,
     pub validations: Vec<ValidationIr>,
     pub immutable: Vec<String>,
+    pub test: Option<TestIr>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TestIr {
+    #[serde(default)]
+    pub for_provider: serde_json::Map<String, serde_json::Value>,
+    #[serde(default)]
+    pub update: Option<serde_json::Map<String, serde_json::Value>>,
 }
 
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Deserialize)]
@@ -122,20 +132,11 @@ impl Default for RequestMappingIr {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ValueExpr {
-    Field {
-        path: FieldPath,
-    },
+    Field { path: FieldPath },
     ExternalName,
-    RelatedIdentifier {
-        via: Vec<String>,
-        name: String,
-    },
-    Coalesce {
-        values: Vec<ValueExpr>,
-    },
-    Literal {
-        value: String,
-    },
+    RelatedIdentifier { via: Vec<String>, name: String },
+    Coalesce { values: Vec<ValueExpr> },
+    Literal { value: String },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -278,8 +279,8 @@ components:
         assert_eq!(observe.response_path.as_deref(), Some("result"));
 
         let codegen = spec::for_codegen(&prepared)?;
-        let provider = validate(&ir, &codegen.late_initialize)
-            .map_err(|errors| format!("{errors:?}"))?;
+        let provider =
+            validate(&ir, &codegen.late_initialize).map_err(|errors| format!("{errors:?}"))?;
         let [zone] = provider.resources.as_slice() else {
             return Err("expected one resource".into());
         };
@@ -290,7 +291,9 @@ components:
         );
         assert_eq!(zone.late_initialize, ["name"]);
         assert_eq!(
-            zone.credentials.as_ref().and_then(|credentials| credentials.secret_field),
+            zone.credentials
+                .as_ref()
+                .and_then(|credentials| credentials.secret_field),
             Some("tokenSecretRef")
         );
         Ok(())
@@ -299,8 +302,14 @@ components:
     #[test]
     fn invalid_ir_reports_every_error() -> Result<(), Box<dyn std::error::Error>> {
         let document = DOCUMENT
-            .replace("apiVersion: example.kube.io/v1alpha1", "apiVersion: v1alpha1")
-            .replace("result: { identifiers: { external_id: response.body.result.id } }", "");
+            .replace(
+                "apiVersion: example.kube.io/v1alpha1",
+                "apiVersion: v1alpha1",
+            )
+            .replace(
+                "result: { identifiers: { external_id: response.body.result.id } }",
+                "",
+            );
         let prepared = spec::prepare(&serde_yaml::from_str(&document)?)?;
         let ir = extract(&prepared)?;
         let codegen = spec::for_codegen(&prepared)?;

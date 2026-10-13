@@ -1,0 +1,15 @@
+# Chainsaw configuration for the provider end-to-end tests (scripts/e2e.sh).
+apiVersion: chainsaw.kyverno.io/v1alpha2
+kind: Configuration
+metadata:
+  name: koof
+spec:
+  timeouts:
+    apply: 30s
+    # A dependent object waits (15s requeue) until what it references is Ready.
+    assert: 2m
+    cleanup: 2m
+    delete: 2m
+    error: 30s
+  execution:
+    parallel: 4

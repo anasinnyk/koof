@@ -66,3 +66,34 @@ jobs:
           platforms: linux/amd64
           cache-from: type=gha,scope=${{ matrix.provider }}
           cache-to: type=gha,mode=max,scope=${{ matrix.provider }}
+
+  e2e:
+    needs: providers
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        provider: ${{ fromJSON(needs.providers.outputs.list) }}
+    env:
+      CHAINSAW_VERSION: v0.2.15
+      CHAINSAW_SHA256: 295d226c89f126c0a97775d364be149f47a810c8a3f9829ee410583d0c1abe3c
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - uses: helm/kind-action@1544676c07bb3570fcb70166beaa07c4528fd4aa
+        with:
+          # scripts/e2e.sh creates the cluster from cluster/k8s.yaml.
+          install_only: true
+      - name: Install chainsaw
+        run: |
+          curl -sSfL -o chainsaw.tar.gz \
+            "https://github.com/kyverno/chainsaw/releases/download/$CHAINSAW_VERSION/chainsaw_linux_amd64.tar.gz"
+          echo "$CHAINSAW_SHA256  chainsaw.tar.gz" | sha256sum -c -
+          mkdir -p "$HOME/.local/bin"
+          tar -xzf chainsaw.tar.gz -C "$HOME/.local/bin" chainsaw
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - run: scripts/e2e.sh ${{ matrix.provider }}
+      - name: Provider logs
+        if: failure()
+        run: tail -n 200 target/e2e/*.log
