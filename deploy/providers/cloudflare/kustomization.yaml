@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: koof-cloudflare
+namePrefix: koof-cloudflare-
+labels:
+  - pairs:
+      app.kubernetes.io/instance: koof-cloudflare
+    includeSelectors: true
+resources:
+  - ../../base
+  - crds.yaml
+  - rbac.yaml
+images:
+  - name: provider
+    newName: ghcr.io/anasinnyk/koof-cloudflare
+    newTag: "0.1.0"

@@ -8,6 +8,7 @@ pub mod external;
 pub mod fake;
 pub mod json_path;
 pub mod managed;
+pub mod manifests;
 pub mod metrics;
 pub mod object;
 pub mod reference;

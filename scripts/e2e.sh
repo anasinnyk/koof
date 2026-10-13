@@ -29,7 +29,7 @@ run() {
   local bin="$root/target/debug"
 
   cargo build --quiet --manifest-path "$root/Cargo.toml" -p "$provider-provider" --bins
-  "$bin/crdgen" | kubectl apply --server-side --force-conflicts -f - >/dev/null
+  "$bin/manifests" | kubectl apply --server-side --force-conflicts -f - >/dev/null
   kubectl wait --for condition=established crd --all --timeout=60s >/dev/null
 
   KOOF_FAKE_ADDR="127.0.0.1:$fake_port" "$bin/fake" >"$logs/$provider-fake.log" 2>&1 &

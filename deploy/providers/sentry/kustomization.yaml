@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: koof-sentry
+namePrefix: koof-sentry-
+labels:
+  - pairs:
+      app.kubernetes.io/instance: koof-sentry
+    includeSelectors: true
+resources:
+  - ../../base
+  - crds.yaml
+  - rbac.yaml
+images:
+  - name: provider
+    newName: ghcr.io/anasinnyk/koof-sentry
+    newTag: "0.1.0"

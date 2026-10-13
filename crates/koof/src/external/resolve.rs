@@ -48,7 +48,7 @@ impl Node {
 ///
 /// Returns [`ResolveValueError`] when a field is not a scalar, a reference is not set
 /// or points nowhere, or an identifier is unknown.
-#[must_use]
+#[must_use = "the future does nothing unless awaited"]
 pub fn resolve_value<'a>(
     client: &'a kube::Client,
     node: &'a Node,

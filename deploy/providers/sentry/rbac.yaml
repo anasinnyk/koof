@@ -1,0 +1,64 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: provider
+rules:
+- apiGroups:
+  - sentry.kube.nas1k.dev
+  resources:
+  - dashboards
+  - monitors
+  - organizations
+  - organizationmembers
+  - projects
+  - projectkeys
+  - servicehooks
+  - teams
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+  - update
+- apiGroups:
+  - sentry.kube.nas1k.dev
+  resources:
+  - dashboards/status
+  - monitors/status
+  - organizations/status
+  - organizationmembers/status
+  - projects/status
+  - projectkeys/status
+  - servicehooks/status
+  - teams/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - sentry.kube.nas1k.dev
+  resources:
+  - dashboards/finalizers
+  - monitors/finalizers
+  - organizations/finalizers
+  - organizationmembers/finalizers
+  - projects/finalizers
+  - projectkeys/finalizers
+  - servicehooks/finalizers
+  - teams/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - ''
+  resources:
+  - secrets
+  verbs:
+  - get
+- apiGroups:
+  - events.k8s.io
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
