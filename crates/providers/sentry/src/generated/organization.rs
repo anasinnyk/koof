@@ -68,7 +68,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     references: &[],
     credentials: Some(koof::resource::Credentials {
         source: koof::resource::CredentialSource::Secret {
-            path: "spec.forProvider.authTokenSecretRef",
+            path: "/spec/forProvider/authTokenSecretRef",
         },
         auth: koof::resource::AuthScheme::Bearer,
     }),
@@ -90,7 +90,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
             response_path: "",
         },
         request: koof::resource::RequestMapping {
-            from: "spec.forProvider",
+            from: "/spec/forProvider",
             set: &[],
         },
     }),

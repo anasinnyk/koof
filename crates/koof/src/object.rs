@@ -1,4 +1,4 @@
-use crate::{error::ReconcileError, json_path, resource::ManagedResource};
+use crate::{error::ReconcileError, resource::ManagedResource};
 use kube::api::{Api, DynamicObject, Patch, PatchParams};
 use serde_json::Value;
 
@@ -45,11 +45,8 @@ pub async fn patch_guarded<R: ManagedResource>(
     resource: &R,
     mut changes: Value,
 ) -> Result<R, ReconcileError> {
-    json_path::set(
-        &mut changes,
-        "metadata.resourceVersion",
-        serde_json::json!(kube::ResourceExt::resource_version(resource)),
-    );
+    changes["metadata"]["resourceVersion"] =
+        serde_json::json!(kube::ResourceExt::resource_version(resource));
     patch(client, resource, &changes).await
 }
 

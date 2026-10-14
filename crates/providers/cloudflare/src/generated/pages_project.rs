@@ -71,7 +71,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     references: &[
         koof::resource::Reference {
             name: "account",
-            from: "spec.forProvider.accountRef",
+            from: "/spec/forProvider/accountRef",
             target: &crate::generated::account::DESCRIPTOR,
             namespace: koof::resource::NamespacePolicy::SameAsResource,
         },
@@ -97,13 +97,13 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
                     koof::resource::ValueExpr::Coalesce(
                         &[
                             koof::resource::ValueExpr::ExternalName,
-                            koof::resource::ValueExpr::Field("spec.resourceName"),
-                            koof::resource::ValueExpr::Field("metadata.name"),
+                            koof::resource::ValueExpr::Field("/spec/resourceName"),
+                            koof::resource::ValueExpr::Field("/metadata/name"),
                         ],
                     ),
                 ),
             ],
-            response_path: "result",
+            response_path: "/result",
         },
         deleted_when: None,
     },
@@ -121,10 +121,10 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
             response_path: "",
         },
         request: koof::resource::RequestMapping {
-            from: "spec.forProvider",
+            from: "/spec/forProvider",
             set: &[],
         },
-        external_name: "result.name",
+        external_name: "/result/name",
     }),
     update: Some(koof::resource::UpdateDescriptor {
         operation: koof::resource::OperationDescriptor {
@@ -141,8 +141,8 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
                     koof::resource::ValueExpr::Coalesce(
                         &[
                             koof::resource::ValueExpr::ExternalName,
-                            koof::resource::ValueExpr::Field("spec.resourceName"),
-                            koof::resource::ValueExpr::Field("metadata.name"),
+                            koof::resource::ValueExpr::Field("/spec/resourceName"),
+                            koof::resource::ValueExpr::Field("/metadata/name"),
                         ],
                     ),
                 ),
@@ -150,7 +150,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
             response_path: "",
         },
         request: koof::resource::RequestMapping {
-            from: "spec.forProvider",
+            from: "/spec/forProvider",
             set: &[],
         },
     }),
@@ -168,8 +168,8 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
                 koof::resource::ValueExpr::Coalesce(
                     &[
                         koof::resource::ValueExpr::ExternalName,
-                        koof::resource::ValueExpr::Field("spec.resourceName"),
-                        koof::resource::ValueExpr::Field("metadata.name"),
+                        koof::resource::ValueExpr::Field("/spec/resourceName"),
+                        koof::resource::ValueExpr::Field("/metadata/name"),
                     ],
                 ),
             ),

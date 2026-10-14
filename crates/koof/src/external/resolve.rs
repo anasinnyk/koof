@@ -1,7 +1,6 @@
 use super::http::Auth;
 use crate::{
     error::{CredentialError, ResolveValueError},
-    json_path,
     reference::{ResourceReference, SecretReference},
     resource::{
         AuthScheme, CredentialSource, ManagedResource, NamespacePolicy, ResourceDescriptor,
@@ -56,7 +55,7 @@ pub fn resolve_value<'a>(
 ) -> BoxFuture<'a, Result<Option<String>, ResolveValueError>> {
     Box::pin(async move {
         match expression {
-            ValueExpr::Field(path) => json_path::scalar(&node.value, path),
+            ValueExpr::Field(path) => scalar(&node.value, path),
             ValueExpr::ExternalName => Ok(node
                 .descriptor
                 .external_name(&node.value)
@@ -114,7 +113,7 @@ pub async fn traverse(
                 current.descriptor.kind
             ))
         })?;
-        let target: ResourceReference = json_path::get_non_null(&current.value, reference.from)
+        let target: ResourceReference = non_null(&current.value, reference.from)
             .cloned()
             .map(serde_json::from_value)
             .transpose()?
@@ -186,7 +185,7 @@ pub async fn resolve_credentials(
         )));
     };
 
-    let selector: SecretReference = json_path::get_non_null(&terminal.value, path)
+    let selector: SecretReference = non_null(&terminal.value, path)
         .cloned()
         .map(serde_json::from_value)
         .transpose()
@@ -245,4 +244,20 @@ pub async fn resolve_secret_key(
         key: key.to_owned(),
         source,
     })
+}
+
+pub(crate) fn non_null<'a>(value: &'a Value, pointer: &str) -> Option<&'a Value> {
+    value.pointer(pointer).filter(|value| !value.is_null())
+}
+
+fn scalar(value: &Value, pointer: &str) -> Result<Option<String>, ResolveValueError> {
+    match value.pointer(pointer) {
+        None | Some(Value::Null) => Ok(None),
+        Some(Value::String(value)) => Ok(Some(value.clone())),
+        Some(Value::Number(value)) => Ok(Some(value.to_string())),
+        Some(Value::Bool(value)) => Ok(Some(value.to_string())),
+        Some(_) => Err(ResolveValueError::NonScalar {
+            path: pointer.to_owned(),
+        }),
+    }
 }

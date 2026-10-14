@@ -27,7 +27,7 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
         .iter()
         .map(|reference| {
             let reference_name = reference.name;
-            let from = reference.from;
+            let from = pointer(reference.from);
             let target_module = field_ident(&reference.target.0)?;
             let namespace = match reference.namespace {
                 NamespacePolicy::SameAsResource => quote!(SameAsResource),
@@ -86,7 +86,7 @@ fn optional(tokens: Option<TokenStream>) -> TokenStream {
 fn credentials_tokens(credentials: &Credentials<'_>) -> TokenStream {
     let source = match credentials.source {
         CredentialSourceIr::SecretKeySelector { path } => {
-            let path = &path.0;
+            let path = pointer(&path.0);
             quote!(koof::resource::CredentialSource::Secret { path: #path })
         }
         CredentialSourceIr::Related { via } => {
@@ -144,7 +144,7 @@ pub fn generate_managed_resource(
 fn create_descriptor(create: Create<'_>) -> TokenStream {
     let request = request_mapping(create.operation);
     let operation = operation_descriptor(create.operation);
-    let external_name = create.external_name;
+    let external_name = pointer(create.external_name);
     quote! {
         koof::resource::CreateDescriptor {
             operation: #operation,
@@ -167,8 +167,9 @@ fn update_descriptor(operation: Operation<'_>) -> TokenStream {
 
 fn request_mapping(operation: Operation<'_>) -> TokenStream {
     let mapping = operation.ir.request_mapping.clone().unwrap_or_default();
-    let from = &mapping.from.0;
+    let from = pointer(&mapping.from.0);
     let set = mapping.set.iter().map(|(path, expression)| {
+        let path = pointer(path);
         let expression = value_expr(expression);
         quote!((#path, #expression))
     });
@@ -182,7 +183,16 @@ fn request_mapping(operation: Operation<'_>) -> TokenStream {
 
 fn observe_descriptor(operation: Operation<'_>) -> TokenStream {
     let descriptor = operation_descriptor(operation);
-    let deleted_when = optional(operation.ir.deleted_when.as_deref().map(|path| quote!(#path)));
+    let deleted_when = optional(
+        operation
+            .ir
+            .deleted_when
+            .as_deref()
+            .map(|path| {
+                let path = pointer(path);
+                quote!(#path)
+            }),
+    );
     quote! {
         koof::resource::ObserveDescriptor {
             operation: #descriptor,
@@ -200,7 +210,7 @@ fn operation_descriptor(operation: Operation<'_>) -> TokenStream {
             let expression = value_expr(expression);
             quote!((#parameter, #expression))
         });
-    let response_path = operation.ir.response_path.clone().unwrap_or_default();
+    let response_path = pointer(operation.ir.response_path.as_deref().unwrap_or_default());
     quote! {
         koof::resource::OperationDescriptor {
             path_parameters: &[#(#path_parameters),*],
@@ -212,7 +222,7 @@ fn operation_descriptor(operation: Operation<'_>) -> TokenStream {
 fn value_expr(expression: &ValueExpr) -> TokenStream {
     match expression {
         ValueExpr::Field { path } => {
-            let path = &path.0;
+            let path = pointer(&path.0);
             quote!(koof::resource::ValueExpr::Field(#path))
         }
         ValueExpr::RelatedIdentifier { via, name } => {
@@ -225,4 +235,9 @@ fn value_expr(expression: &ValueExpr) -> TokenStream {
         ValueExpr::Literal { value } => quote!(koof::resource::ValueExpr::Literal(#value)),
         ValueExpr::ExternalName => quote!(koof::resource::ValueExpr::ExternalName),
     }
+}
+
+fn pointer(path: &str) -> String {
+    jsonptr::PointerBuf::from_tokens(path.split('.').filter(|segment| !segment.is_empty()))
+        .to_string()
 }
