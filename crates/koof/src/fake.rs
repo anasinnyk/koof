@@ -1,6 +1,5 @@
 use crate::{
     http::Operation,
-    json_path,
     resource::{AuthScheme, ManagedResource, ValueExpr},
 };
 use axum::{
@@ -130,7 +129,7 @@ impl Fake {
         let (create_path, id_field) = descriptor.create.as_ref().map_or(("", "id"), |create| {
             create
                 .external_name
-                .rsplit_once('.')
+                .rsplit_once('/')
                 .unwrap_or(("", create.external_name))
         });
         self.shapes.insert(
@@ -545,12 +544,23 @@ fn error(status: StatusCode, message: &str) -> Response {
 
 fn wrap(path: &str, object: Value) -> Response {
     let mut body = Value::Null;
-    if path.is_empty() {
-        body = object;
-    } else {
-        json_path::set(&mut body, path, object);
+    let assigned = jsonptr::Pointer::parse(path)
+        .map_err(|parse| parse.to_string())
+        .and_then(|pointer| {
+            pointer
+                .assign(&mut body, object)
+                .map_err(|assign| assign.to_string())
+        });
+    if let Err(message) = assigned {
+        return error(StatusCode::INTERNAL_SERVER_ERROR, &message);
     }
     (StatusCode::OK, Json(body)).into_response()
+}
+
+fn insert(object: &mut Value, field: &str, value: Value) {
+    if let Some(object) = object.as_object_mut() {
+        object.insert(field.to_owned(), value);
+    }
 }
 
 impl Store {
@@ -595,7 +605,7 @@ impl Store {
                     Ok(number) if shape.numeric_id => json!(number),
                     _ => Value::String(id.clone()),
                 };
-                json_path::set(&mut object, shape.id_field, id_value);
+                insert(&mut object, shape.id_field, id_value);
                 shape.complete(&mut object);
                 let key = (route.kind, route.key(shape, parameters, Some(&id)));
                 if objects.contains_key(&key) {
@@ -625,7 +635,7 @@ impl Store {
                     let id = object.get(shape.id_field).cloned();
                     *object = body;
                     if let Some(id) = id {
-                        json_path::set(object, shape.id_field, id);
+                        insert(object, shape.id_field, id);
                     }
                     shape.complete(object);
                 }

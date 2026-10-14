@@ -1,9 +1,9 @@
 use super::resolve::{Node, resolve_value};
 use crate::{
     error::{ReconcileError, ResolveValueError},
-    json_path,
     resource::RequestMapping,
 };
+use jsonptr::Pointer;
 use serde_json::{Map, Value};
 
 /// Request body: the object at `mapping.from` with `mapping.set` applied,
@@ -18,7 +18,7 @@ pub async fn build<T: serde::de::DeserializeOwned>(
     node: &Node,
     mapping: &RequestMapping,
 ) -> Result<T, ReconcileError> {
-    let mut body = match json_path::get(&node.value, mapping.from) {
+    let mut body = match node.value.pointer(mapping.from) {
         Some(Value::Object(object)) => Value::Object(object.clone()),
         None | Some(Value::Null) => Value::Object(Map::new()),
         Some(_) => {
@@ -34,7 +34,10 @@ pub async fn build<T: serde::de::DeserializeOwned>(
             .ok_or_else(|| {
                 ResolveValueError::Missing(format!("request field {path} could not be resolved"))
             })?;
-        json_path::set(&mut body, path, Value::String(value));
+        Pointer::parse(path)
+            .map_err(|error| ReconcileError::InvalidRequest(error.to_string()))?
+            .assign(&mut body, Value::String(value))
+            .map_err(|error| ReconcileError::InvalidRequest(error.to_string()))?;
     }
     serde_json::from_value(body).map_err(|error| {
         ReconcileError::InvalidRequest(format!(

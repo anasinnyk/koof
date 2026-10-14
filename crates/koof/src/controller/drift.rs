@@ -1,4 +1,4 @@
-use crate::{error::ReconcileError, external::Observation, json_path, resource::ManagedResource};
+use crate::{error::ReconcileError, external::Observation, resource::ManagedResource};
 use serde_json::Value;
 
 /// Desired fields of `resource` that differ from the observation; the desired
@@ -17,9 +17,11 @@ pub fn drift<R: ManagedResource>(
     let from = R::descriptor()
         .update
         .as_ref()
-        .map_or("spec.forProvider", |update| update.request.from);
+        .map_or("/spec/forProvider", |update| update.request.from);
     let value = serde_json::to_value(resource)?;
-    Ok(json_path::get(&value, from).map_or_else(Vec::new, |desired| drifted(desired, observed)))
+    Ok(value
+        .pointer(from)
+        .map_or_else(Vec::new, |desired| drifted(desired, observed)))
 }
 
 #[must_use]

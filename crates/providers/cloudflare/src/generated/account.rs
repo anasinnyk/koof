@@ -68,14 +68,14 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     references: &[],
     credentials: Some(koof::resource::Credentials {
         source: koof::resource::CredentialSource::Secret {
-            path: "spec.forProvider.apiTokenSecretRef",
+            path: "/spec/forProvider/apiTokenSecretRef",
         },
         auth: koof::resource::AuthScheme::Bearer,
     }),
     observe: koof::resource::ObserveDescriptor {
         operation: koof::resource::OperationDescriptor {
             path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
-            response_path: "result",
+            response_path: "/result",
         },
         deleted_when: None,
     },
@@ -85,10 +85,10 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
             response_path: "",
         },
         request: koof::resource::RequestMapping {
-            from: "spec.forProvider",
+            from: "/spec/forProvider",
             set: &[],
         },
-        external_name: "result.id",
+        external_name: "/result/id",
     }),
     update: Some(koof::resource::UpdateDescriptor {
         operation: koof::resource::OperationDescriptor {
@@ -96,10 +96,10 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
             response_path: "",
         },
         request: koof::resource::RequestMapping {
-            from: "spec.forProvider",
+            from: "/spec/forProvider",
             set: &[
-                ("id", koof::resource::ValueExpr::ExternalName),
-                ("type", koof::resource::ValueExpr::Field("status.atProvider.type")),
+                ("/id", koof::resource::ValueExpr::ExternalName),
+                ("/type", koof::resource::ValueExpr::Field("/status/atProvider/type")),
             ],
         },
     }),

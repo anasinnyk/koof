@@ -8,7 +8,6 @@ use crate::{
         create_state::{self, CREATE_FAILED, CREATE_PENDING, CREATE_SUCCEEDED},
     },
     error::{ReconcileError, ResolveValueError},
-    json_path,
     resource::{EXTERNAL_NAME, ManagedResource, ObserveDescriptor, OperationDescriptor},
 };
 use http::{Auth, HttpError, Operation};
@@ -113,12 +112,12 @@ pub async fn observe<R: ManagedResource>(
 
 fn observation(response: Option<&Value>, observe: &ObserveDescriptor) -> Observation {
     let at_provider = response
-        .and_then(|response| json_path::get_non_null(response, observe.operation.response_path))
+        .and_then(|response| resolve::non_null(response, observe.operation.response_path))
         .cloned();
     let deleted = observe.deleted_when.is_some_and(|path| {
         at_provider
             .as_ref()
-            .is_some_and(|resource| json_path::get_non_null(resource, path).is_some())
+            .is_some_and(|resource| resolve::non_null(resource, path).is_some())
     });
     if deleted {
         return Observation {
@@ -182,7 +181,7 @@ pub async fn create<R: ManagedResource>(
 
     let external_name = response
         .as_ref()
-        .and_then(|body| json_path::get(body, create.external_name))
+        .and_then(|body| body.pointer(create.external_name))
         .and_then(|value| match value {
             Value::String(name) => Some(name.clone()),
             Value::Number(number) => Some(number.to_string()),

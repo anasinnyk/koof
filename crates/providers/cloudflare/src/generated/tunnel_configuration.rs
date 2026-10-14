@@ -64,7 +64,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     references: &[
         koof::resource::Reference {
             name: "tunnel",
-            from: "spec.forProvider.tunnelRef",
+            from: "/spec/forProvider/tunnelRef",
             target: &crate::generated::tunnel::DESCRIPTOR,
             namespace: koof::resource::NamespacePolicy::SameAsResource,
         },
@@ -93,7 +93,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
                     },
                 ),
             ],
-            response_path: "result",
+            response_path: "/result",
         },
         deleted_when: None,
     },
@@ -119,7 +119,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
             response_path: "",
         },
         request: koof::resource::RequestMapping {
-            from: "spec.forProvider",
+            from: "/spec/forProvider",
             set: &[],
         },
     }),

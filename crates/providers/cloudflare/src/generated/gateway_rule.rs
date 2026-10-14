@@ -78,7 +78,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     references: &[
         koof::resource::Reference {
             name: "account",
-            from: "spec.forProvider.accountRef",
+            from: "/spec/forProvider/accountRef",
             target: &crate::generated::account::DESCRIPTOR,
             namespace: koof::resource::NamespacePolicy::SameAsResource,
         },
@@ -101,9 +101,9 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
                 ),
                 ("rule_id", koof::resource::ValueExpr::ExternalName),
             ],
-            response_path: "result",
+            response_path: "/result",
         },
-        deleted_when: Some("deleted_at"),
+        deleted_when: Some("/deleted_at"),
     },
     create: Some(koof::resource::CreateDescriptor {
         operation: koof::resource::OperationDescriptor {
@@ -119,10 +119,10 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
             response_path: "",
         },
         request: koof::resource::RequestMapping {
-            from: "spec.forProvider",
+            from: "/spec/forProvider",
             set: &[],
         },
-        external_name: "result.id",
+        external_name: "/result/id",
     }),
     update: Some(koof::resource::UpdateDescriptor {
         operation: koof::resource::OperationDescriptor {
@@ -139,7 +139,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
             response_path: "",
         },
         request: koof::resource::RequestMapping {
-            from: "spec.forProvider",
+            from: "/spec/forProvider",
             set: &[],
         },
     }),

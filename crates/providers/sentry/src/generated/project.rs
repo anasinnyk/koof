@@ -71,13 +71,13 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     references: &[
         koof::resource::Reference {
             name: "organization",
-            from: "spec.forProvider.organizationRef",
+            from: "/spec/forProvider/organizationRef",
             target: &crate::generated::organization::DESCRIPTOR,
             namespace: koof::resource::NamespacePolicy::SameAsResource,
         },
         koof::resource::Reference {
             name: "team",
-            from: "spec.forProvider.teamRef",
+            from: "/spec/forProvider/teamRef",
             target: &crate::generated::team::DESCRIPTOR,
             namespace: koof::resource::NamespacePolicy::SameAsResource,
         },
@@ -125,10 +125,10 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
             response_path: "",
         },
         request: koof::resource::RequestMapping {
-            from: "spec.forProvider",
+            from: "/spec/forProvider",
             set: &[],
         },
-        external_name: "slug",
+        external_name: "/slug",
     }),
     update: Some(koof::resource::UpdateDescriptor {
         operation: koof::resource::OperationDescriptor {
@@ -145,7 +145,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
             response_path: "",
         },
         request: koof::resource::RequestMapping {
-            from: "spec.forProvider",
+            from: "/spec/forProvider",
             set: &[],
         },
     }),

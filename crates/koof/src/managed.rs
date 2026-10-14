@@ -2,6 +2,7 @@ use std::collections::BTreeSet;
 
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
+use smart_default::SmartDefault;
 
 /// An action the controller may take on the external resource
 /// (Crossplane `managementPolicies`).
@@ -28,16 +29,16 @@ pub enum DeletionPolicy {
     Orphan,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema, SmartDefault)]
+#[serde(default, rename_all = "camelCase")]
 pub struct ManagedResourceSpec {
     /// Actions the controller may take. `["*"]` (default) allows all; `["Observe"]`
     /// only reads (import without management). `Observe` is always required.
-    #[serde(rename = "managementPolicies", default = "default_management_policies")]
+    #[default([ManagementAction::All].into_iter().collect())]
     pub management_policies: BTreeSet<ManagementAction>,
 
     /// `Orphan` keeps the external resource when the managed resource is deleted.
     /// Without `Delete` in `managementPolicies` the resource is always orphaned.
-    #[serde(rename = "deletionPolicy", default)]
     pub deletion_policy: DeletionPolicy,
 }
 
@@ -47,17 +48,4 @@ impl ManagedResourceSpec {
         self.management_policies.contains(&ManagementAction::All)
             || self.management_policies.contains(&action)
     }
-}
-
-impl Default for ManagedResourceSpec {
-    fn default() -> Self {
-        Self {
-            management_policies: default_management_policies(),
-            deletion_policy: DeletionPolicy::Delete,
-        }
-    }
-}
-
-fn default_management_policies() -> BTreeSet<ManagementAction> {
-    [ManagementAction::All].into_iter().collect()
 }

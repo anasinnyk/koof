@@ -1,7 +1,7 @@
-use crate::{error::ReconcileError, json_path, object, resource::ManagedResource};
+use crate::{error::ReconcileError, object, resource::ManagedResource};
 use serde_json::{Map, Value};
 
-const FOR_PROVIDER: &str = "spec.forProvider";
+const FOR_PROVIDER: &str = "/spec/forProvider";
 
 /// Observed values for late-initializable fields that are unset in the spec. A
 /// value that does not fit the spec's type (schemas of request and response can
@@ -17,7 +17,7 @@ pub fn candidates<R: ManagedResource>(
     observed: &Value,
 ) -> Result<Map<String, Value>, ReconcileError> {
     let value = serde_json::to_value(resource)?;
-    let desired = json_path::get(&value, FOR_PROVIDER);
+    let desired = value.pointer(FOR_PROVIDER);
     let mut fields = Map::new();
 
     for field in R::descriptor().late_initialize {
@@ -71,7 +71,7 @@ enum Trial {
 fn trial<R: ManagedResource>(resource: &Value, field: &str, candidate: &Value) -> Trial {
     let mut trial = resource.clone();
     let Some(for_provider) =
-        json_path::get_mut(&mut trial, FOR_PROVIDER).and_then(Value::as_object_mut)
+        trial.pointer_mut(FOR_PROVIDER).and_then(Value::as_object_mut)
     else {
         return Trial::DoesNotFit;
     };
@@ -94,8 +94,7 @@ pub async fn apply<R: ManagedResource>(
     resource: &R,
     fields: &Map<String, Value>,
 ) -> Result<(), ReconcileError> {
-    let mut patch = Value::Null;
-    json_path::set(&mut patch, FOR_PROVIDER, Value::Object(fields.clone()));
+    let patch = serde_json::json!({ "spec": { "forProvider": fields } });
     object::patch_guarded(client, resource, patch).await?;
     Ok(())
 }
