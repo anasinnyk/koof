@@ -32,7 +32,7 @@ actions:
     update:
       x-kube-provider:
         name: example
-        # Optional HTTP client defaults; KOOF_HTTP_* variables override them.
+        # Optional HTTP client defaults; KOOF_HTTP__* variables override them.
         http:
           timeout: 30s
           connect_timeout: 10s

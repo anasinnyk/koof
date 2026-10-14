@@ -153,13 +153,10 @@ fn http_defaults(extension: HttpExtension) -> Result<HttpIr, ExtractError> {
     let duration = |name: &str, value: Option<String>| {
         value
             .map(|value| {
-                let duration: jiff::SignedDuration = value.parse().map_err(|error| {
+                humantime::parse_duration(&value).map_err(|error| {
                     ir_error(format!(
                         "x-kube-provider.http.{name}: {value:?} is not a duration like 30s: {error}"
                     ))
-                })?;
-                std::time::Duration::try_from(duration).map_err(|_| {
-                    ir_error(format!("x-kube-provider.http.{name}: {value:?} is negative"))
                 })
             })
             .transpose()

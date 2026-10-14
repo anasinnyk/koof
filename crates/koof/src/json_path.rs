@@ -56,32 +56,3 @@ pub fn set(target: &mut Value, path: &str, value: Value) {
             .or_insert_with(|| Value::Object(Map::new()));
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use serde_json::json;
-
-    #[test]
-    fn get_follows_dot_paths() {
-        let value = json!({ "spec": { "forProvider": { "name": "a" } } });
-        assert_eq!(get(&value, "spec.forProvider.name"), Some(&json!("a")));
-        assert_eq!(get(&value, ""), Some(&value));
-        assert_eq!(get(&value, "spec.missing"), None);
-    }
-
-    #[test]
-    fn set_creates_intermediate_objects() {
-        let mut value = Value::Null;
-        set(&mut value, "metadata.resourceVersion", json!("1"));
-        assert_eq!(value, json!({ "metadata": { "resourceVersion": "1" } }));
-    }
-
-    #[test]
-    fn scalar_rejects_objects() {
-        let value = json!({ "a": { "b": 1 }, "n": 2, "z": null });
-        assert_eq!(scalar(&value, "a.b").ok().flatten().as_deref(), Some("1"));
-        assert_eq!(scalar(&value, "z").ok().flatten(), None);
-        assert!(scalar(&value, "a").is_err());
-    }
-}

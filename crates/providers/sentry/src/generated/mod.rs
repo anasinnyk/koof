@@ -8,16 +8,13 @@ pub mod project;
 pub mod project_key;
 pub mod service_hook;
 pub mod team;
+fn http(http: koof::config::HttpConfig) -> koof::config::HttpConfig {
+    http
+}
 pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo {
     name: "sentry",
     base_url: "https://sentry.io",
-    http: koof::config::HttpDefaults {
-        timeout: None,
-        connect_timeout: None,
-        pool_idle_timeout: None,
-        pool_max_idle_per_host: None,
-        user_agent: None,
-    },
+    http,
 };
 /// Registers the controllers of every resource of this provider.
 #[must_use]
