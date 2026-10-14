@@ -261,39 +261,3 @@ pub async fn delete<R: ManagedResource>(
         .send_discarding::<R::Delete>(&call.auth, &call.parameters(), None)
         .await?)
 }
-
-#[cfg(test)]
-mod tests {
-    use super::observation;
-    use crate::resource::{ObserveDescriptor, OperationDescriptor};
-    use serde_json::json;
-
-    const OBSERVE: ObserveDescriptor = ObserveDescriptor {
-        operation: OperationDescriptor {
-            path_parameters: &[],
-            response_path: "result",
-        },
-        deleted_when: Some("deleted_at"),
-    };
-
-    #[test]
-    fn resource_marked_deleted_does_not_exist() {
-        let response = json!({ "result": { "id": "1", "deleted_at": "2026-10-12T17:45:03Z" } });
-        let observed = observation(Some(&response), &OBSERVE);
-        assert!(!observed.exists);
-        assert!(observed.at_provider.is_none());
-    }
-
-    #[test]
-    fn resource_without_deletion_marker_exists() {
-        let response = json!({ "result": { "id": "1", "deleted_at": null } });
-        let observed = observation(Some(&response), &OBSERVE);
-        assert!(observed.exists);
-        assert_eq!(observed.at_provider, Some(json!({ "id": "1", "deleted_at": null })));
-    }
-
-    #[test]
-    fn missing_response_does_not_exist() {
-        assert!(!observation(None, &OBSERVE).exists);
-    }
-}

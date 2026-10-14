@@ -1,5 +1,5 @@
 use crate::{
-    config::{Config, ConfigError, HttpDefaults},
+    config::{Config, HttpConfig},
     controller::{ControllerContext, run},
     http::HttpClient,
     metrics::Metrics,
@@ -13,7 +13,7 @@ use std::sync::Arc;
 pub struct ProviderInfo {
     pub name: &'static str,
     pub base_url: &'static str,
-    pub http: HttpDefaults,
+    pub http: fn(HttpConfig) -> HttpConfig,
 }
 
 type ControllerFn = fn(Arc<ControllerContext>) -> BoxFuture<'static, ()>;
@@ -62,19 +62,7 @@ impl App {
             .try_init();
 
         let config = Config::from_env(self.provider)?;
-        let sources: Vec<String> = config
-            .sources
-            .iter()
-            .map(|(variable, source)| format!("{variable}={source}"))
-            .collect();
-        tracing::info!(
-            provider = self.provider.name,
-            base_url = %config.base_url,
-            metrics_addr = %config.metrics_addr,
-            http = ?config.http,
-            ?sources,
-            "configuration"
-        );
+        tracing::info!(provider = self.provider.name, ?config, "configuration");
         let http = config.http.client().map_err(AppError::HttpClient)?;
         let kube_client = kube::Client::try_default().await?;
         let reporter = Reporter {
@@ -118,8 +106,8 @@ impl App {
 
 #[derive(Debug, thiserror::Error)]
 pub enum AppError {
-    #[error(transparent)]
-    Config(#[from] ConfigError),
+    #[error("invalid configuration: {0}")]
+    Config(#[from] config::ConfigError),
 
     #[error("cannot create the HTTP client: {0}")]
     HttpClient(#[source] reqwest::Error),

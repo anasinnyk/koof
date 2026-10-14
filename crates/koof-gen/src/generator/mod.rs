@@ -106,7 +106,7 @@ fn mod_file(provider: &Provider<'_>) -> Result<GeneratedFile, GeneratorError> {
 
     let name = provider.name;
     let base_url = provider.base_url;
-    let http = http_defaults(provider.http);
+    let http = http_overrides(provider.http);
     let kinds = provider
         .resources
         .iter()
@@ -124,10 +124,12 @@ fn mod_file(provider: &Provider<'_>) -> Result<GeneratedFile, GeneratorError> {
             pub mod #resource_modules;
         )*
 
+        #http
+
         pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo {
             name: #name,
             base_url: #base_url,
-            http: #http,
+            http,
         };
 
         /// Registers the controllers of every resource of this provider.
@@ -154,49 +156,51 @@ fn mod_file(provider: &Provider<'_>) -> Result<GeneratedFile, GeneratorError> {
     })
 }
 
-fn http_defaults(http: &HttpIr) -> TokenStream {
-    let duration = |value: Option<std::time::Duration>| {
-        value.map_or_else(
-            || quote!(None),
-            |value| {
-                let millis = u64::try_from(value.as_millis()).unwrap_or(u64::MAX);
-                let duration = match millis {
-                    0 => quote!(::std::time::Duration::ZERO),
-                    _ if millis % 3_600_000 == 0 => {
-                        let hours = millis / 3_600_000;
-                        quote!(::std::time::Duration::from_hours(#hours))
-                    }
-                    _ if millis % 60_000 == 0 => {
-                        let minutes = millis / 60_000;
-                        quote!(::std::time::Duration::from_mins(#minutes))
-                    }
-                    _ if millis % 1_000 == 0 => {
-                        let seconds = millis / 1_000;
-                        quote!(::std::time::Duration::from_secs(#seconds))
-                    }
-                    _ => quote!(::std::time::Duration::from_millis(#millis)),
-                };
-                quote!(Some(#duration))
-            },
-        )
+fn http_overrides(http: &HttpIr) -> TokenStream {
+    let duration = |name: &str, value: Option<std::time::Duration>| {
+        let value = value?;
+        let field = quote::format_ident!("{name}");
+        let millis = u64::try_from(value.as_millis()).unwrap_or(u64::MAX);
+        let duration = match millis {
+            0 => quote!(::std::time::Duration::ZERO),
+            _ if millis % 3_600_000 == 0 => {
+                let hours = millis / 3_600_000;
+                quote!(::std::time::Duration::from_hours(#hours))
+            }
+            _ if millis % 60_000 == 0 => {
+                let minutes = millis / 60_000;
+                quote!(::std::time::Duration::from_mins(#minutes))
+            }
+            _ if millis % 1_000 == 0 => {
+                let seconds = millis / 1_000;
+                quote!(::std::time::Duration::from_secs(#seconds))
+            }
+            _ => quote!(::std::time::Duration::from_millis(#millis)),
+        };
+        Some(quote!(http.#field = #duration;))
     };
-    let timeout = duration(http.timeout);
-    let connect_timeout = duration(http.connect_timeout);
-    let pool_idle_timeout = duration(http.pool_idle_timeout);
-    let pool_max_idle_per_host = http
-        .pool_max_idle_per_host
-        .map_or_else(|| quote!(None), |value| quote!(Some(#value)));
-    let user_agent = http
-        .user_agent
-        .as_deref()
-        .map_or_else(|| quote!(None), |value| quote!(Some(#value)));
+    let fields: Vec<TokenStream> = [
+        duration("timeout", http.timeout),
+        duration("connect_timeout", http.connect_timeout),
+        duration("pool_idle_timeout", http.pool_idle_timeout),
+        http.pool_max_idle_per_host
+            .map(|value| quote!(http.pool_max_idle_per_host = #value;)),
+        http.user_agent
+            .as_deref()
+            .map(|value| quote!(#value.clone_into(&mut http.user_agent);)),
+    ]
+    .into_iter()
+    .flatten()
+    .collect();
+    let binding = if fields.is_empty() {
+        quote!(http)
+    } else {
+        quote!(mut http)
+    };
     quote! {
-        koof::config::HttpDefaults {
-            timeout: #timeout,
-            connect_timeout: #connect_timeout,
-            pool_idle_timeout: #pool_idle_timeout,
-            pool_max_idle_per_host: #pool_max_idle_per_host,
-            user_agent: #user_agent,
+        fn http(#binding: koof::config::HttpConfig) -> koof::config::HttpConfig {
+            #(#fields)*
+            http
         }
     }
 }

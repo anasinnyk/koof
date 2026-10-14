@@ -32,16 +32,13 @@ pub mod waiting_room;
 pub mod worker_route;
 pub mod zone;
 pub mod zone_ruleset;
+fn http(http: koof::config::HttpConfig) -> koof::config::HttpConfig {
+    http
+}
 pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo {
     name: "cloudflare",
     base_url: "https://api.cloudflare.com/client/v4",
-    http: koof::config::HttpDefaults {
-        timeout: None,
-        connect_timeout: None,
-        pool_idle_timeout: None,
-        pool_max_idle_per_host: None,
-        user_agent: None,
-    },
+    http,
 };
 /// Registers the controllers of every resource of this provider.
 #[must_use]
