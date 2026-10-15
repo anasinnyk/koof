@@ -1,0 +1,13 @@
+apiVersion: chainsaw.kyverno.io/v1alpha2
+kind: Configuration
+metadata:
+  name: koof
+spec:
+  timeouts:
+    apply: 30s
+    assert: 2m
+    cleanup: 2m
+    delete: 2m
+    error: 30s
+  execution:
+    parallel: 4

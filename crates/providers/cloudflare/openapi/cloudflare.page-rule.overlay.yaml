@@ -1,0 +1,102 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare PageRule
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # The create request body is the resource schema: forProvider gets its writable
+  # fields, atProvider every field of the observe response.
+  - target: $.paths['/zones/{zone_id}/pagerules'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: page_rule
+        apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+        kind: PageRule
+        scope: Namespaced
+
+        test:
+          forProvider:
+            targets:
+              - target: url
+                constraint:
+                  operator: matches
+                  value: example.com/*
+            actions:
+              - id: always_use_https
+            status: active
+          update:
+            status: disabled
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          zone:
+            from: spec.forProvider.zoneRef
+            target: zone
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: api_token
+          source:
+            type: related
+            via: [zone, account]
+
+        fields:
+          mode: all
+
+  - target: $.paths['/zones/{zone_id}/pagerules/{pagerule_id}'].get
+    update:
+      x-kube-operation:
+        resource: page_rule
+        lifecycle: observe
+        response:
+          path: result
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          pagerule_id:
+            type: external_name
+
+  - target: $.paths['/zones/{zone_id}/pagerules'].post
+    update:
+      x-kube-operation:
+        resource: page_rule
+        lifecycle: create
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/zones/{zone_id}/pagerules/{pagerule_id}'].put
+    update:
+      x-kube-operation:
+        resource: page_rule
+        lifecycle: update
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          pagerule_id:
+            type: external_name
+
+  - target: $.paths['/zones/{zone_id}/pagerules/{pagerule_id}'].delete
+    update:
+      x-kube-operation:
+        resource: page_rule
+        lifecycle: delete
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          pagerule_id:
+            type: external_name

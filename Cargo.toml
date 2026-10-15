@@ -1,0 +1,32 @@
+[workspace]
+resolver = "3"
+members = ["crates/providers/cloudflare", "crates/providers/sentry", "crates/koof", "crates/koof-gen"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.91"
+license = "MIT"
+repository = "https://github.com/anasinnyk/koof"
+homepage = "https://github.com/anasinnyk/koof"
+
+[workspace.lints.rust]
+warnings = { level = "deny", priority = -1 }
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+
+unwrap_used = "deny"
+expect_used = "deny"
+todo = "deny"
+dbg_macro = "deny"
+
+# Debug info for dependencies (and the ~27k-line generated types) dominates the
+# size of target/; line tables keep backtraces useful.
+[profile.dev]
+debug = "line-tables-only"
+
+[profile.dev.package."*"]
+debug = false

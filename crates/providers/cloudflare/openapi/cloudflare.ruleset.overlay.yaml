@@ -1,0 +1,147 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare Ruleset
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # The resource schema: `rulesets_Ruleset` plus the `kind`, `phase` and `rules`
+  # the API declares only on request bodies and responses. A separate schema
+  # rather than new properties on `rulesets_Ruleset`: that one is merged (allOf)
+  # with the response's `rules` (a different union of ~20 rule types), which
+  # typify cannot merge in reasonable time. Rules are managed inline: a `PUT`
+  # replaces the whole list, and single rules have no observe endpoint.
+  - target: $.components.schemas
+    update:
+      rulesets_ZoneRuleset:
+        allOf:
+          - $ref: '#/components/schemas/rulesets_Ruleset'
+          - type: object
+            properties:
+              kind:
+                $ref: '#/components/schemas/rulesets_RulesetKind'
+              phase:
+                $ref: '#/components/schemas/rulesets_RulesetPhase'
+              rules:
+                $ref: '#/components/schemas/rulesets_RequestRules'
+            required:
+              - name
+              - kind
+              - phase
+
+  - target: $.components.schemas.rulesets_ZoneRuleset
+    update:
+      x-kube-resource:
+        name: zone_ruleset
+        apiVersion: rulesets.cloudflare.kube.nas1k.dev/v1alpha1
+        kind: Ruleset
+        scope: Namespaced
+
+        test:
+          forProvider:
+            name: default
+            kind: zone
+            phase: http_request_firewall_custom
+            rules:
+              - description: Block the admin path
+                expression: (http.request.uri.path eq "/admin")
+                action: block
+          update:
+            description: updated by koof e2e
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          zone:
+            from: spec.forProvider.zoneRef
+            target: zone
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: api_token
+          source:
+            type: related
+            via: [zone, account]
+
+        fields:
+          mode: explicit
+          forProvider:
+            - name
+            - description
+            - kind
+            - phase
+            - rules
+          atProvider:
+            - id
+            - name
+            - description
+            - kind
+            - phase
+            - rules
+            - version
+            - last_updated
+
+  - target: $.paths['/zones/{zone_id}/rulesets/{ruleset_id}'].get
+    update:
+      x-kube-operation:
+        resource: zone_ruleset
+        lifecycle: observe
+        response:
+          path: result
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          ruleset_id:
+            type: external_name
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/zones/{zone_id}/rulesets'].post
+    update:
+      x-kube-operation:
+        resource: zone_ruleset
+        lifecycle: create
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/zones/{zone_id}/rulesets/{ruleset_id}'].put
+    update:
+      x-kube-operation:
+        resource: zone_ruleset
+        lifecycle: update
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          ruleset_id:
+            type: external_name
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/zones/{zone_id}/rulesets/{ruleset_id}'].delete
+    update:
+      x-kube-operation:
+        resource: zone_ruleset
+        lifecycle: delete
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          ruleset_id:
+            type: external_name
+        result:
+          identifiers:
+            external_id: response.body.result.id

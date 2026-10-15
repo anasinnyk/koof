@@ -1,0 +1,100 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare NotificationPolicy
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # The create request body is the resource schema: forProvider gets its writable
+  # fields, atProvider every field of the observe response.
+  - target: $.paths['/accounts/{account_id}/alerting/v3/policies'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: notification_policy
+        apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+        kind: NotificationPolicy
+        scope: Namespaced
+
+        test:
+          forProvider:
+            name: koof e2e
+            alert_type: universal_ssl_event_type
+            enabled: true
+            mechanisms:
+              email:
+                - id: ops@example.com
+          update:
+            enabled: false
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          account:
+            from: spec.forProvider.accountRef
+            target: account
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: api_token
+          source:
+            type: related
+            via: [account]
+
+        fields:
+          mode: all
+
+  - target: $.paths['/accounts/{account_id}/alerting/v3/policies/{policy_id}'].get
+    update:
+      x-kube-operation:
+        resource: notification_policy
+        lifecycle: observe
+        response:
+          path: result
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          policy_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/alerting/v3/policies'].post
+    update:
+      x-kube-operation:
+        resource: notification_policy
+        lifecycle: create
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/accounts/{account_id}/alerting/v3/policies/{policy_id}'].put
+    update:
+      x-kube-operation:
+        resource: notification_policy
+        lifecycle: update
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          policy_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/alerting/v3/policies/{policy_id}'].delete
+    update:
+      x-kube-operation:
+        resource: notification_policy
+        lifecycle: delete
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          policy_id:
+            type: external_name

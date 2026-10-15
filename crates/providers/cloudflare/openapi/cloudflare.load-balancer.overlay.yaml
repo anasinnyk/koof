@@ -1,0 +1,97 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare LoadBalancer
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # The create request body is the resource schema: forProvider gets its writable
+  # fields, atProvider every field of the observe response.
+  - target: $.paths['/zones/{zone_id}/load_balancers'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: load_balancer
+        apiVersion: loadbalancing.cloudflare.kube.nas1k.dev/v1alpha1
+        kind: LoadBalancer
+        scope: Namespaced
+
+        test:
+          forProvider:
+            name: lb.example.com
+            default_pools: [17b5962d775c646f3f9725cbc7a53df4]
+            fallback_pool: 17b5962d775c646f3f9725cbc7a53df4
+          update:
+            proxied: true
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          zone:
+            from: spec.forProvider.zoneRef
+            target: zone
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: api_token
+          source:
+            type: related
+            via: [zone, account]
+
+        fields:
+          mode: all
+
+  - target: $.paths['/zones/{zone_id}/load_balancers/{load_balancer_id}'].get
+    update:
+      x-kube-operation:
+        resource: load_balancer
+        lifecycle: observe
+        response:
+          path: result
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          load_balancer_id:
+            type: external_name
+
+  - target: $.paths['/zones/{zone_id}/load_balancers'].post
+    update:
+      x-kube-operation:
+        resource: load_balancer
+        lifecycle: create
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/zones/{zone_id}/load_balancers/{load_balancer_id}'].put
+    update:
+      x-kube-operation:
+        resource: load_balancer
+        lifecycle: update
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          load_balancer_id:
+            type: external_name
+
+  - target: $.paths['/zones/{zone_id}/load_balancers/{load_balancer_id}'].delete
+    update:
+      x-kube-operation:
+        resource: load_balancer
+        lifecycle: delete
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          load_balancer_id:
+            type: external_name

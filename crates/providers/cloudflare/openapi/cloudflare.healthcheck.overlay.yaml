@@ -1,0 +1,97 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare Healthcheck
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # The create request body is the resource schema: forProvider gets its writable
+  # fields, atProvider every field of the observe response.
+  - target: $.components.schemas['healthchecks_query_healthcheck']
+    update:
+      x-kube-resource:
+        name: healthcheck
+        apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+        kind: Healthcheck
+        scope: Namespaced
+
+        test:
+          forProvider:
+            name: koof-e2e
+            address: origin.example.com
+            type: HTTP
+          update:
+            description: updated by koof e2e
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          zone:
+            from: spec.forProvider.zoneRef
+            target: zone
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: api_token
+          source:
+            type: related
+            via: [zone, account]
+
+        fields:
+          mode: all
+
+  - target: $.paths['/zones/{zone_id}/healthchecks/{healthcheck_id}'].get
+    update:
+      x-kube-operation:
+        resource: healthcheck
+        lifecycle: observe
+        response:
+          path: result
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          healthcheck_id:
+            type: external_name
+
+  - target: $.paths['/zones/{zone_id}/healthchecks'].post
+    update:
+      x-kube-operation:
+        resource: healthcheck
+        lifecycle: create
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/zones/{zone_id}/healthchecks/{healthcheck_id}'].put
+    update:
+      x-kube-operation:
+        resource: healthcheck
+        lifecycle: update
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          healthcheck_id:
+            type: external_name
+
+  - target: $.paths['/zones/{zone_id}/healthchecks/{healthcheck_id}'].delete
+    update:
+      x-kube-operation:
+        resource: healthcheck
+        lifecycle: delete
+        path_parameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          healthcheck_id:
+            type: external_name

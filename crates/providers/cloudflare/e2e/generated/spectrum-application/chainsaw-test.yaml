@@ -1,0 +1,115 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: spectrum-application
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+                namespace: ($namespace)
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Zone
+          metadata:
+            name: zone
+          spec:
+            forProvider:
+              accountRef:
+                name: ($namespace)
+              name: example.com
+              type: full
+    - apply:
+        resource:
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: SpectrumApplication
+          metadata:
+            name: spectrum-application
+          spec:
+            forProvider:
+              dns:
+                name: ssh.example.com
+                type: CNAME
+              origin_direct:
+              - tcp://192.0.2.1:22
+              protocol: tcp/22
+              traffic_type: direct
+              zoneRef:
+                name: zone
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Zone
+          metadata:
+            name: zone
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: SpectrumApplication
+          metadata:
+            name: spectrum-application
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: SpectrumApplication
+          metadata:
+            name: spectrum-application
+          spec:
+            forProvider:
+              ip_firewall: true
+    - assert:
+        resource:
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: SpectrumApplication
+          metadata:
+            name: spectrum-application
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              ip_firewall: true
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: SpectrumApplication
+          name: spectrum-application

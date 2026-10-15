@@ -1,0 +1,93 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: notification-policy
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+                namespace: ($namespace)
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: NotificationPolicy
+          metadata:
+            name: notification-policy
+          spec:
+            forProvider:
+              accountRef:
+                name: ($namespace)
+              alert_type: universal_ssl_event_type
+              enabled: true
+              mechanisms:
+                email:
+                - id: ops@example.com
+              name: koof e2e
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: NotificationPolicy
+          metadata:
+            name: notification-policy
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: NotificationPolicy
+          metadata:
+            name: notification-policy
+          spec:
+            forProvider:
+              enabled: false
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: NotificationPolicy
+          metadata:
+            name: notification-policy
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              enabled: false
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: NotificationPolicy
+          name: notification-policy

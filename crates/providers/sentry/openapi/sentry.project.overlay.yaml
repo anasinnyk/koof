@@ -1,0 +1,106 @@
+overlay: 1.1.0
+info:
+  title: Sentry Project
+  version: 0.0.1
+extends: ./sentry.json
+actions:
+  # The create request body is the resource schema.
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/projects/'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: project
+        apiVersion: sentry.kube.nas1k.dev/v1alpha1
+        kind: Project
+        scope: Namespaced
+
+        test:
+          forProvider:
+            name: koof e2e
+            slug: koof-e2e
+          update:
+            name: koof e2e renamed
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          organization:
+            from: spec.forProvider.organizationRef
+            target: organization
+            namespace: same_as_resource
+          team:
+            from: spec.forProvider.teamRef
+            target: team
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: auth_token
+          source:
+            type: related
+            via: [organization]
+
+        fields:
+          mode: all
+
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].get
+    update:
+      x-kube-operation:
+        resource: project
+        lifecycle: observe
+        path_parameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [organization]
+            name: external_id
+          project_id_or_slug:
+            type: external_name
+
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/projects/'].post
+    update:
+      x-kube-operation:
+        resource: project
+        lifecycle: create
+        path_parameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [organization]
+            name: external_id
+          team_id_or_slug:
+            type: related_identifier
+            via: [team]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.slug
+
+  # The update is partial (only the fields sent change), but the document marks
+  # digest and security-token settings required, which forProvider does not have.
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].put.requestBody.content['application/json'].schema.required
+    remove: true
+
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].put
+    update:
+      x-kube-operation:
+        resource: project
+        lifecycle: update
+        path_parameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [organization]
+            name: external_id
+          project_id_or_slug:
+            type: external_name
+
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].delete
+    update:
+      x-kube-operation:
+        resource: project
+        lifecycle: delete
+        path_parameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [organization]
+            name: external_id
+          project_id_or_slug:
+            type: external_name

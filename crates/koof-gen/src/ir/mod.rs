@@ -1,0 +1,197 @@
+mod extract;
+pub mod resolved;
+mod validate;
+
+pub use extract::{ExtractError, extract};
+pub use validate::{ValidationError, validate};
+
+use serde::Deserialize;
+use std::collections::BTreeMap;
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ProviderIr {
+    pub provider: String,
+    pub base_url: String,
+    pub http: HttpIr,
+    pub resources: BTreeMap<ResourceName, ResourceIr>,
+    pub operations: BTreeMap<OperationId, OperationIr>,
+    pub security_schemes: BTreeMap<SecuritySchemeName, SecuritySchemeIr>,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct HttpIr {
+    pub timeout: Option<std::time::Duration>,
+    pub connect_timeout: Option<std::time::Duration>,
+    pub pool_idle_timeout: Option<std::time::Duration>,
+    pub pool_max_idle_per_host: Option<usize>,
+    pub user_agent: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Deserialize)]
+#[serde(transparent)]
+pub struct ResourceName(pub String);
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct OperationId(pub String);
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct ResourceIr {
+    pub api_version: String,
+    pub kind: String,
+    pub scope: ScopeIr,
+    pub identifiers: BTreeMap<String, ValueExpr>,
+    pub references: BTreeMap<String, ReferenceIr>,
+    pub credentials: Option<CredentialsIr>,
+    pub lifecycle: LifecycleIr,
+    pub validations: Vec<ValidationIr>,
+    pub immutable: Vec<String>,
+    pub test: Option<TestIr>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TestIr {
+    #[serde(default)]
+    pub for_provider: serde_json::Map<String, serde_json::Value>,
+    #[serde(default)]
+    pub update: Option<serde_json::Map<String, serde_json::Value>>,
+}
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Deserialize)]
+pub enum ScopeIr {
+    #[default]
+    Namespaced,
+    Cluster,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+pub struct ValidationIr {
+    pub rule: String,
+    pub message: String,
+    #[serde(default)]
+    pub field: String,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+pub struct ReferenceIr {
+    pub from: FieldPath,
+    pub target: ResourceName,
+    #[serde(default)]
+    pub namespace: NamespacePolicy,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+pub struct CredentialsIr {
+    pub source: CredentialSourceIr,
+
+    pub security_scheme: SecuritySchemeName,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(tag = "type", rename_all = "snake_case")]
+pub enum CredentialSourceIr {
+    SecretKeySelector { path: FieldPath },
+    Related { via: Vec<String> },
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct LifecycleIr {
+    pub observe: OperationId,
+    pub create: Option<OperationId>,
+    pub update: Option<OperationId>,
+    pub delete: Option<OperationId>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct OperationIr {
+    pub method: HttpMethod,
+    pub path: String,
+    pub path_parameters: BTreeMap<String, ValueExpr>,
+
+    pub request: Option<SchemaName>,
+    pub response: Option<SchemaName>,
+    pub response_path: Option<String>,
+    pub deleted_when: Option<String>,
+    pub request_mapping: Option<RequestMappingIr>,
+    pub result_identifiers: BTreeMap<String, String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+pub struct RequestMappingIr {
+    #[serde(default = "RequestMappingIr::default_from")]
+    pub from: FieldPath,
+    #[serde(default)]
+    pub set: BTreeMap<String, ValueExpr>,
+}
+
+impl RequestMappingIr {
+    fn default_from() -> FieldPath {
+        FieldPath("spec.forProvider".to_owned())
+    }
+}
+
+impl Default for RequestMappingIr {
+    fn default() -> Self {
+        Self {
+            from: Self::default_from(),
+            set: BTreeMap::new(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(tag = "type", rename_all = "snake_case")]
+pub enum ValueExpr {
+    Field { path: FieldPath },
+    ExternalName,
+    RelatedIdentifier { via: Vec<String>, name: String },
+    Coalesce { values: Vec<ValueExpr> },
+    Literal { value: String },
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(transparent)]
+pub struct FieldPath(pub String);
+
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum NamespacePolicy {
+    #[default]
+    SameAsResource,
+    FromReference,
+    ClusterScoped,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum HttpMethod {
+    Get,
+    Post,
+    Put,
+    Patch,
+    Delete,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct SchemaName(pub String);
+
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Deserialize)]
+pub struct SecuritySchemeName(pub String);
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ApiKeyLocationIr {
+    Header,
+    Query,
+    Cookie,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum SecuritySchemeIr {
+    ApiKey {
+        name: String,
+        location: ApiKeyLocationIr,
+    },
+
+    Http {
+        scheme: String,
+    },
+}

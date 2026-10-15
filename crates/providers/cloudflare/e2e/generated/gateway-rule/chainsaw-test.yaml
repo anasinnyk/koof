@@ -1,0 +1,93 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: gateway-rule
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+                namespace: ($namespace)
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: GatewayRule
+          metadata:
+            name: gateway-rule
+          spec:
+            forProvider:
+              accountRef:
+                name: ($namespace)
+              action: block
+              enabled: true
+              filters:
+              - dns
+              name: koof e2e
+              traffic: any(dns.domains[*] == "example.com")
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: GatewayRule
+          metadata:
+            name: gateway-rule
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: GatewayRule
+          metadata:
+            name: gateway-rule
+          spec:
+            forProvider:
+              enabled: false
+    - assert:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: GatewayRule
+          metadata:
+            name: gateway-rule
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              enabled: false
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: GatewayRule
+          name: gateway-rule

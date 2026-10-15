@@ -1,0 +1,113 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: tunnel-configuration
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+                namespace: ($namespace)
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Tunnel
+          metadata:
+            name: tunnel
+          spec:
+            forProvider:
+              accountRef:
+                name: ($namespace)
+              config_src: cloudflare
+              name: koof-e2e
+    - apply:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: TunnelConfiguration
+          metadata:
+            annotations:
+              zerotrust.cloudflare.kube.nas1k.dev/external-name: ($namespace)
+            name: tunnel-configuration
+          spec:
+            deletionPolicy: Orphan
+            forProvider:
+              config:
+                ingress:
+                - hostname: app.example.com
+                  service: http://app.default.svc.cluster.local:8080
+                - service: http_status:404
+              tunnelRef:
+                name: tunnel
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Tunnel
+          metadata:
+            name: tunnel
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: TunnelConfiguration
+          metadata:
+            name: tunnel-configuration
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: TunnelConfiguration
+          metadata:
+            name: tunnel-configuration
+          spec:
+            forProvider:
+              config:
+                ingress:
+                - service: http_status:404
+    - assert:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: TunnelConfiguration
+          metadata:
+            name: tunnel-configuration
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              config:
+                ingress:
+                - service: http_status:404

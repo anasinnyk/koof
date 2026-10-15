@@ -1,0 +1,21 @@
+# Imports an existing Cloudflare account (accounts cannot be created through the
+# API token). The external-name annotation is the account ID. Read-only: the
+# controller observes the account and fills unset fields, but never changes or
+# deletes it.
+apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+kind: Account
+metadata:
+  name: nas1k
+  annotations:
+    cloudflare.kube.nas1k.dev/external-name: f78862bae12573bd3940958787c11430
+spec:
+  managementPolicies: ["Observe", "LateInitialize"]
+  deletionPolicy: Orphan
+  forProvider:
+    name: "Andriy.nas@gmail.com's Account"
+    # Credentials of every resource reached through accountRef; cluster-scoped,
+    # so the Secret's namespace is required.
+    apiTokenSecretRef:
+      name: cf-token
+      key: token
+      namespace: default

@@ -1,0 +1,16 @@
+overlay: 1.1.0
+info:
+  title: Sentry provider
+  version: 0.0.1
+extends: ./sentry.json
+actions:
+  # The document's server is https://{region}.sentry.io; default to the US region
+  # (KOOF_BASE_URL=https://de.sentry.io for the EU region).
+  - target: $.servers
+    remove: true
+  - target: $
+    update:
+      servers:
+        - url: https://sentry.io
+      x-kube-provider:
+        name: sentry

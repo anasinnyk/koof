@@ -1,0 +1,124 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  providers:
+    runs-on: ubuntu-latest
+    outputs:
+      list: ${{ steps.list.outputs.list }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - id: list
+        run: echo "list=$(ls crates/providers | jq -R . | jq -cs .)" >> "$GITHUB_OUTPUT"
+
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - run: cargo clippy --workspace --all-targets --locked
+      - run: cargo test --workspace --locked
+      - run: scripts/check-generated.sh
+      - run: cargo doc --no-deps --locked -p koof -p koof-gen
+        env:
+          RUSTDOCFLAGS: -D warnings
+      - run: cargo publish --dry-run --locked -p koof -p koof-gen
+
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@67b7c9de7d66c881487796e401478f3cb00704b0 # 1.91
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - run: cargo check --locked -p koof -p koof-gen
+
+  image:
+    needs: providers
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        provider: ${{ fromJSON(needs.providers.outputs.list) }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          build-args: PROVIDER=${{ matrix.provider }}
+          platforms: linux/amd64
+          cache-from: type=gha,scope=${{ matrix.provider }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.provider }}
+
+  e2e:
+    needs: providers
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        provider: ${{ fromJSON(needs.providers.outputs.list) }}
+    env:
+      CHAINSAW_VERSION: v0.2.15
+      CHAINSAW_SHA256: 295d226c89f126c0a97775d364be149f47a810c8a3f9829ee410583d0c1abe3c
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      - uses: helm/kind-action@1544676c07bb3570fcb70166beaa07c4528fd4aa
+        with:
+          # scripts/e2e.sh creates the cluster from cluster/k8s.yaml.
+          install_only: true
+      - name: Install chainsaw
+        run: |
+          curl -sSfL -o chainsaw.tar.gz \
+            "https://github.com/kyverno/chainsaw/releases/download/$CHAINSAW_VERSION/chainsaw_linux_amd64.tar.gz"
+          echo "$CHAINSAW_SHA256  chainsaw.tar.gz" | sha256sum -c -
+          mkdir -p "$HOME/.local/bin"
+          tar -xzf chainsaw.tar.gz -C "$HOME/.local/bin" chainsaw
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - run: scripts/e2e.sh ${{ matrix.provider }}
+      - name: Provider logs
+        if: failure()
+        run: tail -n 200 target/e2e/*.log
+
+  alpha-version:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'release')
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - id: version
+        env:
+          PR: ${{ github.event.pull_request.number }}
+          RUN: ${{ github.run_number }}
+        run: |
+          version="$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[] | select(.name == "koof") | .version')"
+          echo "version=$version-alpha.pr$PR.$RUN" >> "$GITHUB_OUTPUT"
+
+  alpha-images:
+    needs: alpha-version
+    uses: ./.github/workflows/images.yml
+    permissions:
+      contents: read
+      packages: write
+    with:
+      version: ${{ needs.alpha-version.outputs.version }}

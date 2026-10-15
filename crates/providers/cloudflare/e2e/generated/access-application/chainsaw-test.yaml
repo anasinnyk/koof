@@ -1,0 +1,93 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: access-application
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+                namespace: ($namespace)
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: AccessApplication
+          metadata:
+            name: access-application
+          spec:
+            forProvider:
+              accountRef:
+                name: ($namespace)
+              domain: app.example.com
+              name: koof e2e
+              self_hosted_domains:
+              - app.example.com
+              session_duration: 24h
+              type: self_hosted
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: ($namespace)
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: AccessApplication
+          metadata:
+            name: access-application
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: AccessApplication
+          metadata:
+            name: access-application
+          spec:
+            forProvider:
+              session_duration: 12h
+    - assert:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: AccessApplication
+          metadata:
+            name: access-application
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              session_duration: 12h
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: AccessApplication
+          name: access-application

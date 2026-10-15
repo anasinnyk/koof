@@ -1,0 +1,98 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare Account
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  - target: $.components.schemas.iam_account
+    update:
+      x-kube-resource:
+        name: account
+        apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+        kind: Account
+        # An account is shared by every namespace; its credentials Secret reference
+        # must name a namespace.
+        scope: Cluster
+
+        test:
+          forProvider:
+            name: koof e2e
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        credentials:
+          security_scheme: api_token
+          source:
+            type: secret_key_selector
+            path: spec.forProvider.apiTokenSecretRef
+
+        fields:
+          mode: explicit
+          forProvider:
+            - name
+            - settings
+          atProvider:
+            - id
+            - name
+            - type
+            - created_on
+            - managed_by
+            - settings
+
+  - target: $.paths['/accounts/{account_id}'].get
+    update:
+      x-kube-operation:
+        resource: account
+        lifecycle: observe
+        response:
+          path: result
+        path_parameters:
+          account_id:
+            type: external_name
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/accounts'].post
+    update:
+      x-kube-operation:
+        resource: account
+        lifecycle: create
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/accounts/{account_id}'].put
+    update:
+      x-kube-operation:
+        resource: account
+        lifecycle: update
+        # The update body is the full account: id and type are required but are
+        # not part of forProvider.
+        request:
+          set:
+            id:
+              type: external_name
+            type:
+              type: field
+              path: status.atProvider.type
+        path_parameters:
+          account_id:
+            type: external_name
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/accounts/{account_id}'].delete
+    update:
+      x-kube-operation:
+        resource: account
+        lifecycle: delete
+        path_parameters:
+          account_id:
+            type: external_name
+        result:
+          identifiers:
+            external_id: response.body.result.id

@@ -1,0 +1,86 @@
+overlay: 1.1.0
+info:
+  title: Sentry Monitor
+  version: 0.0.1
+extends: ./sentry.json
+actions:
+  # The create request body is the resource schema.
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/monitors/'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: monitor
+        apiVersion: sentry.kube.nas1k.dev/v1alpha1
+        kind: Monitor
+        scope: Namespaced
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          organization:
+            from: spec.forProvider.organizationRef
+            target: organization
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: auth_token
+          source:
+            type: related
+            via: [organization]
+
+        fields:
+          mode: all
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/'].get
+    update:
+      x-kube-operation:
+        resource: monitor
+        lifecycle: observe
+        path_parameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [organization]
+            name: external_id
+          monitor_id_or_slug:
+            type: external_name
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/monitors/'].post
+    update:
+      x-kube-operation:
+        resource: monitor
+        lifecycle: create
+        path_parameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [organization]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.slug
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/'].put
+    update:
+      x-kube-operation:
+        resource: monitor
+        lifecycle: update
+        path_parameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [organization]
+            name: external_id
+          monitor_id_or_slug:
+            type: external_name
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/'].delete
+    update:
+      x-kube-operation:
+        resource: monitor
+        lifecycle: delete
+        path_parameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [organization]
+            name: external_id
+          monitor_id_or_slug:
+            type: external_name

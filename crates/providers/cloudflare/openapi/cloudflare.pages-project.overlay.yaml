@@ -1,0 +1,149 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare Pages Project
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  - target: $.components.schemas.pages_project
+    update:
+      x-kube-resource:
+        name: pages_project
+        apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+        kind: PagesProject
+        scope: Namespaced
+
+        test:
+          forProvider:
+            name: koof-e2e
+            production_branch: main
+            deployment_configs:
+              preview: &config
+                always_use_latest_compatibility_date: false
+                build_image_major_version: 3
+                compatibility_date: "2025-01-01"
+                compatibility_flags: []
+                env_vars: {}
+                fail_open: true
+                usage_model: standard
+              production: *config
+          update:
+            production_branch: release
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          account:
+            from: spec.forProvider.accountRef
+            target: account
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: api_token
+          source:
+            type: related
+            via: [account]
+
+        fields:
+          mode: explicit
+          forProvider:
+            - name
+            - production_branch
+            - build_config
+            - deployment_configs
+            - source
+          atProvider:
+            - id
+            - name
+            - created_on
+            - domains
+            - framework
+            - framework_version
+            - preview_script_name
+            - production_script_name
+            - production_branch
+            - subdomain
+            - uses_functions
+
+  - target: $.paths['/accounts/{account_id}/pages/projects/{project_name}'].get
+    update:
+      x-kube-operation:
+        resource: pages_project
+        lifecycle: observe
+        response:
+          path: result
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          project_name:
+            type: coalesce
+            values:
+              - type: external_name
+              - type: field
+                path: spec.resourceName
+              - type: field
+                path: metadata.name
+        result:
+          identifiers:
+            external_id: response.body.result.name
+
+  - target: $.paths['/accounts/{account_id}/pages/projects'].post
+    update:
+      x-kube-operation:
+        resource: pages_project
+        lifecycle: create
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.name
+
+  - target: $.paths['/accounts/{account_id}/pages/projects/{project_name}'].patch
+    update:
+      x-kube-operation:
+        resource: pages_project
+        lifecycle: update
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          project_name:
+            type: coalesce
+            values:
+              - type: external_name
+              - type: field
+                path: spec.resourceName
+              - type: field
+                path: metadata.name
+        result:
+          identifiers:
+            external_id: response.body.result.name
+
+  - target: $.paths['/accounts/{account_id}/pages/projects/{project_name}'].delete
+    update:
+      x-kube-operation:
+        resource: pages_project
+        lifecycle: delete
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          project_name:
+            type: coalesce
+            values:
+              - type: external_name
+              - type: field
+                path: spec.resourceName
+              - type: field
+                path: metadata.name
+        result:
+          identifiers:
+            external_id: response.body.result.name

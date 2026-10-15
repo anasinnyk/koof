@@ -1,0 +1,381 @@
+---
+{
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "ClusterRole",
+  "metadata": {
+    "name": "provider"
+  },
+  "rules": [
+    {
+      "apiGroups": [
+        "cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "accounts",
+        "iplists",
+        "notificationpolicies",
+        "pagesprojects",
+        "turnstilewidgets",
+        "zones"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "accounts/status",
+        "iplists/status",
+        "notificationpolicies/status",
+        "pagesprojects/status",
+        "turnstilewidgets/status",
+        "zones/status"
+      ],
+      "verbs": [
+        "get",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "accounts/finalizers",
+        "iplists/finalizers",
+        "notificationpolicies/finalizers",
+        "pagesprojects/finalizers",
+        "turnstilewidgets/finalizers",
+        "zones/finalizers"
+      ],
+      "verbs": [
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "loadbalancing.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "loadbalancermonitors",
+        "loadbalancerpools",
+        "loadbalancers"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "loadbalancing.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "loadbalancermonitors/status",
+        "loadbalancerpools/status",
+        "loadbalancers/status"
+      ],
+      "verbs": [
+        "get",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "loadbalancing.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "loadbalancermonitors/finalizers",
+        "loadbalancerpools/finalizers",
+        "loadbalancers/finalizers"
+      ],
+      "verbs": [
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "rulesets.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "rulesets"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "rulesets.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "rulesets/status"
+      ],
+      "verbs": [
+        "get",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "rulesets.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "rulesets/finalizers"
+      ],
+      "verbs": [
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "storage.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "d1databases",
+        "hyperdrives",
+        "kvnamespaces",
+        "queues",
+        "r2buckets",
+        "vectorizeindexes"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "storage.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "d1databases/status",
+        "hyperdrives/status",
+        "kvnamespaces/status",
+        "queues/status",
+        "r2buckets/status",
+        "vectorizeindexes/status"
+      ],
+      "verbs": [
+        "get",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "storage.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "d1databases/finalizers",
+        "hyperdrives/finalizers",
+        "kvnamespaces/finalizers",
+        "queues/finalizers",
+        "r2buckets/finalizers",
+        "vectorizeindexes/finalizers"
+      ],
+      "verbs": [
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "workers.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "workerroutes"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "workers.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "workerroutes/status"
+      ],
+      "verbs": [
+        "get",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "workers.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "workerroutes/finalizers"
+      ],
+      "verbs": [
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "zerotrust.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "accessapplications",
+        "gatewaylists",
+        "gatewayrules",
+        "tunnels",
+        "tunnelcidrroutes",
+        "tunnelconfigurations",
+        "tunnelhostnameroutes"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "zerotrust.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "accessapplications/status",
+        "gatewaylists/status",
+        "gatewayrules/status",
+        "tunnels/status",
+        "tunnelcidrroutes/status",
+        "tunnelconfigurations/status",
+        "tunnelhostnameroutes/status"
+      ],
+      "verbs": [
+        "get",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "zerotrust.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "accessapplications/finalizers",
+        "gatewaylists/finalizers",
+        "gatewayrules/finalizers",
+        "tunnels/finalizers",
+        "tunnelcidrroutes/finalizers",
+        "tunnelconfigurations/finalizers",
+        "tunnelhostnameroutes/finalizers"
+      ],
+      "verbs": [
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "zones.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "customhostnames",
+        "dnsrecords",
+        "emailroutingrules",
+        "healthchecks",
+        "logpushjobs",
+        "pagerules",
+        "spectrumapplications",
+        "waitingrooms"
+      ],
+      "verbs": [
+        "get",
+        "list",
+        "watch",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "zones.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "customhostnames/status",
+        "dnsrecords/status",
+        "emailroutingrules/status",
+        "healthchecks/status",
+        "logpushjobs/status",
+        "pagerules/status",
+        "spectrumapplications/status",
+        "waitingrooms/status"
+      ],
+      "verbs": [
+        "get",
+        "patch",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "zones.cloudflare.kube.nas1k.dev"
+      ],
+      "resources": [
+        "customhostnames/finalizers",
+        "dnsrecords/finalizers",
+        "emailroutingrules/finalizers",
+        "healthchecks/finalizers",
+        "logpushjobs/finalizers",
+        "pagerules/finalizers",
+        "spectrumapplications/finalizers",
+        "waitingrooms/finalizers"
+      ],
+      "verbs": [
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        ""
+      ],
+      "resources": [
+        "secrets"
+      ],
+      "verbs": [
+        "get"
+      ]
+    },
+    {
+      "apiGroups": [
+        "events.k8s.io"
+      ],
+      "resources": [
+        "events"
+      ],
+      "verbs": [
+        "create",
+        "patch"
+      ]
+    }
+  ]
+}

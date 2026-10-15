@@ -1,0 +1,96 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare D1Database
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # The create request body is the resource schema: forProvider gets its writable
+  # fields, atProvider every field of the observe response.
+  - target: $.paths['/accounts/{account_id}/d1/database'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: d1_database
+        apiVersion: storage.cloudflare.kube.nas1k.dev/v1alpha1
+        kind: D1Database
+        scope: Namespaced
+
+        test:
+          forProvider:
+            name: koof-e2e
+          update:
+            read_replication:
+              mode: auto
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          account:
+            from: spec.forProvider.accountRef
+            target: account
+            namespace: same_as_resource
+
+        credentials:
+          security_scheme: api_token
+          source:
+            type: related
+            via: [account]
+
+        fields:
+          mode: all
+
+  - target: $.paths['/accounts/{account_id}/d1/database/{database_id}'].get
+    update:
+      x-kube-operation:
+        resource: d1_database
+        lifecycle: observe
+        response:
+          path: result
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          database_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/d1/database'].post
+    update:
+      x-kube-operation:
+        resource: d1_database
+        lifecycle: create
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.uuid
+
+  - target: $.paths['/accounts/{account_id}/d1/database/{database_id}'].put
+    update:
+      x-kube-operation:
+        resource: d1_database
+        lifecycle: update
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          database_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/d1/database/{database_id}'].delete
+    update:
+      x-kube-operation:
+        resource: d1_database
+        lifecycle: delete
+        path_parameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          database_id:
+            type: external_name

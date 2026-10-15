@@ -1,0 +1,60 @@
+overlay: 1.1.0
+info:
+  title: Sentry Organization
+  version: 0.0.1
+extends: ./sentry.json
+actions:
+  # Organizations cannot be created through the API: import one by setting the
+  # sentry.kube.nas1k.dev/external-name annotation to its slug. It holds the auth
+  # token every other resource uses.
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/'].get.responses['200'].content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: organization
+        apiVersion: sentry.kube.nas1k.dev/v1alpha1
+        kind: Organization
+        scope: Cluster
+
+        test:
+          forProvider:
+            name: koof e2e
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        credentials:
+          security_scheme: auth_token
+          source:
+            type: secret_key_selector
+            path: spec.forProvider.authTokenSecretRef
+
+        fields:
+          mode: explicit
+          forProvider:
+            - name
+          atProvider:
+            - id
+            - slug
+            - name
+            - dateCreated
+            - isEarlyAdopter
+            - require2FA
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/'].get
+    update:
+      x-kube-operation:
+        resource: organization
+        lifecycle: observe
+        path_parameters:
+          organization_id_or_slug:
+            type: external_name
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/'].put
+    update:
+      x-kube-operation:
+        resource: organization
+        lifecycle: update
+        path_parameters:
+          organization_id_or_slug:
+            type: external_name
