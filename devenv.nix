@@ -10,7 +10,7 @@
     kubectl
     kind
     kyverno-chainsaw
-    vacuum-go
+    kustomize
   ];
 
   languages.rust.enable = true;
