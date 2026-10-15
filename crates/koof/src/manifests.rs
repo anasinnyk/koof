@@ -53,11 +53,12 @@ pub fn cluster_role(crds: &[CustomResourceDefinition]) -> ClusterRole {
 /// # Errors
 ///
 /// Returns an error when a document cannot be serialized.
-pub fn documents<T: Serialize>(items: &[T]) -> Result<String, serde_yaml::Error> {
+pub fn documents<T: Serialize>(items: &[T]) -> Result<String, serde_json::Error> {
     let mut out = String::new();
     for item in items {
         out.push_str("---\n");
-        out.push_str(&serde_yaml::to_string(item)?);
+        out.push_str(&serde_json::to_string_pretty(item)?);
+        out.push('\n');
     }
     Ok(out)
 }
