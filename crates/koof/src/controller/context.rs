@@ -1,10 +1,8 @@
-use super::{BACKOFF_BASE, RESYNC};
 use crate::{external::http::HttpClient, metrics::Metrics};
 use kube::runtime::events::Recorder;
 use std::{
     collections::{BTreeSet, HashMap},
     sync::{Arc, Mutex, PoisonError},
-    time::Duration,
 };
 
 pub struct ControllerContext {
@@ -53,12 +51,6 @@ impl Backoff {
             .lock()
             .unwrap_or_else(PoisonError::into_inner)
             .remove(key);
-    }
-
-    #[must_use]
-    pub fn delay(attempts: u32) -> Duration {
-        let exponent = attempts.saturating_sub(1).min(16);
-        BACKOFF_BASE.saturating_mul(1 << exponent).min(RESYNC)
     }
 }
 

@@ -10,9 +10,10 @@ pub mod status;
 pub use context::{Backoff, ControllerContext, SyncTracker};
 
 use crate::{
-    error::{ReconcileError, Retry},
+    error::ReconcileError,
     external,
     resource::{EXTERNAL_NAME, ManagedResource},
+    retry::{self, RetryPolicy},
 };
 use conditions::ConditionSpec;
 use create_state::CreateState;
@@ -33,7 +34,13 @@ const RESYNC: Duration = Duration::from_mins(5);
 const MISSING: Duration = Duration::from_secs(30);
 const WAITING: Duration = Duration::from_secs(15);
 const CONFIRM: Duration = Duration::from_secs(5);
-const BACKOFF_BASE: Duration = Duration::from_secs(5);
+const RECONCILE_RETRY: RetryPolicy = RetryPolicy {
+    base: Duration::from_secs(5),
+    max: RESYNC,
+    attempts: None,
+    waiting: Some(WAITING),
+    permanent: Some(RESYNC),
+};
 
 /// Observes the external resource and records the result in the status. On failure
 /// records `Synced=False` and a warning event before returning the error.
@@ -66,7 +73,7 @@ pub async fn reconcile<R: ManagedResource>(
                 Ok(action)
             }
             Err(error) => {
-                tracing::warn!(%error, retry = ?error.retry(), "reconcile failed");
+                tracing::warn!(%error, failure = ?retry::classify(&error), "reconcile failed");
                 if let Err(status_error) = record_failure(&context, resource.as_ref(), &error).await
                 {
                     tracing::warn!(error = %status_error, "cannot record failure in status");
@@ -322,12 +329,9 @@ pub fn error_policy<R: ManagedResource>(
     context: Arc<ControllerContext>,
 ) -> Action {
     let attempts = context.backoff.failed(&object_key(resource.as_ref()));
-    let delay = match error.retry() {
-        Retry::Transient(Some(retry_after)) => retry_after,
-        Retry::Transient(None) => Backoff::delay(attempts),
-        Retry::Waiting => WAITING,
-        Retry::Permanent => RESYNC,
-    };
+    let delay = RECONCILE_RETRY
+        .delay(retry::classify(error), attempts)
+        .unwrap_or(RESYNC);
     tracing::debug!(attempts, ?delay, "requeue after failure");
     Action::requeue(delay)
 }

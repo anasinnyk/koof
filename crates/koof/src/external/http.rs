@@ -1,4 +1,3 @@
-use crate::error::Retry;
 use serde::{Serialize, de::DeserializeOwned};
 use std::{fmt, time::Duration};
 use tracing::Instrument as _;
@@ -228,23 +227,6 @@ impl HttpClient {
         }
         let bytes: &[u8] = if bytes.is_empty() { b"null" } else { &bytes };
         Ok(Some(serde_json::from_slice(bytes)?))
-    }
-}
-
-impl HttpError {
-    #[must_use]
-    pub fn retry(&self) -> Retry {
-        match self {
-            Self::Transport(_) => Retry::Transient(None),
-            Self::Status {
-                status,
-                retry_after,
-                ..
-            } if *status == reqwest::StatusCode::TOO_MANY_REQUESTS || status.is_server_error() => {
-                Retry::Transient(*retry_after)
-            }
-            Self::Status { .. } | Self::MissingParameter(_) | Self::Decode(_) => Retry::Permanent,
-        }
     }
 }
 

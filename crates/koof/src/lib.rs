@@ -12,6 +12,7 @@ pub mod metrics;
 pub mod object;
 pub mod reference;
 pub mod resource;
+pub mod retry;
 pub mod schema;
 pub mod status;
 
