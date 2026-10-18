@@ -167,7 +167,7 @@ pub async fn create<R: ManagedResource>(
         .await
     {
         Ok(response) => response,
-        Err(error @ HttpError::Status { .. }) => {
+        Err(error) if not_created(&error) => {
             create_state::record(
                 &context.kube_client,
                 &resource,
@@ -214,6 +214,14 @@ pub async fn create<R: ManagedResource>(
         ))
     })?;
     Ok(external_name)
+}
+
+fn not_created(error: &HttpError) -> bool {
+    match error {
+        HttpError::Status { status, .. } => status.is_client_error(),
+        HttpError::Transport(error) => error.is_connect(),
+        HttpError::MissingParameter(_) | HttpError::Decode(_) => false,
+    }
 }
 
 /// Sends the desired state through `R::Update` (response body ignored).
