@@ -52,7 +52,6 @@ actions:
         name: widget
         apiVersion: example.kube.dev/v1alpha1
         kind: Widget
-        scope: Namespaced
         identifiers:
           external_id:
             type: external_name
@@ -83,6 +82,13 @@ actions:
           widget_id:
             type: external_name
 ```
+
+Every resource is namespaced: references point at resources in the same
+namespace and the credentials Secret is read from it. `cluster: true` on
+`x-kube-resource` also generates a cluster-scoped `Cluster<Kind>` (its Secret
+reference names a namespace); references to the resource then take
+`kind: <Kind> | Cluster<Kind>` (default `<Kind>`), and a cluster variant can only
+reference resources that have one too.
 
 `lifecycle` is one of `observe` (required), `create`, `update` and `delete`.
 For APIs that soft-delete (the observe endpoint keeps answering `200`),

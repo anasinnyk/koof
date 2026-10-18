@@ -1,11 +1,8 @@
 use super::http::Auth;
 use crate::{
     error::{CredentialError, ResolveValueError},
-    reference::{ResourceReference, SecretReference},
-    resource::{
-        AuthScheme, CredentialSource, ManagedResource, NamespacePolicy, ResourceDescriptor,
-        ValueExpr,
-    },
+    reference::{ClusterSecretKeySelector, SecretKeySelector},
+    resource::{AuthScheme, CredentialSource, ManagedResource, ResourceDescriptor, ValueExpr},
 };
 use futures::future::BoxFuture;
 use k8s_openapi::api::core::v1::Secret;
@@ -28,15 +25,6 @@ impl Node {
             descriptor: R::descriptor(),
             namespace: kube::ResourceExt::namespace(resource),
             value: serde_json::to_value(resource)?,
-        })
-    }
-
-    fn require_namespace(&self, purpose: &str) -> Result<String, ResolveValueError> {
-        self.namespace.clone().ok_or_else(|| {
-            ResolveValueError::Missing(format!(
-                "{} is cluster-scoped; {purpose} needs an explicit namespace",
-                self.descriptor.kind
-            ))
         })
     }
 }
@@ -94,6 +82,12 @@ pub fn resolve_value<'a>(
     })
 }
 
+#[derive(serde::Deserialize)]
+struct KindedReference {
+    name: String,
+    kind: Option<String>,
+}
+
 /// Follows the named references from `node` and returns the resource at the end.
 ///
 /// # Errors
@@ -113,7 +107,7 @@ pub async fn traverse(
                 current.descriptor.kind
             ))
         })?;
-        let target: ResourceReference = non_null(&current.value, reference.from)
+        let target: KindedReference = non_null(&current.value, reference.from)
             .cloned()
             .map(serde_json::from_value)
             .transpose()?
@@ -123,29 +117,41 @@ pub async fn traverse(
                     reference.from
                 ))
             })?;
+        let descriptor = match target.kind.as_deref() {
+            None => reference.targets.first(),
+            Some(kind) => reference
+                .targets
+                .iter()
+                .find(|descriptor| descriptor.kind == kind),
+        }
+        .copied()
+        .ok_or_else(|| {
+            ResolveValueError::Missing(format!(
+                "resource reference {} cannot point at kind {}",
+                reference.from,
+                target.kind.as_deref().unwrap_or_default()
+            ))
+        })?;
 
-        let api_resource = (reference.target.api_resource)();
-        let (api, namespace): (Api<DynamicObject>, Option<String>) = if !reference.target.namespaced
-            || reference.namespace == NamespacePolicy::ClusterScoped
-        {
-            (Api::all_with(client.clone(), &api_resource), None)
-        } else {
-            let namespace = match reference.namespace {
-                NamespacePolicy::FromReference => match target.namespace.clone() {
-                    Some(namespace) => namespace,
-                    None => current.require_namespace("the reference")?,
-                },
-                _ => current.require_namespace("the reference")?,
+        let api_resource = (descriptor.api_resource)();
+        let (api, namespace): (Api<DynamicObject>, Option<String>) =
+            match (descriptor.namespaced, current.namespace.clone()) {
+                (false, _) => (Api::all_with(client.clone(), &api_resource), None),
+                (true, Some(namespace)) => (
+                    Api::namespaced_with(client.clone(), &namespace, &api_resource),
+                    Some(namespace),
+                ),
+                (true, None) => {
+                    return Err(ResolveValueError::Missing(format!(
+                        "cluster-scoped {} cannot reference namespaced {}",
+                        current.descriptor.kind, descriptor.kind
+                    )));
+                }
             };
-            (
-                Api::namespaced_with(client.clone(), &namespace, &api_resource),
-                Some(namespace),
-            )
-        };
 
         let object = api.get(&target.name).await?;
         current = Node {
-            descriptor: reference.target,
+            descriptor,
             namespace,
             value: serde_json::to_value(object)?,
         };
@@ -185,19 +191,22 @@ pub async fn resolve_credentials(
         )));
     };
 
-    let selector: SecretReference = non_null(&terminal.value, path)
-        .cloned()
-        .map(serde_json::from_value)
-        .transpose()
-        .map_err(ResolveValueError::from)?
-        .ok_or_else(|| {
-            CredentialError::MissingValue(format!("credential field {path} is not set"))
-        })?;
-    let namespace = match selector.namespace.clone() {
-        Some(namespace) => namespace,
-        None => terminal.require_namespace("the credentials Secret")?,
+    let selector = non_null(&terminal.value, path).cloned().ok_or_else(|| {
+        CredentialError::MissingValue(format!("credential field {path} is not set"))
+    })?;
+    let secret = match terminal.namespace {
+        Some(namespace) => {
+            let SecretKeySelector { name, key } =
+                serde_json::from_value(selector).map_err(ResolveValueError::from)?;
+            ClusterSecretKeySelector {
+                name,
+                key,
+                namespace,
+            }
+        }
+        None => serde_json::from_value(selector).map_err(ResolveValueError::from)?,
     };
-    let value = resolve_secret_key(client, &namespace, &selector.name, &selector.key).await?;
+    let value = resolve_secret_key(client, &secret.namespace, &secret.name, &secret.key).await?;
 
     Ok(match credentials.auth {
         AuthScheme::Bearer => Auth::Bearer(value),

@@ -25,7 +25,7 @@ pub struct ProjectForProviderSpec {
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub organization_ref: Option<koof::reference::ResourceReference>,
+    pub organization_ref: Option<crate::generated::organization::OrganizationReference>,
     #[serde(rename = "teamRef", default, skip_serializing_if = "Option::is_none")]
     pub team_ref: Option<koof::reference::ResourceReference>,
 }
@@ -72,14 +72,15 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         koof::resource::Reference {
             name: "organization",
             from: "/spec/forProvider/organizationRef",
-            target: &crate::generated::organization::DESCRIPTOR,
-            namespace: koof::resource::NamespacePolicy::SameAsResource,
+            targets: &[
+                &crate::generated::organization::DESCRIPTOR,
+                &crate::generated::cluster_organization::DESCRIPTOR,
+            ],
         },
         koof::resource::Reference {
             name: "team",
             from: "/spec/forProvider/teamRef",
-            target: &crate::generated::team::DESCRIPTOR,
-            namespace: koof::resource::NamespacePolicy::SameAsResource,
+            targets: &[&crate::generated::team::DESCRIPTOR],
         },
     ],
     credentials: Some(koof::resource::Credentials {

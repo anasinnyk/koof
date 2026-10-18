@@ -6,6 +6,7 @@ apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
 kind: Account
 metadata:
   name: nas1k
+  namespace: default
   annotations:
     cloudflare.kube.nas1k.dev/external-name: f78862bae12573bd3940958787c11430
 spec:
@@ -13,9 +14,8 @@ spec:
   deletionPolicy: Orphan
   forProvider:
     name: "Andriy.nas@gmail.com's Account"
-    # Credentials of every resource reached through accountRef; cluster-scoped,
-    # so the Secret's namespace is required.
+    # Credentials of every resource reached through accountRef; the Secret is
+    # read from the account's namespace.
     apiTokenSecretRef:
       name: cf-token
       key: token
-      namespace: default

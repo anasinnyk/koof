@@ -88,8 +88,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         koof::resource::Reference {
             name: "zone",
             from: "/spec/forProvider/zoneRef",
-            target: &crate::generated::zone::DESCRIPTOR,
-            namespace: koof::resource::NamespacePolicy::SameAsResource,
+            targets: &[&crate::generated::zone::DESCRIPTOR],
         },
     ],
     credentials: Some(koof::resource::Credentials {

@@ -3,6 +3,7 @@ pub mod types;
 pub mod dashboard;
 pub mod monitor;
 pub mod organization;
+pub mod cluster_organization;
 pub mod organization_member;
 pub mod project;
 pub mod project_key;
@@ -22,6 +23,7 @@ pub fn controllers(app: koof::App) -> koof::App {
     app.controller::<dashboard::Dashboard>()
         .controller::<monitor::Monitor>()
         .controller::<organization::Organization>()
+        .controller::<cluster_organization::ClusterOrganization>()
         .controller::<organization_member::OrganizationMember>()
         .controller::<project::Project>()
         .controller::<project_key::ProjectKey>()
@@ -34,6 +36,7 @@ pub fn fake() -> koof::fake::Fake {
         .resource::<dashboard::Dashboard>()
         .resource::<monitor::Monitor>()
         .resource::<organization::Organization>()
+        .resource::<cluster_organization::ClusterOrganization>()
         .resource::<organization_member::OrganizationMember>()
         .resource::<project::Project>()
         .resource::<project_key::ProjectKey>()
@@ -48,6 +51,7 @@ pub fn crds() -> Vec<
     vec![
         < dashboard::Dashboard as kube::CustomResourceExt > ::crd(), < monitor::Monitor
         as kube::CustomResourceExt > ::crd(), < organization::Organization as
+        kube::CustomResourceExt > ::crd(), < cluster_organization::ClusterOrganization as
         kube::CustomResourceExt > ::crd(), < organization_member::OrganizationMember as
         kube::CustomResourceExt > ::crd(), < project::Project as kube::CustomResourceExt
         > ::crd(), < project_key::ProjectKey as kube::CustomResourceExt > ::crd(), <

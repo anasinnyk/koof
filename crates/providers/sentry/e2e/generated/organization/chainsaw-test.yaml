@@ -22,21 +22,20 @@ spec:
           metadata:
             annotations:
               sentry.kube.nas1k.dev/external-name: ($namespace)
-            name: ($namespace)
+            name: organization
           spec:
             deletionPolicy: Orphan
             forProvider:
               authTokenSecretRef:
                 key: token
                 name: credentials
-                namespace: ($namespace)
               name: koof e2e
     - assert:
         resource:
           apiVersion: sentry.kube.nas1k.dev/v1alpha1
           kind: Organization
           metadata:
-            name: ($namespace)
+            name: organization
           status:
             (conditions[?type == 'Ready']):
             - status: 'True'

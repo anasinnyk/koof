@@ -2,8 +2,11 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use super::{
     ApiKeyLocationIr, CredentialSourceIr, FieldPath, OperationId, OperationIr, ProviderIr,
-    ResourceIr, ResourceName, ScopeIr, SecuritySchemeIr, ValueExpr,
-    resolved::{Auth, Create, Credentials, Operation, Provider, Reference, Resource},
+    ResourceIr, ResourceName, SecuritySchemeIr, ValueExpr,
+    resolved::{
+        Auth, Create, Credentials, Operation, Provider, Reference, Resource, cluster_kind,
+        cluster_name,
+    },
 };
 
 #[derive(Debug, PartialEq, Eq)]
@@ -38,8 +41,13 @@ pub fn validate<'a>(
             errors: &mut errors,
         };
         let fields = late_initialize.get(name).map_or(&[][..], Vec::as_slice);
-        if let Some(resource) = checker.resolve(fields) {
-            resources.push(resource);
+        if let Some(namespaced) = checker.resolve(fields) {
+            let cluster = resource
+                .cluster
+                .then(|| checker.cluster_variant(&namespaced))
+                .flatten();
+            resources.push(namespaced);
+            resources.extend(cluster);
         }
     }
 
@@ -65,13 +73,18 @@ fn validate_unique_kinds(
     kinds: &mut BTreeMap<(String, String), ResourceName>,
     errors: &mut Vec<ValidationError>,
 ) {
-    let key = (resource.api_version.clone(), resource.kind.clone());
-
-    if let Some(previous) = kinds.insert(key, name.clone()) {
-        errors.push(ValidationError {
-            location: format!("resource.{}", name.0),
-            message: format!("apiVersion/kind already used by resource {}", previous.0),
-        });
+    let mut variants = vec![(resource.kind.clone(), name.clone())];
+    if resource.cluster {
+        variants.push((cluster_kind(&resource.kind), cluster_name(name)));
+    }
+    for (kind, variant) in variants {
+        if let Some(previous) = kinds.insert((resource.api_version.clone(), kind), variant.clone())
+        {
+            errors.push(ValidationError {
+                location: format!("resource.{}", variant.0),
+                message: format!("apiVersion/kind already used by resource {}", previous.0),
+            });
+        }
     }
 }
 
@@ -109,11 +122,13 @@ impl<'a> Checker<'a, '_> {
         }
         let (group, version) = api_version?;
         Some(Resource {
-            name: self.name,
-            kind: &resource.kind,
+            name: self.name.clone(),
+            kind: resource.kind.clone(),
+            base_kind: &resource.kind,
             group,
             version,
-            namespaced: resource.scope == ScopeIr::Namespaced,
+            namespaced: true,
+            has_cluster_variant: resource.cluster,
             identifiers: &resource.identifiers,
             references,
             credentials,
@@ -128,6 +143,40 @@ impl<'a> Checker<'a, '_> {
         })
     }
 
+    fn cluster_variant(&mut self, namespaced: &Resource<'a>) -> Option<Resource<'a>> {
+        let errors_before = self.errors.len();
+        let mut references = namespaced.references.clone();
+        for reference in &mut references {
+            let has_cluster_variant = self
+                .ir
+                .resources
+                .get(reference.target)
+                .is_some_and(|target| target.cluster);
+            if !has_cluster_variant {
+                self.error(
+                    &format!("references.{}", reference.name),
+                    format!(
+                        "{} cannot reference {}: it has no cluster variant (set cluster: true on it)",
+                        cluster_kind(namespaced.base_kind),
+                        reference.target.0
+                    ),
+                );
+            }
+            reference.targets = vec![cluster_name(reference.target)];
+        }
+        if self.errors.len() != errors_before {
+            return None;
+        }
+        Some(Resource {
+            name: cluster_name(self.name),
+            kind: cluster_kind(namespaced.base_kind),
+            namespaced: false,
+            has_cluster_variant: false,
+            references,
+            ..namespaced.clone()
+        })
+    }
+
     fn error(&mut self, location: &str, message: impl Into<String>) {
         self.errors.push(ValidationError {
             location: format!("resources.{}.{location}", self.name.0),
@@ -139,30 +188,36 @@ impl<'a> Checker<'a, '_> {
         let mut references = Vec::new();
         for (name, reference) in &self.resource.references {
             let location = format!("references.{name}");
-            match self.ir.resources.get(&reference.target) {
-                None => self.error(
+            let Some(target) = self.ir.resources.get(&reference.target) else {
+                self.error(
                     &location,
                     format!("unknown target resource {}", reference.target.0),
-                ),
-                Some(target) if self.resource.test.is_some() && target.test.is_none() => self
-                    .error(
-                        "test",
-                        format!(
-                            "the test needs a {0} object; add a test to resource {0}",
-                            reference.target.0
-                        ),
+                );
+                continue;
+            };
+            if self.resource.test.is_some() && target.test.is_none() {
+                self.error(
+                    "test",
+                    format!(
+                        "the test needs a {0} object; add a test to resource {0}",
+                        reference.target.0
                     ),
-                Some(_) => {}
+                );
             }
             let Some(field) = self.for_provider_field(&location, &reference.from) else {
                 continue;
             };
+            let mut targets = vec![reference.target.clone()];
+            if target.cluster {
+                targets.push(cluster_name(&reference.target));
+            }
             references.push(Reference {
                 name,
                 from: &reference.from.0,
                 field,
                 target: &reference.target,
-                namespace: reference.namespace,
+                target_kind: &target.kind,
+                targets,
             });
         }
         references

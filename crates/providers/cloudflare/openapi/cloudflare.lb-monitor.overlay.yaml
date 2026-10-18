@@ -12,7 +12,6 @@ actions:
         name: lb_monitor
         apiVersion: loadbalancing.cloudflare.kube.nas1k.dev/v1alpha1
         kind: LoadBalancerMonitor
-        scope: Namespaced
 
         test:
           forProvider:
@@ -31,7 +30,6 @@ actions:
           account:
             from: spec.forProvider.accountRef
             target: account
-            namespace: same_as_resource
 
         credentials:
           security_scheme: api_token

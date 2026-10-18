@@ -12,7 +12,6 @@ actions:
         name: r2_bucket
         apiVersion: storage.cloudflare.kube.nas1k.dev/v1alpha1
         kind: R2Bucket
-        scope: Namespaced
 
         test:
           forProvider:
@@ -26,7 +25,6 @@ actions:
           account:
             from: spec.forProvider.accountRef
             target: account
-            namespace: same_as_resource
 
         credentials:
           security_scheme: api_token
