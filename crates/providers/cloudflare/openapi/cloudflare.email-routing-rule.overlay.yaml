@@ -12,7 +12,6 @@ actions:
         name: email_routing_rule
         apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
         kind: EmailRoutingRule
-        scope: Namespaced
 
         test:
           forProvider:
@@ -36,7 +35,6 @@ actions:
           zone:
             from: spec.forProvider.zoneRef
             target: zone
-            namespace: same_as_resource
 
         credentials:
           security_scheme: api_token

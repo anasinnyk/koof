@@ -57,14 +57,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -704,7 +708,7 @@
       "plural": "accounts",
       "singular": "account"
     },
-    "scope": "Cluster",
+    "scope": "Namespaced",
     "versions": [
       {
         "additionalPrinterColumns": [
@@ -749,17 +753,13 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "apiTokenSecretRef": {
-                        "description": "A key of a Secret, for credentials. `namespace` defaults to the namespace of the\nresource holding the reference; cluster-scoped resources must set it.",
+                        "description": "A key of a Secret in the namespace of the (namespaced) resource holding the\nreference, for credentials.",
                         "nullable": true,
                         "properties": {
                           "key": {
                             "type": "string"
                           },
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -947,6 +947,275 @@
               "spec"
             ],
             "title": "Account",
+            "type": "object"
+          }
+        },
+        "served": true,
+        "storage": true,
+        "subresources": {
+          "status": {}
+        }
+      }
+    ]
+  }
+}
+---
+{
+  "apiVersion": "apiextensions.k8s.io/v1",
+  "kind": "CustomResourceDefinition",
+  "metadata": {
+    "name": "clusteraccounts.cloudflare.kube.nas1k.dev"
+  },
+  "spec": {
+    "group": "cloudflare.kube.nas1k.dev",
+    "names": {
+      "kind": "ClusterAccount",
+      "plural": "clusteraccounts",
+      "singular": "clusteraccount"
+    },
+    "scope": "Cluster",
+    "versions": [
+      {
+        "additionalPrinterColumns": [
+          {
+            "jsonPath": ".status.conditions[?(@.type==\"Ready\")].status",
+            "name": "Ready",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".status.conditions[?(@.type==\"Synced\")].status",
+            "name": "Synced",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".metadata.annotations.cloudflare\\.kube\\.nas1k\\.dev/external-name",
+            "name": "External-Name",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".metadata.creationTimestamp",
+            "name": "Age",
+            "type": "date"
+          }
+        ],
+        "name": "v1alpha1",
+        "schema": {
+          "openAPIV3Schema": {
+            "description": "Auto-generated derived type for ClusterAccountSpec via `CustomResource`",
+            "properties": {
+              "spec": {
+                "properties": {
+                  "deletionPolicy": {
+                    "default": "Delete",
+                    "description": "`Orphan` keeps the external resource when the managed resource is deleted.\nWithout `Delete` in `managementPolicies` the resource is always orphaned.",
+                    "enum": [
+                      "Delete",
+                      "Orphan"
+                    ],
+                    "type": "string"
+                  },
+                  "forProvider": {
+                    "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
+                    "properties": {
+                      "apiTokenSecretRef": {
+                        "description": "A key of a Secret in `namespace`, for credentials of a cluster-scoped resource.",
+                        "nullable": true,
+                        "properties": {
+                          "key": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "namespace": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "key",
+                          "name",
+                          "namespace"
+                        ],
+                        "type": "object"
+                      },
+                      "name": {
+                        "description": "Account name",
+                        "type": "string"
+                      },
+                      "settings": {
+                        "description": "Account settings",
+                        "nullable": true,
+                        "properties": {
+                          "abuse_contact_email": {
+                            "description": "Sets an abuse contact email to notify for abuse reports.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "enforce_twofactor": {
+                            "default": false,
+                            "description": "Indicates whether membership in this account requires that\nTwo-Factor Authentication is enabled",
+                            "type": "boolean"
+                          }
+                        },
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ],
+                    "type": "object"
+                  },
+                  "managementPolicies": {
+                    "default": [
+                      "*"
+                    ],
+                    "description": "Actions the controller may take. `[\"*\"]` (default) allows all; `[\"Observe\"]`\nonly reads (import without management). `Observe` is always required.",
+                    "items": {
+                      "description": "An action the controller may take on the external resource\n(Crossplane `managementPolicies`).",
+                      "enum": [
+                        "Observe",
+                        "Create",
+                        "Update",
+                        "Delete",
+                        "LateInitialize",
+                        "*"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "forProvider"
+                ],
+                "type": "object"
+              },
+              "status": {
+                "description": "`status` of a managed resource; `A` is the generated `atProvider` type.",
+                "nullable": true,
+                "properties": {
+                  "atProvider": {
+                    "description": "`AccountAtProvider`",
+                    "nullable": true,
+                    "properties": {
+                      "created_on": {
+                        "description": "Timestamp for the creation of the account",
+                        "format": "date-time",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "id": {
+                        "description": "Identifier",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "managed_by": {
+                        "description": "Parent container details",
+                        "nullable": true,
+                        "properties": {
+                          "parent_org_id": {
+                            "description": "ID of the parent Organization, if one exists",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "parent_org_name": {
+                            "description": "Name of the parent Organization, if one exists",
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "name": {
+                        "description": "Account name",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "settings": {
+                        "description": "Account settings",
+                        "nullable": true,
+                        "properties": {
+                          "abuse_contact_email": {
+                            "description": "Sets an abuse contact email to notify for abuse reports.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "enforce_twofactor": {
+                            "default": false,
+                            "description": "Indicates whether membership in this account requires that\nTwo-Factor Authentication is enabled",
+                            "type": "boolean"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": {
+                        "description": "`IamAccountType`",
+                        "enum": [
+                          "standard",
+                          "enterprise"
+                        ],
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "conditions": {
+                    "default": [],
+                    "items": {
+                      "description": "Condition contains details for one aspect of the current state of this API Resource.",
+                      "properties": {
+                        "lastTransitionTime": {
+                          "description": "lastTransitionTime is the last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "message": {
+                          "description": "message is a human readable message indicating details about the transition. This may be an empty string.",
+                          "type": "string"
+                        },
+                        "observedGeneration": {
+                          "description": "observedGeneration represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "reason": {
+                          "description": "reason contains a programmatic identifier indicating the reason for the condition's last transition. Producers of specific condition types may define expected values and meanings for this field, and whether the values are considered a guaranteed API. The value should be a CamelCase string. This field may not be empty.",
+                          "type": "string"
+                        },
+                        "status": {
+                          "description": "status of the condition, one of True, False, Unknown.",
+                          "type": "string"
+                        },
+                        "type": {
+                          "description": "type of condition in CamelCase or in foo.example.com/CamelCase.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "lastTransitionTime",
+                        "message",
+                        "reason",
+                        "status",
+                        "type"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "observedGeneration": {
+                    "format": "int64",
+                    "nullable": true,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "required": [
+              "spec"
+            ],
+            "title": "ClusterAccount",
             "type": "object"
           }
         },
@@ -1187,14 +1456,10 @@
                         "type": "object"
                       },
                       "zoneRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -1783,14 +2048,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -2151,14 +2420,10 @@
                         "type": "string"
                       },
                       "zoneRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -2767,14 +3032,10 @@
                         "type": "string"
                       },
                       "zoneRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -3055,14 +3316,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -3362,14 +3627,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -5057,14 +5326,10 @@
                         "type": "string"
                       },
                       "zoneRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -5438,14 +5703,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -5778,14 +6047,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -6031,14 +6304,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -6255,14 +6532,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -6654,14 +6935,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -7857,14 +8142,10 @@
                         "type": "number"
                       },
                       "zoneRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -8922,14 +9203,10 @@
                         "type": "string"
                       },
                       "zoneRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -9311,14 +9588,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -10554,14 +10835,10 @@
                         "type": "array"
                       },
                       "zoneRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -10873,14 +11150,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -11882,14 +12163,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -12193,14 +12478,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -12563,14 +12852,10 @@
                         "type": "string"
                       },
                       "zoneRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -12746,14 +13031,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -13100,14 +13389,10 @@
                         "type": "string"
                       },
                       "tunnelRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -13586,14 +13871,10 @@
                         "type": "object"
                       },
                       "tunnelRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -14060,14 +14341,10 @@
                         "type": "string"
                       },
                       "tunnelRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -14281,14 +14558,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -14603,14 +14884,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -15086,14 +15371,10 @@
                         "type": "string"
                       },
                       "zoneRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -15522,14 +15803,10 @@
                         "type": "string"
                       },
                       "zoneRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },
@@ -15722,14 +15999,18 @@
                     "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
                     "properties": {
                       "accountRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
-                          "name": {
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
                             "type": "string"
                           },
-                          "namespace": {
-                            "nullable": true,
+                          "name": {
                             "type": "string"
                           }
                         },
@@ -16274,14 +16555,10 @@
                         "type": "array"
                       },
                       "zoneRef": {
-                        "description": "A reference to another managed resource.",
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
                         "nullable": true,
                         "properties": {
                           "name": {
-                            "type": "string"
-                          },
-                          "namespace": {
-                            "nullable": true,
                             "type": "string"
                           }
                         },

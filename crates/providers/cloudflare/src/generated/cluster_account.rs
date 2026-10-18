@@ -1,0 +1,126 @@
+//! This file is generated. Do not edit manually.
+#![allow(clippy::pedantic)]
+/// CRD schema of `spec.forProvider`: unions flattened for kube, then the
+/// overlay's CEL validations.
+fn for_provider_schema(schema: &mut schemars::Schema) {
+    koof::schema::flatten_unions(schema);
+    koof::schema::add_validations(schema, &[]);
+}
+/// `spec.forProvider`: the generated API fields plus references and
+/// credentials.
+#[derive(
+    Clone,
+    Debug,
+    PartialEq,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema
+)]
+#[schemars(transform = for_provider_schema)]
+pub struct ClusterAccountForProviderSpec {
+    #[serde(flatten)]
+    pub fields: crate::generated::types::AccountForProvider,
+    #[serde(
+        rename = "apiTokenSecretRef",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub api_token_secret_ref: Option<koof::reference::ClusterSecretKeySelector>,
+}
+#[derive(
+    kube::CustomResource,
+    Clone,
+    Debug,
+    PartialEq,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema
+)]
+#[kube(
+    group = "cloudflare.kube.nas1k.dev",
+    version = "v1alpha1",
+    kind = "ClusterAccount",
+    status = "ClusterAccountStatus",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Ready\\\")].status\",\"name\":\"Ready\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Synced\\\")].status\",\"name\":\"Synced\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.annotations.cloudflare\\\\.kube\\\\.nas1k\\\\.dev/external-name\",\"name\":\"External-Name\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.creationTimestamp\",\"name\":\"Age\",\"type\":\"date\"}"
+)]
+pub struct ClusterAccountSpec {
+    #[serde(rename = "forProvider")]
+    pub for_provider: ClusterAccountForProviderSpec,
+    #[serde(flatten)]
+    pub management: koof::managed::ManagedResourceSpec,
+}
+pub type ClusterAccountStatus = koof::status::ManagedStatus<
+    crate::generated::types::AccountAtProvider,
+>;
+fn api_resource() -> kube::api::ApiResource {
+    kube::api::ApiResource::erase::<ClusterAccount>(&())
+}
+pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
+    kind: "ClusterAccount",
+    api_resource,
+    group: "cloudflare.kube.nas1k.dev",
+    namespaced: false,
+    identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
+    late_initialize: &["name", "settings"],
+    references: &[],
+    credentials: Some(koof::resource::Credentials {
+        source: koof::resource::CredentialSource::Secret {
+            path: "/spec/forProvider/apiTokenSecretRef",
+        },
+        auth: koof::resource::AuthScheme::Bearer,
+    }),
+    observe: koof::resource::ObserveDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
+            response_path: "/result",
+        },
+        deleted_when: None,
+    },
+    create: Some(koof::resource::CreateDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[],
+            response_path: "",
+        },
+        request: koof::resource::RequestMapping {
+            from: "/spec/forProvider",
+            set: &[],
+        },
+        external_name: "/result/id",
+    }),
+    update: Some(koof::resource::UpdateDescriptor {
+        operation: koof::resource::OperationDescriptor {
+            path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
+            response_path: "",
+        },
+        request: koof::resource::RequestMapping {
+            from: "/spec/forProvider",
+            set: &[
+                ("/id", koof::resource::ValueExpr::ExternalName),
+                ("/type", koof::resource::ValueExpr::Field("/status/atProvider/type")),
+            ],
+        },
+    }),
+    delete: Some(koof::resource::OperationDescriptor {
+        path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
+        response_path: "",
+    }),
+};
+impl koof::ManagedResource for ClusterAccount {
+    type AtProvider = crate::generated::types::AccountAtProvider;
+    type Observe = crate::generated::operations::AccountObserve;
+    type Create = crate::generated::operations::AccountCreate;
+    type Update = crate::generated::operations::AccountUpdate;
+    type Delete = crate::generated::operations::AccountDelete;
+    fn descriptor() -> &'static koof::ResourceDescriptor {
+        &DESCRIPTOR
+    }
+    fn status(&self) -> Option<&koof::status::ManagedStatus<Self::AtProvider>> {
+        self.status.as_ref()
+    }
+    fn management(&self) -> &koof::managed::ManagedResourceSpec {
+        &self.spec.management
+    }
+}

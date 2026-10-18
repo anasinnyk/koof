@@ -106,7 +106,7 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
             let resource = ResourceIr {
                 api_version: extension.api_version,
                 kind: extension.kind,
-                scope: extension.scope,
+                cluster: extension.cluster,
                 identifiers: extension.identifiers,
                 references: extension.references,
                 credentials: extension.credentials,

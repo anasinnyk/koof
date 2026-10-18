@@ -4,7 +4,10 @@ use crate::{
         naming::{field_ident, kind_ident},
         types::GeneratedTypes,
     },
-    ir::{ValueExpr, resolved::Resource},
+    ir::{
+        ValueExpr,
+        resolved::{Resource, cluster_kind},
+    },
 };
 use proc_macro2::TokenStream;
 use quote::quote;
@@ -15,11 +18,11 @@ pub fn generate_spec(
 ) -> Result<TokenStream, GeneratorError> {
     let group = resource.group;
     let version = resource.version;
-    let kind = resource.kind;
+    let kind = &resource.kind;
     let status_name = format!("{kind}Status");
     let spec_ident = kind_ident(&format!("{kind}Spec"))?;
     let for_provider_ident = kind_ident(&format!("{kind}ForProviderSpec"))?;
-    let fields_type = types.path(&format!("{kind}ForProvider"))?;
+    let fields_type = types.path(&format!("{}ForProvider", resource.base_kind))?;
 
     let validations = validation_tokens(resource);
     let print_columns = print_columns(resource);
@@ -149,7 +152,7 @@ pub fn generate_status(
     types: &GeneratedTypes,
 ) -> Result<TokenStream, GeneratorError> {
     let status_ident = kind_ident(&format!("{}Status", resource.kind))?;
-    let at_provider_type = types.path(&format!("{}AtProvider", resource.kind))?;
+    let at_provider_type = types.path(&format!("{}AtProvider", resource.base_kind))?;
 
     Ok(quote! {
         pub type #status_ident = koof::status::ManagedStatus<#at_provider_type>;
@@ -163,14 +166,70 @@ fn reference_fields(resource: &Resource<'_>) -> Result<Vec<TokenStream>, Generat
         .map(|reference| {
             let json_name = reference.field;
             let ident = field_ident(json_name)?;
+            let reference_type = if reference.targets.len() > 1 {
+                let module = field_ident(&reference.target.0)?;
+                let type_ident = kind_ident(&format!("{}Reference", reference.target_kind))?;
+                quote!(crate::generated::#module::#type_ident)
+            } else {
+                quote!(koof::reference::ResourceReference)
+            };
 
             Ok(quote! {
                 #[serde(rename = #json_name, default, skip_serializing_if = "Option::is_none")]
-                pub #ident:
-                    Option<koof::reference::ResourceReference>,
+                pub #ident: Option<#reference_type>,
             })
         })
         .collect()
+}
+
+/// `<Kind>Reference`: a reference to either variant of a resource that also has a
+/// `Cluster<Kind>` variant, told apart by `kind`.
+pub fn generate_variant_reference(resource: &Resource<'_>) -> Result<TokenStream, GeneratorError> {
+    if !resource.has_cluster_variant {
+        return Ok(TokenStream::new());
+    }
+    let kind = kind_ident(&resource.kind)?;
+    let cluster_kind = kind_ident(&cluster_kind(&resource.kind))?;
+    let reference_ident = kind_ident(&format!("{}Reference", resource.kind))?;
+    let kind_enum_ident = kind_ident(&format!("{}ReferenceKind", resource.kind))?;
+    let reference_doc = format!(
+        "A reference to an object of kind `{kind}` (default) in the namespace of the \
+         resource holding the reference, or of kind `{cluster_kind}`, by `kind`."
+    );
+
+    Ok(quote! {
+        #[doc = #reference_doc]
+        #[derive(
+            Clone,
+            Debug,
+            PartialEq,
+            serde::Serialize,
+            serde::Deserialize,
+            schemars::JsonSchema
+        )]
+        pub struct #reference_ident {
+            pub name: String,
+            #[serde(default)]
+            pub kind: #kind_enum_ident,
+        }
+
+        #[derive(
+            Clone,
+            Copy,
+            Debug,
+            Default,
+            PartialEq,
+            Eq,
+            serde::Serialize,
+            serde::Deserialize,
+            schemars::JsonSchema
+        )]
+        pub enum #kind_enum_ident {
+            #[default]
+            #kind,
+            #cluster_kind,
+        }
+    })
 }
 
 fn credential_field(resource: &Resource<'_>) -> Result<Option<TokenStream>, GeneratorError> {
@@ -182,10 +241,14 @@ fn credential_field(resource: &Resource<'_>) -> Result<Option<TokenStream>, Gene
         return Ok(None);
     };
     let ident = field_ident(json_name)?;
+    let selector = if resource.namespaced {
+        quote!(koof::reference::SecretKeySelector)
+    } else {
+        quote!(koof::reference::ClusterSecretKeySelector)
+    };
 
     Ok(Some(quote! {
         #[serde(rename = #json_name, default, skip_serializing_if = "Option::is_none")]
-        pub #ident:
-            Option<koof::reference::SecretReference>,
+        pub #ident: Option<#selector>,
     }))
 }

@@ -107,15 +107,9 @@ pub enum ValueExpr {
 pub struct Reference {
     pub name: &'static str,
     pub from: &'static str,
-    pub target: &'static ResourceDescriptor,
-    pub namespace: NamespacePolicy,
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum NamespacePolicy {
-    SameAsResource,
-    FromReference,
-    ClusterScoped,
+    /// The kinds the reference can point at, told apart by its `kind` field; the
+    /// first one is the default.
+    pub targets: &'static [&'static ResourceDescriptor],
 }
 
 #[derive(Debug)]

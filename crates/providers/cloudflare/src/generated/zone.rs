@@ -35,7 +35,7 @@ pub struct ZoneForProviderSpec {
     #[serde(flatten)]
     pub fields: crate::generated::types::ZoneForProvider,
     #[serde(rename = "accountRef", default, skip_serializing_if = "Option::is_none")]
-    pub account_ref: Option<koof::reference::ResourceReference>,
+    pub account_ref: Option<crate::generated::account::AccountReference>,
 }
 #[derive(
     kube::CustomResource,
@@ -80,8 +80,10 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         koof::resource::Reference {
             name: "account",
             from: "/spec/forProvider/accountRef",
-            target: &crate::generated::account::DESCRIPTOR,
-            namespace: koof::resource::NamespacePolicy::SameAsResource,
+            targets: &[
+                &crate::generated::account::DESCRIPTOR,
+                &crate::generated::cluster_account::DESCRIPTOR,
+            ],
         },
     ],
     credentials: Some(koof::resource::Credentials {

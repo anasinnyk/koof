@@ -66,8 +66,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         koof::resource::Reference {
             name: "tunnel",
             from: "/spec/forProvider/tunnelRef",
-            target: &crate::generated::tunnel::DESCRIPTOR,
-            namespace: koof::resource::NamespacePolicy::SameAsResource,
+            targets: &[&crate::generated::tunnel::DESCRIPTOR],
         },
     ],
     credentials: Some(koof::resource::Credentials {

@@ -1,6 +1,6 @@
 use super::SpecError;
 use crate::ir::{
-    CredentialsIr, FieldPath, ReferenceIr, RequestMappingIr, ResourceName, ScopeIr, TestIr,
+    CredentialsIr, FieldPath, ReferenceIr, RequestMappingIr, ResourceName, TestIr,
     ValidationIr, ValueExpr,
 };
 use serde::{Deserialize, de::DeserializeOwned};
@@ -42,13 +42,13 @@ pub fn kube_provider(document: &Value) -> Result<Option<ProviderExtension>, Spec
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ResourceExtension {
     pub name: ResourceName,
     pub api_version: String,
     pub kind: String,
     #[serde(default)]
-    pub scope: ScopeIr,
+    pub cluster: bool,
     #[serde(default)]
     pub fields: FieldSelection,
     #[serde(default)]

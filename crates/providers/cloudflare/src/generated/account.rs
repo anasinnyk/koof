@@ -25,7 +25,7 @@ pub struct AccountForProviderSpec {
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub api_token_secret_ref: Option<koof::reference::SecretReference>,
+    pub api_token_secret_ref: Option<koof::reference::SecretKeySelector>,
 }
 #[derive(
     kube::CustomResource,
@@ -40,6 +40,7 @@ pub struct AccountForProviderSpec {
     group = "cloudflare.kube.nas1k.dev",
     version = "v1alpha1",
     kind = "Account",
+    namespaced,
     status = "AccountStatus",
     printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Ready\\\")].status\",\"name\":\"Ready\",\"type\":\"string\"}",
     printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Synced\\\")].status\",\"name\":\"Synced\",\"type\":\"string\"}",
@@ -52,6 +53,36 @@ pub struct AccountSpec {
     #[serde(flatten)]
     pub management: koof::managed::ManagedResourceSpec,
 }
+///A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.
+#[derive(
+    Clone,
+    Debug,
+    PartialEq,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema
+)]
+pub struct AccountReference {
+    pub name: String,
+    #[serde(default)]
+    pub kind: AccountReferenceKind,
+}
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    PartialEq,
+    Eq,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema
+)]
+pub enum AccountReferenceKind {
+    #[default]
+    Account,
+    ClusterAccount,
+}
 pub type AccountStatus = koof::status::ManagedStatus<
     crate::generated::types::AccountAtProvider,
 >;
@@ -62,7 +93,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "Account",
     api_resource,
     group: "cloudflare.kube.nas1k.dev",
-    namespaced: false,
+    namespaced: true,
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     late_initialize: &["name", "settings"],
     references: &[],

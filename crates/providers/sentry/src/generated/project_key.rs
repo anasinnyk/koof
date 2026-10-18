@@ -66,8 +66,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
         koof::resource::Reference {
             name: "project",
             from: "/spec/forProvider/projectRef",
-            target: &crate::generated::project::DESCRIPTOR,
-            namespace: koof::resource::NamespacePolicy::SameAsResource,
+            targets: &[&crate::generated::project::DESCRIPTOR],
         },
     ],
     credentials: Some(koof::resource::Credentials {

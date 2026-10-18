@@ -12,7 +12,6 @@ actions:
         name: waiting_room
         apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
         kind: WaitingRoom
-        scope: Namespaced
 
         test:
           forProvider:
@@ -31,7 +30,6 @@ actions:
           zone:
             from: spec.forProvider.zoneRef
             target: zone
-            namespace: same_as_resource
 
         credentials:
           security_scheme: api_token

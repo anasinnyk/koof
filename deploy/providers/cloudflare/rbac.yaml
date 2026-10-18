@@ -12,6 +12,7 @@
       ],
       "resources": [
         "accounts",
+        "clusteraccounts",
         "iplists",
         "notificationpolicies",
         "pagesprojects",
@@ -32,6 +33,7 @@
       ],
       "resources": [
         "accounts/status",
+        "clusteraccounts/status",
         "iplists/status",
         "notificationpolicies/status",
         "pagesprojects/status",
@@ -50,6 +52,7 @@
       ],
       "resources": [
         "accounts/finalizers",
+        "clusteraccounts/finalizers",
         "iplists/finalizers",
         "notificationpolicies/finalizers",
         "pagesprojects/finalizers",
