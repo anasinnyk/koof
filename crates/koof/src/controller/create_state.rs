@@ -1,4 +1,9 @@
-use crate::{error::ReconcileError, object, resource::ManagedResource};
+use crate::{
+    error::ReconcileError,
+    object,
+    resource::ManagedResource,
+    retry::{self, RetryPolicy},
+};
 use serde_json::{Map, Value};
 use std::time::Duration;
 
@@ -7,6 +12,14 @@ pub const CREATE_SUCCEEDED: &str = "external-create-succeeded";
 pub const CREATE_FAILED: &str = "external-create-failed";
 
 pub const CREATE_GRACE: Duration = Duration::from_mins(1);
+
+const RECORD_RETRY: RetryPolicy = RetryPolicy {
+    base: Duration::from_millis(200),
+    max: Duration::from_secs(2),
+    attempts: Some(5),
+    waiting: None,
+    permanent: None,
+};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct CreateState {
@@ -62,6 +75,26 @@ pub async fn annotate<R: ManagedResource>(
     resource: &R,
     values: &[(&str, Option<String>)],
 ) -> Result<R, ReconcileError> {
+    object::patch_guarded(client, resource, annotations::<R>(values)).await
+}
+
+/// [`annotate`] without `resourceVersion`, retried on transient errors, so a
+/// concurrent change cannot lose the outcome of a create.
+///
+/// # Errors
+///
+/// Returns [`ReconcileError`] when the patch still fails after the retries.
+pub async fn record<R: ManagedResource>(
+    client: &kube::Client,
+    resource: &R,
+    values: &[(&str, Option<String>)],
+) -> Result<(), ReconcileError> {
+    let patch = annotations::<R>(values);
+    retry::with_retries(&RECORD_RETRY, || object::patch(client, resource, &patch)).await?;
+    Ok(())
+}
+
+fn annotations<R: ManagedResource>(values: &[(&str, Option<String>)]) -> Value {
     let descriptor = R::descriptor();
     let annotations: Map<String, Value> = values
         .iter()
@@ -72,12 +105,7 @@ pub async fn annotate<R: ManagedResource>(
             )
         })
         .collect();
-    object::patch_guarded(
-        client,
-        resource,
-        serde_json::json!({ "metadata": { "annotations": annotations } }),
-    )
-    .await
+    serde_json::json!({ "metadata": { "annotations": annotations } })
 }
 
 #[must_use]
