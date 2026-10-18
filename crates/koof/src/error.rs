@@ -1,12 +1,3 @@
-use std::time::Duration;
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum Retry {
-    Transient(Option<Duration>),
-    Waiting,
-    Permanent,
-}
-
 #[derive(Debug, thiserror::Error)]
 pub enum CredentialError {
     #[error("Kubernetes API request failed: {0}")]
@@ -73,50 +64,4 @@ pub enum ReconcileError {
 
     #[error("{0}")]
     CreateIncomplete(String),
-}
-
-impl ReconcileError {
-    #[must_use]
-    pub fn retry(&self) -> Retry {
-        match self {
-            Self::Http(error) => error.retry(),
-            Self::Kubernetes(error) => kubernetes_retry(error),
-            Self::ResolveValue(error) => error.retry(),
-            Self::Credentials(error) => error.retry(),
-            Self::Serialization(_)
-            | Self::Policy(_)
-            | Self::Unsupported(_)
-            | Self::InvalidRequest(_)
-            | Self::CreateIncomplete(_) => Retry::Permanent,
-        }
-    }
-}
-
-impl ResolveValueError {
-    #[must_use]
-    pub fn retry(&self) -> Retry {
-        match self {
-            Self::ReferenceNotReady(_) => Retry::Waiting,
-            Self::Kubernetes(error) => kubernetes_retry(error),
-            Self::Serialization(_) | Self::Missing(_) | Self::NonScalar { .. } => Retry::Permanent,
-        }
-    }
-}
-
-impl CredentialError {
-    #[must_use]
-    pub fn retry(&self) -> Retry {
-        match self {
-            Self::Kubernetes(error) => kubernetes_retry(error),
-            Self::Resolve(error) => error.retry(),
-            Self::MissingValue(_) | Self::InvalidSecretUtf8 { .. } => Retry::Permanent,
-        }
-    }
-}
-
-fn kubernetes_retry(error: &kube::Error) -> Retry {
-    match error {
-        kube::Error::Api(status) if status.code == 404 => Retry::Waiting,
-        _ => Retry::Transient(None),
-    }
 }

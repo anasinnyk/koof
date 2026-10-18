@@ -168,7 +168,7 @@ pub async fn create<R: ManagedResource>(
     {
         Ok(response) => response,
         Err(error @ HttpError::Status { .. }) => {
-            create_state::annotate(
+            create_state::record(
                 &context.kube_client,
                 &resource,
                 &[(CREATE_FAILED, Some(create_state::now()))],
@@ -196,7 +196,8 @@ pub async fn create<R: ManagedResource>(
             ))
         })?;
 
-    create_state::annotate(
+    tracing::info!(%external_name, "recording the external name of the created resource");
+    create_state::record(
         &context.kube_client,
         &resource,
         &[
@@ -204,7 +205,14 @@ pub async fn create<R: ManagedResource>(
             (CREATE_SUCCEEDED, Some(create_state::now())),
         ],
     )
-    .await?;
+    .await
+    .map_err(|error| {
+        ReconcileError::CreateIncomplete(format!(
+            "created external resource {external_name} but could not record it ({error}); \
+             set {} to {external_name}",
+            descriptor.annotation(EXTERNAL_NAME)
+        ))
+    })?;
     Ok(external_name)
 }
 
