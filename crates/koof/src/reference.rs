@@ -1,21 +1,25 @@
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-/// A reference to another managed resource.
+/// A reference to another managed resource: a namespaced resource in the namespace
+/// of the resource holding the reference, or a cluster-scoped one.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 pub struct ResourceReference {
     pub name: String,
-
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub namespace: Option<String>,
 }
 
-/// A key of a Secret, for credentials. `namespace` defaults to the namespace of the
-/// resource holding the reference; cluster-scoped resources must set it.
+/// A key of a Secret in the namespace of the (namespaced) resource holding the
+/// reference, for credentials.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
-pub struct SecretReference {
+pub struct SecretKeySelector {
     pub name: String,
     pub key: String,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub namespace: Option<String>,
+}
+
+/// A key of a Secret in `namespace`, for credentials of a cluster-scoped resource.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+pub struct ClusterSecretKeySelector {
+    pub name: String,
+    pub key: String,
+    pub namespace: String,
 }

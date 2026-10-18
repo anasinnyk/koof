@@ -1,4 +1,5 @@
 use crate::app::ProviderInfo;
+use reqwest::redirect::Policy;
 use serde::{Deserialize, Serialize};
 use smart_default::SmartDefault;
 use std::time::Duration;
@@ -31,6 +32,7 @@ impl HttpConfig {
             .pool_idle_timeout(self.pool_idle_timeout)
             .pool_max_idle_per_host(self.pool_max_idle_per_host)
             .user_agent(&self.user_agent)
+            .redirect(Policy::none())
             .build()
     }
 }

@@ -38,7 +38,7 @@ pub struct OperationId(pub String);
 pub struct ResourceIr {
     pub api_version: String,
     pub kind: String,
-    pub scope: ScopeIr,
+    pub cluster: bool,
     pub identifiers: BTreeMap<String, ValueExpr>,
     pub references: BTreeMap<String, ReferenceIr>,
     pub credentials: Option<CredentialsIr>,
@@ -57,13 +57,6 @@ pub struct TestIr {
     pub update: Option<serde_json::Map<String, serde_json::Value>>,
 }
 
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Deserialize)]
-pub enum ScopeIr {
-    #[default]
-    Namespaced,
-    Cluster,
-}
-
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 pub struct ValidationIr {
     pub rule: String,
@@ -73,11 +66,10 @@ pub struct ValidationIr {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ReferenceIr {
     pub from: FieldPath,
     pub target: ResourceName,
-    #[serde(default)]
-    pub namespace: NamespacePolicy,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -152,15 +144,6 @@ pub enum ValueExpr {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(transparent)]
 pub struct FieldPath(pub String);
-
-#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub enum NamespacePolicy {
-    #[default]
-    SameAsResource,
-    FromReference,
-    ClusterScoped,
-}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum HttpMethod {

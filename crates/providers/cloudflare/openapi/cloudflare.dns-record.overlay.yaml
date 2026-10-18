@@ -10,7 +10,6 @@ actions:
         name: dns_record
         apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
         kind: DNSRecord
-        scope: Namespaced
 
         validations:
           - rule: "!has(self.ttl) || self.ttl == 1 || (self.ttl >= 30 && self.ttl <= 86400)"
@@ -35,7 +34,6 @@ actions:
           zone:
             from: spec.forProvider.zoneRef
             target: zone
-            namespace: same_as_resource
 
         credentials:
           security_scheme: api_token

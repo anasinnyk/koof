@@ -97,7 +97,7 @@ fn dependency_order<'p, 'a>(
             return;
         }
         for reference in &resource.references {
-            if let Some(target) = find(provider, reference.target) {
+            if let Some(target) = find(provider, &reference.targets[0]) {
                 visit(provider, target, order);
             }
         }
@@ -115,7 +115,7 @@ fn find<'p, 'a>(
     provider
         .resources
         .iter()
-        .find(|resource| resource.name == name)
+        .find(|resource| resource.name == *name)
 }
 
 fn api_version(resource: &Resource<'_>) -> String {
@@ -148,7 +148,7 @@ fn manifest(provider: &Provider<'_>, resource: &Resource<'_>) -> Value {
         })
         .unwrap_or_default();
     for reference in &resource.references {
-        if let Some(target) = find(provider, reference.target) {
+        if let Some(target) = find(provider, &reference.targets[0]) {
             for_provider.insert(
                 reference.field.to_owned(),
                 json!({ "name": object_name(target) }),
@@ -160,10 +160,11 @@ fn manifest(provider: &Provider<'_>, resource: &Resource<'_>) -> Value {
         .as_ref()
         .and_then(|credentials| credentials.secret_field)
     {
-        for_provider.insert(
-            field.to_owned(),
-            json!({ "name": SECRET, "key": SECRET_KEY, "namespace": "($namespace)" }),
-        );
+        let mut selector = json!({ "name": SECRET, "key": SECRET_KEY });
+        if !resource.namespaced {
+            selector["namespace"] = json!("($namespace)");
+        }
+        for_provider.insert(field.to_owned(), selector);
     }
 
     let mut object = reference(resource);

@@ -22,14 +22,13 @@ spec:
           metadata:
             annotations:
               sentry.kube.nas1k.dev/external-name: ($namespace)
-            name: ($namespace)
+            name: organization
           spec:
             deletionPolicy: Orphan
             forProvider:
               authTokenSecretRef:
                 key: token
                 name: credentials
-                namespace: ($namespace)
               name: koof e2e
     - apply:
         resource:
@@ -41,7 +40,7 @@ spec:
             forProvider:
               name: koof e2e
               organizationRef:
-                name: ($namespace)
+                name: organization
               slug: koof-e2e
     - apply:
         resource:
@@ -53,7 +52,7 @@ spec:
             forProvider:
               name: koof e2e
               organizationRef:
-                name: ($namespace)
+                name: organization
               slug: koof-e2e
               teamRef:
                 name: team
@@ -62,7 +61,7 @@ spec:
           apiVersion: sentry.kube.nas1k.dev/v1alpha1
           kind: Organization
           metadata:
-            name: ($namespace)
+            name: organization
           status:
             (conditions[?type == 'Ready']):
             - status: 'True'

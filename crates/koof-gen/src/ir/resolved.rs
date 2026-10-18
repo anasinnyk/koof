@@ -1,6 +1,6 @@
 use super::{
-    CredentialSourceIr, HttpIr, NamespacePolicy, OperationId, OperationIr, ResourceName, TestIr,
-    ValidationIr, ValueExpr,
+    CredentialSourceIr, HttpIr, OperationId, OperationIr, ResourceName, TestIr, ValidationIr,
+    ValueExpr,
 };
 use std::collections::BTreeMap;
 
@@ -13,13 +13,15 @@ pub struct Provider<'a> {
     pub operations: Vec<Operation<'a>>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Resource<'a> {
-    pub name: &'a ResourceName,
-    pub kind: &'a str,
+    pub name: ResourceName,
+    pub kind: String,
+    pub base_kind: &'a str,
     pub group: &'a str,
     pub version: &'a str,
     pub namespaced: bool,
+    pub has_cluster_variant: bool,
     pub identifiers: &'a BTreeMap<String, ValueExpr>,
     pub references: Vec<Reference<'a>>,
     pub credentials: Option<Credentials<'a>>,
@@ -45,16 +47,17 @@ pub struct Create<'a> {
     pub external_name: &'a str,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Reference<'a> {
     pub name: &'a str,
     pub from: &'a str,
     pub field: &'a str,
     pub target: &'a ResourceName,
-    pub namespace: NamespacePolicy,
+    pub target_kind: &'a str,
+    pub targets: Vec<ResourceName>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Credentials<'a> {
     pub source: &'a CredentialSourceIr,
     pub auth: Auth<'a>,
@@ -65,4 +68,14 @@ pub struct Credentials<'a> {
 pub enum Auth<'a> {
     Bearer,
     Header(&'a str),
+}
+
+#[must_use]
+pub fn cluster_name(name: &ResourceName) -> ResourceName {
+    ResourceName(format!("cluster_{}", name.0))
+}
+
+#[must_use]
+pub fn cluster_kind(kind: &str) -> String {
+    format!("Cluster{kind}")
 }

@@ -5,7 +5,7 @@ use crate::{
         types::GeneratedTypes,
     },
     ir::{
-        CredentialSourceIr, NamespacePolicy, ValueExpr,
+        CredentialSourceIr, ValueExpr,
         resolved::{Auth, Create, Credentials, Operation, Resource},
     },
 };
@@ -13,7 +13,7 @@ use proc_macro2::TokenStream;
 use quote::quote;
 
 pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, GeneratorError> {
-    let kind = resource.kind;
+    let kind = &resource.kind;
     let resource_ident = kind_ident(kind)?;
     let group = resource.group;
 
@@ -28,18 +28,19 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
         .map(|reference| {
             let reference_name = reference.name;
             let from = pointer(reference.from);
-            let target_module = field_ident(&reference.target.0)?;
-            let namespace = match reference.namespace {
-                NamespacePolicy::SameAsResource => quote!(SameAsResource),
-                NamespacePolicy::FromReference => quote!(FromReference),
-                NamespacePolicy::ClusterScoped => quote!(ClusterScoped),
-            };
+            let targets = reference
+                .targets
+                .iter()
+                .map(|target| {
+                    let module = field_ident(&target.0)?;
+                    Ok(quote!(&crate::generated::#module::DESCRIPTOR))
+                })
+                .collect::<Result<Vec<_>, GeneratorError>>()?;
             Ok(quote! {
                 koof::resource::Reference {
                     name: #reference_name,
                     from: #from,
-                    target: &crate::generated::#target_module::DESCRIPTOR,
-                    namespace: koof::resource::NamespacePolicy::#namespace,
+                    targets: &[#(#targets),*],
                 }
             })
         })
@@ -104,8 +105,8 @@ pub fn generate_managed_resource(
     resource: &Resource<'_>,
     types: &GeneratedTypes,
 ) -> Result<TokenStream, GeneratorError> {
-    let resource_ident = kind_ident(resource.kind)?;
-    let at_provider_type = types.path(&format!("{}AtProvider", resource.kind))?;
+    let resource_ident = kind_ident(&resource.kind)?;
+    let at_provider_type = types.path(&format!("{}AtProvider", resource.base_kind))?;
     let observe = operation_ident(resource.observe.id)?;
     let operation_type = |operation: Option<Operation<'_>>| -> Result<TokenStream, GeneratorError> {
         let Some(operation) = operation else {

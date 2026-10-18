@@ -13,7 +13,8 @@ actions:
         name: organization
         apiVersion: sentry.kube.nas1k.dev/v1alpha1
         kind: Organization
-        scope: Cluster
+        # Also a cluster-scoped ClusterOrganization, shared by every namespace.
+        cluster: true
 
         test:
           forProvider:

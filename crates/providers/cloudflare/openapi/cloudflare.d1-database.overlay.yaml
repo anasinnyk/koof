@@ -12,7 +12,6 @@ actions:
         name: d1_database
         apiVersion: storage.cloudflare.kube.nas1k.dev/v1alpha1
         kind: D1Database
-        scope: Namespaced
 
         test:
           forProvider:
@@ -29,7 +28,6 @@ actions:
           account:
             from: spec.forProvider.accountRef
             target: account
-            namespace: same_as_resource
 
         credentials:
           security_scheme: api_token

@@ -12,7 +12,6 @@ actions:
         name: turnstile_widget
         apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
         kind: TurnstileWidget
-        scope: Namespaced
 
         test:
           forProvider:
@@ -30,7 +29,6 @@ actions:
           account:
             from: spec.forProvider.accountRef
             target: account
-            namespace: same_as_resource
 
         credentials:
           security_scheme: api_token

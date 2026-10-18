@@ -20,13 +20,12 @@ spec:
           apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
           kind: Account
           metadata:
-            name: ($namespace)
+            name: account
           spec:
             forProvider:
               apiTokenSecretRef:
                 key: token
                 name: credentials
-                namespace: ($namespace)
               name: koof e2e
     - apply:
         resource:
@@ -37,7 +36,7 @@ spec:
           spec:
             forProvider:
               accountRef:
-                name: ($namespace)
+                name: account
               name: example.com
               type: full
     - apply:
@@ -60,7 +59,7 @@ spec:
           apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
           kind: Account
           metadata:
-            name: ($namespace)
+            name: account
           status:
             (conditions[?type == 'Ready']):
             - status: 'True'

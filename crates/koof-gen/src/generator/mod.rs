@@ -59,6 +59,7 @@ fn resource_file(
 ) -> Result<GeneratedFile, GeneratorError> {
     let items = [
         crd::generate_spec(resource, types)?,
+        crd::generate_variant_reference(resource)?,
         crd::generate_status(resource, types)?,
         descriptor::generate_descriptor(resource)?,
         descriptor::generate_managed_resource(resource, types)?,
@@ -112,7 +113,7 @@ fn mod_file(provider: &Provider<'_>) -> Result<GeneratedFile, GeneratorError> {
         .iter()
         .map(|resource| {
             let module = field_ident(&resource.name.0)?;
-            let kind = kind_ident(resource.kind)?;
+            let kind = kind_ident(&resource.kind)?;
             Ok(quote!(#module::#kind))
         })
         .collect::<Result<Vec<_>, GeneratorError>>()?;

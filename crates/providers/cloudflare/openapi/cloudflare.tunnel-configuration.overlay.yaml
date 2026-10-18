@@ -19,7 +19,6 @@ actions:
         name: tunnel_configuration
         apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
         kind: TunnelConfiguration
-        scope: Namespaced
 
         test:
           forProvider:
@@ -37,7 +36,6 @@ actions:
           tunnel:
             from: spec.forProvider.tunnelRef
             target: tunnel
-            namespace: same_as_resource
 
         credentials:
           security_scheme: api_token

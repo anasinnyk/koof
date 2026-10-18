@@ -25,7 +25,7 @@ pub struct OrganizationForProviderSpec {
         default,
         skip_serializing_if = "Option::is_none"
     )]
-    pub auth_token_secret_ref: Option<koof::reference::SecretReference>,
+    pub auth_token_secret_ref: Option<koof::reference::SecretKeySelector>,
 }
 #[derive(
     kube::CustomResource,
@@ -40,6 +40,7 @@ pub struct OrganizationForProviderSpec {
     group = "sentry.kube.nas1k.dev",
     version = "v1alpha1",
     kind = "Organization",
+    namespaced,
     status = "OrganizationStatus",
     printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Ready\\\")].status\",\"name\":\"Ready\",\"type\":\"string\"}",
     printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Synced\\\")].status\",\"name\":\"Synced\",\"type\":\"string\"}",
@@ -52,6 +53,36 @@ pub struct OrganizationSpec {
     #[serde(flatten)]
     pub management: koof::managed::ManagedResourceSpec,
 }
+///A reference to an object of kind `Organization` (default) in the namespace of the resource holding the reference, or of kind `ClusterOrganization`, by `kind`.
+#[derive(
+    Clone,
+    Debug,
+    PartialEq,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema
+)]
+pub struct OrganizationReference {
+    pub name: String,
+    #[serde(default)]
+    pub kind: OrganizationReferenceKind,
+}
+#[derive(
+    Clone,
+    Copy,
+    Debug,
+    Default,
+    PartialEq,
+    Eq,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema
+)]
+pub enum OrganizationReferenceKind {
+    #[default]
+    Organization,
+    ClusterOrganization,
+}
 pub type OrganizationStatus = koof::status::ManagedStatus<
     crate::generated::types::OrganizationAtProvider,
 >;
@@ -62,7 +93,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
     kind: "Organization",
     api_resource,
     group: "sentry.kube.nas1k.dev",
-    namespaced: false,
+    namespaced: true,
     identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
     late_initialize: &["name"],
     references: &[],

@@ -12,7 +12,6 @@ actions:
         name: spectrum_application
         apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
         kind: SpectrumApplication
-        scope: Namespaced
 
         test:
           forProvider:
@@ -33,7 +32,6 @@ actions:
           zone:
             from: spec.forProvider.zoneRef
             target: zone
-            namespace: same_as_resource
 
         credentials:
           security_scheme: api_token

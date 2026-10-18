@@ -2,6 +2,7 @@ pub mod operations;
 pub mod types;
 pub mod access_application;
 pub mod account;
+pub mod cluster_account;
 pub mod custom_hostname;
 pub mod d1_database;
 pub mod dns_record;
@@ -45,6 +46,7 @@ pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo {
 pub fn controllers(app: koof::App) -> koof::App {
     app.controller::<access_application::AccessApplication>()
         .controller::<account::Account>()
+        .controller::<cluster_account::ClusterAccount>()
         .controller::<custom_hostname::CustomHostname>()
         .controller::<d1_database::D1Database>()
         .controller::<dns_record::DNSRecord>()
@@ -81,6 +83,7 @@ pub fn fake() -> koof::fake::Fake {
     koof::fake::Fake::new()
         .resource::<access_application::AccessApplication>()
         .resource::<account::Account>()
+        .resource::<cluster_account::ClusterAccount>()
         .resource::<custom_hostname::CustomHostname>()
         .resource::<d1_database::D1Database>()
         .resource::<dns_record::DNSRecord>()
@@ -120,6 +123,7 @@ pub fn crds() -> Vec<
     vec![
         < access_application::AccessApplication as kube::CustomResourceExt > ::crd(), <
         account::Account as kube::CustomResourceExt > ::crd(), <
+        cluster_account::ClusterAccount as kube::CustomResourceExt > ::crd(), <
         custom_hostname::CustomHostname as kube::CustomResourceExt > ::crd(), <
         d1_database::D1Database as kube::CustomResourceExt > ::crd(), <
         dns_record::DNSRecord as kube::CustomResourceExt > ::crd(), <
