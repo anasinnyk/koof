@@ -208,8 +208,9 @@ pub async fn create<R: ManagedResource>(
     .await
     .map_err(|error| {
         ReconcileError::CreateIncomplete(format!(
-            "created external resource {external_name} but could not record it ({error}); \
+            "created external resource {external_name} but could not record it ({}); \
              set {} to {external_name}",
+            crate::error::chain(&error),
             descriptor.annotation(EXTERNAL_NAME)
         ))
     })?;

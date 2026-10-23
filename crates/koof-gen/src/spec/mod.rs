@@ -18,7 +18,7 @@ pub enum SpecError {
     #[error("missing object at {0}")]
     Missing(String),
 
-    #[error("invalid {extension} at {location}: {source}")]
+    #[error("invalid {extension} at {location}")]
     Extension {
         extension: &'static str,
         location: String,
