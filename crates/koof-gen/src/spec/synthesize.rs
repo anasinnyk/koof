@@ -522,7 +522,10 @@ fn collect_variants(
         .and_then(Value::as_array)
     {
         Some(variants) => {
-            for variant in variants {
+            for variant in variants
+                .iter()
+                .filter(|variant| variant.get("type").and_then(Value::as_str) != Some("null"))
+            {
                 collect_variants(schemas, variant, None, out, visiting);
             }
         }
