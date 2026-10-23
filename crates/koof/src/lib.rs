@@ -5,6 +5,7 @@ pub mod config;
 pub mod controller;
 pub mod error;
 pub mod external;
+#[cfg(feature = "fake")]
 pub mod fake;
 pub mod managed;
 pub mod manifests;

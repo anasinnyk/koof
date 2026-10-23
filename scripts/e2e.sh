@@ -28,7 +28,7 @@ run() {
   local provider="$1"
   local bin="$root/target/debug"
 
-  cargo build --quiet --manifest-path "$root/Cargo.toml" -p "$provider-provider" --bins || return 1
+  cargo build --quiet --manifest-path "$root/Cargo.toml" -p "$provider-provider" --bins --features fake || return 1
   "$bin/manifests" | kubectl apply --server-side --force-conflicts -f - >/dev/null || return 1
   kubectl wait --for condition=established crd --all --timeout=60s >/dev/null || return 1
 

@@ -139,6 +139,7 @@ fn mod_file(provider: &Provider<'_>) -> Result<GeneratedFile, GeneratorError> {
             app #(.controller::<#kinds>())*
         }
 
+        #[cfg(feature = "fake")]
         #[must_use]
         pub fn fake() -> koof::fake::Fake {
             koof::fake::Fake::new() #(.resource::<#kinds>())*
