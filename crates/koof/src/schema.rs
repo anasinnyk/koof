@@ -61,9 +61,20 @@ fn flatten(node: &mut Map<String, Value>) {
     }
 
     for keyword in ["oneOf", "anyOf"] {
-        let Some(Value::Array(variants)) = node.remove(keyword) else {
+        let Some(Value::Array(mut variants)) = node.remove(keyword) else {
             continue;
         };
+        let count = variants.len();
+        variants.retain(|variant| variant.get("type").and_then(Value::as_str) != Some("null"));
+        if variants.len() < count {
+            node.insert("nullable".to_owned(), Value::Bool(true));
+        }
+        if let [Value::Object(variant)] = variants.as_slice() {
+            for (key, value) in variant {
+                node.entry(key.clone()).or_insert_with(|| value.clone());
+            }
+            continue;
+        }
         let objects: Vec<&Map<String, Value>> = variants
             .iter()
             .filter_map(Value::as_object)

@@ -435,8 +435,290 @@
                         "type": "string"
                       },
                       "saas_app": {
+                        "description": "`AccessApplicationForProviderVariant1SaasApp`",
                         "nullable": true,
-                        "x-kubernetes-preserve-unknown-fields": true
+                        "properties": {
+                          "access_token_lifetime": {
+                            "description": "The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must be greater than or equal to 1m and less than or equal to 24h.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "allow_pkce_without_client_secret": {
+                            "description": "If client secret should be required on the token endpoint when authorization_code_with_pkce grant is used.",
+                            "nullable": true,
+                            "type": "boolean"
+                          },
+                          "app_launcher_url": {
+                            "description": "The URL where this applications tile redirects users",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "auth_type": {
+                            "enum": [
+                              "saml",
+                              "oidc"
+                            ],
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "client_id": {
+                            "description": "The application client id",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "client_secret": {
+                            "description": "The application client secret, only returned on POST request.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "consumer_service_url": {
+                            "description": "The service provider's endpoint that is responsible for receiving and parsing a SAML assertion.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "description": "`AccessCreatedAt`",
+                            "format": "date-time",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "custom_attributes": {
+                            "items": {
+                              "description": "`AccessSamlSaasAppCustomAttributesItem`",
+                              "properties": {
+                                "friendly_name": {
+                                  "description": "The SAML FriendlyName of the attribute.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the attribute.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "name_format": {
+                                  "description": "A globally unique name for an identity or service provider.",
+                                  "enum": [
+                                    "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified",
+                                    "urn:oasis:names:tc:SAML:2.0:attrname-format:basic",
+                                    "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+                                  ],
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "required": {
+                                  "description": "If the attribute is required when building a SAML assertion.",
+                                  "nullable": true,
+                                  "type": "boolean"
+                                },
+                                "source": {
+                                  "description": "`AccessSamlSaasAppCustomAttributesItemSource`",
+                                  "nullable": true,
+                                  "properties": {
+                                    "name": {
+                                      "description": "The name of the IdP attribute.",
+                                      "nullable": true,
+                                      "type": "string"
+                                    },
+                                    "name_by_idp": {
+                                      "description": "A mapping from IdP ID to attribute name.",
+                                      "items": {
+                                        "description": "`AccessSamlSaasAppCustomAttributesItemSourceNameByIdpItem`",
+                                        "properties": {
+                                          "idp_id": {
+                                            "description": "The UID of the IdP.",
+                                            "nullable": true,
+                                            "type": "string"
+                                          },
+                                          "source_name": {
+                                            "description": "The name of the IdP provided attribute.",
+                                            "nullable": true,
+                                            "type": "string"
+                                          }
+                                        },
+                                        "type": "object"
+                                      },
+                                      "type": "array"
+                                    }
+                                  },
+                                  "type": "object"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "custom_claims": {
+                            "items": {
+                              "description": "`AccessOidcSaasAppCustomClaimsItem`",
+                              "properties": {
+                                "name": {
+                                  "description": "The name of the claim.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "required": {
+                                  "description": "If the claim is required when building an OIDC token.",
+                                  "nullable": true,
+                                  "type": "boolean"
+                                },
+                                "scope": {
+                                  "description": "The scope of the claim.",
+                                  "enum": [
+                                    "groups",
+                                    "profile",
+                                    "email",
+                                    "openid"
+                                  ],
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "source": {
+                                  "description": "`AccessOidcSaasAppCustomClaimsItemSource`",
+                                  "nullable": true,
+                                  "properties": {
+                                    "name": {
+                                      "description": "The name of the IdP claim.",
+                                      "nullable": true,
+                                      "type": "string"
+                                    },
+                                    "name_by_idp": {
+                                      "additionalProperties": {
+                                        "type": "string"
+                                      },
+                                      "description": "A mapping from IdP ID to claim name.",
+                                      "type": "object"
+                                    }
+                                  },
+                                  "type": "object"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "default_relay_state": {
+                            "description": "The URL that the user will be redirected to after a successful login for IDP initiated logins.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "grant_types": {
+                            "description": "The OIDC flows supported by this application",
+                            "items": {
+                              "description": "`AccessOidcSaasAppGrantTypesItem`",
+                              "enum": [
+                                "authorization_code",
+                                "authorization_code_with_pkce",
+                                "refresh_tokens",
+                                "hybrid",
+                                "implicit"
+                              ],
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "group_filter_regex": {
+                            "description": "A regex to filter Cloudflare groups returned in ID token and userinfo endpoint",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "hybrid_and_implicit_options": {
+                            "description": "`AccessOidcSaasAppHybridAndImplicitOptions`",
+                            "nullable": true,
+                            "properties": {
+                              "return_access_token_from_authorization_endpoint": {
+                                "description": "If an Access Token should be returned from the OIDC Authorization endpoint",
+                                "nullable": true,
+                                "type": "boolean"
+                              },
+                              "return_id_token_from_authorization_endpoint": {
+                                "description": "If an ID Token should be returned from the OIDC Authorization endpoint",
+                                "nullable": true,
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "idp_entity_id": {
+                            "description": "The unique identifier for your SaaS application.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "name_id_format": {
+                            "description": "The format of the name identifier sent to the SaaS application.",
+                            "enum": [
+                              "id",
+                              "email"
+                            ],
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "name_id_transform_jsonata": {
+                            "description": "A [JSONata](https://jsonata.org/) expression that transforms an application's user identities into a NameID value for its SAML assertion. This expression should evaluate to a singular string. The output of this expression can override the `name_id_format` setting.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "public_key": {
+                            "description": "The Access public certificate that will be used to verify your identity.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "redirect_uris": {
+                            "description": "The permitted URL's for Cloudflare to return Authorization codes and Access/ID tokens",
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "refresh_token_options": {
+                            "description": "`AccessOidcSaasAppRefreshTokenOptions`",
+                            "nullable": true,
+                            "properties": {
+                              "lifetime": {
+                                "description": "How long a refresh token will be valid for after creation. Valid units are m,h,d. Must be longer than 1m.",
+                                "nullable": true,
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "saml_attribute_transform_jsonata": {
+                            "description": "A [JSONata] (https://jsonata.org/) expression that transforms an application's user identities into attribute assertions in the SAML response. The expression can transform id, email, name, and groups values. It can also transform fields listed in the saml_attributes or oidc_fields of the identity provider used to authenticate. The output of this expression must be a JSON object.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "scopes": {
+                            "description": "Define the user information shared with access, \"offline_access\" scope will be automatically enabled if refresh tokens are enabled",
+                            "items": {
+                              "description": "`AccessOidcSaasAppScopesItem`",
+                              "enum": [
+                                "openid",
+                                "groups",
+                                "email",
+                                "profile"
+                              ],
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "sp_entity_id": {
+                            "description": "A globally unique name for an identity or service provider.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "sso_endpoint": {
+                            "description": "The endpoint where your SaaS application will send login requests.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "updated_at": {
+                            "description": "`AccessUpdatedAt`",
+                            "format": "date-time",
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
                       },
                       "same_site_cookie_attribute": {
                         "description": "Sets the SameSite cookie setting, which provides increased security against CSRF attacks.",
@@ -448,6 +730,7 @@
                         "nullable": true,
                         "properties": {
                           "authentication": {
+                            "description": "`AccessScimConfigAuthentication`",
                             "nullable": true,
                             "x-kubernetes-preserve-unknown-fields": true
                           },
@@ -623,8 +906,830 @@
                 "nullable": true,
                 "properties": {
                   "atProvider": {
+                    "description": "`AccessApplicationAtProvider`",
                     "nullable": true,
-                    "x-kubernetes-preserve-unknown-fields": true
+                    "properties": {
+                      "allow_authenticate_via_warp": {
+                        "description": "When set to true, users can authenticate to this application using their WARP session.  When set to false this application will always require direct IdP authentication. This setting always overrides the organization setting for WARP authentication.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "allow_iframe": {
+                        "description": "Enables loading application content in an iFrame.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "allowed_idps": {
+                        "description": "The identity providers your users can select when connecting to this application. Defaults to all IdPs configured in your account.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true,
+                        "type": "array"
+                      },
+                      "app_launcher_logo_url": {
+                        "description": "The image URL of the logo shown in the App Launcher header.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "app_launcher_visible": {
+                        "description": "Displays the application in the App Launcher.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "aud": {
+                        "description": "Audience tag.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "auto_redirect_to_identity": {
+                        "description": "When set to `true`, users skip the identity provider selection step during login. You must specify only one identity provider in allowed_idps.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "bg_color": {
+                        "description": "The background color of the App Launcher page.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "cors_headers": {
+                        "description": "`AccessCorsHeaders`",
+                        "nullable": true,
+                        "properties": {
+                          "allow_all_headers": {
+                            "description": "Allows all HTTP request headers.",
+                            "nullable": true,
+                            "type": "boolean"
+                          },
+                          "allow_all_methods": {
+                            "description": "Allows all HTTP request methods.",
+                            "nullable": true,
+                            "type": "boolean"
+                          },
+                          "allow_all_origins": {
+                            "description": "Allows all origins.",
+                            "nullable": true,
+                            "type": "boolean"
+                          },
+                          "allow_credentials": {
+                            "description": "When set to `true`, includes credentials (cookies, authorization headers, or TLS client certificates) with requests.",
+                            "nullable": true,
+                            "type": "boolean"
+                          },
+                          "allowed_headers": {
+                            "description": "Allowed HTTP request headers.",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true,
+                            "type": "array"
+                          },
+                          "allowed_methods": {
+                            "description": "Allowed HTTP request methods.",
+                            "items": {
+                              "description": "`AccessAllowedMethodsItem`",
+                              "enum": [
+                                "GET",
+                                "POST",
+                                "HEAD",
+                                "PUT",
+                                "DELETE",
+                                "CONNECT",
+                                "OPTIONS",
+                                "TRACE",
+                                "PATCH"
+                              ],
+                              "type": "string"
+                            },
+                            "nullable": true,
+                            "type": "array"
+                          },
+                          "allowed_origins": {
+                            "description": "Allowed origins.",
+                            "items": {
+                              "type": "string"
+                            },
+                            "nullable": true,
+                            "type": "array"
+                          },
+                          "max_age": {
+                            "description": "The maximum number of seconds the results of a preflight request can be cached.",
+                            "format": "double",
+                            "nullable": true,
+                            "type": "number"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "created_at": {
+                        "description": "`AccessCreatedAt`",
+                        "format": "date-time",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "custom_deny_message": {
+                        "description": "The custom error message shown to a user when they are denied access to the application.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "custom_deny_url": {
+                        "description": "The custom URL a user is redirected to when they are denied access to the application when failing identity-based rules.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "custom_non_identity_deny_url": {
+                        "description": "The custom URL a user is redirected to when they are denied access to the application when failing non-identity rules.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "custom_pages": {
+                        "description": "The custom pages that will be displayed when applicable for this application",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true,
+                        "type": "array"
+                      },
+                      "destinations": {
+                        "description": "List of destinations secured by Access. This supersedes `self_hosted_domains` to allow for more flexibility in defining different types of domains. If `destinations` are provided, then `self_hosted_domains` will be ignored.",
+                        "items": {
+                          "description": "`AccessDestinationsItem`",
+                          "properties": {
+                            "cidr": {
+                              "description": "The CIDR range of the destination. Single IPs will be computed as /32.",
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "hostname": {
+                              "description": "The hostname of the destination. Matches a valid SNI served by an HTTPS origin.",
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "l4_protocol": {
+                              "description": "The L4 protocol of the destination. When omitted, both UDP and TCP traffic will match.",
+                              "enum": [
+                                "tcp",
+                                "udp"
+                              ],
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "mcp_server_id": {
+                              "description": "The MCP server id configured in ai-controls.",
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "port_range": {
+                              "description": "The port range of the destination. Can be a single port or a range of ports. When omitted, all ports will match.",
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "type": {
+                              "x-kubernetes-preserve-unknown-fields": true
+                            },
+                            "uri": {
+                              "description": "The URI of the destination. Public destinations' URIs can include a domain and path with [wildcards](https://developers.cloudflare.com/cloudflare-one/policies/access/app-paths/).",
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "vnet_id": {
+                              "description": "The VNET ID to match the destination. When omitted, all VNETs will match.",
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "worker_id": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "nullable": true,
+                        "type": "array"
+                      },
+                      "domain": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "eager_redirect_cookie_setting": {
+                        "description": "Preemptively sets the Access session cookie on every hostname in a multi-hostname self-hosted application during the initial redirect chain, rather than setting it lazily on first visit. Defaults to true. Set to false to disable the eager redirect cookie behavior.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "enable_binding_cookie": {
+                        "description": "Enables the binding cookie, which increases security against compromised authorization tokens and CSRF attacks.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "footer_links": {
+                        "description": "The links in the App Launcher footer.",
+                        "items": {
+                          "description": "`AccessFooterLinksItem`",
+                          "properties": {
+                            "name": {
+                              "description": "The hypertext in the footer link.",
+                              "type": "string"
+                            },
+                            "url": {
+                              "description": "the hyperlink in the footer link.",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "name",
+                            "url"
+                          ],
+                          "type": "object"
+                        },
+                        "nullable": true,
+                        "type": "array"
+                      },
+                      "header_bg_color": {
+                        "description": "The background color of the App Launcher header.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "http_only_cookie_attribute": {
+                        "description": "Enables the HttpOnly cookie attribute, which increases security against XSS attacks.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "id": {
+                        "description": "UUID.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "landing_page_design": {
+                        "description": "The design of the App Launcher landing page shown to users when they log in.",
+                        "nullable": true,
+                        "properties": {
+                          "button_color": {
+                            "description": "The background color of the log in button on the landing page.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "button_text_color": {
+                            "description": "The color of the text in the log in button on the landing page.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "image_url": {
+                            "description": "The URL of the image shown on the landing page.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "message": {
+                            "description": "The message shown on the landing page.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "title": {
+                            "description": "The title shown on the landing page.",
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "logo_url": {
+                        "description": "The image URL for the logo shown in the App Launcher dashboard.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "mfa_config": {
+                        "nullable": true,
+                        "type": "object"
+                      },
+                      "name": {
+                        "description": "The name of the application.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "oauth_configuration": {
+                        "description": "**Beta:** Optional configuration for managing an OAuth authorization flow controlled by Access. When set, Access will act as the OAuth authorization server for this application. Only compatible with OAuth clients that support [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators for OAuth 2.0). This feature is currently in beta.",
+                        "nullable": true,
+                        "properties": {
+                          "dynamic_client_registration": {
+                            "description": "Settings for OAuth dynamic client registration.",
+                            "nullable": true,
+                            "properties": {
+                              "allow_any_on_localhost": {
+                                "description": "Allows any client with redirect URIs on localhost.",
+                                "nullable": true,
+                                "type": "boolean"
+                              },
+                              "allow_any_on_loopback": {
+                                "description": "Allows any client with redirect URIs on 127.0.0.1.",
+                                "nullable": true,
+                                "type": "boolean"
+                              },
+                              "allowed_uris": {
+                                "description": "The URIs that are allowed as redirect URIs for dynamically registered clients. HTTP and HTTPS paths may end in `/*` to match all sub-paths. Custom-scheme URIs must be explicitly configured and match exactly.",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "type": "array"
+                              },
+                              "enabled": {
+                                "description": "Whether dynamic client registration is enabled.",
+                                "nullable": true,
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "enabled": {
+                            "default": true,
+                            "description": "Whether the OAuth configuration is enabled for this application. When set to `false`, Access will not handle OAuth for this application. Defaults to `true` if omitted.",
+                            "type": "boolean"
+                          },
+                          "grant": {
+                            "description": "Settings for OAuth grant behavior.",
+                            "nullable": true,
+                            "properties": {
+                              "access_token_lifetime": {
+                                "description": "The lifetime of the access token. Must be in the format `300ms` or `2h45m`. Valid time units are ns, us (or µs), ms, s, m, h.",
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "session_duration": {
+                                "description": "The duration of the OAuth session. Must be in the format `300ms` or `2h45m`. Valid time units are ns, us (or µs), ms, s, m, h.",
+                                "nullable": true,
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "options_preflight_bypass": {
+                        "description": "Allows options preflight requests to bypass Access authentication and go directly to the origin. Cannot turn on if cors_headers is set.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "path_cookie_attribute": {
+                        "description": "Enables cookie paths to scope an application's JWT to the application path. If disabled, the JWT will scope to the hostname by default",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "policies": {
+                        "items": {
+                          "x-kubernetes-preserve-unknown-fields": true
+                        },
+                        "type": "array"
+                      },
+                      "read_service_tokens_from_header": {
+                        "description": "Allows matching Access Service Tokens passed HTTP in a single header with this name.\nThis works as an alternative to the (CF-Access-Client-Id, CF-Access-Client-Secret) pair of headers.\nThe header value will be interpreted as a json object similar to:\n  {\n    \"cf-access-client-id\": \"88bf3b6d86161464f6509f7219099e57.access.example.com\",\n    \"cf-access-client-secret\": \"bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5\"\n  }",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "saas_app": {
+                        "description": "`AccessApplicationAtProviderVariant1SaasApp`",
+                        "nullable": true,
+                        "properties": {
+                          "access_token_lifetime": {
+                            "description": "The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must be greater than or equal to 1m and less than or equal to 24h.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "allow_pkce_without_client_secret": {
+                            "description": "If client secret should be required on the token endpoint when authorization_code_with_pkce grant is used.",
+                            "nullable": true,
+                            "type": "boolean"
+                          },
+                          "app_launcher_url": {
+                            "description": "The URL where this applications tile redirects users",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "auth_type": {
+                            "enum": [
+                              "saml",
+                              "oidc"
+                            ],
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "client_id": {
+                            "description": "The application client id",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "client_secret": {
+                            "description": "The application client secret, only returned on POST request.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "consumer_service_url": {
+                            "description": "The service provider's endpoint that is responsible for receiving and parsing a SAML assertion.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "description": "`AccessCreatedAt`",
+                            "format": "date-time",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "custom_attributes": {
+                            "items": {
+                              "description": "`AccessSamlSaasAppCustomAttributesItem`",
+                              "properties": {
+                                "friendly_name": {
+                                  "description": "The SAML FriendlyName of the attribute.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the attribute.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "name_format": {
+                                  "description": "A globally unique name for an identity or service provider.",
+                                  "enum": [
+                                    "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified",
+                                    "urn:oasis:names:tc:SAML:2.0:attrname-format:basic",
+                                    "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+                                  ],
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "required": {
+                                  "description": "If the attribute is required when building a SAML assertion.",
+                                  "nullable": true,
+                                  "type": "boolean"
+                                },
+                                "source": {
+                                  "description": "`AccessSamlSaasAppCustomAttributesItemSource`",
+                                  "nullable": true,
+                                  "properties": {
+                                    "name": {
+                                      "description": "The name of the IdP attribute.",
+                                      "nullable": true,
+                                      "type": "string"
+                                    },
+                                    "name_by_idp": {
+                                      "description": "A mapping from IdP ID to attribute name.",
+                                      "items": {
+                                        "description": "`AccessSamlSaasAppCustomAttributesItemSourceNameByIdpItem`",
+                                        "properties": {
+                                          "idp_id": {
+                                            "description": "The UID of the IdP.",
+                                            "nullable": true,
+                                            "type": "string"
+                                          },
+                                          "source_name": {
+                                            "description": "The name of the IdP provided attribute.",
+                                            "nullable": true,
+                                            "type": "string"
+                                          }
+                                        },
+                                        "type": "object"
+                                      },
+                                      "type": "array"
+                                    }
+                                  },
+                                  "type": "object"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "custom_claims": {
+                            "items": {
+                              "description": "`AccessOidcSaasAppCustomClaimsItem`",
+                              "properties": {
+                                "name": {
+                                  "description": "The name of the claim.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "required": {
+                                  "description": "If the claim is required when building an OIDC token.",
+                                  "nullable": true,
+                                  "type": "boolean"
+                                },
+                                "scope": {
+                                  "description": "The scope of the claim.",
+                                  "enum": [
+                                    "groups",
+                                    "profile",
+                                    "email",
+                                    "openid"
+                                  ],
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "source": {
+                                  "description": "`AccessOidcSaasAppCustomClaimsItemSource`",
+                                  "nullable": true,
+                                  "properties": {
+                                    "name": {
+                                      "description": "The name of the IdP claim.",
+                                      "nullable": true,
+                                      "type": "string"
+                                    },
+                                    "name_by_idp": {
+                                      "additionalProperties": {
+                                        "type": "string"
+                                      },
+                                      "description": "A mapping from IdP ID to claim name.",
+                                      "type": "object"
+                                    }
+                                  },
+                                  "type": "object"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "default_relay_state": {
+                            "description": "The URL that the user will be redirected to after a successful login for IDP initiated logins.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "grant_types": {
+                            "description": "The OIDC flows supported by this application",
+                            "items": {
+                              "description": "`AccessOidcSaasAppGrantTypesItem`",
+                              "enum": [
+                                "authorization_code",
+                                "authorization_code_with_pkce",
+                                "refresh_tokens",
+                                "hybrid",
+                                "implicit"
+                              ],
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "group_filter_regex": {
+                            "description": "A regex to filter Cloudflare groups returned in ID token and userinfo endpoint",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "hybrid_and_implicit_options": {
+                            "description": "`AccessOidcSaasAppHybridAndImplicitOptions`",
+                            "nullable": true,
+                            "properties": {
+                              "return_access_token_from_authorization_endpoint": {
+                                "description": "If an Access Token should be returned from the OIDC Authorization endpoint",
+                                "nullable": true,
+                                "type": "boolean"
+                              },
+                              "return_id_token_from_authorization_endpoint": {
+                                "description": "If an ID Token should be returned from the OIDC Authorization endpoint",
+                                "nullable": true,
+                                "type": "boolean"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "idp_entity_id": {
+                            "description": "The unique identifier for your SaaS application.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "name_id_format": {
+                            "description": "The format of the name identifier sent to the SaaS application.",
+                            "enum": [
+                              "id",
+                              "email"
+                            ],
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "name_id_transform_jsonata": {
+                            "description": "A [JSONata](https://jsonata.org/) expression that transforms an application's user identities into a NameID value for its SAML assertion. This expression should evaluate to a singular string. The output of this expression can override the `name_id_format` setting.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "public_key": {
+                            "description": "The Access public certificate that will be used to verify your identity.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "redirect_uris": {
+                            "description": "The permitted URL's for Cloudflare to return Authorization codes and Access/ID tokens",
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "refresh_token_options": {
+                            "description": "`AccessOidcSaasAppRefreshTokenOptions`",
+                            "nullable": true,
+                            "properties": {
+                              "lifetime": {
+                                "description": "How long a refresh token will be valid for after creation. Valid units are m,h,d. Must be longer than 1m.",
+                                "nullable": true,
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "saml_attribute_transform_jsonata": {
+                            "description": "A [JSONata] (https://jsonata.org/) expression that transforms an application's user identities into attribute assertions in the SAML response. The expression can transform id, email, name, and groups values. It can also transform fields listed in the saml_attributes or oidc_fields of the identity provider used to authenticate. The output of this expression must be a JSON object.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "scopes": {
+                            "description": "Define the user information shared with access, \"offline_access\" scope will be automatically enabled if refresh tokens are enabled",
+                            "items": {
+                              "description": "`AccessOidcSaasAppScopesItem`",
+                              "enum": [
+                                "openid",
+                                "groups",
+                                "email",
+                                "profile"
+                              ],
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "sp_entity_id": {
+                            "description": "A globally unique name for an identity or service provider.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "sso_endpoint": {
+                            "description": "The endpoint where your SaaS application will send login requests.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "updated_at": {
+                            "description": "`AccessUpdatedAt`",
+                            "format": "date-time",
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "same_site_cookie_attribute": {
+                        "description": "Sets the SameSite cookie setting, which provides increased security against CSRF attacks.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "scim_config": {
+                        "description": "Configuration for provisioning to this application via SCIM. This is currently in closed beta.",
+                        "nullable": true,
+                        "properties": {
+                          "authentication": {
+                            "description": "`AccessScimConfigAuthentication`",
+                            "nullable": true,
+                            "x-kubernetes-preserve-unknown-fields": true
+                          },
+                          "deactivate_on_delete": {
+                            "description": "If false, propagates DELETE requests to the target application for SCIM resources. If true, sets 'active' to false on the SCIM resource. Note: Some targets do not support DELETE operations.",
+                            "nullable": true,
+                            "type": "boolean"
+                          },
+                          "enabled": {
+                            "description": "Whether SCIM provisioning is turned on for this application.",
+                            "nullable": true,
+                            "type": "boolean"
+                          },
+                          "idp_uid": {
+                            "description": "The UID of the IdP to use as the source for SCIM resources to provision to this application.",
+                            "type": "string"
+                          },
+                          "mappings": {
+                            "description": "A list of mappings to apply to SCIM resources before provisioning them in this application. These can transform or filter the resources to be provisioned.",
+                            "items": {
+                              "description": "Transformations and filters applied to resources before they are provisioned in the remote SCIM service.",
+                              "properties": {
+                                "enabled": {
+                                  "description": "Whether or not this mapping is enabled.",
+                                  "nullable": true,
+                                  "type": "boolean"
+                                },
+                                "filter": {
+                                  "description": "A [SCIM filter expression](https://datatracker.ietf.org/doc/html/rfc7644#section-3.4.2.2) that matches resources that should be provisioned to this application.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "operations": {
+                                  "description": "Whether or not this mapping applies to creates, updates, or deletes.",
+                                  "nullable": true,
+                                  "properties": {
+                                    "create": {
+                                      "description": "Whether or not this mapping applies to create (POST) operations.",
+                                      "nullable": true,
+                                      "type": "boolean"
+                                    },
+                                    "delete": {
+                                      "description": "Whether or not this mapping applies to DELETE operations.",
+                                      "nullable": true,
+                                      "type": "boolean"
+                                    },
+                                    "update": {
+                                      "description": "Whether or not this mapping applies to update (PATCH/PUT) operations.",
+                                      "nullable": true,
+                                      "type": "boolean"
+                                    }
+                                  },
+                                  "type": "object"
+                                },
+                                "schema": {
+                                  "description": "Which SCIM resource type this mapping applies to.",
+                                  "type": "string"
+                                },
+                                "strictness": {
+                                  "description": "The level of adherence to outbound resource schemas when provisioning to this mapping. ‘Strict’ removes unknown values, while ‘passthrough’ passes unknown values to the target.",
+                                  "enum": [
+                                    "strict",
+                                    "passthrough"
+                                  ],
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "transform_jsonata": {
+                                  "description": "A [JSONata](https://jsonata.org/) expression that transforms the resource before provisioning it in the application.",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "schema"
+                              ],
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "remote_uri": {
+                            "description": "The base URI for the application's SCIM-compatible API.",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "idp_uid",
+                          "remote_uri"
+                        ],
+                        "type": "object"
+                      },
+                      "self_hosted_domains": {
+                        "description": "List of public domains that Access will secure. This field is deprecated in favor of `destinations` and will be supported until **November 21, 2025.** If `destinations` are provided, then `self_hosted_domains` will be ignored.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true,
+                        "type": "array"
+                      },
+                      "service_auth_401_redirect": {
+                        "description": "Returns a 401 status code when the request is blocked by a Service Auth policy.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "session_duration": {
+                        "description": "The amount of time that tokens issued for this application will be valid. Must be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. Note: unsupported for infrastructure type applications.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "skip_app_launcher_login_page": {
+                        "description": "Determines when to skip the App Launcher landing page.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "skip_interstitial": {
+                        "description": "Enables automatic authentication through cloudflared.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "tags": {
+                        "description": "The tags you want assigned to an application. Tags are used to filter applications in the App Launcher dashboard.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true,
+                        "type": "array"
+                      },
+                      "target_criteria": {
+                        "items": {
+                          "x-kubernetes-preserve-unknown-fields": true
+                        },
+                        "type": "array"
+                      },
+                      "type": {
+                        "nullable": true,
+                        "x-kubernetes-preserve-unknown-fields": true
+                      },
+                      "updated_at": {
+                        "description": "`AccessUpdatedAt`",
+                        "format": "date-time",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "use_clientless_isolation_app_launcher_url": {
+                        "description": "Determines if users can access this application via a clientless browser isolation URL.\nThis allows users to access private domains without connecting to Gateway. The option requires\nClientless Browser Isolation to be set up with policies that allow users of this application.",
+                        "nullable": true,
+                        "type": "boolean"
+                      }
+                    },
+                    "type": "object"
                   },
                   "conditions": {
                     "default": [],
@@ -5724,8 +6829,28 @@
                         "type": "object"
                       },
                       "caching": {
+                        "description": "`HyperdriveHyperdriveCaching`",
                         "nullable": true,
-                        "x-kubernetes-preserve-unknown-fields": true
+                        "properties": {
+                          "disabled": {
+                            "description": "Set to true to disable caching of SQL responses. Default is false.",
+                            "nullable": true,
+                            "type": "boolean"
+                          },
+                          "max_age": {
+                            "description": "Specify the maximum duration (in seconds) items should persist in the cache. Defaults to 60 seconds if not specified.",
+                            "format": "int64",
+                            "nullable": true,
+                            "type": "integer"
+                          },
+                          "stale_while_revalidate": {
+                            "description": "Specify the number of seconds the cache may serve a stale response. Defaults to 15 seconds if not specified.",
+                            "format": "int64",
+                            "nullable": true,
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
                       },
                       "mtls": {
                         "description": "mTLS configuration for the origin connection. Cannot be used with VPC Service origins; TLS must be managed on the VPC Service.",
@@ -5854,8 +6979,28 @@
                     "nullable": true,
                     "properties": {
                       "caching": {
+                        "description": "`HyperdriveHyperdriveCaching`",
                         "nullable": true,
-                        "x-kubernetes-preserve-unknown-fields": true
+                        "properties": {
+                          "disabled": {
+                            "description": "Set to true to disable caching of SQL responses. Default is false.",
+                            "nullable": true,
+                            "type": "boolean"
+                          },
+                          "max_age": {
+                            "description": "Specify the maximum duration (in seconds) items should persist in the cache. Defaults to 60 seconds if not specified.",
+                            "format": "int64",
+                            "nullable": true,
+                            "type": "integer"
+                          },
+                          "stale_while_revalidate": {
+                            "description": "Specify the number of seconds the cache may serve a stale response. Defaults to 15 seconds if not specified.",
+                            "format": "int64",
+                            "nullable": true,
+                            "type": "integer"
+                          }
+                        },
+                        "type": "object"
                       },
                       "created_on": {
                         "description": "Defines the creation time of the Hyperdrive configuration.",
@@ -5902,8 +7047,59 @@
                         "type": "string"
                       },
                       "origin": {
+                        "description": "`HyperdriveAtProviderOrigin`",
                         "nullable": true,
-                        "x-kubernetes-preserve-unknown-fields": true
+                        "properties": {
+                          "access_client_id": {
+                            "description": "Defines the Client ID of the Access token to use when connecting to the origin database.",
+                            "type": "string"
+                          },
+                          "access_client_secret": {
+                            "description": "Defines the Client Secret of the Access Token to use when connecting to the origin database. The API never returns this write-only value.",
+                            "type": "string"
+                          },
+                          "database": {
+                            "description": "Set the name of your origin database.",
+                            "type": "string"
+                          },
+                          "host": {
+                            "description": "Defines the host (hostname or IP) of your origin database.",
+                            "type": "string"
+                          },
+                          "password": {
+                            "description": "Set the password needed to access your origin database. The API never returns this write-only value.",
+                            "type": "string"
+                          },
+                          "port": {
+                            "description": "Defines the port of your origin database. Defaults to 5432 for PostgreSQL or 3306 for MySQL if not specified.",
+                            "format": "int64",
+                            "type": "integer"
+                          },
+                          "scheme": {
+                            "description": "Specifies the URL scheme used to connect to your origin database.",
+                            "enum": [
+                              "postgres",
+                              "postgresql",
+                              "mysql"
+                            ],
+                            "type": "string"
+                          },
+                          "service_id": {
+                            "description": "The identifier of the Workers VPC Service to connect through. Hyperdrive will egress through the specified VPC Service to reach the origin database.",
+                            "type": "string"
+                          },
+                          "user": {
+                            "description": "Set the user of your origin database.",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "database",
+                          "password",
+                          "scheme",
+                          "user"
+                        ],
+                        "type": "object"
                       },
                       "origin_connection_limit": {
                         "description": "The (soft) maximum number of connections the Hyperdrive is allowed to make to the origin database.\n\nMaximum allowed: 20 for free tier accounts, 100 for paid tier accounts.\nIf not specified, defaults to 20 for free tier and 60 for paid tier.\nCertain Cloudflare-managed origins may be permitted a higher limit.\nContact Cloudflare if you need a higher limit.",
@@ -9095,14 +10291,17 @@
                         "type": "string"
                       },
                       "max_upload_bytes": {
+                        "description": "The maximum uncompressed file size of a batch of logs. This setting value must be between `5 MB` and `1 GB`, or `0` to disable it. Note that you cannot set a minimum file size; this means that log files may be much smaller than this batch size.",
                         "nullable": true,
                         "type": "integer"
                       },
                       "max_upload_interval_seconds": {
+                        "description": "The maximum interval in seconds for log batches. This setting must be between 30 and 300 seconds (5 minutes), or `0` to disable it. Note that you cannot specify a minimum interval for log batches; this means that log files may be sent in shorter intervals than this.",
                         "nullable": true,
                         "type": "integer"
                       },
                       "max_upload_records": {
+                        "description": "The maximum number of log lines per batch. This setting must be between 1000 and 1,000,000 lines, or `0` to disable it. Note that you cannot specify a minimum number of log lines per batch; this means that log files may contain many fewer lines than this.",
                         "nullable": true,
                         "type": "integer"
                       },
@@ -9356,14 +10555,17 @@
                         "type": "string"
                       },
                       "max_upload_bytes": {
+                        "description": "The maximum uncompressed file size of a batch of logs. This setting value must be between `5 MB` and `1 GB`, or `0` to disable it. Note that you cannot set a minimum file size; this means that log files may be much smaller than this batch size.",
                         "nullable": true,
                         "type": "integer"
                       },
                       "max_upload_interval_seconds": {
+                        "description": "The maximum interval in seconds for log batches. This setting must be between 30 and 300 seconds (5 minutes), or `0` to disable it. Note that you cannot specify a minimum interval for log batches; this means that log files may be sent in shorter intervals than this.",
                         "nullable": true,
                         "type": "integer"
                       },
                       "max_upload_records": {
+                        "description": "The maximum number of log lines per batch. This setting must be between 1000 and 1,000,000 lines, or `0` to disable it. Note that you cannot specify a minimum number of log lines per batch; this means that log files may contain many fewer lines than this.",
                         "nullable": true,
                         "type": "integer"
                       },
@@ -11313,8 +12515,25 @@
                               },
                               "env_vars": {
                                 "additionalProperties": {
+                                  "description": "`PagesEnvVarsInnerValue`",
                                   "nullable": true,
-                                  "x-kubernetes-preserve-unknown-fields": true
+                                  "properties": {
+                                    "type": {
+                                      "enum": [
+                                        "plain_text",
+                                        "secret_text"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "value"
+                                  ],
+                                  "type": "object"
                                 },
                                 "description": "Environment variables used for builds and Pages Functions.",
                                 "nullable": true,
@@ -11613,8 +12832,25 @@
                               },
                               "env_vars": {
                                 "additionalProperties": {
+                                  "description": "`PagesEnvVarsInnerValue`",
                                   "nullable": true,
-                                  "x-kubernetes-preserve-unknown-fields": true
+                                  "properties": {
+                                    "type": {
+                                      "enum": [
+                                        "plain_text",
+                                        "secret_text"
+                                      ],
+                                      "type": "string"
+                                    },
+                                    "value": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "type",
+                                    "value"
+                                  ],
+                                  "type": "object"
                                 },
                                 "description": "Environment variables used for builds and Pages Functions.",
                                 "nullable": true,
@@ -12761,8 +13997,36 @@
                         "type": "object"
                       },
                       "edge_ips": {
+                        "description": "The anycast edge IP configuration for the hostname of this application.",
                         "nullable": true,
-                        "x-kubernetes-preserve-unknown-fields": true
+                        "properties": {
+                          "connectivity": {
+                            "description": "The IP versions supported for inbound connections on Spectrum anycast IPs.",
+                            "enum": [
+                              "all",
+                              "ipv4",
+                              "ipv6"
+                            ],
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "ips": {
+                            "description": "The array of customer owned IPs we broadcast via anycast for this hostname and application.",
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "type": {
+                            "enum": [
+                              "dynamic",
+                              "static"
+                            ],
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
                       },
                       "ip_firewall": {
                         "description": "Enables IP Access Rules for this application.\nNotes: Only available for TCP applications.",
@@ -12807,8 +14071,9 @@
                         "type": "object"
                       },
                       "origin_port": {
+                        "description": "The destination port at the origin. Only specified in conjunction with origin_dns. May use an integer to specify a single origin port, for example `1000`, or a string to specify a range of origin ports, for example `\"1000-2000\"`.\nNotes: If specifying a port range, the number of ports in the range must match the number of ports specified in the \"protocol\" field.",
                         "nullable": true,
-                        "x-kubernetes-preserve-unknown-fields": true
+                        "x-kubernetes-int-or-string": true
                       },
                       "protocol": {
                         "description": "The port configuration at Cloudflare's edge. May specify a single port, for example `\"tcp/1000\"`, or a range of ports, for example `\"tcp/1000-2000\"`.",
@@ -12901,8 +14166,176 @@
                 "nullable": true,
                 "properties": {
                   "atProvider": {
+                    "description": "`SpectrumApplicationAtProvider`",
                     "nullable": true,
-                    "x-kubernetes-preserve-unknown-fields": true
+                    "properties": {
+                      "argo_smart_routing": {
+                        "description": "Enables Argo Smart Routing for this application.\nNotes: Only available for TCP or UDP applications with traffic_type set to \"direct\".",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "created_on": {
+                        "description": "`SpectrumConfigCreated`",
+                        "format": "date-time",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "dns": {
+                        "description": "The name and type of DNS record for the Spectrum application.",
+                        "nullable": true,
+                        "properties": {
+                          "name": {
+                            "description": "The name of the DNS record associated with the application.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "type": {
+                            "description": "The type of DNS record associated with the application.",
+                            "enum": [
+                              "CNAME",
+                              "ADDRESS"
+                            ],
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "edge_ips": {
+                        "description": "The anycast edge IP configuration for the hostname of this application.",
+                        "nullable": true,
+                        "properties": {
+                          "connectivity": {
+                            "description": "The IP versions supported for inbound connections on Spectrum anycast IPs.",
+                            "enum": [
+                              "all",
+                              "ipv4",
+                              "ipv6"
+                            ],
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "ips": {
+                            "description": "The array of customer owned IPs we broadcast via anycast for this hostname and application.",
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "type": {
+                            "enum": [
+                              "dynamic",
+                              "static"
+                            ],
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "id": {
+                        "description": "`SpectrumConfigAppIdentifier`",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "ip_firewall": {
+                        "description": "Enables IP Access Rules for this application.\nNotes: Only available for TCP applications.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "modified_on": {
+                        "description": "`SpectrumConfigModified`",
+                        "format": "date-time",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "origin_direct": {
+                        "description": "List of origin IP addresses. Array may contain multiple IP addresses for load balancing.",
+                        "items": {
+                          "type": "string"
+                        },
+                        "nullable": true,
+                        "type": "array"
+                      },
+                      "origin_dns": {
+                        "description": "The name and type of DNS record for the Spectrum application.",
+                        "nullable": true,
+                        "properties": {
+                          "name": {
+                            "description": "The name of the DNS record associated with the origin.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "ttl": {
+                            "description": "The TTL of our resolution of your DNS record in seconds.",
+                            "format": "int64",
+                            "nullable": true,
+                            "type": "integer"
+                          },
+                          "type": {
+                            "description": "The type of DNS record associated with the origin. \"\" is used to specify a combination of A/AAAA records.",
+                            "enum": [
+                              "",
+                              "A",
+                              "AAAA",
+                              "SRV"
+                            ],
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "origin_port": {
+                        "description": "The destination port at the origin. Only specified in conjunction with origin_dns. May use an integer to specify a single origin port, for example `1000`, or a string to specify a range of origin ports, for example `\"1000-2000\"`.\nNotes: If specifying a port range, the number of ports in the range must match the number of ports specified in the \"protocol\" field.",
+                        "nullable": true,
+                        "x-kubernetes-int-or-string": true
+                      },
+                      "protocol": {
+                        "description": "The port configuration at Cloudflare's edge. May specify a single port, for example `\"tcp/1000\"`, or a range of ports, for example `\"tcp/1000-2000\"`.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "proxy_protocol": {
+                        "description": "Enables Proxy Protocol to the origin. Refer to [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/) for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple Proxy Protocol.",
+                        "enum": [
+                          "off",
+                          "v1",
+                          "v2",
+                          "simple"
+                        ],
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "tls": {
+                        "description": "The type of TLS termination associated with the application.",
+                        "enum": [
+                          "off",
+                          "flexible",
+                          "full",
+                          "strict"
+                        ],
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "traffic_type": {
+                        "description": "Determines how data travels from the edge to your origin. When set to \"direct\", Spectrum will send traffic directly to your origin, and the application's type is derived from the `protocol`. When set to \"http\" or \"https\", Spectrum will apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and the application type matches this property exactly.",
+                        "enum": [
+                          "direct",
+                          "http",
+                          "https"
+                        ],
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "virtual_network_id": {
+                        "description": "Optional UUID of a virtual network for routing origin traffic through tunnel virtual networks.",
+                        "format": "uuid",
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
                   },
                   "conditions": {
                     "default": [],
