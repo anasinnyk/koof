@@ -50,7 +50,7 @@ pub async fn patch_guarded<R: ManagedResource>(
     patch(client, resource, &changes).await
 }
 
-/// Merge-patches the status subresource.
+/// Patches the status subresource.
 ///
 /// # Errors
 ///
@@ -58,13 +58,13 @@ pub async fn patch_guarded<R: ManagedResource>(
 pub async fn patch_status<R: ManagedResource>(
     client: &kube::Client,
     resource: &R,
-    patch: &Value,
+    patch: &Patch<Value>,
 ) -> Result<(), ReconcileError> {
     api(client, resource)
         .patch_status(
             &kube::ResourceExt::name_any(resource),
             &PatchParams::default(),
-            &Patch::Merge(patch),
+            patch,
         )
         .await?;
     Ok(())
