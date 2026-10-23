@@ -489,7 +489,13 @@ fn walk_properties(
             .into_iter()
             .flatten()
         {
-            walk_properties(schemas, variant, visiting, visit);
+            if keyword == "allOf" {
+                walk_properties(schemas, variant, visiting, visit);
+            } else {
+                walk_properties(schemas, variant, visiting, &mut |name, property, _| {
+                    visit(name, property, false);
+                });
+            }
         }
     }
 }
