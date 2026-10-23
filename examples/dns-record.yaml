@@ -3,15 +3,15 @@
 apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
 kind: DNSRecord
 metadata:
-  name: www-nas1k-dev
+  name: rbs-nas1k-dev
   namespace: default
 spec:
   forProvider:
     zoneRef:
       name: nas1k-dev
-    type: A
-    name: www.nas1k.dev
-    content: 192.0.2.1
-    ttl: 1 # automatic
-    proxied: true
+    type: TXT
+    name: _demo.nas1k.dev
+    content: "Rust BootCamp Summer 2026"
+    ttl: 1
+    proxied: false
     comment: managed by koof
