@@ -3,7 +3,7 @@ use crate::{
     controller::{ControllerContext, run},
     http::HttpClient,
     metrics::Metrics,
-    resource::ManagedResource,
+    resource::{ManagedResource, ResourceDescriptor},
 };
 use futures::future::BoxFuture;
 use kube::runtime::events::{Recorder, Reporter};
@@ -20,7 +20,7 @@ type ControllerFn = fn(Arc<ControllerContext>) -> BoxFuture<'static, ()>;
 
 pub struct App {
     provider: &'static ProviderInfo,
-    controllers: Vec<(&'static str, ControllerFn)>,
+    controllers: Vec<(&'static ResourceDescriptor, ControllerFn)>,
 }
 
 impl App {
@@ -40,7 +40,7 @@ impl App {
     #[must_use]
     pub fn controller<R: ManagedResource>(mut self) -> Self {
         self.controllers
-            .push((R::descriptor().kind, |context| Box::pin(run::<R>(context))));
+            .push((R::descriptor(), |context| Box::pin(run::<R>(context))));
         self
     }
 
@@ -70,14 +70,23 @@ impl App {
             instance: config.pod_name.clone(),
         };
         let metrics = Arc::new(Metrics::new());
+        let descriptors: Vec<&'static ResourceDescriptor> = self
+            .controllers
+            .iter()
+            .map(|(descriptor, _)| *descriptor)
+            .collect();
         let context = Arc::new(ControllerContext::new(
             kube_client.clone(),
             HttpClient::new(http, config.base_url.clone()).with_metrics(metrics.clone()),
             Recorder::new(kube_client, reporter),
             metrics,
+            descriptors.clone(),
         ));
 
-        let kinds: Vec<&'static str> = self.controllers.iter().map(|(kind, _)| *kind).collect();
+        let kinds: Vec<&'static str> = descriptors
+            .iter()
+            .map(|descriptor| descriptor.kind)
+            .collect();
         let listener = tokio::net::TcpListener::bind(&config.metrics_addr)
             .await
             .map_err(|source| AppError::Bind {

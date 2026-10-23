@@ -2,7 +2,9 @@ use super::http::Auth;
 use crate::{
     error::{CredentialError, ResolveValueError},
     reference::{ClusterSecretKeySelector, SecretKeySelector},
-    resource::{AuthScheme, CredentialSource, ManagedResource, ResourceDescriptor, ValueExpr},
+    resource::{
+        AuthScheme, CredentialSource, ManagedResource, Reference, ResourceDescriptor, ValueExpr,
+    },
 };
 use futures::future::BoxFuture;
 use k8s_openapi::api::core::v1::Secret;
@@ -88,6 +90,41 @@ struct KindedReference {
     kind: Option<String>,
 }
 
+/// The kind and name `reference` points at in `value`; `Ok(None)` when it is not set.
+///
+/// # Errors
+///
+/// Returns [`ResolveValueError`] when the reference is malformed or names a kind it
+/// cannot point at.
+pub fn target(
+    value: &Value,
+    reference: &Reference,
+) -> Result<Option<(&'static ResourceDescriptor, String)>, ResolveValueError> {
+    let Some(target) = non_null(value, reference.from)
+        .cloned()
+        .map(serde_json::from_value::<KindedReference>)
+        .transpose()?
+    else {
+        return Ok(None);
+    };
+    let descriptor = match target.kind.as_deref() {
+        None => reference.targets.first(),
+        Some(kind) => reference
+            .targets
+            .iter()
+            .find(|descriptor| descriptor.kind == kind),
+    }
+    .copied()
+    .ok_or_else(|| {
+        ResolveValueError::Missing(format!(
+            "resource reference {} cannot point at kind {}",
+            reference.from,
+            target.kind.as_deref().unwrap_or_default()
+        ))
+    })?;
+    Ok(Some((descriptor, target.name)))
+}
+
 /// Follows the named references from `node` and returns the resource at the end.
 ///
 /// # Errors
@@ -107,30 +144,8 @@ pub async fn traverse(
                 current.descriptor.kind
             ))
         })?;
-        let target: KindedReference = non_null(&current.value, reference.from)
-            .cloned()
-            .map(serde_json::from_value)
-            .transpose()?
-            .ok_or_else(|| {
-                ResolveValueError::Missing(format!(
-                    "resource reference {} is not set",
-                    reference.from
-                ))
-            })?;
-        let descriptor = match target.kind.as_deref() {
-            None => reference.targets.first(),
-            Some(kind) => reference
-                .targets
-                .iter()
-                .find(|descriptor| descriptor.kind == kind),
-        }
-        .copied()
-        .ok_or_else(|| {
-            ResolveValueError::Missing(format!(
-                "resource reference {} cannot point at kind {}",
-                reference.from,
-                target.kind.as_deref().unwrap_or_default()
-            ))
+        let (descriptor, name) = target(&current.value, reference)?.ok_or_else(|| {
+            ResolveValueError::Missing(format!("resource reference {} is not set", reference.from))
         })?;
 
         let api_resource = (descriptor.api_resource)();
@@ -149,7 +164,7 @@ pub async fn traverse(
                 }
             };
 
-        let object = api.get(&target.name).await?;
+        let object = api.get(&name).await?;
         current = Node {
             descriptor,
             namespace,
