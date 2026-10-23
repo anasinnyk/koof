@@ -83,14 +83,14 @@ impl HttpClient {
 
     /// Sends `O` with the given path parameters and optional body.
     ///
-    /// `404 Not Found` becomes `Ok(None)`; an empty successful body decodes as JSON
-    /// `null`.
+    /// `404 Not Found` on `GET` or `DELETE` becomes `Ok(None)`; an empty successful
+    /// body decodes as JSON `null`.
     ///
     /// # Errors
     ///
     /// Returns [`HttpError`] when a path parameter is missing, the request fails, the
-    /// status is neither successful nor `404` (the body is kept), or the response
-    /// cannot be decoded.
+    /// status is neither successful nor a `GET`/`DELETE` `404` (the body is kept), or
+    /// the response cannot be decoded.
     pub async fn send<O: Operation>(
         &self,
         auth: &Auth,
@@ -161,7 +161,7 @@ impl HttpClient {
     }
 
     /// Like [`send`](Self::send) but ignores the response body: `Ok(true)` on
-    /// success, `Ok(false)` on `404`. For operations whose body is irrelevant
+    /// success, `Ok(false)` on a `GET`/`DELETE` `404`. For operations whose body is irrelevant
     /// (delete), so an unexpected body shape cannot fail the call.
     ///
     /// # Errors
@@ -209,7 +209,9 @@ impl HttpClient {
 
         let response = request.send().await?;
         let status = response.status();
-        if status == reqwest::StatusCode::NOT_FOUND {
+        if status == reqwest::StatusCode::NOT_FOUND
+            && matches!(O::METHOD, reqwest::Method::GET | reqwest::Method::DELETE)
+        {
             return Ok(None);
         }
         let retry_after = response
