@@ -148,6 +148,9 @@ fn merge_scalars(node: &mut Map<String, Value>, variants: &[Value]) {
             Some(scalar @ ("string" | "integer" | "number" | "boolean")) => {
                 types.insert(scalar);
             }
+            None if variant.get("x-kubernetes-int-or-string") == Some(&Value::Bool(true)) => {
+                types.extend(["integer", "string"]);
+            }
             _ => mixed = true,
         }
         nullable |= variant.get("nullable") == Some(&Value::Bool(true));
