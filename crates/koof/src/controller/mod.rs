@@ -35,6 +35,8 @@ const RESYNC: Duration = Duration::from_mins(5);
 const MISSING: Duration = Duration::from_secs(30);
 const WAITING: Duration = Duration::from_secs(15);
 const CONFIRM: Duration = Duration::from_secs(5);
+const ORPHANED: &str = "External resource kept (orphaned)";
+const NOT_DELETABLE: &str = "External resource kept: the API has no delete operation";
 const RECONCILE_RETRY: RetryPolicy = RetryPolicy {
     base: Duration::from_secs(5),
     max: RESYNC,
@@ -113,8 +115,11 @@ async fn reconcile_inner<R: ManagedResource>(
             return in_use(context, resource, &dependents).await;
         }
     }
+    if deleting && R::descriptor().delete.is_none() {
+        return release(context, resource, Some(NOT_DELETABLE)).await;
+    }
     if deleting && policy::orphans_on_delete(resource.management()) {
-        return release(context, resource, true).await;
+        return release(context, resource, Some(ORPHANED)).await;
     }
 
     let observation = external::observe(context, resource).await?;
@@ -160,7 +165,9 @@ async fn reconcile_inner<R: ManagedResource>(
     match decision.action {
         PolicyAction::None => {}
         PolicyAction::Delete => return delete_external(context, resource).await,
-        PolicyAction::Finalize => return release(context, resource, observation.exists).await,
+        PolicyAction::Finalize => {
+            return release(context, resource, observation.exists.then_some(ORPHANED)).await;
+        }
         PolicyAction::Create if R::descriptor().create.is_some() => {
             return create_external(context, resource).await;
         }
@@ -250,19 +257,12 @@ async fn in_use<R: ManagedResource>(
 async fn release<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
-    orphaned: bool,
+    orphaned: Option<&str>,
 ) -> Result<Action, ReconcileError> {
-    if orphaned {
+    if let Some(note) = orphaned {
         tracing::info!("external resource orphaned");
         context.metrics.action(R::descriptor().kind, "orphaned");
-        publish(
-            context,
-            resource,
-            EventType::Normal,
-            "Orphaned",
-            "External resource kept (orphaned)",
-        )
-        .await;
+        publish(context, resource, EventType::Normal, "Orphaned", note).await;
     }
     finalizer::remove(&context.kube_client, resource).await?;
     context

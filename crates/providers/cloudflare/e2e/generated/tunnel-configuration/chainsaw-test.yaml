@@ -48,7 +48,6 @@ spec:
               zerotrust.cloudflare.kube.nas1k.dev/external-name: ($namespace)
             name: tunnel-configuration
           spec:
-            deletionPolicy: Orphan
             forProvider:
               config:
                 ingress:
