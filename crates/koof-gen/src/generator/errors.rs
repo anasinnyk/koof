@@ -8,6 +8,9 @@ pub enum GeneratorError {
     #[error("no generated type for schema {0}")]
     UnknownType(String),
 
+    #[error("e2e dependencies form a cycle: {0}; remove `test` or break the cycle")]
+    ReferenceCycle(String),
+
     #[error("invalid Rust identifier: {0}")]
     InvalidIdentifier(String),
 

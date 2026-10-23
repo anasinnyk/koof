@@ -18,15 +18,19 @@ pub fn generate_tests(provider: &Provider<'_>) -> Result<Vec<GeneratedFile>, Gen
                 path: format!("e2e/generated/{name}/chainsaw-test.yaml").into(),
                 content: format!(
                     "{HEADER}{}",
-                    serde_yaml::to_string(&test(provider, resource, &name))?
+                    serde_yaml::to_string(&test(provider, resource, &name)?)?
                 ),
             })
         })
         .collect()
 }
 
-fn test(provider: &Provider<'_>, resource: &Resource<'_>, name: &str) -> Value {
-    let objects = dependency_order(provider, resource);
+fn test(
+    provider: &Provider<'_>,
+    resource: &Resource<'_>,
+    name: &str,
+) -> Result<Value, GeneratorError> {
+    let objects = dependency_order(provider, resource)?;
 
     let mut create: Vec<Value> = Vec::new();
     if objects.iter().any(|object| {
@@ -76,36 +80,44 @@ fn test(provider: &Provider<'_>, resource: &Resource<'_>, name: &str) -> Value {
         } } }] }));
     }
 
-    json!({
+    Ok(json!({
         "apiVersion": "chainsaw.kyverno.io/v1alpha1",
         "kind": "Test",
         "metadata": { "name": name },
         "spec": { "steps": steps },
-    })
+    }))
 }
 
 fn dependency_order<'p, 'a>(
     provider: &'p Provider<'a>,
     resource: &'p Resource<'a>,
-) -> Vec<&'p Resource<'a>> {
+) -> Result<Vec<&'p Resource<'a>>, GeneratorError> {
     fn visit<'p, 'a>(
         provider: &'p Provider<'a>,
         resource: &'p Resource<'a>,
         order: &mut Vec<&'p Resource<'a>>,
-    ) {
+        path: &mut Vec<&'p str>,
+    ) -> Result<(), GeneratorError> {
         if order.iter().any(|seen| seen.name == resource.name) {
-            return;
+            return Ok(());
         }
+        if path.contains(&resource.name.0.as_str()) {
+            path.push(&resource.name.0);
+            return Err(GeneratorError::ReferenceCycle(path.join(" -> ")));
+        }
+        path.push(&resource.name.0);
         for reference in &resource.references {
             if let Some(target) = find(provider, &reference.targets[0]) {
-                visit(provider, target, order);
+                visit(provider, target, order, path)?;
             }
         }
+        path.pop();
         order.push(resource);
+        Ok(())
     }
     let mut order = Vec::new();
-    visit(provider, resource, &mut order);
-    order
+    visit(provider, resource, &mut order, &mut Vec::new())?;
+    Ok(order)
 }
 
 fn find<'p, 'a>(
