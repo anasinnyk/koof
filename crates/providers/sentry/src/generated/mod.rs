@@ -30,6 +30,7 @@ pub fn controllers(app: koof::App) -> koof::App {
         .controller::<service_hook::ServiceHook>()
         .controller::<team::Team>()
 }
+#[cfg(feature = "fake")]
 #[must_use]
 pub fn fake() -> koof::fake::Fake {
     koof::fake::Fake::new()
