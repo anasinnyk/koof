@@ -22,7 +22,7 @@ actions:
             type: external_name
 
         credentials:
-          security_scheme: api_token
+          securityScheme: api_token
           source:
             type: secret_key_selector
             path: spec.forProvider.apiTokenSecretRef
@@ -47,7 +47,7 @@ actions:
         lifecycle: observe
         response:
           path: result
-        path_parameters:
+        pathParameters:
           account_id:
             type: external_name
         result:
@@ -77,7 +77,7 @@ actions:
             type:
               type: field
               path: status.atProvider.type
-        path_parameters:
+        pathParameters:
           account_id:
             type: external_name
         result:
@@ -89,7 +89,7 @@ actions:
       x-kube-operation:
         resource: account
         lifecycle: delete
-        path_parameters:
+        pathParameters:
           account_id:
             type: external_name
         result:

@@ -31,7 +31,7 @@ actions:
             target: account
 
         credentials:
-          security_scheme: api_token
+          securityScheme: api_token
           source:
             type: related
             via: [account]
@@ -67,7 +67,7 @@ actions:
         lifecycle: observe
         response:
           path: result
-        path_parameters:
+        pathParameters:
           zone_id:
             type: external_name
         result:
@@ -95,7 +95,7 @@ actions:
       x-kube-operation:
         resource: zone
         lifecycle: update
-        path_parameters:
+        pathParameters:
           zone_id:
             type: external_name
         result:
@@ -107,7 +107,7 @@ actions:
       x-kube-operation:
         resource: zone
         lifecycle: delete
-        path_parameters:
+        pathParameters:
           zone_id:
             type: external_name
         result:

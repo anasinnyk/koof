@@ -34,7 +34,7 @@ actions:
             target: account
 
         credentials:
-          security_scheme: api_token
+          securityScheme: api_token
           source:
             type: related
             via: [account]
@@ -49,7 +49,7 @@ actions:
         lifecycle: observe
         response:
           path: result
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [account]
@@ -62,7 +62,7 @@ actions:
       x-kube-operation:
         resource: notification_policy
         lifecycle: create
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [account]
@@ -76,7 +76,7 @@ actions:
       x-kube-operation:
         resource: notification_policy
         lifecycle: update
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [account]
@@ -89,7 +89,7 @@ actions:
       x-kube-operation:
         resource: notification_policy
         lifecycle: delete
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [account]

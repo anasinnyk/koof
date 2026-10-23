@@ -25,7 +25,7 @@ actions:
             type: external_name
 
         credentials:
-          security_scheme: auth_token
+          securityScheme: auth_token
           source:
             type: secret_key_selector
             path: spec.forProvider.authTokenSecretRef
@@ -47,7 +47,7 @@ actions:
       x-kube-operation:
         resource: organization
         lifecycle: observe
-        path_parameters:
+        pathParameters:
           organization_id_or_slug:
             type: external_name
 
@@ -56,6 +56,6 @@ actions:
       x-kube-operation:
         resource: organization
         lifecycle: update
-        path_parameters:
+        pathParameters:
           organization_id_or_slug:
             type: external_name
