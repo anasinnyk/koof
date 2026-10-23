@@ -125,7 +125,17 @@ fn normalize_object(map: &mut Map<String, Value>) {
             }
         }
         _ => {
-            let schema = Value::Object(std::mem::take(map));
+            let mut schema = std::mem::take(map);
+            let annotations: Vec<String> = schema
+                .keys()
+                .filter(|key| *key == "readOnly" || *key == "writeOnly" || key.starts_with("x-"))
+                .cloned()
+                .collect();
+            for key in annotations {
+                if let Some(value) = schema.remove(&key) {
+                    map.insert(key, value);
+                }
+            }
             map.insert(
                 "anyOf".to_owned(),
                 serde_json::json!([schema, { "type": "null" }]),
