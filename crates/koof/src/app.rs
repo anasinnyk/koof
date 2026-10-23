@@ -105,7 +105,7 @@ impl App {
             _ = controllers => {}
             result = server => {
                 if let Err(error) = result {
-                    tracing::error!(%error, "metrics server failed");
+                    tracing::error!(error = crate::error::chain(&error), "metrics server failed");
                 }
             }
         }
@@ -115,16 +115,16 @@ impl App {
 
 #[derive(Debug, thiserror::Error)]
 pub enum AppError {
-    #[error("invalid configuration: {0}")]
+    #[error("invalid configuration")]
     Config(#[from] config::ConfigError),
 
-    #[error("cannot create the HTTP client: {0}")]
+    #[error("cannot create the HTTP client")]
     HttpClient(#[source] reqwest::Error),
 
-    #[error("cannot connect to Kubernetes: {0}")]
+    #[error("cannot connect to Kubernetes")]
     Kubernetes(#[from] kube::Error),
 
-    #[error("cannot listen on {address}: {source}")]
+    #[error("cannot listen on {address}")]
     Bind {
         address: String,
         #[source]

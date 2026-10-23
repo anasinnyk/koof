@@ -76,17 +76,21 @@ pub async fn reconcile<R: ManagedResource>(
                 Ok(action)
             }
             Err(error) => {
-                tracing::warn!(%error, failure = ?retry::classify(&error), "reconcile failed");
+                let message = crate::error::chain(&error);
+                tracing::warn!(error = message, failure = ?retry::classify(&error), "reconcile failed");
                 if let Err(status_error) = record_failure(&context, resource.as_ref(), &error).await
                 {
-                    tracing::warn!(error = %status_error, "cannot record failure in status");
+                    tracing::warn!(
+                        error = crate::error::chain(&status_error),
+                        "cannot record failure in status"
+                    );
                 }
                 publish(
                     &context,
                     resource.as_ref(),
                     EventType::Warning,
                     "ReconcileError",
-                    &error.to_string(),
+                    &message,
                 )
                 .await;
                 Err(error)

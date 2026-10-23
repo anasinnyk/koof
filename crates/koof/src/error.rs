@@ -1,6 +1,6 @@
 #[derive(Debug, thiserror::Error)]
 pub enum CredentialError {
-    #[error("Kubernetes API request failed: {0}")]
+    #[error("Kubernetes API request failed")]
     Kubernetes(#[from] kube::Error),
 
     #[error("{0}")]
@@ -20,7 +20,7 @@ pub enum CredentialError {
 
 #[derive(Debug, thiserror::Error)]
 pub enum ResolveValueError {
-    #[error("failed to serialize resource: {0}")]
+    #[error("failed to serialize resource")]
     Serialization(#[from] serde_json::Error),
 
     #[error("{0}")]
@@ -32,7 +32,7 @@ pub enum ResolveValueError {
     #[error("reference not ready: {0}")]
     ReferenceNotReady(String),
 
-    #[error("Kubernetes API request failed: {0}")]
+    #[error("Kubernetes API request failed")]
     Kubernetes(#[from] kube::Error),
 }
 
@@ -47,10 +47,10 @@ pub enum ReconcileError {
     #[error(transparent)]
     Http(#[from] crate::http::HttpError),
 
-    #[error("JSON (de)serialization failed: {0}")]
+    #[error("JSON (de)serialization failed")]
     Serialization(#[from] serde_json::Error),
 
-    #[error("Kubernetes API request failed: {0}")]
+    #[error("Kubernetes API request failed")]
     Kubernetes(#[from] kube::Error),
 
     #[error(transparent)]
@@ -64,4 +64,19 @@ pub enum ReconcileError {
 
     #[error("{0}")]
     CreateIncomplete(String),
+}
+
+#[must_use]
+pub fn chain(error: &dyn std::error::Error) -> String {
+    let mut message = error.to_string();
+    let mut source = error.source();
+    while let Some(cause) = source {
+        let cause_message = cause.to_string();
+        if !message.contains(&cause_message) {
+            message.push_str(": ");
+            message.push_str(&cause_message);
+        }
+        source = cause.source();
+    }
+    message
 }

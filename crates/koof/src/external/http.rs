@@ -43,7 +43,7 @@ pub enum HttpError {
     #[error("invalid path parameter {name}: {value:?}")]
     InvalidParameter { name: String, value: String },
 
-    #[error("HTTP request failed: {0}")]
+    #[error("HTTP request failed")]
     Transport(#[from] reqwest::Error),
 
     #[error("{method} {path} returned {status}: {body}")]
@@ -55,7 +55,7 @@ pub enum HttpError {
         retry_after: Option<Duration>,
     },
 
-    #[error("failed to decode response: {0}")]
+    #[error("failed to decode response")]
     Decode(#[from] serde_json::Error),
 }
 
@@ -128,7 +128,10 @@ impl HttpClient {
                 Err(_) => span.record("status", "error"),
             };
             if let Err(error) = &result {
-                tracing::debug!(%error, "provider request failed");
+                tracing::debug!(
+                    error = crate::error::chain(error),
+                    "provider request failed"
+                );
             }
             result
         }

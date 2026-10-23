@@ -77,7 +77,7 @@ pub async fn record_failure<R: ManagedResource>(
     set_conditions(
         context,
         resource,
-        vec![ConditionSpec::reconcile_error(error.to_string())],
+        vec![ConditionSpec::reconcile_error(crate::error::chain(error))],
     )
     .await
 }
