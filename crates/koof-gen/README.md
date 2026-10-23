@@ -35,10 +35,10 @@ actions:
         # Optional HTTP client defaults; KOOF_HTTP__* variables override them.
         http:
           timeout: 30s
-          connect_timeout: 10s
-          pool_idle_timeout: 90s
-          pool_max_idle_per_host: 16
-          user_agent: example-operator
+          connectTimeout: 10s
+          poolIdleTimeout: 90s
+          poolMaxIdlePerHost: 16
+          userAgent: example-operator
 ```
 
 A resource: `x-kube-resource` on its schema (usually the create request body)
@@ -60,7 +60,7 @@ actions:
             from: spec.forProvider.accountRef
             target: account
         credentials:
-          security_scheme: api_token
+          securityScheme: api_token
           source:
             type: related
             via: [account]
@@ -74,7 +74,7 @@ actions:
         lifecycle: observe
         response:
           path: result
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [account]
@@ -92,11 +92,11 @@ reference resources that have one too.
 
 `lifecycle` is one of `observe` (required), `create`, `update` and `delete`.
 For APIs that soft-delete (the observe endpoint keeps answering `200`),
-`response.deleted_when: deleted_at` on `observe` treats the resource as gone once
+`response.deletedWhen: deleted_at` on `observe` treats the resource as gone once
 that field is set.
 Request bodies default to `spec.forProvider`; `request.set` adds values such as
 identifiers of referenced resources. `x-kube-field` on a property sets `ignored`
-or `late_initialize: false`.
+or `lateInitialize: false`.
 
 ## Provider crate
 
