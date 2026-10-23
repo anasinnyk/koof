@@ -45,6 +45,11 @@ impl ConditionSpec {
     }
 
     #[must_use]
+    pub fn in_use(message: impl Into<String>) -> Self {
+        Self::new(READY, "False", "InUse", message)
+    }
+
+    #[must_use]
     pub fn reconcile_success() -> Self {
         Self::new(SYNCED, "True", "ReconcileSuccess", "")
     }

@@ -1,4 +1,4 @@
-use crate::{external::http::HttpClient, metrics::Metrics};
+use crate::{external::http::HttpClient, metrics::Metrics, resource::ResourceDescriptor};
 use kube::runtime::events::Recorder;
 use std::{
     collections::{BTreeSet, HashMap},
@@ -12,6 +12,7 @@ pub struct ControllerContext {
     pub metrics: Arc<Metrics>,
     pub backoff: Backoff,
     pub synced: SyncTracker,
+    pub descriptors: Vec<&'static ResourceDescriptor>,
 }
 
 impl ControllerContext {
@@ -21,6 +22,7 @@ impl ControllerContext {
         provider_client: HttpClient,
         recorder: Recorder,
         metrics: Arc<Metrics>,
+        descriptors: Vec<&'static ResourceDescriptor>,
     ) -> Self {
         Self {
             kube_client,
@@ -29,6 +31,7 @@ impl ControllerContext {
             metrics,
             backoff: Backoff::default(),
             synced: SyncTracker::default(),
+            descriptors,
         }
     }
 }
