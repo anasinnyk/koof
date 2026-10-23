@@ -45,6 +45,9 @@ pub(super) async fn dependents<R: ManagedResource>(
                 if let Ok(Some((kind, referenced))) = resolve::target(&value, reference)
                     && std::ptr::eq(kind, target)
                     && referenced == name
+                    && !(std::ptr::eq(*descriptor, target)
+                        && object.name_any() == name
+                        && object.namespace() == namespace)
                 {
                     dependents.push(format!(
                         "{} {}/{}",
