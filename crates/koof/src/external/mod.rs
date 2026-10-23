@@ -220,7 +220,9 @@ fn not_created(error: &HttpError) -> bool {
     match error {
         HttpError::Status { status, .. } => status.is_client_error(),
         HttpError::Transport(error) => error.is_connect(),
-        HttpError::MissingParameter(_) | HttpError::Decode(_) => false,
+        HttpError::MissingParameter(_)
+        | HttpError::InvalidParameter { .. }
+        | HttpError::Decode(_) => false,
     }
 }
 

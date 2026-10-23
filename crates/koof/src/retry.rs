@@ -36,9 +36,10 @@ fn http(error: &HttpError) -> Failure {
         } if *status == reqwest::StatusCode::TOO_MANY_REQUESTS || status.is_server_error() => {
             Failure::Transient(*retry_after)
         }
-        HttpError::Status { .. } | HttpError::MissingParameter(_) | HttpError::Decode(_) => {
-            Failure::Permanent
-        }
+        HttpError::Status { .. }
+        | HttpError::MissingParameter(_)
+        | HttpError::InvalidParameter { .. }
+        | HttpError::Decode(_) => Failure::Permanent,
     }
 }
 

@@ -40,6 +40,9 @@ pub enum HttpError {
     #[error("unresolved path parameter in {0}")]
     MissingParameter(String),
 
+    #[error("invalid path parameter {name}: {value:?}")]
+    InvalidParameter { name: String, value: String },
+
     #[error("HTTP request failed: {0}")]
     Transport(#[from] reqwest::Error),
 
@@ -233,6 +236,12 @@ impl HttpClient {
 fn render_path(template: &str, parameters: &[(&str, &str)]) -> Result<String, HttpError> {
     let mut path = template.to_owned();
     for (name, value) in parameters {
+        if matches!(*value, "." | "..") {
+            return Err(HttpError::InvalidParameter {
+                name: (*name).to_owned(),
+                value: (*value).to_owned(),
+            });
+        }
         path = path.replace(&format!("{{{name}}}"), &urlencoding::encode(value));
     }
     if path.contains('{') {
