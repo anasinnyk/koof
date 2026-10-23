@@ -24,7 +24,6 @@ spec:
               sentry.kube.nas1k.dev/external-name: ($namespace)
             name: ($namespace)
           spec:
-            deletionPolicy: Orphan
             forProvider:
               authTokenSecretRef:
                 key: token
