@@ -28,9 +28,9 @@ run() {
   local provider="$1"
   local bin="$root/target/debug"
 
-  cargo build --quiet --manifest-path "$root/Cargo.toml" -p "$provider-provider" --bins
-  "$bin/manifests" | kubectl apply --server-side --force-conflicts -f - >/dev/null
-  kubectl wait --for condition=established crd --all --timeout=60s >/dev/null
+  cargo build --quiet --manifest-path "$root/Cargo.toml" -p "$provider-provider" --bins || return 1
+  "$bin/manifests" | kubectl apply --server-side --force-conflicts -f - >/dev/null || return 1
+  kubectl wait --for condition=established crd --all --timeout=60s >/dev/null || return 1
 
   KOOF_FAKE_ADDR="127.0.0.1:$fake_port" "$bin/fake" >"$logs/$provider-fake.log" 2>&1 &
   pids+=($!)
@@ -50,7 +50,6 @@ run() {
   local status=0
   chainsaw test --config "$root/.chainsaw.yaml" --test-dir "$root/crates/providers/$provider/e2e" \
     "${chainsaw_args[@]+"${chainsaw_args[@]}"}" || status=$?
-  stop
   if [[ $status -ne 0 ]]; then
     echo "logs: $logs/$provider-controller.log, $logs/$provider-fake.log" >&2
   fi
@@ -77,6 +76,7 @@ fi
 failed=()
 for provider in "${providers[@]}"; do
   run "$provider" || failed+=("$provider")
+  stop
 done
 if [[ ${#failed[@]} -gt 0 ]]; then
   echo "e2e failed: ${failed[*]}" >&2
