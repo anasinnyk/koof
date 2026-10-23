@@ -32,7 +32,7 @@ actions:
             target: zone
 
         credentials:
-          security_scheme: api_token
+          securityScheme: api_token
           source:
             type: related
             via: [zone, account]
@@ -47,7 +47,7 @@ actions:
         lifecycle: observe
         response:
           path: result
-        path_parameters:
+        pathParameters:
           zone_id:
             type: related_identifier
             via: [zone]
@@ -60,7 +60,7 @@ actions:
       x-kube-operation:
         resource: logpush_job
         lifecycle: create
-        path_parameters:
+        pathParameters:
           zone_id:
             type: related_identifier
             via: [zone]
@@ -74,7 +74,7 @@ actions:
       x-kube-operation:
         resource: logpush_job
         lifecycle: update
-        path_parameters:
+        pathParameters:
           zone_id:
             type: related_identifier
             via: [zone]
@@ -87,7 +87,7 @@ actions:
       x-kube-operation:
         resource: logpush_job
         lifecycle: delete
-        path_parameters:
+        pathParameters:
           zone_id:
             type: related_identifier
             via: [zone]

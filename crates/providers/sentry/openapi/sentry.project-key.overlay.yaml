@@ -22,7 +22,7 @@ actions:
             target: project
 
         credentials:
-          security_scheme: auth_token
+          securityScheme: auth_token
           source:
             type: related
             via: [project, organization]
@@ -35,7 +35,7 @@ actions:
       x-kube-operation:
         resource: project_key
         lifecycle: observe
-        path_parameters:
+        pathParameters:
           organization_id_or_slug:
             type: related_identifier
             via: [project, organization]
@@ -52,7 +52,7 @@ actions:
       x-kube-operation:
         resource: project_key
         lifecycle: create
-        path_parameters:
+        pathParameters:
           organization_id_or_slug:
             type: related_identifier
             via: [project, organization]
@@ -70,7 +70,7 @@ actions:
       x-kube-operation:
         resource: project_key
         lifecycle: update
-        path_parameters:
+        pathParameters:
           organization_id_or_slug:
             type: related_identifier
             via: [project, organization]
@@ -87,7 +87,7 @@ actions:
       x-kube-operation:
         resource: project_key
         lifecycle: delete
-        path_parameters:
+        pathParameters:
           organization_id_or_slug:
             type: related_identifier
             via: [project, organization]

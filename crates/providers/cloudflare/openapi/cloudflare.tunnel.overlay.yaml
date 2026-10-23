@@ -30,7 +30,7 @@ actions:
             target: account
 
         credentials:
-          security_scheme: api_token
+          securityScheme: api_token
           source:
             type: related
             via: [account]
@@ -45,8 +45,8 @@ actions:
         lifecycle: observe
         response:
           path: result
-          deleted_when: deleted_at
-        path_parameters:
+          deletedWhen: deleted_at
+        pathParameters:
           account_id:
             type: related_identifier
             via: [account]
@@ -59,7 +59,7 @@ actions:
       x-kube-operation:
         resource: tunnel
         lifecycle: create
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [account]
@@ -73,7 +73,7 @@ actions:
       x-kube-operation:
         resource: tunnel
         lifecycle: update
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [account]
@@ -86,7 +86,7 @@ actions:
       x-kube-operation:
         resource: tunnel
         lifecycle: delete
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [account]

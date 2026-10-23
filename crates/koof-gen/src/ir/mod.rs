@@ -58,6 +58,7 @@ pub struct TestIr {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ValidationIr {
     pub rule: String,
     pub message: String,
@@ -66,13 +67,14 @@ pub struct ValidationIr {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
-#[serde(deny_unknown_fields)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ReferenceIr {
     pub from: FieldPath,
     pub target: ResourceName,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CredentialsIr {
     pub source: CredentialSourceIr,
 
@@ -80,7 +82,7 @@ pub struct CredentialsIr {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
-#[serde(tag = "type", rename_all = "snake_case")]
+#[serde(tag = "type", rename_all = "snake_case", deny_unknown_fields)]
 pub enum CredentialSourceIr {
     SecretKeySelector { path: FieldPath },
     Related { via: Vec<String> },
@@ -109,6 +111,7 @@ pub struct OperationIr {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RequestMappingIr {
     #[serde(default = "RequestMappingIr::default_from")]
     pub from: FieldPath,
@@ -132,7 +135,7 @@ impl Default for RequestMappingIr {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
-#[serde(tag = "type", rename_all = "snake_case")]
+#[serde(tag = "type", rename_all = "snake_case", deny_unknown_fields)]
 pub enum ValueExpr {
     Field { path: FieldPath },
     ExternalName,

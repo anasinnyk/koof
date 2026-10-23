@@ -38,7 +38,7 @@ actions:
             target: tunnel
 
         credentials:
-          security_scheme: api_token
+          securityScheme: api_token
           source:
             type: related
             via: [tunnel, account]
@@ -69,7 +69,7 @@ actions:
         lifecycle: observe
         response:
           path: result
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [tunnel, account]
@@ -84,7 +84,7 @@ actions:
       x-kube-operation:
         resource: tunnel_configuration
         lifecycle: update
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [tunnel, account]

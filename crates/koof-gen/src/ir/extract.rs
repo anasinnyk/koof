@@ -163,8 +163,8 @@ fn http_defaults(extension: HttpExtension) -> Result<HttpIr, ExtractError> {
     };
     Ok(HttpIr {
         timeout: duration("timeout", extension.timeout)?,
-        connect_timeout: duration("connect_timeout", extension.connect_timeout)?,
-        pool_idle_timeout: duration("pool_idle_timeout", extension.pool_idle_timeout)?,
+        connect_timeout: duration("connectTimeout", extension.connect_timeout)?,
+        pool_idle_timeout: duration("poolIdleTimeout", extension.pool_idle_timeout)?,
         pool_max_idle_per_host: extension.pool_max_idle_per_host,
         user_agent: extension.user_agent,
     })

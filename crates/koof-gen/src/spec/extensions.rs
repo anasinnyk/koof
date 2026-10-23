@@ -17,7 +17,7 @@ pub const HTTP_METHODS: [&str; 8] = [
 ];
 
 #[derive(Debug, Deserialize)]
-#[serde(deny_unknown_fields)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ProviderExtension {
     pub name: String,
     #[serde(default)]
@@ -25,7 +25,7 @@ pub struct ProviderExtension {
 }
 
 #[derive(Debug, Default, Deserialize)]
-#[serde(deny_unknown_fields)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HttpExtension {
     pub timeout: Option<String>,
     pub connect_timeout: Option<String>,
@@ -83,6 +83,7 @@ pub enum FieldSelectionMode {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct OperationExtension {
     pub resource: ResourceName,
     pub lifecycle: LifecycleAction,
@@ -118,7 +119,7 @@ impl LifecycleAction {
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(deny_unknown_fields)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ResponseExtension {
     pub path: String,
     #[serde(default)]
@@ -126,12 +127,14 @@ pub struct ResponseExtension {
 }
 
 #[derive(Debug, Default, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ResultExtension {
     #[serde(default)]
     pub identifiers: BTreeMap<String, String>,
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FieldExtension {
     #[serde(default)]
     pub ignored: bool,

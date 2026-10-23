@@ -32,7 +32,7 @@ actions:
             target: tunnel
 
         credentials:
-          security_scheme: api_token
+          securityScheme: api_token
           source:
             type: related
             via: [tunnel, account]
@@ -58,8 +58,8 @@ actions:
         lifecycle: observe
         response:
           path: result
-          deleted_when: deleted_at
-        path_parameters:
+          deletedWhen: deleted_at
+        pathParameters:
           account_id:
             type: related_identifier
             via: [tunnel, account]
@@ -72,7 +72,7 @@ actions:
       x-kube-operation:
         resource: tunnel_hostname_route
         lifecycle: create
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [tunnel, account]
@@ -93,7 +93,7 @@ actions:
       x-kube-operation:
         resource: tunnel_hostname_route
         lifecycle: update
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [tunnel, account]
@@ -113,7 +113,7 @@ actions:
       x-kube-operation:
         resource: tunnel_hostname_route
         lifecycle: delete
-        path_parameters:
+        pathParameters:
           account_id:
             type: related_identifier
             via: [tunnel, account]
