@@ -8,6 +8,7 @@ use crate::{
     status::ManagedStatus,
 };
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::Condition;
+use kube::api::Patch;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct StatusChange {
@@ -55,7 +56,10 @@ pub async fn update_status<R: ManagedResource>(
     if serde_json::to_value(resource.status())? == serde_json::to_value(Some(&desired))? {
         return Ok(change);
     }
-    patch_status(context, resource, &serde_json::json!({ "status": desired })).await?;
+    let replace = serde_json::from_value(serde_json::json!([
+        { "op": "add", "path": "/status", "value": desired },
+    ]))?;
+    patch_status(context, resource, &Patch::Json(replace)).await?;
     Ok(change)
 }
 
@@ -100,7 +104,7 @@ pub async fn set_conditions<R: ManagedResource>(
     patch_status(
         context,
         resource,
-        &serde_json::json!({ "status": { "conditions": conditions } }),
+        &Patch::Merge(serde_json::json!({ "status": { "conditions": conditions } })),
     )
     .await
 }
@@ -130,7 +134,7 @@ fn record_state<R: ManagedResource>(
 async fn patch_status<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
-    patch: &serde_json::Value,
+    patch: &Patch<serde_json::Value>,
 ) -> Result<(), ReconcileError> {
     crate::object::patch_status(&context.kube_client, resource, patch).await
 }
