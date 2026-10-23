@@ -31,11 +31,17 @@ pub fn synthesize(document: &mut Value) -> Result<BTreeMap<ResourceName, Vec<Str
     let creatable = creatable_resources(&snapshot)?;
 
     let mut synthesized = Map::new();
-    let mut kinds = BTreeMap::new();
+    let mut kinds: BTreeMap<ResourceName, String> = BTreeMap::new();
     for kube_resource in kube_resources(&snapshot) {
         let kube_resource = kube_resource?;
         let extension = &kube_resource.extension;
         let resource = Resource { schemas, extension };
+        if let Some((other, _)) = kinds.iter().find(|(_, kind)| **kind == extension.kind) {
+            return Err(resource.error(&format!(
+                "kind {} is already used by resource {}; kinds must be unique within a provider",
+                extension.kind, other.0
+            )));
+        }
 
         let creatable = creatable.contains(&extension.name);
         resource.for_provider(
