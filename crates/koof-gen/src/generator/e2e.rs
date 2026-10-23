@@ -175,9 +175,6 @@ fn manifest(provider: &Provider<'_>, resource: &Resource<'_>) -> Value {
     }
     let mut spec = Map::new();
     spec.insert("forProvider".to_owned(), Value::Object(for_provider));
-    if resource.delete.is_none() {
-        spec.insert("deletionPolicy".to_owned(), json!("Orphan"));
-    }
     object["spec"] = Value::Object(spec);
     object
 }
