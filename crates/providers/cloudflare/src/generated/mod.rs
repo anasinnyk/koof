@@ -78,6 +78,7 @@ pub fn controllers(app: koof::App) -> koof::App {
         .controller::<zone::Zone>()
         .controller::<zone_ruleset::Ruleset>()
 }
+#[cfg(feature = "fake")]
 #[must_use]
 pub fn fake() -> koof::fake::Fake {
     koof::fake::Fake::new()

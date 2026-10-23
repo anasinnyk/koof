@@ -46,7 +46,8 @@ scripts/e2e.sh [provider...]   # kind cluster koof-e2e, controller + fake API on
 ```
 
 The controller talks to `koof::fake`, an in-memory API built from the same
-descriptors (`fake` binary of each provider), instead of the real provider.
+descriptors (`fake` binary of each provider, built with the `fake` feature),
+instead of the real provider.
 
 ## Images
 
