@@ -6,6 +6,7 @@ pub mod finalizer;
 pub mod late_init;
 pub mod policy;
 pub mod status;
+mod usage;
 
 pub use context::{Backoff, ControllerContext, SyncTracker};
 
@@ -106,6 +107,12 @@ async fn reconcile_inner<R: ManagedResource>(
         ensured = finalizer::ensure(&context.kube_client, resource).await?;
         &ensured
     };
+    if deleting {
+        let dependents = usage::dependents(context, resource).await?;
+        if !dependents.is_empty() {
+            return in_use(context, resource, &dependents).await;
+        }
+    }
     if deleting && policy::orphans_on_delete(resource.management()) {
         return release(context, resource, true).await;
     }
@@ -215,6 +222,29 @@ async fn delete_external<R: ManagedResource>(
     )
     .await;
     Ok(Action::requeue(CONFIRM))
+}
+
+async fn in_use<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+    dependents: &[String],
+) -> Result<Action, ReconcileError> {
+    let message = format!(
+        "Deletion waits until these resources are deleted: {}",
+        dependents.join(", ")
+    );
+    tracing::info!(?dependents, "deletion blocked by dependents");
+    set_conditions(
+        context,
+        resource,
+        vec![
+            ConditionSpec::in_use(message.clone()),
+            ConditionSpec::reconcile_success(),
+        ],
+    )
+    .await?;
+    publish(context, resource, EventType::Normal, "InUse", &message).await;
+    Ok(Action::requeue(WAITING))
 }
 
 async fn release<R: ManagedResource>(
