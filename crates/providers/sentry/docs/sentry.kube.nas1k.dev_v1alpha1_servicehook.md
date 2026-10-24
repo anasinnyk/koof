@@ -42,6 +42,11 @@ spec:
 | `forProvider.url` | string | yes | The URL for the webhook. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
 
+Validation:
+
+- `forProvider`: projectRef cannot be removed once set
+- `forProvider.projectRef`: projectRef is immutable
+
 ## Status
 
 `conditions` holds `Ready` and `Synced`; `atProvider` is the resource as the API returns it.

@@ -111,7 +111,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "organizationRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "period": {
                         "description": "The saved time range period for this dashboard.",
@@ -398,7 +404,13 @@
                     "required": [
                       "title"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "organizationRef cannot be removed once set",
+                        "rule": "!has(oldSelf.organizationRef) || has(self.organizationRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -1252,7 +1264,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "organizationRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "owner": {
                         "description": "The ID of the team or user that owns the monitor. (eg. user:51 or team:6)",
@@ -1283,7 +1301,13 @@
                       "name",
                       "project"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "organizationRef cannot be removed once set",
+                        "rule": "!has(oldSelf.organizationRef) || has(self.organizationRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -2326,7 +2350,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "organizationRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "regenerate": {
                         "description": "Reissue the invite token, invalidating any previously sent invite link.",
@@ -2376,7 +2406,13 @@
                     "required": [
                       "email"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "organizationRef cannot be removed once set",
+                        "rule": "!has(oldSelf.organizationRef) || has(self.organizationRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -3022,7 +3058,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "organizationRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "platform": {
                         "description": "The platform for the project.",
@@ -3051,7 +3093,13 @@
                     "required": [
                       "name"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "organizationRef cannot be removed once set",
+                        "rule": "!has(oldSelf.organizationRef) || has(self.organizationRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -3837,7 +3885,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "projectRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "rateLimit": {
                         "description": "Applies a rate limit to cap the number of errors accepted during a given time window. To\ndisable entirely set `rateLimit` to null.\n```json\n{\n    \"rateLimit\": {\n        \"window\": 7200, // time in seconds\n        \"count\": 1000 // error cap\n    }\n}\n```",
@@ -3869,7 +3923,13 @@
                         "type": "string"
                       }
                     },
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "projectRef cannot be removed once set",
+                        "rule": "!has(oldSelf.projectRef) || has(self.projectRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -4221,7 +4281,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "projectRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "url": {
                         "description": "The URL for the webhook.",
@@ -4232,7 +4298,13 @@
                       "events",
                       "url"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "projectRef cannot be removed once set",
+                        "rule": "!has(oldSelf.projectRef) || has(self.projectRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -4451,7 +4523,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "organizationRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "slug": {
                         "description": "Uniquely identifies a team and is used for the interface. If not\n        provided, it is automatically generated from the name.",
@@ -4459,7 +4537,13 @@
                         "type": "string"
                       }
                     },
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "organizationRef cannot be removed once set",
+                        "rule": "!has(oldSelf.organizationRef) || has(self.organizationRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [

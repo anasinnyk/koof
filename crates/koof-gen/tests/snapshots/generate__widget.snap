@@ -18,6 +18,16 @@ fn for_provider_schema(schema: &mut schemars::Schema) {
             },
             koof::schema::Validation {
                 rule: "self == oldSelf",
+                message: "accountRef is immutable",
+                field: "accountRef",
+            },
+            koof::schema::Validation {
+                rule: "!has(oldSelf.accountRef) || has(self.accountRef)",
+                message: "accountRef cannot be removed once set",
+                field: "",
+            },
+            koof::schema::Validation {
+                rule: "self == oldSelf",
                 message: "name is immutable",
                 field: "name",
             },

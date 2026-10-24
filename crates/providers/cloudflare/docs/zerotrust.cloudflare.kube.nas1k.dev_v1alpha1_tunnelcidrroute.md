@@ -42,6 +42,11 @@ spec:
 | `forProvider.virtual_network_id` | string (uuid) |  | UUID of the virtual network. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
 
+Validation:
+
+- `forProvider`: tunnelRef cannot be removed once set
+- `forProvider.tunnelRef`: tunnelRef is immutable
+
 ## Status
 
 `conditions` holds `Ready` and `Synced`; `atProvider` is the resource as the API returns it.

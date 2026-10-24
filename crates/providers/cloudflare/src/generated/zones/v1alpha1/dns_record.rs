@@ -12,6 +12,16 @@ fn for_provider_schema(schema: &mut schemars::Schema) {
                 message: "ttl must be 1 (automatic) or between 30 and 86400 seconds",
                 field: "",
             },
+            koof::schema::Validation {
+                rule: "self == oldSelf",
+                message: "zoneRef is immutable",
+                field: "zoneRef",
+            },
+            koof::schema::Validation {
+                rule: "!has(oldSelf.zoneRef) || has(self.zoneRef)",
+                message: "zoneRef cannot be removed once set",
+                field: "",
+            },
         ],
     );
 }

@@ -51,6 +51,8 @@ spec:
 Validation:
 
 - `forProvider`: ttl must be 1 (automatic) or between 30 and 86400 seconds
+- `forProvider`: zoneRef cannot be removed once set
+- `forProvider.zoneRef`: zoneRef is immutable
 
 ## Status
 

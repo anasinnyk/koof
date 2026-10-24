@@ -43,6 +43,11 @@ spec:
 | `forProvider.useCase` | string |  | * `user` * `profiling` * `tempest` * `demo` One of `user`, `profiling`, `tempest`, `demo`. Default `user`. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
 
+Validation:
+
+- `forProvider`: projectRef cannot be removed once set
+- `forProvider.projectRef`: projectRef is immutable
+
 ## Status
 
 `conditions` holds `Ready` and `Synced`; `atProvider` is the resource as the API returns it.
