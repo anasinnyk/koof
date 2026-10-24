@@ -1,0 +1,54 @@
+---
+source: crates/koof-gen/tests/generate.rs
+expression: "&files[\"src/generated/operations.rs\"]"
+---
+//! This file is generated. Do not edit manually.
+#![allow(clippy::pedantic)]
+pub struct AccountCreate;
+impl koof::Operation for AccountCreate {
+    const NAME: &'static str = "account.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/accounts";
+    type Request = crate::generated::types::Account;
+    type Response = crate::generated::types::AccountResponse;
+}
+pub struct AccountObserve;
+impl koof::Operation for AccountObserve {
+    const NAME: &'static str = "account.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}";
+    type Request = ();
+    type Response = crate::generated::types::AccountResponse;
+}
+pub struct WidgetCreate;
+impl koof::Operation for WidgetCreate {
+    const NAME: &'static str = "widget.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/accounts/{account_id}/widgets";
+    type Request = crate::generated::types::Widget;
+    type Response = crate::generated::types::WidgetResponse;
+}
+pub struct WidgetDelete;
+impl koof::Operation for WidgetDelete {
+    const NAME: &'static str = "widget.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/accounts/{account_id}/widgets/{widget_id}";
+    type Request = ();
+    type Response = ();
+}
+pub struct WidgetObserve;
+impl koof::Operation for WidgetObserve {
+    const NAME: &'static str = "widget.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}/widgets/{widget_id}";
+    type Request = ();
+    type Response = crate::generated::types::WidgetResponse;
+}
+pub struct WidgetUpdate;
+impl koof::Operation for WidgetUpdate {
+    const NAME: &'static str = "widget.update";
+    const METHOD: reqwest::Method = reqwest::Method::PATCH;
+    const PATH: &'static str = "/accounts/{account_id}/widgets/{widget_id}";
+    type Request = crate::generated::types::Widget;
+    type Response = crate::generated::types::WidgetResponse;
+}

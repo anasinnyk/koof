@@ -118,8 +118,8 @@ so the API server rejects invalid changes.
 
 ## A field koof should not touch
 
-Properties marked `readOnly` never reach `forProvider`. For others, set
-`x-kube-field` on the property schema:
+Properties marked `readOnly` never reach `forProvider`. With `fields.mode: all`,
+set `x-kube-field` on the property schema (with `explicit`, just do not list it):
 
 ```yaml
 - target: $.components.schemas.zones_zone.properties.status

@@ -1,0 +1,97 @@
+overlay: 1.1.0
+info:
+  title: Widgets Widget
+  version: 0.0.1
+actions:
+  - target: $.components.schemas.widget
+    update:
+      x-kube-resource:
+        name: widget
+        apiVersion: shop.widgets.example.dev/v1alpha1
+        kind: Widget
+        immutable: [name]
+        validations:
+          - rule: "!has(self.size) || self.size <= 500"
+            message: "size must be at most 500"
+        identifiers:
+          external_id:
+            type: external_name
+        references:
+          account:
+            from: spec.forProvider.accountRef
+            target: account
+        credentials:
+          securityScheme: api_token
+          source:
+            type: related
+            via: [account]
+        test:
+          forProvider:
+            name: e2e
+            size: 10
+          update:
+            size: 20
+        fields:
+          mode: explicit
+          forProvider: [name, size, color, tags]
+          atProvider: [id, name, size, color, tags, created_on]
+
+  - target: $.components.schemas.widget.properties.tags
+    update:
+      x-kube-field:
+        lateInitialize: false
+
+  - target: $.paths['/accounts/{account_id}/widgets/{widget_id}'].get
+    update:
+      x-kube-operation:
+        resource: widget
+        lifecycle: observe
+        response:
+          path: result
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          widget_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/widgets'].post
+    update:
+      x-kube-operation:
+        resource: widget
+        lifecycle: create
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/accounts/{account_id}/widgets/{widget_id}'].patch
+    update:
+      x-kube-operation:
+        resource: widget
+        lifecycle: update
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          widget_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/widgets/{widget_id}'].delete
+    update:
+      x-kube-operation:
+        resource: widget
+        lifecycle: delete
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          widget_id:
+            type: external_name

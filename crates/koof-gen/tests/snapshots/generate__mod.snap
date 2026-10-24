@@ -1,0 +1,54 @@
+---
+source: crates/koof-gen/tests/generate.rs
+expression: "&files[\"src/generated/mod.rs\"]"
+---
+pub mod operations;
+pub mod types;
+pub mod shop;
+pub mod widgets;
+fn http(mut http: koof::config::HttpConfig) -> koof::config::HttpConfig {
+    http.timeout = ::std::time::Duration::from_secs(20u64);
+    "koof-widgets-test".clone_into(&mut http.user_agent);
+    http
+}
+pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo::new(
+        "widgets",
+        "https://api.widgets.example/v1",
+    )
+    .with_http(http);
+/// Registers the controllers of every resource of this provider.
+#[must_use]
+pub fn controllers(app: koof::App) -> koof::App {
+    app.controller::<widgets::v1alpha1::account::Account>()
+        .controller::<widgets::v1alpha1::cluster_account::ClusterAccount>()
+        .controller::<shop::v1alpha1::widget::Widget>()
+}
+#[cfg(feature = "fake")]
+#[must_use]
+pub fn fake() -> koof::fake::Fake {
+    koof::fake::Fake::new()
+        .resource::<widgets::v1alpha1::account::Account>()
+        .resource::<widgets::v1alpha1::cluster_account::ClusterAccount>()
+        .resource::<shop::v1alpha1::widget::Widget>()
+}
+/// `CustomResourceDefinition`s of every resource of this provider.
+#[must_use]
+pub fn crds() -> Vec<
+    k8s_openapi::apiextensions_apiserver::pkg::apis::apiextensions::v1::CustomResourceDefinition,
+> {
+    vec![
+        < widgets::v1alpha1::account::Account as kube::CustomResourceExt > ::crd(), <
+        widgets::v1alpha1::cluster_account::ClusterAccount as kube::CustomResourceExt >
+        ::crd(), < shop::v1alpha1::widget::Widget as kube::CustomResourceExt > ::crd()
+    ]
+}
+/// Documentation of every resource of this provider.
+#[must_use]
+pub fn docs() -> Vec<koof::docs::ResourceDoc> {
+    vec![
+        koof::docs::ResourceDoc::of:: < widgets::v1alpha1::account::Account > (),
+        koof::docs::ResourceDoc::of:: <
+        widgets::v1alpha1::cluster_account::ClusterAccount > (),
+        koof::docs::ResourceDoc::of:: < shop::v1alpha1::widget::Widget > ()
+    ]
+}

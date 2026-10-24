@@ -1,0 +1,17 @@
+---
+source: crates/koof-gen/tests/generate.rs
+expression: "files.keys().cloned().collect::<Vec<_>>().join(\"\\n\")"
+---
+e2e/generated/account/chainsaw-test.yaml
+e2e/generated/cluster-account/chainsaw-test.yaml
+e2e/generated/widget/chainsaw-test.yaml
+src/generated/mod.rs
+src/generated/operations.rs
+src/generated/shop/mod.rs
+src/generated/shop/v1alpha1/mod.rs
+src/generated/shop/v1alpha1/widget.rs
+src/generated/types.rs
+src/generated/widgets/mod.rs
+src/generated/widgets/v1alpha1/account.rs
+src/generated/widgets/v1alpha1/cluster_account.rs
+src/generated/widgets/v1alpha1/mod.rs
