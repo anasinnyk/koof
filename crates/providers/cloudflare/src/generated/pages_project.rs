@@ -55,130 +55,130 @@ pub type PagesProjectStatus = koof::status::ManagedStatus<
 fn api_resource() -> kube::api::ApiResource {
     kube::api::ApiResource::erase::<PagesProject>(&())
 }
-pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
-    kind: "PagesProject",
-    api_resource,
-    group: "cloudflare.kube.nas1k.dev",
-    namespaced: true,
-    identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
-    late_initialize: &[
-        "build_config",
-        "deployment_configs",
-        "name",
-        "production_branch",
-        "source",
-    ],
-    references: &[
-        koof::resource::Reference {
-            name: "account",
-            from: "/spec/forProvider/accountRef",
-            targets: &[
-                &crate::generated::account::DESCRIPTOR,
-                &crate::generated::cluster_account::DESCRIPTOR,
-            ],
-        },
-    ],
-    credentials: Some(koof::resource::Credentials {
-        source: koof::resource::CredentialSource::Related {
-            via: &["account"],
-        },
-        auth: koof::resource::AuthScheme::Bearer,
-    }),
-    observe: koof::resource::ObserveDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                (
-                    "account_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["account"],
-                        name: "external_id",
-                    },
-                ),
-                (
-                    "project_name",
-                    koof::resource::ValueExpr::Coalesce(
-                        &[
-                            koof::resource::ValueExpr::ExternalName,
-                            koof::resource::ValueExpr::Field("/spec/resourceName"),
-                            koof::resource::ValueExpr::Field("/metadata/name"),
-                        ],
-                    ),
-                ),
-            ],
-            response_path: "/result",
-        },
-        deleted_when: None,
-    },
-    create: Some(koof::resource::CreateDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                (
-                    "account_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["account"],
-                        name: "external_id",
-                    },
-                ),
-            ],
-            response_path: "",
-        },
-        request: koof::resource::RequestMapping {
-            from: "/spec/forProvider",
-            set: &[],
-        },
-        external_name: "/result/name",
-    }),
-    update: Some(koof::resource::UpdateDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                (
-                    "account_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["account"],
-                        name: "external_id",
-                    },
-                ),
-                (
-                    "project_name",
-                    koof::resource::ValueExpr::Coalesce(
-                        &[
-                            koof::resource::ValueExpr::ExternalName,
-                            koof::resource::ValueExpr::Field("/spec/resourceName"),
-                            koof::resource::ValueExpr::Field("/metadata/name"),
-                        ],
-                    ),
-                ),
-            ],
-            response_path: "",
-        },
-        request: koof::resource::RequestMapping {
-            from: "/spec/forProvider",
-            set: &[],
-        },
-    }),
-    delete: Some(koof::resource::OperationDescriptor {
-        path_parameters: &[
-            (
-                "account_id",
-                koof::resource::ValueExpr::RelatedIdentifier {
-                    via: &["account"],
-                    name: "external_id",
-                },
-            ),
-            (
-                "project_name",
-                koof::resource::ValueExpr::Coalesce(
+pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
+        "PagesProject",
+        api_resource,
+        "cloudflare.kube.nas1k.dev",
+        true,
+        koof::resource::ObserveDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
                     &[
-                        koof::resource::ValueExpr::ExternalName,
-                        koof::resource::ValueExpr::Field("/spec/resourceName"),
-                        koof::resource::ValueExpr::Field("/metadata/name"),
+                        (
+                            "account_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["account"],
+                                name: "external_id",
+                            },
+                        ),
+                        (
+                            "project_name",
+                            koof::resource::ValueExpr::Coalesce(
+                                &[
+                                    koof::resource::ValueExpr::ExternalName,
+                                    koof::resource::ValueExpr::Field("/spec/resourceName"),
+                                    koof::resource::ValueExpr::Field("/metadata/name"),
+                                ],
+                            ),
+                        ),
                     ],
-                ),
+                )
+                .with_response_path("/result"),
+        ),
+    )
+    .with_identifiers(&[("external_id", koof::resource::ValueExpr::ExternalName)])
+    .with_late_initialize(
+        &["build_config", "deployment_configs", "name", "production_branch", "source"],
+    )
+    .with_references(
+        &[
+            koof::resource::Reference::new(
+                "account",
+                "/spec/forProvider/accountRef",
+                &[
+                    &crate::generated::account::DESCRIPTOR,
+                    &crate::generated::cluster_account::DESCRIPTOR,
+                ],
             ),
         ],
-        response_path: "",
-    }),
-};
+    )
+    .with_credentials(
+        koof::resource::Credentials::new(
+            koof::resource::CredentialSource::Related {
+                via: &["account"],
+            },
+            koof::resource::AuthScheme::Bearer,
+        ),
+    )
+    .with_create(
+        koof::resource::CreateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "account_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["account"],
+                                name: "external_id",
+                            },
+                        ),
+                    ],
+                ),
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+            "/result/name",
+        ),
+    )
+    .with_update(
+        koof::resource::UpdateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "account_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["account"],
+                                name: "external_id",
+                            },
+                        ),
+                        (
+                            "project_name",
+                            koof::resource::ValueExpr::Coalesce(
+                                &[
+                                    koof::resource::ValueExpr::ExternalName,
+                                    koof::resource::ValueExpr::Field("/spec/resourceName"),
+                                    koof::resource::ValueExpr::Field("/metadata/name"),
+                                ],
+                            ),
+                        ),
+                    ],
+                ),
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+        ),
+    )
+    .with_delete(
+        koof::resource::OperationDescriptor::new()
+            .with_path_parameters(
+                &[
+                    (
+                        "account_id",
+                        koof::resource::ValueExpr::RelatedIdentifier {
+                            via: &["account"],
+                            name: "external_id",
+                        },
+                    ),
+                    (
+                        "project_name",
+                        koof::resource::ValueExpr::Coalesce(
+                            &[
+                                koof::resource::ValueExpr::ExternalName,
+                                koof::resource::ValueExpr::Field("/spec/resourceName"),
+                                koof::resource::ValueExpr::Field("/metadata/name"),
+                            ],
+                        ),
+                    ),
+                ],
+            ),
+    );
 impl koof::ManagedResource for PagesProject {
     type AtProvider = crate::generated::types::PagesProjectAtProvider;
     type Observe = crate::generated::operations::PagesProjectObserve;

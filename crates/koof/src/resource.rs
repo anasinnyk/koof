@@ -38,6 +38,7 @@ pub trait ManagedResource:
 }
 
 #[derive(Debug)]
+#[non_exhaustive]
 pub struct ResourceDescriptor {
     pub kind: &'static str,
     pub api_resource: fn() -> kube::api::ApiResource,
@@ -54,6 +55,83 @@ pub struct ResourceDescriptor {
 }
 
 impl ResourceDescriptor {
+    #[must_use]
+    pub const fn new(
+        kind: &'static str,
+        api_resource: fn() -> kube::api::ApiResource,
+        group: &'static str,
+        namespaced: bool,
+        observe: ObserveDescriptor,
+    ) -> Self {
+        Self {
+            kind,
+            api_resource,
+            group,
+            namespaced,
+            identifiers: &[],
+            late_initialize: &[],
+            references: &[],
+            credentials: None,
+            observe,
+            create: None,
+            update: None,
+            delete: None,
+        }
+    }
+
+    #[must_use]
+    pub const fn with_identifiers(self, identifiers: &'static [(&'static str, ValueExpr)]) -> Self {
+        Self {
+            identifiers,
+            ..self
+        }
+    }
+
+    #[must_use]
+    pub const fn with_late_initialize(self, late_initialize: &'static [&'static str]) -> Self {
+        Self {
+            late_initialize,
+            ..self
+        }
+    }
+
+    #[must_use]
+    pub const fn with_references(self, references: &'static [Reference]) -> Self {
+        Self { references, ..self }
+    }
+
+    #[must_use]
+    pub const fn with_credentials(self, credentials: Credentials) -> Self {
+        Self {
+            credentials: Some(credentials),
+            ..self
+        }
+    }
+
+    #[must_use]
+    pub const fn with_create(self, create: CreateDescriptor) -> Self {
+        Self {
+            create: Some(create),
+            ..self
+        }
+    }
+
+    #[must_use]
+    pub const fn with_update(self, update: UpdateDescriptor) -> Self {
+        Self {
+            update: Some(update),
+            ..self
+        }
+    }
+
+    #[must_use]
+    pub const fn with_delete(self, delete: OperationDescriptor) -> Self {
+        Self {
+            delete: Some(delete),
+            ..self
+        }
+    }
+
     #[must_use]
     pub fn identifier(&self, name: &str) -> Option<&ValueExpr> {
         self.identifiers
@@ -104,6 +182,7 @@ pub enum ValueExpr {
 }
 
 #[derive(Debug)]
+#[non_exhaustive]
 pub struct Reference {
     pub name: &'static str,
     pub from: &'static str,
@@ -112,10 +191,33 @@ pub struct Reference {
     pub targets: &'static [&'static ResourceDescriptor],
 }
 
+impl Reference {
+    #[must_use]
+    pub const fn new(
+        name: &'static str,
+        from: &'static str,
+        targets: &'static [&'static ResourceDescriptor],
+    ) -> Self {
+        Self {
+            name,
+            from,
+            targets,
+        }
+    }
+}
+
 #[derive(Debug)]
+#[non_exhaustive]
 pub struct Credentials {
     pub source: CredentialSource,
     pub auth: AuthScheme,
+}
+
+impl Credentials {
+    #[must_use]
+    pub const fn new(source: CredentialSource, auth: AuthScheme) -> Self {
+        Self { source, auth }
+    }
 }
 
 #[derive(Debug)]
@@ -131,32 +233,124 @@ pub enum AuthScheme {
 }
 
 #[derive(Debug)]
+#[non_exhaustive]
 pub struct OperationDescriptor {
     pub path_parameters: &'static [(&'static str, ValueExpr)],
     pub response_path: &'static str,
 }
 
+impl OperationDescriptor {
+    #[must_use]
+    pub const fn new() -> Self {
+        Self {
+            path_parameters: &[],
+            response_path: "",
+        }
+    }
+
+    #[must_use]
+    pub const fn with_path_parameters(
+        self,
+        path_parameters: &'static [(&'static str, ValueExpr)],
+    ) -> Self {
+        Self {
+            path_parameters,
+            ..self
+        }
+    }
+
+    #[must_use]
+    pub const fn with_response_path(self, response_path: &'static str) -> Self {
+        Self {
+            response_path,
+            ..self
+        }
+    }
+}
+
+impl Default for OperationDescriptor {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[derive(Debug)]
+#[non_exhaustive]
 pub struct ObserveDescriptor {
     pub operation: OperationDescriptor,
     pub deleted_when: Option<&'static str>,
 }
 
+impl ObserveDescriptor {
+    #[must_use]
+    pub const fn new(operation: OperationDescriptor) -> Self {
+        Self {
+            operation,
+            deleted_when: None,
+        }
+    }
+
+    #[must_use]
+    pub const fn with_deleted_when(self, deleted_when: &'static str) -> Self {
+        Self {
+            deleted_when: Some(deleted_when),
+            ..self
+        }
+    }
+}
+
 #[derive(Debug)]
+#[non_exhaustive]
 pub struct CreateDescriptor {
     pub operation: OperationDescriptor,
     pub request: RequestMapping,
     pub external_name: &'static str,
 }
 
+impl CreateDescriptor {
+    #[must_use]
+    pub const fn new(
+        operation: OperationDescriptor,
+        request: RequestMapping,
+        external_name: &'static str,
+    ) -> Self {
+        Self {
+            operation,
+            request,
+            external_name,
+        }
+    }
+}
+
 #[derive(Debug)]
+#[non_exhaustive]
 pub struct UpdateDescriptor {
     pub operation: OperationDescriptor,
     pub request: RequestMapping,
 }
 
+impl UpdateDescriptor {
+    #[must_use]
+    pub const fn new(operation: OperationDescriptor, request: RequestMapping) -> Self {
+        Self { operation, request }
+    }
+}
+
 #[derive(Debug)]
+#[non_exhaustive]
 pub struct RequestMapping {
     pub from: &'static str,
     pub set: &'static [(&'static str, ValueExpr)],
+}
+
+impl RequestMapping {
+    #[must_use]
+    pub const fn new(from: &'static str) -> Self {
+        Self { from, set: &[] }
+    }
+
+    #[must_use]
+    pub const fn with_set(self, set: &'static [(&'static str, ValueExpr)]) -> Self {
+        Self { set, ..self }
+    }
 }

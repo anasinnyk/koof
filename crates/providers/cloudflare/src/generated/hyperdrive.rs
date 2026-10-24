@@ -55,97 +55,103 @@ pub type HyperdriveStatus = koof::status::ManagedStatus<
 fn api_resource() -> kube::api::ApiResource {
     kube::api::ApiResource::erase::<Hyperdrive>(&())
 }
-pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
-    kind: "Hyperdrive",
-    api_resource,
-    group: "storage.cloudflare.kube.nas1k.dev",
-    namespaced: true,
-    identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
-    late_initialize: &["caching", "mtls", "name", "origin", "origin_connection_limit"],
-    references: &[
-        koof::resource::Reference {
-            name: "account",
-            from: "/spec/forProvider/accountRef",
-            targets: &[
-                &crate::generated::account::DESCRIPTOR,
-                &crate::generated::cluster_account::DESCRIPTOR,
-            ],
-        },
-    ],
-    credentials: Some(koof::resource::Credentials {
-        source: koof::resource::CredentialSource::Related {
-            via: &["account"],
-        },
-        auth: koof::resource::AuthScheme::Bearer,
-    }),
-    observe: koof::resource::ObserveDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                (
-                    "account_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["account"],
-                        name: "external_id",
-                    },
-                ),
-                ("hyperdrive_id", koof::resource::ValueExpr::ExternalName),
-            ],
-            response_path: "/result",
-        },
-        deleted_when: None,
-    },
-    create: Some(koof::resource::CreateDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                (
-                    "account_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["account"],
-                        name: "external_id",
-                    },
-                ),
-            ],
-            response_path: "",
-        },
-        request: koof::resource::RequestMapping {
-            from: "/spec/forProvider",
-            set: &[],
-        },
-        external_name: "/result/id",
-    }),
-    update: Some(koof::resource::UpdateDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                (
-                    "account_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["account"],
-                        name: "external_id",
-                    },
-                ),
-                ("hyperdrive_id", koof::resource::ValueExpr::ExternalName),
-            ],
-            response_path: "",
-        },
-        request: koof::resource::RequestMapping {
-            from: "/spec/forProvider",
-            set: &[],
-        },
-    }),
-    delete: Some(koof::resource::OperationDescriptor {
-        path_parameters: &[
-            (
-                "account_id",
-                koof::resource::ValueExpr::RelatedIdentifier {
-                    via: &["account"],
-                    name: "external_id",
-                },
+pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
+        "Hyperdrive",
+        api_resource,
+        "storage.cloudflare.kube.nas1k.dev",
+        true,
+        koof::resource::ObserveDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "account_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["account"],
+                                name: "external_id",
+                            },
+                        ),
+                        ("hyperdrive_id", koof::resource::ValueExpr::ExternalName),
+                    ],
+                )
+                .with_response_path("/result"),
+        ),
+    )
+    .with_identifiers(&[("external_id", koof::resource::ValueExpr::ExternalName)])
+    .with_late_initialize(
+        &["caching", "mtls", "name", "origin", "origin_connection_limit"],
+    )
+    .with_references(
+        &[
+            koof::resource::Reference::new(
+                "account",
+                "/spec/forProvider/accountRef",
+                &[
+                    &crate::generated::account::DESCRIPTOR,
+                    &crate::generated::cluster_account::DESCRIPTOR,
+                ],
             ),
-            ("hyperdrive_id", koof::resource::ValueExpr::ExternalName),
         ],
-        response_path: "",
-    }),
-};
+    )
+    .with_credentials(
+        koof::resource::Credentials::new(
+            koof::resource::CredentialSource::Related {
+                via: &["account"],
+            },
+            koof::resource::AuthScheme::Bearer,
+        ),
+    )
+    .with_create(
+        koof::resource::CreateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "account_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["account"],
+                                name: "external_id",
+                            },
+                        ),
+                    ],
+                ),
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+            "/result/id",
+        ),
+    )
+    .with_update(
+        koof::resource::UpdateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "account_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["account"],
+                                name: "external_id",
+                            },
+                        ),
+                        ("hyperdrive_id", koof::resource::ValueExpr::ExternalName),
+                    ],
+                ),
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+        ),
+    )
+    .with_delete(
+        koof::resource::OperationDescriptor::new()
+            .with_path_parameters(
+                &[
+                    (
+                        "account_id",
+                        koof::resource::ValueExpr::RelatedIdentifier {
+                            via: &["account"],
+                            name: "external_id",
+                        },
+                    ),
+                    ("hyperdrive_id", koof::resource::ValueExpr::ExternalName),
+                ],
+            ),
+    );
 impl koof::ManagedResource for Hyperdrive {
     type AtProvider = crate::generated::types::HyperdriveAtProvider;
     type Observe = crate::generated::operations::HyperdriveObserve;

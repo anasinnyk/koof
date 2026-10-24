@@ -55,116 +55,122 @@ pub type WaitingRoomStatus = koof::status::ManagedStatus<
 fn api_resource() -> kube::api::ApiResource {
     kube::api::ApiResource::erase::<WaitingRoom>(&())
 }
-pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
-    kind: "WaitingRoom",
-    api_resource,
-    group: "zones.cloudflare.kube.nas1k.dev",
-    namespaced: true,
-    identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
-    late_initialize: &[
-        "additional_routes",
-        "cookie_attributes",
-        "cookie_suffix",
-        "custom_page_html",
-        "default_template_language",
-        "description",
-        "disable_session_renewal",
-        "enabled_origin_commands",
-        "host",
-        "json_response_enabled",
-        "name",
-        "new_users_per_minute",
-        "path",
-        "queue_all",
-        "queueing_method",
-        "queueing_status_code",
-        "session_duration",
-        "suspended",
-        "total_active_users",
-        "turnstile_action",
-        "turnstile_mode",
-    ],
-    references: &[
-        koof::resource::Reference {
-            name: "zone",
-            from: "/spec/forProvider/zoneRef",
-            targets: &[&crate::generated::zone::DESCRIPTOR],
-        },
-    ],
-    credentials: Some(koof::resource::Credentials {
-        source: koof::resource::CredentialSource::Related {
-            via: &["zone", "account"],
-        },
-        auth: koof::resource::AuthScheme::Bearer,
-    }),
-    observe: koof::resource::ObserveDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                ("waiting_room_id", koof::resource::ValueExpr::ExternalName),
-                (
-                    "zone_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["zone"],
-                        name: "external_id",
-                    },
-                ),
-            ],
-            response_path: "/result",
-        },
-        deleted_when: None,
-    },
-    create: Some(koof::resource::CreateDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                (
-                    "zone_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["zone"],
-                        name: "external_id",
-                    },
-                ),
-            ],
-            response_path: "",
-        },
-        request: koof::resource::RequestMapping {
-            from: "/spec/forProvider",
-            set: &[],
-        },
-        external_name: "/result/id",
-    }),
-    update: Some(koof::resource::UpdateDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                ("waiting_room_id", koof::resource::ValueExpr::ExternalName),
-                (
-                    "zone_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["zone"],
-                        name: "external_id",
-                    },
-                ),
-            ],
-            response_path: "",
-        },
-        request: koof::resource::RequestMapping {
-            from: "/spec/forProvider",
-            set: &[],
-        },
-    }),
-    delete: Some(koof::resource::OperationDescriptor {
-        path_parameters: &[
-            ("waiting_room_id", koof::resource::ValueExpr::ExternalName),
-            (
-                "zone_id",
-                koof::resource::ValueExpr::RelatedIdentifier {
-                    via: &["zone"],
-                    name: "external_id",
-                },
+pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
+        "WaitingRoom",
+        api_resource,
+        "zones.cloudflare.kube.nas1k.dev",
+        true,
+        koof::resource::ObserveDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        ("waiting_room_id", koof::resource::ValueExpr::ExternalName),
+                        (
+                            "zone_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["zone"],
+                                name: "external_id",
+                            },
+                        ),
+                    ],
+                )
+                .with_response_path("/result"),
+        ),
+    )
+    .with_identifiers(&[("external_id", koof::resource::ValueExpr::ExternalName)])
+    .with_late_initialize(
+        &[
+            "additional_routes",
+            "cookie_attributes",
+            "cookie_suffix",
+            "custom_page_html",
+            "default_template_language",
+            "description",
+            "disable_session_renewal",
+            "enabled_origin_commands",
+            "host",
+            "json_response_enabled",
+            "name",
+            "new_users_per_minute",
+            "path",
+            "queue_all",
+            "queueing_method",
+            "queueing_status_code",
+            "session_duration",
+            "suspended",
+            "total_active_users",
+            "turnstile_action",
+            "turnstile_mode",
+        ],
+    )
+    .with_references(
+        &[
+            koof::resource::Reference::new(
+                "zone",
+                "/spec/forProvider/zoneRef",
+                &[&crate::generated::zone::DESCRIPTOR],
             ),
         ],
-        response_path: "",
-    }),
-};
+    )
+    .with_credentials(
+        koof::resource::Credentials::new(
+            koof::resource::CredentialSource::Related {
+                via: &["zone", "account"],
+            },
+            koof::resource::AuthScheme::Bearer,
+        ),
+    )
+    .with_create(
+        koof::resource::CreateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "zone_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["zone"],
+                                name: "external_id",
+                            },
+                        ),
+                    ],
+                ),
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+            "/result/id",
+        ),
+    )
+    .with_update(
+        koof::resource::UpdateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        ("waiting_room_id", koof::resource::ValueExpr::ExternalName),
+                        (
+                            "zone_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["zone"],
+                                name: "external_id",
+                            },
+                        ),
+                    ],
+                ),
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+        ),
+    )
+    .with_delete(
+        koof::resource::OperationDescriptor::new()
+            .with_path_parameters(
+                &[
+                    ("waiting_room_id", koof::resource::ValueExpr::ExternalName),
+                    (
+                        "zone_id",
+                        koof::resource::ValueExpr::RelatedIdentifier {
+                            via: &["zone"],
+                            name: "external_id",
+                        },
+                    ),
+                ],
+            ),
+    );
 impl koof::ManagedResource for WaitingRoom {
     type AtProvider = crate::generated::types::WaitingRoomAtProvider;
     type Observe = crate::generated::operations::WaitingRoomObserve;

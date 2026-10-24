@@ -54,76 +54,76 @@ pub type TunnelConfigurationStatus = koof::status::ManagedStatus<
 fn api_resource() -> kube::api::ApiResource {
     kube::api::ApiResource::erase::<TunnelConfiguration>(&())
 }
-pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
-    kind: "TunnelConfiguration",
-    api_resource,
-    group: "zerotrust.cloudflare.kube.nas1k.dev",
-    namespaced: true,
-    identifiers: &[],
-    late_initialize: &["config"],
-    references: &[
-        koof::resource::Reference {
-            name: "tunnel",
-            from: "/spec/forProvider/tunnelRef",
-            targets: &[&crate::generated::tunnel::DESCRIPTOR],
-        },
-    ],
-    credentials: Some(koof::resource::Credentials {
-        source: koof::resource::CredentialSource::Related {
-            via: &["tunnel", "account"],
-        },
-        auth: koof::resource::AuthScheme::Bearer,
-    }),
-    observe: koof::resource::ObserveDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                (
-                    "account_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["tunnel", "account"],
-                        name: "external_id",
-                    },
+pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
+        "TunnelConfiguration",
+        api_resource,
+        "zerotrust.cloudflare.kube.nas1k.dev",
+        true,
+        koof::resource::ObserveDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "account_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["tunnel", "account"],
+                                name: "external_id",
+                            },
+                        ),
+                        (
+                            "tunnel_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["tunnel"],
+                                name: "external_id",
+                            },
+                        ),
+                    ],
+                )
+                .with_response_path("/result"),
+        ),
+    )
+    .with_late_initialize(&["config"])
+    .with_references(
+        &[
+            koof::resource::Reference::new(
+                "tunnel",
+                "/spec/forProvider/tunnelRef",
+                &[&crate::generated::tunnel::DESCRIPTOR],
+            ),
+        ],
+    )
+    .with_credentials(
+        koof::resource::Credentials::new(
+            koof::resource::CredentialSource::Related {
+                via: &["tunnel", "account"],
+            },
+            koof::resource::AuthScheme::Bearer,
+        ),
+    )
+    .with_update(
+        koof::resource::UpdateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "account_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["tunnel", "account"],
+                                name: "external_id",
+                            },
+                        ),
+                        (
+                            "tunnel_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["tunnel"],
+                                name: "external_id",
+                            },
+                        ),
+                    ],
                 ),
-                (
-                    "tunnel_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["tunnel"],
-                        name: "external_id",
-                    },
-                ),
-            ],
-            response_path: "/result",
-        },
-        deleted_when: None,
-    },
-    create: None,
-    update: Some(koof::resource::UpdateDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                (
-                    "account_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["tunnel", "account"],
-                        name: "external_id",
-                    },
-                ),
-                (
-                    "tunnel_id",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["tunnel"],
-                        name: "external_id",
-                    },
-                ),
-            ],
-            response_path: "",
-        },
-        request: koof::resource::RequestMapping {
-            from: "/spec/forProvider",
-            set: &[],
-        },
-    }),
-    delete: None,
-};
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+        ),
+    );
 impl koof::ManagedResource for TunnelConfiguration {
     type AtProvider = crate::generated::types::TunnelConfigurationAtProvider;
     type Observe = crate::generated::operations::TunnelConfigurationObserve;

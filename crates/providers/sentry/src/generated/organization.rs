@@ -89,44 +89,47 @@ pub type OrganizationStatus = koof::status::ManagedStatus<
 fn api_resource() -> kube::api::ApiResource {
     kube::api::ApiResource::erase::<Organization>(&())
 }
-pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
-    kind: "Organization",
-    api_resource,
-    group: "sentry.kube.nas1k.dev",
-    namespaced: true,
-    identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
-    late_initialize: &["name"],
-    references: &[],
-    credentials: Some(koof::resource::Credentials {
-        source: koof::resource::CredentialSource::Secret {
-            path: "/spec/forProvider/authTokenSecretRef",
-        },
-        auth: koof::resource::AuthScheme::Bearer,
-    }),
-    observe: koof::resource::ObserveDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                ("organization_id_or_slug", koof::resource::ValueExpr::ExternalName),
-            ],
-            response_path: "",
-        },
-        deleted_when: None,
-    },
-    create: None,
-    update: Some(koof::resource::UpdateDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                ("organization_id_or_slug", koof::resource::ValueExpr::ExternalName),
-            ],
-            response_path: "",
-        },
-        request: koof::resource::RequestMapping {
-            from: "/spec/forProvider",
-            set: &[],
-        },
-    }),
-    delete: None,
-};
+pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
+        "Organization",
+        api_resource,
+        "sentry.kube.nas1k.dev",
+        true,
+        koof::resource::ObserveDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "organization_id_or_slug",
+                            koof::resource::ValueExpr::ExternalName,
+                        ),
+                    ],
+                ),
+        ),
+    )
+    .with_identifiers(&[("external_id", koof::resource::ValueExpr::ExternalName)])
+    .with_late_initialize(&["name"])
+    .with_credentials(
+        koof::resource::Credentials::new(
+            koof::resource::CredentialSource::Secret {
+                path: "/spec/forProvider/authTokenSecretRef",
+            },
+            koof::resource::AuthScheme::Bearer,
+        ),
+    )
+    .with_update(
+        koof::resource::UpdateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "organization_id_or_slug",
+                            koof::resource::ValueExpr::ExternalName,
+                        ),
+                    ],
+                ),
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+        ),
+    );
 impl koof::ManagedResource for Organization {
     type AtProvider = crate::generated::types::OrganizationAtProvider;
     type Observe = crate::generated::operations::OrganizationObserve;

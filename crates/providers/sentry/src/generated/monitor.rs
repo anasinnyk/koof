@@ -59,106 +59,111 @@ pub type MonitorStatus = koof::status::ManagedStatus<
 fn api_resource() -> kube::api::ApiResource {
     kube::api::ApiResource::erase::<Monitor>(&())
 }
-pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
-    kind: "Monitor",
-    api_resource,
-    group: "sentry.kube.nas1k.dev",
-    namespaced: true,
-    identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
-    late_initialize: &[
-        "alert_rule",
-        "config",
-        "is_muted",
-        "name",
-        "owner",
-        "project",
-        "slug",
-        "status",
-    ],
-    references: &[
-        koof::resource::Reference {
-            name: "organization",
-            from: "/spec/forProvider/organizationRef",
-            targets: &[
-                &crate::generated::organization::DESCRIPTOR,
-                &crate::generated::cluster_organization::DESCRIPTOR,
-            ],
-        },
-    ],
-    credentials: Some(koof::resource::Credentials {
-        source: koof::resource::CredentialSource::Related {
-            via: &["organization"],
-        },
-        auth: koof::resource::AuthScheme::Bearer,
-    }),
-    observe: koof::resource::ObserveDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                ("monitor_id_or_slug", koof::resource::ValueExpr::ExternalName),
-                (
-                    "organization_id_or_slug",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["organization"],
-                        name: "external_id",
-                    },
+pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
+        "Monitor",
+        api_resource,
+        "sentry.kube.nas1k.dev",
+        true,
+        koof::resource::ObserveDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        ("monitor_id_or_slug", koof::resource::ValueExpr::ExternalName),
+                        (
+                            "organization_id_or_slug",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["organization"],
+                                name: "external_id",
+                            },
+                        ),
+                    ],
                 ),
-            ],
-            response_path: "",
-        },
-        deleted_when: None,
-    },
-    create: Some(koof::resource::CreateDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                (
-                    "organization_id_or_slug",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["organization"],
-                        name: "external_id",
-                    },
-                ),
-            ],
-            response_path: "",
-        },
-        request: koof::resource::RequestMapping {
-            from: "/spec/forProvider",
-            set: &[],
-        },
-        external_name: "/slug",
-    }),
-    update: Some(koof::resource::UpdateDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[
-                ("monitor_id_or_slug", koof::resource::ValueExpr::ExternalName),
-                (
-                    "organization_id_or_slug",
-                    koof::resource::ValueExpr::RelatedIdentifier {
-                        via: &["organization"],
-                        name: "external_id",
-                    },
-                ),
-            ],
-            response_path: "",
-        },
-        request: koof::resource::RequestMapping {
-            from: "/spec/forProvider",
-            set: &[],
-        },
-    }),
-    delete: Some(koof::resource::OperationDescriptor {
-        path_parameters: &[
-            ("monitor_id_or_slug", koof::resource::ValueExpr::ExternalName),
-            (
-                "organization_id_or_slug",
-                koof::resource::ValueExpr::RelatedIdentifier {
-                    via: &["organization"],
-                    name: "external_id",
-                },
+        ),
+    )
+    .with_identifiers(&[("external_id", koof::resource::ValueExpr::ExternalName)])
+    .with_late_initialize(
+        &[
+            "alert_rule",
+            "config",
+            "is_muted",
+            "name",
+            "owner",
+            "project",
+            "slug",
+            "status",
+        ],
+    )
+    .with_references(
+        &[
+            koof::resource::Reference::new(
+                "organization",
+                "/spec/forProvider/organizationRef",
+                &[
+                    &crate::generated::organization::DESCRIPTOR,
+                    &crate::generated::cluster_organization::DESCRIPTOR,
+                ],
             ),
         ],
-        response_path: "",
-    }),
-};
+    )
+    .with_credentials(
+        koof::resource::Credentials::new(
+            koof::resource::CredentialSource::Related {
+                via: &["organization"],
+            },
+            koof::resource::AuthScheme::Bearer,
+        ),
+    )
+    .with_create(
+        koof::resource::CreateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "organization_id_or_slug",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["organization"],
+                                name: "external_id",
+                            },
+                        ),
+                    ],
+                ),
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+            "/slug",
+        ),
+    )
+    .with_update(
+        koof::resource::UpdateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        ("monitor_id_or_slug", koof::resource::ValueExpr::ExternalName),
+                        (
+                            "organization_id_or_slug",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["organization"],
+                                name: "external_id",
+                            },
+                        ),
+                    ],
+                ),
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+        ),
+    )
+    .with_delete(
+        koof::resource::OperationDescriptor::new()
+            .with_path_parameters(
+                &[
+                    ("monitor_id_or_slug", koof::resource::ValueExpr::ExternalName),
+                    (
+                        "organization_id_or_slug",
+                        koof::resource::ValueExpr::RelatedIdentifier {
+                            via: &["organization"],
+                            name: "external_id",
+                        },
+                    ),
+                ],
+            ),
+    );
 impl koof::ManagedResource for Monitor {
     type AtProvider = crate::generated::types::MonitorAtProvider;
     type Observe = crate::generated::operations::MonitorObserve;

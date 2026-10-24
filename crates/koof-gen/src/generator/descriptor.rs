@@ -10,7 +10,7 @@ use crate::{
     },
 };
 use proc_macro2::TokenStream;
-use quote::quote;
+use quote::{ToTokens, format_ident, quote};
 
 pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, GeneratorError> {
     let kind = &resource.kind;
@@ -37,51 +37,60 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
                 })
                 .collect::<Result<Vec<_>, GeneratorError>>()?;
             Ok(quote! {
-                koof::resource::Reference {
-                    name: #reference_name,
-                    from: #from,
-                    targets: &[#(#targets),*],
-                }
+                koof::resource::Reference::new(#reference_name, #from, &[#(#targets),*])
             })
         })
         .collect::<Result<Vec<_>, GeneratorError>>()?;
 
-    let credentials = resource
-        .credentials
-        .as_ref()
-        .map_or_else(|| quote!(None), credentials_tokens);
-
+    let credentials = resource.credentials.as_ref().map(|credentials| {
+        let credentials = credentials_tokens(credentials);
+        quote!(.with_credentials(#credentials))
+    });
+    let identifiers = slice_setter("with_identifiers", identifiers);
+    let late_initialize = slice_setter("with_late_initialize", resource.late_initialize);
+    let references = slice_setter("with_references", references);
     let observe = observe_descriptor(resource.observe);
-    let delete = optional(resource.delete.map(operation_descriptor));
-    let create = optional(resource.create.map(create_descriptor));
+    let create = resource.create.map(|create| {
+        let create = create_descriptor(create);
+        quote!(.with_create(#create))
+    });
+    let update = resource.update.map(|update| {
+        let update = update_descriptor(update);
+        quote!(.with_update(#update))
+    });
+    let delete = resource.delete.map(|delete| {
+        let delete = operation_descriptor(delete);
+        quote!(.with_delete(#delete))
+    });
     let namespaced = resource.namespaced;
-    let late_initialize = resource.late_initialize;
-    let update = optional(resource.update.map(update_descriptor));
 
     Ok(quote! {
         fn api_resource() -> kube::api::ApiResource {
             kube::api::ApiResource::erase::<#resource_ident>(&())
         }
 
-        pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
-            kind: #kind,
-            api_resource,
-            group: #group,
-            namespaced: #namespaced,
-            identifiers: &[#(#identifiers),*],
-            late_initialize: &[#(#late_initialize),*],
-            references: &[#(#references),*],
-            credentials: #credentials,
-            observe: #observe,
-            create: #create,
-            update: #update,
-            delete: #delete,
-        };
+        pub static DESCRIPTOR: koof::ResourceDescriptor =
+            koof::ResourceDescriptor::new(#kind, api_resource, #group, #namespaced, #observe)
+                #identifiers
+                #late_initialize
+                #references
+                #credentials
+                #create
+                #update
+                #delete;
     })
 }
 
-fn optional(tokens: Option<TokenStream>) -> TokenStream {
-    tokens.map_or_else(|| quote!(None), |tokens| quote!(Some(#tokens)))
+fn slice_setter<T: ToTokens>(
+    setter: &str,
+    items: impl IntoIterator<Item = T>,
+) -> Option<TokenStream> {
+    let items: Vec<T> = items.into_iter().collect();
+    if items.is_empty() {
+        return None;
+    }
+    let setter = format_ident!("{setter}");
+    Some(quote!(.#setter(&[#(#items),*])))
 }
 
 fn credentials_tokens(credentials: &Credentials<'_>) -> TokenStream {
@@ -98,7 +107,7 @@ fn credentials_tokens(credentials: &Credentials<'_>) -> TokenStream {
         Auth::Bearer => quote!(koof::resource::AuthScheme::Bearer),
         Auth::Header(name) => quote!(koof::resource::AuthScheme::Header(#name)),
     };
-    quote!(Some(koof::resource::Credentials { source: #source, auth: #auth }))
+    quote!(koof::resource::Credentials::new(#source, #auth))
 }
 
 pub fn generate_managed_resource(
@@ -146,24 +155,13 @@ fn create_descriptor(create: Create<'_>) -> TokenStream {
     let request = request_mapping(create.operation);
     let operation = operation_descriptor(create.operation);
     let external_name = pointer(create.external_name);
-    quote! {
-        koof::resource::CreateDescriptor {
-            operation: #operation,
-            request: #request,
-            external_name: #external_name,
-        }
-    }
+    quote!(koof::resource::CreateDescriptor::new(#operation, #request, #external_name))
 }
 
 fn update_descriptor(operation: Operation<'_>) -> TokenStream {
     let request = request_mapping(operation);
     let operation = operation_descriptor(operation);
-    quote! {
-        koof::resource::UpdateDescriptor {
-            operation: #operation,
-            request: #request,
-        }
-    }
+    quote!(koof::resource::UpdateDescriptor::new(#operation, #request))
 }
 
 fn request_mapping(operation: Operation<'_>) -> TokenStream {
@@ -174,26 +172,17 @@ fn request_mapping(operation: Operation<'_>) -> TokenStream {
         let expression = value_expr(expression);
         quote!((#path, #expression))
     });
-    quote! {
-        koof::resource::RequestMapping {
-            from: #from,
-            set: &[#(#set),*],
-        }
-    }
+    let set = slice_setter("with_set", set);
+    quote!(koof::resource::RequestMapping::new(#from) #set)
 }
 
 fn observe_descriptor(operation: Operation<'_>) -> TokenStream {
     let descriptor = operation_descriptor(operation);
-    let deleted_when = optional(operation.ir.deleted_when.as_deref().map(|path| {
+    let deleted_when = operation.ir.deleted_when.as_deref().map(|path| {
         let path = pointer(path);
-        quote!(#path)
-    }));
-    quote! {
-        koof::resource::ObserveDescriptor {
-            operation: #descriptor,
-            deleted_when: #deleted_when,
-        }
-    }
+        quote!(.with_deleted_when(#path))
+    });
+    quote!(koof::resource::ObserveDescriptor::new(#descriptor) #deleted_when)
 }
 
 fn operation_descriptor(operation: Operation<'_>) -> TokenStream {
@@ -205,13 +194,11 @@ fn operation_descriptor(operation: Operation<'_>) -> TokenStream {
             let expression = value_expr(expression);
             quote!((#parameter, #expression))
         });
+    let path_parameters = slice_setter("with_path_parameters", path_parameters);
     let response_path = pointer(operation.ir.response_path.as_deref().unwrap_or_default());
-    quote! {
-        koof::resource::OperationDescriptor {
-            path_parameters: &[#(#path_parameters),*],
-            response_path: #response_path,
-        }
-    }
+    let response_path =
+        (!response_path.is_empty()).then(|| quote!(.with_response_path(#response_path)));
+    quote!(koof::resource::OperationDescriptor::new() #path_parameters #response_path)
 }
 
 fn value_expr(expression: &ValueExpr) -> TokenStream {
