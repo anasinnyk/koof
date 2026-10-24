@@ -379,6 +379,31 @@
         "create",
         "patch"
       ]
+    }
+  ]
+}
+---
+{
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "Role",
+  "metadata": {
+    "name": "provider"
+  },
+  "rules": [
+    {
+      "apiGroups": [
+        "coordination.k8s.io"
+      ],
+      "resourceNames": [
+        "koof-cloudflare"
+      ],
+      "resources": [
+        "leases"
+      ],
+      "verbs": [
+        "get",
+        "update"
+      ]
     },
     {
       "apiGroups": [
@@ -388,9 +413,7 @@
         "leases"
       ],
       "verbs": [
-        "get",
-        "create",
-        "update"
+        "create"
       ]
     }
   ]
