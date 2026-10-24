@@ -44,6 +44,11 @@ pub fn cluster_role(crds: &[CustomResourceDefinition]) -> ClusterRole {
         vec!["events".to_owned()],
         &["create", "patch"],
     ));
+    rules.push(rule(
+        "coordination.k8s.io",
+        vec!["leases".to_owned()],
+        &["get", "create", "update"],
+    ));
     ClusterRole {
         metadata: ObjectMeta {
             name: Some(NAME.to_owned()),

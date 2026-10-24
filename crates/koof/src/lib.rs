@@ -7,6 +7,7 @@ pub mod error;
 pub mod external;
 #[cfg(feature = "fake")]
 pub mod fake;
+pub mod leader;
 pub mod managed;
 pub mod manifests;
 pub mod metrics;

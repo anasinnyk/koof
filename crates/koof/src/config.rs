@@ -37,6 +37,19 @@ impl HttpConfig {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, SmartDefault)]
+pub struct LeaderElectionConfig {
+    pub enabled: bool,
+    pub name: String,
+    pub namespace: Option<String>,
+    #[default(Duration::from_secs(15))]
+    #[serde(with = "humantime_serde")]
+    pub lease_duration: Duration,
+    #[default(Duration::from_secs(5))]
+    #[serde(with = "humantime_serde")]
+    pub renew_interval: Duration,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Config {
     pub base_url: String,
@@ -44,6 +57,7 @@ pub struct Config {
     pub pod_name: Option<String>,
     pub concurrency: u16,
     pub http: HttpConfig,
+    pub leader_election: LeaderElectionConfig,
 }
 
 impl Config {
@@ -59,6 +73,10 @@ impl Config {
             pod_name: None,
             concurrency: 8,
             http: (provider.http)(http),
+            leader_election: LeaderElectionConfig {
+                name: format!("koof-{}", provider.name),
+                ..LeaderElectionConfig::default()
+            },
         }
     }
 
@@ -88,4 +106,34 @@ fn environment() -> config::Environment {
     config::Environment::with_prefix("KOOF")
         .prefix_separator("_")
         .separator("__")
+}
+
+#[cfg(all(test, feature = "env"))]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn leader_election_from_environment() -> Result<(), config::ConfigError> {
+        static PROVIDER: ProviderInfo = ProviderInfo::new("test", "http://127.0.0.1");
+        let variables = [
+            ("KOOF_LEADER_ELECTION__ENABLED", "true"),
+            ("KOOF_LEADER_ELECTION__NAMESPACE", "system"),
+            ("KOOF_LEADER_ELECTION__LEASE_DURATION", "30s"),
+        ]
+        .into_iter()
+        .map(|(key, value)| (key.to_owned(), value.to_owned()))
+        .collect();
+        let config = Config::load(&PROVIDER, environment().source(Some(variables)))?;
+        assert_eq!(
+            config.leader_election,
+            LeaderElectionConfig {
+                enabled: true,
+                name: "koof-test".to_owned(),
+                namespace: Some("system".to_owned()),
+                lease_duration: Duration::from_secs(30),
+                renew_interval: Duration::from_secs(5),
+            }
+        );
+        Ok(())
+    }
 }
