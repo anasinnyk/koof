@@ -1,3 +1,4 @@
+use crate::resource::GroupKind;
 use prometheus_client::{
     encoding::EncodeLabelSet,
     metrics::{
@@ -16,17 +17,20 @@ use std::{
 
 #[derive(Clone, Debug, Hash, PartialEq, Eq, EncodeLabelSet)]
 struct KindLabels {
+    group: String,
     kind: String,
 }
 
 #[derive(Clone, Debug, Hash, PartialEq, Eq, EncodeLabelSet)]
 struct ReconcileLabels {
+    group: String,
     kind: String,
     result: String,
 }
 
 #[derive(Clone, Debug, Hash, PartialEq, Eq, EncodeLabelSet)]
 struct ActionLabels {
+    group: String,
     kind: String,
     action: String,
 }
@@ -44,6 +48,7 @@ struct OperationLabels {
 
 #[derive(Clone, Debug, Hash, PartialEq, Eq, EncodeLabelSet)]
 struct StateLabels {
+    group: String,
     kind: String,
     ready: String,
     synced: String,
@@ -63,7 +68,7 @@ pub struct ObjectState {
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 struct TrackedObject {
-    kind: &'static str,
+    kind: GroupKind,
     state: ObjectState,
 }
 
@@ -167,41 +172,46 @@ impl Metrics {
         Ok(output)
     }
 
-    pub fn reconciled(&self, kind: &str, result: &str, duration: Duration) {
+    pub fn reconciled(&self, kind: GroupKind, result: &str, duration: Duration) {
         self.reconciles
             .get_or_create(&ReconcileLabels {
-                kind: kind.to_owned(),
+                group: kind.group.to_owned(),
+                kind: kind.kind.to_owned(),
                 result: result.to_owned(),
             })
             .inc();
         self.reconcile_duration
             .get_or_create(&KindLabels {
-                kind: kind.to_owned(),
+                group: kind.group.to_owned(),
+                kind: kind.kind.to_owned(),
             })
             .observe(duration.as_secs_f64());
     }
 
-    pub fn action(&self, kind: &str, action: &str) {
+    pub fn action(&self, kind: GroupKind, action: &str) {
         self.actions
             .get_or_create(&ActionLabels {
-                kind: kind.to_owned(),
+                group: kind.group.to_owned(),
+                kind: kind.kind.to_owned(),
                 action: action.to_owned(),
             })
             .inc();
     }
 
-    pub fn drift_detected(&self, kind: &str) {
+    pub fn drift_detected(&self, kind: GroupKind) {
         self.drift
             .get_or_create(&KindLabels {
-                kind: kind.to_owned(),
+                group: kind.group.to_owned(),
+                kind: kind.kind.to_owned(),
             })
             .inc();
     }
 
-    pub fn late_initialized(&self, kind: &str) {
+    pub fn late_initialized(&self, kind: GroupKind) {
         self.late_initialized
             .get_or_create(&KindLabels {
-                kind: kind.to_owned(),
+                group: kind.group.to_owned(),
+                kind: kind.kind.to_owned(),
             })
             .inc();
     }
@@ -220,7 +230,7 @@ impl Metrics {
             .observe(duration.as_secs_f64());
     }
 
-    pub fn object_state(&self, key: &str, kind: &'static str, state: Option<ObjectState>) {
+    pub fn object_state(&self, key: &str, kind: GroupKind, state: Option<ObjectState>) {
         let mut objects = self.objects.lock().unwrap_or_else(PoisonError::into_inner);
         let previous = match state {
             Some(state) => objects.insert(key.to_owned(), TrackedObject { kind, state }),
@@ -241,7 +251,8 @@ impl Metrics {
 
 fn state_labels(object: &TrackedObject) -> StateLabels {
     StateLabels {
-        kind: object.kind.to_owned(),
+        group: object.kind.group.to_owned(),
+        kind: object.kind.kind.to_owned(),
         ready: object.state.ready.to_string(),
         synced: object.state.synced.to_string(),
     }

@@ -1,6 +1,6 @@
 use crate::{
     http::Operation,
-    resource::{AuthScheme, ManagedResource, ValueExpr},
+    resource::{AuthScheme, GroupKind, ManagedResource, ValueExpr},
 };
 use axum::{
     Json, Router,
@@ -29,7 +29,7 @@ enum Lifecycle {
 
 #[derive(Debug)]
 struct Route {
-    kind: &'static str,
+    kind: GroupKind,
     lifecycle: Lifecycle,
     method: Method,
     template: Vec<&'static str>,
@@ -52,10 +52,10 @@ struct Shape {
 #[derive(Debug, Default)]
 pub struct Fake {
     routes: Vec<Route>,
-    shapes: BTreeMap<&'static str, Shape>,
+    shapes: BTreeMap<GroupKind, Shape>,
 }
 
-type Key = (&'static str, Vec<String>);
+type Key = (GroupKind, Vec<String>);
 
 struct Store {
     fake: Fake,
@@ -72,7 +72,7 @@ impl Fake {
     #[must_use]
     pub fn resource<R: ManagedResource>(mut self) -> Self {
         let descriptor = R::descriptor();
-        let kind = descriptor.kind;
+        let kind = descriptor.group_kind();
         let auth = descriptor
             .credentials
             .as_ref()
@@ -494,9 +494,12 @@ async fn state(State(store): State<Arc<Store>>) -> Json<Value> {
         .lock()
         .map(|objects| objects.clone())
         .unwrap_or_default();
-    let mut state: BTreeMap<&str, Map<String, Value>> = BTreeMap::new();
+    let mut state: BTreeMap<String, Map<String, Value>> = BTreeMap::new();
     for ((kind, key), object) in objects {
-        state.entry(kind).or_default().insert(key.join("/"), object);
+        state
+            .entry(kind.to_string())
+            .or_default()
+            .insert(key.join("/"), object);
     }
     Json(json!(state))
 }
@@ -526,7 +529,7 @@ async fn handle(
     tracing::info!(
         %method,
         path = uri.path(),
-        kind = route.kind,
+        kind = %route.kind,
         lifecycle = ?route.lifecycle,
         status = response.status().as_u16(),
         "request"
@@ -570,7 +573,7 @@ impl Store {
         parameters: &BTreeMap<&'static str, String>,
         body: &[u8],
     ) -> Response {
-        let Some(shape) = self.fake.shapes.get(route.kind) else {
+        let Some(shape) = self.fake.shapes.get(&route.kind) else {
             return error(StatusCode::INTERNAL_SERVER_ERROR, "unregistered kind");
         };
         let body: Value = if body.is_empty() {

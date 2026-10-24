@@ -1,14 +1,6 @@
 pub mod operations;
 pub mod types;
-pub mod dashboard;
-pub mod monitor;
-pub mod organization;
-pub mod cluster_organization;
-pub mod organization_member;
-pub mod project;
-pub mod project_key;
-pub mod service_hook;
-pub mod team;
+pub mod sentry;
 fn http(http: koof::config::HttpConfig) -> koof::config::HttpConfig {
     http
 }
@@ -20,29 +12,29 @@ pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo::new(
 /// Registers the controllers of every resource of this provider.
 #[must_use]
 pub fn controllers(app: koof::App) -> koof::App {
-    app.controller::<dashboard::Dashboard>()
-        .controller::<monitor::Monitor>()
-        .controller::<organization::Organization>()
-        .controller::<cluster_organization::ClusterOrganization>()
-        .controller::<organization_member::OrganizationMember>()
-        .controller::<project::Project>()
-        .controller::<project_key::ProjectKey>()
-        .controller::<service_hook::ServiceHook>()
-        .controller::<team::Team>()
+    app.controller::<sentry::v1alpha1::dashboard::Dashboard>()
+        .controller::<sentry::v1alpha1::monitor::Monitor>()
+        .controller::<sentry::v1alpha1::organization::Organization>()
+        .controller::<sentry::v1alpha1::cluster_organization::ClusterOrganization>()
+        .controller::<sentry::v1alpha1::organization_member::OrganizationMember>()
+        .controller::<sentry::v1alpha1::project::Project>()
+        .controller::<sentry::v1alpha1::project_key::ProjectKey>()
+        .controller::<sentry::v1alpha1::service_hook::ServiceHook>()
+        .controller::<sentry::v1alpha1::team::Team>()
 }
 #[cfg(feature = "fake")]
 #[must_use]
 pub fn fake() -> koof::fake::Fake {
     koof::fake::Fake::new()
-        .resource::<dashboard::Dashboard>()
-        .resource::<monitor::Monitor>()
-        .resource::<organization::Organization>()
-        .resource::<cluster_organization::ClusterOrganization>()
-        .resource::<organization_member::OrganizationMember>()
-        .resource::<project::Project>()
-        .resource::<project_key::ProjectKey>()
-        .resource::<service_hook::ServiceHook>()
-        .resource::<team::Team>()
+        .resource::<sentry::v1alpha1::dashboard::Dashboard>()
+        .resource::<sentry::v1alpha1::monitor::Monitor>()
+        .resource::<sentry::v1alpha1::organization::Organization>()
+        .resource::<sentry::v1alpha1::cluster_organization::ClusterOrganization>()
+        .resource::<sentry::v1alpha1::organization_member::OrganizationMember>()
+        .resource::<sentry::v1alpha1::project::Project>()
+        .resource::<sentry::v1alpha1::project_key::ProjectKey>()
+        .resource::<sentry::v1alpha1::service_hook::ServiceHook>()
+        .resource::<sentry::v1alpha1::team::Team>()
 }
 /// `CustomResourceDefinition`s of every resource of this provider.
 #[must_use]
@@ -50,13 +42,16 @@ pub fn crds() -> Vec<
     k8s_openapi::apiextensions_apiserver::pkg::apis::apiextensions::v1::CustomResourceDefinition,
 > {
     vec![
-        < dashboard::Dashboard as kube::CustomResourceExt > ::crd(), < monitor::Monitor
-        as kube::CustomResourceExt > ::crd(), < organization::Organization as
-        kube::CustomResourceExt > ::crd(), < cluster_organization::ClusterOrganization as
-        kube::CustomResourceExt > ::crd(), < organization_member::OrganizationMember as
-        kube::CustomResourceExt > ::crd(), < project::Project as kube::CustomResourceExt
-        > ::crd(), < project_key::ProjectKey as kube::CustomResourceExt > ::crd(), <
-        service_hook::ServiceHook as kube::CustomResourceExt > ::crd(), < team::Team as
+        < sentry::v1alpha1::dashboard::Dashboard as kube::CustomResourceExt > ::crd(), <
+        sentry::v1alpha1::monitor::Monitor as kube::CustomResourceExt > ::crd(), <
+        sentry::v1alpha1::organization::Organization as kube::CustomResourceExt >
+        ::crd(), < sentry::v1alpha1::cluster_organization::ClusterOrganization as
+        kube::CustomResourceExt > ::crd(), <
+        sentry::v1alpha1::organization_member::OrganizationMember as
+        kube::CustomResourceExt > ::crd(), < sentry::v1alpha1::project::Project as
+        kube::CustomResourceExt > ::crd(), < sentry::v1alpha1::project_key::ProjectKey as
+        kube::CustomResourceExt > ::crd(), < sentry::v1alpha1::service_hook::ServiceHook
+        as kube::CustomResourceExt > ::crd(), < sentry::v1alpha1::team::Team as
         kube::CustomResourceExt > ::crd()
     ]
 }

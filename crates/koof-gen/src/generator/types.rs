@@ -23,22 +23,39 @@ impl GeneratedTypes {
         let ident = syn::Ident::new(&name, proc_macro2::Span::call_site());
         Ok(quote!(crate::generated::types::#ident))
     }
+
+    /// The types generated for `schema_name` and its nested schemas, each paired
+    /// with the name it would have if the schema were named `alias`.
+    pub fn aliases(&self, schema_name: &str, alias: &str) -> Vec<(String, String)> {
+        let qualified = typify_type_name(schema_name);
+        let alias = typify_type_name(alias);
+        self.names
+            .range(qualified.clone()..)
+            .take_while(|name| name.starts_with(&qualified))
+            .map(|name| (name.clone(), format!("{alias}{}", &name[qualified.len()..])))
+            .collect()
+    }
 }
 
 /// Runs typify over `components.schemas` of a document prepared by
-/// [`crate::spec::for_codegen`].
+/// [`crate::spec::for_codegen`]. Schemas are passed in order of their names with
+/// any of `prefixes` removed, so that a schema shared by several types is named
+/// after the same type whatever the qualification of the synthesized schemas.
 ///
 /// # Errors
 ///
 /// Returns [`GeneratorError`] when a schema cannot be read as JSON Schema or typify
 /// rejects the schema set.
-pub fn generate_types(document: &Value) -> Result<GeneratedTypes, GeneratorError> {
+pub fn generate_types(
+    document: &Value,
+    prefixes: &BTreeSet<String>,
+) -> Result<GeneratedTypes, GeneratorError> {
     let schemas = document
         .pointer("/components/schemas")
         .and_then(Value::as_object)
         .ok_or_else(|| GeneratorError::Typify("missing components.schemas".into()))?;
 
-    let definitions = schemas
+    let mut definitions = schemas
         .iter()
         .map(|(name, schema)| {
             serde_json::from_value::<schemars08::schema::Schema>(schema.clone())
@@ -46,6 +63,14 @@ pub fn generate_types(document: &Value) -> Result<GeneratedTypes, GeneratorError
                 .map_err(|error| GeneratorError::Typify(format!("schema {name}: {error}")))
         })
         .collect::<Result<Vec<_>, _>>()?;
+    let unqualified = |name: &str| {
+        prefixes
+            .iter()
+            .find_map(|prefix| name.strip_prefix(prefix.as_str()))
+            .unwrap_or(name)
+            .to_owned()
+    };
+    definitions.sort_by_cached_key(|(name, _)| (unqualified(name), name.clone()));
 
     let mut settings = typify::TypeSpaceSettings::default();
     settings

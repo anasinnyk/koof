@@ -56,6 +56,9 @@ pub enum ResolveValueError {
     #[error("resource reference {from} cannot point at kind {kind}")]
     ReferenceKind { from: &'static str, kind: String },
 
+    #[error("resource reference {from} to kind {kind} is ambiguous; set its apiVersion")]
+    AmbiguousReference { from: &'static str, kind: String },
+
     #[error("cluster-scoped {kind} cannot reference namespaced {target}")]
     ClusterScopedReference {
         kind: &'static str,

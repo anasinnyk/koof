@@ -13,6 +13,11 @@ A generated provider describes each resource as a static `ResourceDescriptor`
 - reports `Ready` / `Synced` conditions, events and `atProvider` status;
 - serves Prometheus metrics, `/healthz` and `/readyz`.
 
+A resource type is identified by its API group and kind (`<group>/<kind>`), so a
+provider may have the same kind in several groups: per-kind metrics carry both a
+`group` and a `kind` label, and a reference whose targets share a kind across
+groups needs `apiVersion` next to `name` and `kind`.
+
 ## Usage
 
 The provider binary is a few lines around the generated code:

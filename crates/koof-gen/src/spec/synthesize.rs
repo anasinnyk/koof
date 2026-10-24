@@ -7,13 +7,14 @@ use super::{
     normalize::is_read_only,
     resolve_ref, schema_ref_name, schemas_mut, success_json_schema,
 };
-use crate::ir::{FieldPath, ResourceName};
+use crate::ir::{FieldPath, ResourceName, synthesized_schema};
 use serde_json::{Map, Value, json};
 use std::collections::{BTreeMap, BTreeSet};
 
-/// Adds `<Kind>ForProvider` and `<Kind>AtProvider` schemas to `components.schemas`
-/// for every schema with `x-kube-resource`; returns, per resource, the top-level
-/// `forProvider` fields that may be late-initialized.
+/// Adds the `ForProvider` and `AtProvider` schemas of every schema with
+/// `x-kube-resource` to `components.schemas`, keyed by [`synthesized_schema`];
+/// returns, per resource, the top-level `forProvider` fields that may be
+/// late-initialized.
 ///
 /// # Errors
 ///
@@ -31,17 +32,11 @@ pub fn synthesize(document: &mut Value) -> Result<BTreeMap<ResourceName, Vec<Str
     let creatable = creatable_resources(&snapshot)?;
 
     let mut synthesized = Map::new();
-    let mut kinds: BTreeMap<ResourceName, String> = BTreeMap::new();
+    let mut roots: BTreeMap<ResourceName, String> = BTreeMap::new();
     for kube_resource in kube_resources(&snapshot) {
         let kube_resource = kube_resource?;
         let extension = &kube_resource.extension;
         let resource = Resource { schemas, extension };
-        if let Some((other, _)) = kinds.iter().find(|(_, kind)| **kind == extension.kind) {
-            return Err(resource.error(&format!(
-                "kind {} is already used by resource {}; kinds must be unique within a provider",
-                extension.kind, other.0
-            )));
-        }
 
         let creatable = creatable.contains(&extension.name);
         resource.for_provider(
@@ -59,7 +54,7 @@ pub fn synthesize(document: &mut Value) -> Result<BTreeMap<ResourceName, Vec<Str
                 ));
             }
         }
-        kinds.insert(extension.name.clone(), extension.kind.clone());
+        roots.insert(extension.name.clone(), resource.root("ForProvider"));
     }
 
     let target = schemas_mut(document)?;
@@ -73,17 +68,17 @@ pub fn synthesize(document: &mut Value) -> Result<BTreeMap<ResourceName, Vec<Str
         target.insert(name, schema);
     }
 
-    kinds
+    roots
         .into_iter()
-        .map(|(name, kind)| Ok((name, late_initialize_fields(target, &kind)?)))
+        .map(|(name, root)| Ok((name, late_initialize_fields(target, &root)?)))
         .collect()
 }
 
 fn late_initialize_fields(
     schemas: &Map<String, Value>,
-    kind: &str,
+    root_name: &str,
 ) -> Result<Vec<String>, SpecError> {
-    let Some(root) = schemas.get(&format!("{kind}ForProvider")) else {
+    let Some(root) = schemas.get(root_name) else {
         return Ok(Vec::new());
     };
     let objects: Vec<&Value> = match root.get("oneOf").and_then(Value::as_array) {
@@ -102,7 +97,7 @@ fn late_initialize_fields(
     {
         let late_initialize = [property, resolve_ref(schemas, property)]
             .into_iter()
-            .map(|schema| FieldExtension::of(schema, &format!("{kind}ForProvider.{name}")))
+            .map(|schema| FieldExtension::of(schema, &format!("{root_name}.{name}")))
             .collect::<Result<Vec<_>, _>>()?
             .iter()
             .all(|field| field.late_initialize);
@@ -130,6 +125,10 @@ struct Resource<'a> {
 }
 
 impl Resource<'_> {
+    fn root(&self, role: &str) -> String {
+        synthesized_schema(&self.extension.api_version, &self.extension.kind, role)
+    }
+
     fn for_provider(
         &self,
         schema_name: &str,
@@ -149,7 +148,7 @@ impl Resource<'_> {
                 fields
             }
         };
-        let root = format!("{}ForProvider", self.extension.kind);
+        let root = self.root("ForProvider");
         // With `all`, a field read-only in some variants of a union is kept only in
         // the variants where it is writable.
         let selection = Selection {
@@ -164,7 +163,7 @@ impl Resource<'_> {
             FieldSelectionMode::Explicit => names(&self.extension.fields.at_provider),
             FieldSelectionMode::All => self.all_property_names(response),
         };
-        let root = format!("{}AtProvider", self.extension.kind);
+        let root = self.root("AtProvider");
         let selection = Selection {
             keep_required: false,
             writable_only: false,
@@ -190,6 +189,11 @@ impl Resource<'_> {
             &mut BTreeSet::new(),
         );
 
+        if out.contains_key(root) {
+            return Err(self.error(&format!(
+                "synthesized schema {root} is already used by another resource"
+            )));
+        }
         let mut found = BTreeSet::new();
         if variants.len() <= 1 {
             let object = self.filter_object(schema, fields, selection, &mut found);

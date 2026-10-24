@@ -59,6 +59,7 @@ pub async fn reconcile<R: ManagedResource>(
 ) -> Result<Action, ReconcileError> {
     let span = tracing::info_span!(
         "reconcile",
+        group = R::descriptor().group,
         kind = R::descriptor().kind,
         namespace = kube::ResourceExt::namespace(resource.as_ref()).unwrap_or_default(),
         name = kube::ResourceExt::name_any(resource.as_ref()),
@@ -68,7 +69,7 @@ pub async fn reconcile<R: ManagedResource>(
         let started = std::time::Instant::now();
         let result = reconcile_inner(resource.as_ref(), &context).await;
         context.metrics.reconciled(
-            R::descriptor().kind,
+            R::descriptor().group_kind(),
             if result.is_ok() { "success" } else { "error" },
             started.elapsed(),
         );
@@ -155,7 +156,7 @@ async fn reconcile_inner<R: ManagedResource>(
     )?;
     tracing::debug!(?decision, ?drifted_fields, "decided");
     if !drifted_fields.is_empty() {
-        context.metrics.drift_detected(R::descriptor().kind);
+        context.metrics.drift_detected(R::descriptor().group_kind());
     }
 
     if decision.late_initialize
@@ -223,7 +224,9 @@ async fn late_initialize<R: ManagedResource>(
     late_init::apply(&context.kube_client, resource, &fields).await?;
     let names: Vec<&str> = fields.keys().map(String::as_str).collect();
     tracing::info!(fields = ?names, "late-initialized");
-    context.metrics.late_initialized(R::descriptor().kind);
+    context
+        .metrics
+        .late_initialized(R::descriptor().group_kind());
     publish(
         context,
         resource,
@@ -242,7 +245,9 @@ async fn delete_external<R: ManagedResource>(
     let existed = external::delete(context, resource).await?;
     context.attempts.deleted(&object_key(resource));
     tracing::info!(existed, "external resource deleted");
-    context.metrics.action(R::descriptor().kind, "deleted");
+    context
+        .metrics
+        .action(R::descriptor().group_kind(), "deleted");
     set_conditions(
         context,
         resource,
@@ -293,7 +298,9 @@ async fn release<R: ManagedResource>(
 ) -> Result<Action, ReconcileError> {
     if let Some(note) = orphaned {
         tracing::info!("external resource orphaned");
-        context.metrics.action(R::descriptor().kind, "orphaned");
+        context
+            .metrics
+            .action(R::descriptor().group_kind(), "orphaned");
         publish(context, resource, EventType::Normal, "Orphaned", note).await;
     }
     finalizer::remove(&context.kube_client, resource).await?;
@@ -301,7 +308,7 @@ async fn release<R: ManagedResource>(
     context.attempts.forget(&key);
     context
         .metrics
-        .object_state(&key, R::descriptor().kind, None);
+        .object_state(&key, R::descriptor().group_kind(), None);
     Ok(Action::await_change())
 }
 
@@ -312,7 +319,9 @@ async fn update_external<R: ManagedResource>(
 ) -> Result<Action, ReconcileError> {
     external::update(context, resource).await?;
     tracing::info!(?drifted_fields, "external resource updated");
-    context.metrics.action(R::descriptor().kind, "updated");
+    context
+        .metrics
+        .action(R::descriptor().group_kind(), "updated");
     publish(
         context,
         resource,
@@ -384,7 +393,9 @@ async fn create_external<R: ManagedResource>(
 
     let external_name = external::create(context, resource).await?;
     tracing::info!(%external_name, "external resource created");
-    context.metrics.action(R::descriptor().kind, "created");
+    context
+        .metrics
+        .action(R::descriptor().group_kind(), "created");
     publish(
         context,
         resource,
@@ -416,7 +427,7 @@ pub fn error_policy<R: ManagedResource>(
 pub(crate) fn object_key<R: ManagedResource>(resource: &R) -> String {
     format!(
         "{}/{}/{}",
-        R::descriptor().kind,
+        R::descriptor().group_kind(),
         kube::ResourceExt::namespace(resource).unwrap_or_default(),
         kube::ResourceExt::name_any(resource)
     )
@@ -456,9 +467,9 @@ pub async fn run<R: ManagedResource>(
             tokio::time::sleep(grace).await;
         }
     };
-    let kind = R::descriptor().kind;
+    let kind = R::descriptor().group_kind();
     let api = kube::Api::<R>::all(context.kube_client.clone());
-    tracing::info!(resource = kind, "starting controller");
+    tracing::info!(resource = %kind, "starting controller");
 
     let external_name_key = R::descriptor().annotation(EXTERNAL_NAME);
     let external_name = move |resource: &R| {
@@ -500,7 +511,7 @@ pub async fn run<R: ManagedResource>(
                 Err(kube::runtime::controller::Error::ReconcilerFailed(..)) | Ok(_) => {}
                 Err(error) => {
                     tracing::warn!(
-                        resource = kind,
+                        resource = %kind,
                         error = crate::error::chain(&error),
                         "controller error"
                     );
@@ -510,7 +521,7 @@ pub async fn run<R: ManagedResource>(
     tokio::select! {
         () = controller => {}
         () = stopping(SHUTDOWN_GRACE) => {
-            tracing::warn!(resource = kind, "controller did not stop in time; aborting");
+            tracing::warn!(resource = %kind, "controller did not stop in time; aborting");
         }
     }
 }

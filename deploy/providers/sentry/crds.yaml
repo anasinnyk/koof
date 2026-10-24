@@ -91,6 +91,11 @@
                         "description": "A reference to an object of kind `Organization` (default) in the namespace of the resource holding the reference, or of kind `ClusterOrganization`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Organization",
                             "enum": [
@@ -1227,6 +1232,11 @@
                         "description": "A reference to an object of kind `Organization` (default) in the namespace of the resource holding the reference, or of kind `ClusterOrganization`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Organization",
                             "enum": [
@@ -2296,6 +2306,11 @@
                         "description": "A reference to an object of kind `Organization` (default) in the namespace of the resource holding the reference, or of kind `ClusterOrganization`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Organization",
                             "enum": [
@@ -2987,6 +3002,11 @@
                         "description": "A reference to an object of kind `Organization` (default) in the namespace of the resource holding the reference, or of kind `ClusterOrganization`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Organization",
                             "enum": [
@@ -4411,6 +4431,11 @@
                         "description": "A reference to an object of kind `Organization` (default) in the namespace of the resource holding the reference, or of kind `ClusterOrganization`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Organization",
                             "enum": [

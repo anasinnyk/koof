@@ -123,7 +123,7 @@ fn record_state<R: ManagedResource>(
 ) {
     context.metrics.object_state(
         &object_key(resource),
-        R::descriptor().kind,
+        R::descriptor().group_kind(),
         Some(ObjectState {
             ready: conditions::is_true(conditions, conditions::READY),
             synced: conditions::is_true(conditions, conditions::SYNCED),

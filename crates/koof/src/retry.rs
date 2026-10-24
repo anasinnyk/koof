@@ -58,6 +58,7 @@ fn resolve_value(error: &ResolveValueError) -> Failure {
         | ResolveValueError::UnknownReference { .. }
         | ResolveValueError::ReferenceNotSet { .. }
         | ResolveValueError::ReferenceKind { .. }
+        | ResolveValueError::AmbiguousReference { .. }
         | ResolveValueError::ClusterScopedReference { .. }
         | ResolveValueError::NonScalar { .. } => Failure::Permanent,
     }

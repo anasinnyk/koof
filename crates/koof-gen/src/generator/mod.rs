@@ -1,12 +1,13 @@
 use crate::ir::{
-    HttpIr,
+    HttpIr, group_module,
     resolved::{Provider, Resource},
+    synthesized_prefix,
 };
-use naming::{field_ident, kind_ident};
+use naming::{field_ident, kind_ident, schema_name};
 use proc_macro2::TokenStream;
 use quote::quote;
 use serde_json::Value;
-use std::path::PathBuf;
+use std::{collections::BTreeMap, path::PathBuf};
 use types::GeneratedTypes;
 
 mod crd;
@@ -24,20 +25,37 @@ pub struct GeneratedFile {
     pub content: String,
 }
 
-/// Generates `src/generated/{mod,types,operations,<resource>}.rs` and the
-/// end-to-end tests `e2e/generated/<resource>/chainsaw-test.yaml`.
+type Versions<'r, 'a> = BTreeMap<&'a str, Vec<&'r Resource<'a>>>;
+
+struct Group<'r, 'a> {
+    name: &'a str,
+    versions: Versions<'r, 'a>,
+}
+
+type Aliases = BTreeMap<String, String>;
+
+/// Generates `src/generated/{mod,types,operations}.rs`, the resource modules
+/// `src/generated/<group>/<version>/<resource>.rs` with a `mod.rs` per level, and
+/// the end-to-end tests `e2e/generated/<resource>/chainsaw-test.yaml`.
 ///
 /// `document` is the schema set from [`crate::spec::for_codegen`].
 ///
 /// # Errors
 ///
 /// Returns [`GeneratorError`] when typify rejects the schemas, a referenced schema has
-/// no generated type, or a name is not a valid Rust identifier.
+/// no generated type, a name is not a valid Rust identifier, or two API groups map
+/// to the same module.
 pub fn generate(
     provider: &Provider<'_>,
     document: &Value,
 ) -> Result<Vec<GeneratedFile>, GeneratorError> {
-    let types = types::generate_types(document)?;
+    let prefixes = provider
+        .resources
+        .iter()
+        .map(|resource| synthesized_prefix(&format!("{}/{}", resource.group, resource.version)))
+        .collect();
+    let types = types::generate_types(document, &prefixes)?;
+    let groups = groups(provider)?;
 
     let mut files = provider
         .resources
@@ -45,12 +63,64 @@ pub fn generate(
         .map(|resource| resource_file(resource, &types))
         .collect::<Result<Vec<_>, _>>()?;
 
+    let mut renamed = Aliases::new();
+    for (module, group) in &groups {
+        files.push(group_file(module, group)?);
+        for (version, resources) in &group.versions {
+            let aliases = aliases(resources, &types);
+            files.push(version_file(module, version, resources, &aliases)?);
+            renamed.extend(aliases.into_iter().map(|(alias, name)| (name, alias)));
+        }
+    }
     files.push(operations_file(provider, &types)?);
-    files.push(types_file(&types)?);
-    files.push(mod_file(provider)?);
+    files.push(types_file(&types, &renamed)?);
+    files.push(mod_file(provider, &groups)?);
     files.extend(e2e::generate_tests(provider)?);
 
     Ok(files)
+}
+
+fn groups<'r, 'a>(
+    provider: &'r Provider<'a>,
+) -> Result<BTreeMap<String, Group<'r, 'a>>, GeneratorError> {
+    let mut groups: BTreeMap<String, Group<'r, 'a>> = BTreeMap::new();
+    for resource in &provider.resources {
+        let module = group_module(resource.group);
+        let conflict = |conflict: String| GeneratorError::GroupModule {
+            group: resource.group.to_owned(),
+            module: module.clone(),
+            conflict,
+        };
+        if matches!(module.as_str(), "types" | "operations") {
+            return Err(conflict("reserved".to_owned()));
+        }
+        let group = groups.entry(module.clone()).or_insert_with(|| Group {
+            name: resource.group,
+            versions: BTreeMap::new(),
+        });
+        if group.name != resource.group {
+            return Err(conflict(format!("already used by {}", group.name)));
+        }
+        group
+            .versions
+            .entry(resource.version)
+            .or_default()
+            .push(resource);
+    }
+    Ok(groups)
+}
+
+fn aliases(resources: &[&Resource<'_>], types: &GeneratedTypes) -> Aliases {
+    let mut aliases = Aliases::new();
+    for resource in resources {
+        for role in ["ForProvider", "AtProvider"] {
+            let alias = format!("{}{role}", resource.base_kind);
+            for (name, alias) in types.aliases(&schema_name(resource, role), &alias) {
+                aliases.insert(alias, name);
+            }
+        }
+    }
+    aliases
 }
 
 fn resource_file(
@@ -66,8 +136,64 @@ fn resource_file(
     ];
 
     Ok(GeneratedFile {
-        path: format!("src/generated/{}.rs", resource.name.0).into(),
+        path: format!(
+            "src/generated/{}/{}/{}.rs",
+            group_module(resource.group),
+            resource.version,
+            resource.name.0
+        )
+        .into(),
         content: format_tokens(generated_file(&quote!(#(#items)*)))?,
+    })
+}
+
+fn group_file(module: &str, group: &Group<'_, '_>) -> Result<GeneratedFile, GeneratorError> {
+    let versions = group
+        .versions
+        .keys()
+        .map(|version| field_ident(version))
+        .collect::<Result<Vec<_>, _>>()?;
+    let doc = format!(" API group `{}`.", group.name);
+    let content = quote! {
+        #![doc = #doc]
+
+        #(
+            pub mod #versions;
+        )*
+    };
+
+    Ok(GeneratedFile {
+        path: format!("src/generated/{module}/mod.rs").into(),
+        content: format_tokens(content)?,
+    })
+}
+
+fn version_file(
+    module: &str,
+    version: &str,
+    resources: &[&Resource<'_>],
+    aliases: &Aliases,
+) -> Result<GeneratedFile, GeneratorError> {
+    let modules = resources
+        .iter()
+        .map(|resource| field_ident(&resource.name.0))
+        .collect::<Result<Vec<_>, _>>()?;
+    let reexports = aliases.iter().map(|(alias, name)| {
+        let alias = syn::Ident::new(alias, proc_macro2::Span::call_site());
+        let name = syn::Ident::new(name, proc_macro2::Span::call_site());
+        quote!(pub use crate::generated::types::#name as #alias;)
+    });
+    let content = quote! {
+        #(
+            pub mod #modules;
+        )*
+
+        #(#reexports)*
+    };
+
+    Ok(GeneratedFile {
+        path: format!("src/generated/{module}/{version}/mod.rs").into(),
+        content: format_tokens(content)?,
     })
 }
 
@@ -83,7 +209,7 @@ fn operations_file(
     })
 }
 
-fn types_file(types: &GeneratedTypes) -> Result<GeneratedFile, GeneratorError> {
+fn types_file(types: &GeneratedTypes, renamed: &Aliases) -> Result<GeneratedFile, GeneratorError> {
     let tokens = &types.tokens;
     let content = quote! {
         #![doc = " This file is generated. Do not edit manually."]
@@ -91,18 +217,24 @@ fn types_file(types: &GeneratedTypes) -> Result<GeneratedFile, GeneratorError> {
 
         #tokens
     };
+    let mut content = format_tokens(content)?;
+    for (name, alias) in renamed {
+        content = content.replace(&format!("///`{name}`\n"), &format!("///`{alias}`\n"));
+    }
 
     Ok(GeneratedFile {
         path: "src/generated/types.rs".into(),
-        content: format_tokens(content)?,
+        content,
     })
 }
 
-fn mod_file(provider: &Provider<'_>) -> Result<GeneratedFile, GeneratorError> {
-    let resource_modules = provider
-        .resources
-        .iter()
-        .map(|resource| field_ident(&resource.name.0))
+fn mod_file(
+    provider: &Provider<'_>,
+    groups: &BTreeMap<String, Group<'_, '_>>,
+) -> Result<GeneratedFile, GeneratorError> {
+    let group_modules = groups
+        .keys()
+        .map(|module| field_ident(module))
         .collect::<Result<Vec<_>, _>>()?;
 
     let name = provider.name;
@@ -112,9 +244,11 @@ fn mod_file(provider: &Provider<'_>) -> Result<GeneratedFile, GeneratorError> {
         .resources
         .iter()
         .map(|resource| {
+            let group = field_ident(&group_module(resource.group))?;
+            let version = field_ident(resource.version)?;
             let module = field_ident(&resource.name.0)?;
             let kind = kind_ident(&resource.kind)?;
-            Ok(quote!(#module::#kind))
+            Ok(quote!(#group::#version::#module::#kind))
         })
         .collect::<Result<Vec<_>, GeneratorError>>()?;
     let content = quote! {
@@ -122,7 +256,7 @@ fn mod_file(provider: &Provider<'_>) -> Result<GeneratedFile, GeneratorError> {
         pub mod types;
 
         #(
-            pub mod #resource_modules;
+            pub mod #group_modules;
         )*
 
         #http

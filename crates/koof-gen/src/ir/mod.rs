@@ -181,3 +181,24 @@ pub enum SecuritySchemeIr {
         scheme: String,
     },
 }
+
+/// Module name of an API group: its first DNS label in snake case.
+#[must_use]
+pub fn group_module(group: &str) -> String {
+    heck::ToSnakeCase::to_snake_case(group.split('.').next().unwrap_or(group))
+}
+
+/// `components.schemas` key of a synthesized schema (`role` is `ForProvider` or
+/// `AtProvider`): [`synthesized_prefix`] followed by `<kind><role>`.
+#[must_use]
+pub fn synthesized_schema(api_version: &str, kind: &str, role: &str) -> String {
+    format!("{}{kind}{role}", synthesized_prefix(api_version))
+}
+
+/// `<group module>_<version>_`, the prefix of the synthesized schemas of the
+/// resources of `api_version`.
+#[must_use]
+pub fn synthesized_prefix(api_version: &str) -> String {
+    let (group, version) = api_version.split_once('/').unwrap_or(("", api_version));
+    format!("{}_{version}_", group_module(group))
+}
