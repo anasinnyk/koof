@@ -31,18 +31,14 @@ pub async fn build<T: serde::de::DeserializeOwned>(
     for (path, expression) in mapping.set {
         let value = resolve_value(client, node, expression)
             .await?
-            .ok_or_else(|| {
-                ResolveValueError::Missing(format!("request field {path} could not be resolved"))
-            })?;
+            .ok_or_else(|| ResolveValueError::RequestFieldNotSet { path })?;
         Pointer::parse(path)
-            .map_err(|error| ReconcileError::InvalidRequest(error.to_string()))?
+            .map_err(|source| ReconcileError::RequestPath { path, source })?
             .assign(&mut body, Value::String(value))
-            .map_err(|error| ReconcileError::InvalidRequest(error.to_string()))?;
+            .map_err(|source| ReconcileError::RequestAssign { path, source })?;
     }
-    serde_json::from_value(body).map_err(|error| {
-        ReconcileError::InvalidRequest(format!(
-            "request body built from {} does not match the API: {error}",
-            mapping.from
-        ))
+    serde_json::from_value(body).map_err(|source| ReconcileError::InvalidRequest {
+        from: mapping.from,
+        source,
     })
 }
