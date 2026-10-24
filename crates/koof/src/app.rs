@@ -106,6 +106,7 @@ impl App {
             Recorder::new(kube_client, reporter),
             metrics,
             descriptors.clone(),
+            config.concurrency,
         ));
 
         let kinds: Vec<&'static str> = descriptors
