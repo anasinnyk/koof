@@ -89,56 +89,60 @@ pub type AccountStatus = koof::status::ManagedStatus<
 fn api_resource() -> kube::api::ApiResource {
     kube::api::ApiResource::erase::<Account>(&())
 }
-pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor {
-    kind: "Account",
-    api_resource,
-    group: "cloudflare.kube.nas1k.dev",
-    namespaced: true,
-    identifiers: &[("external_id", koof::resource::ValueExpr::ExternalName)],
-    late_initialize: &["name", "settings"],
-    references: &[],
-    credentials: Some(koof::resource::Credentials {
-        source: koof::resource::CredentialSource::Secret {
-            path: "/spec/forProvider/apiTokenSecretRef",
-        },
-        auth: koof::resource::AuthScheme::Bearer,
-    }),
-    observe: koof::resource::ObserveDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
-            response_path: "/result",
-        },
-        deleted_when: None,
-    },
-    create: Some(koof::resource::CreateDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[],
-            response_path: "",
-        },
-        request: koof::resource::RequestMapping {
-            from: "/spec/forProvider",
-            set: &[],
-        },
-        external_name: "/result/id",
-    }),
-    update: Some(koof::resource::UpdateDescriptor {
-        operation: koof::resource::OperationDescriptor {
-            path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
-            response_path: "",
-        },
-        request: koof::resource::RequestMapping {
-            from: "/spec/forProvider",
-            set: &[
-                ("/id", koof::resource::ValueExpr::ExternalName),
-                ("/type", koof::resource::ValueExpr::Field("/status/atProvider/type")),
-            ],
-        },
-    }),
-    delete: Some(koof::resource::OperationDescriptor {
-        path_parameters: &[("account_id", koof::resource::ValueExpr::ExternalName)],
-        response_path: "",
-    }),
-};
+pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
+        "Account",
+        api_resource,
+        "cloudflare.kube.nas1k.dev",
+        true,
+        koof::resource::ObserveDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[("account_id", koof::resource::ValueExpr::ExternalName)],
+                )
+                .with_response_path("/result"),
+        ),
+    )
+    .with_identifiers(&[("external_id", koof::resource::ValueExpr::ExternalName)])
+    .with_late_initialize(&["name", "settings"])
+    .with_credentials(
+        koof::resource::Credentials::new(
+            koof::resource::CredentialSource::Secret {
+                path: "/spec/forProvider/apiTokenSecretRef",
+            },
+            koof::resource::AuthScheme::Bearer,
+        ),
+    )
+    .with_create(
+        koof::resource::CreateDescriptor::new(
+            koof::resource::OperationDescriptor::new(),
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+            "/result/id",
+        ),
+    )
+    .with_update(
+        koof::resource::UpdateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[("account_id", koof::resource::ValueExpr::ExternalName)],
+                ),
+            koof::resource::RequestMapping::new("/spec/forProvider")
+                .with_set(
+                    &[
+                        ("/id", koof::resource::ValueExpr::ExternalName),
+                        (
+                            "/type",
+                            koof::resource::ValueExpr::Field("/status/atProvider/type"),
+                        ),
+                    ],
+                ),
+        ),
+    )
+    .with_delete(
+        koof::resource::OperationDescriptor::new()
+            .with_path_parameters(
+                &[("account_id", koof::resource::ValueExpr::ExternalName)],
+            ),
+    );
 impl koof::ManagedResource for Account {
     type AtProvider = crate::generated::types::AccountAtProvider;
     type Observe = crate::generated::operations::AccountObserve;

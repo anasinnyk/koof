@@ -12,11 +12,11 @@ pub mod team;
 fn http(http: koof::config::HttpConfig) -> koof::config::HttpConfig {
     http
 }
-pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo {
-    name: "sentry",
-    base_url: "https://sentry.io",
-    http,
-};
+pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo::new(
+        "sentry",
+        "https://sentry.io",
+    )
+    .with_http(http);
 /// Registers the controllers of every resource of this provider.
 #[must_use]
 pub fn controllers(app: koof::App) -> koof::App {
