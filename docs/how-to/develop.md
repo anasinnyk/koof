@@ -14,12 +14,12 @@ scripts/check.sh                 # everything CI checks except e2e
 ## Coverage
 
 ```sh
-cargo install cargo-llvm-cov && rustup component add llvm-tools-preview
 scripts/coverage.sh                # line coverage of koof and koof-gen
 ```
 
-Without rustup, point `LLVM_COV` and `LLVM_PROFDATA` at the `llvm-cov` and
-`llvm-profdata` of the LLVM version that `rustc -vV` reports. CI runs the script on
+The devenv shell provides `cargo-llvm-cov` and points `LLVM_COV` / `LLVM_PROFDATA`
+at the LLVM of its `rustc`. Elsewhere: `cargo install cargo-llvm-cov` and
+`rustup component add llvm-tools-preview`. CI runs the script on
 every push; on `main` it publishes the badge JSON to the `badges` branch, which the
 README badges read through [shields.io](https://shields.io/badges/endpoint-badge).
 
