@@ -15,11 +15,14 @@ categories = ["api-bindings", "asynchronous", "development-tools"]
 workspace = true
 
 [features]
+default = ["env", "subscriber"]
+env = ["dep:config"]
 fake = ["dep:regress"]
+subscriber = ["dep:tracing-subscriber"]
 
 [dependencies]
 axum = "0.8.9"
-config = { version = "0.15", default-features = false }
+config = { version = "0.15", default-features = false, optional = true }
 futures = "0.3.34"
 humantime-serde = "1.1"
 json-patch = "4.2"
@@ -38,5 +41,5 @@ smart-default = "0.7"
 thiserror = "2.0.20"
 tokio = { version = "1.53.1", features = ["net", "macros", "signal", "time"] }
 tracing = "0.1.44"
-tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"], optional = true }
 urlencoding = "2.1.3"

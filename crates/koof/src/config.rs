@@ -63,10 +63,12 @@ impl Config {
     /// # Errors
     ///
     /// Returns an error when a `KOOF_*` variable cannot be parsed.
+    #[cfg(feature = "env")]
     pub fn from_env(provider: &ProviderInfo) -> Result<Self, config::ConfigError> {
         Self::load(provider, environment())
     }
 
+    #[cfg(feature = "env")]
     fn load(
         provider: &ProviderInfo,
         environment: config::Environment,
@@ -79,6 +81,7 @@ impl Config {
     }
 }
 
+#[cfg(feature = "env")]
 fn environment() -> config::Environment {
     config::Environment::with_prefix("KOOF")
         .prefix_separator("_")
