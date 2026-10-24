@@ -1,0 +1,6 @@
+---
+source: crates/koof/src/metrics.rs
+expression: samples(&metrics)
+---
+koof_managed_resources{group="example.dev",kind="Record",ready="false",synced="true"} 0
+koof_managed_resources{group="example.dev",kind="Record",ready="true",synced="true"} 1

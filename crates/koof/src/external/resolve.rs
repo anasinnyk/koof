@@ -364,4 +364,163 @@ mod tests {
         ));
         Ok(())
     }
+
+    mod values {
+        use super::*;
+        use crate::testing::{ZONE_ID, account, kubernetes, record, secret, zone};
+        use pretty_assertions::assert_eq;
+        use rstest::rstest;
+
+        async fn resolved(
+            external_name: Option<&str>,
+            for_provider: Value,
+            objects: &[Value],
+            expression: &ValueExpr,
+        ) -> Result<Option<String>, String> {
+            let node = Node::of(&record(external_name, for_provider)).expect("node");
+            resolve_value(&kubernetes(objects), &node, expression)
+                .await
+                .map_err(|error| error.to_string())
+        }
+
+        fn www() -> Value {
+            json!({
+                "name": "www.example.com",
+                "ttl": 300,
+                "proxied": true,
+                "settings": { "ipv4_only": true },
+                "zoneRef": { "name": "example" },
+            })
+        }
+
+        #[rstest]
+        #[case::string_field(ValueExpr::Field("/spec/forProvider/name"), Some("www.example.com"))]
+        #[case::number_field(ValueExpr::Field("/spec/forProvider/ttl"), Some("300"))]
+        #[case::boolean_field(ValueExpr::Field("/spec/forProvider/proxied"), Some("true"))]
+        #[case::unset_field(ValueExpr::Field("/spec/forProvider/comment"), None)]
+        #[case::external_name(ValueExpr::ExternalName, Some("record-1"))]
+        #[case::literal(ValueExpr::Literal("v4"), Some("v4"))]
+        #[case::first_value_that_is_set(
+            ValueExpr::Coalesce(&[ValueExpr::Field("/spec/forProvider/comment"), ValueExpr::ExternalName]),
+            Some("record-1")
+        )]
+        #[case::id_of_the_referenced_resource(ZONE_ID, Some("zone-1"))]
+        #[tokio::test]
+        async fn resolves_values_of_the_resource(
+            #[case] expression: ValueExpr,
+            #[case] value: Option<&str>,
+        ) {
+            assert_eq!(
+                resolved(Some("record-1"), www(), &[zone()], &expression).await,
+                Ok(value.map(str::to_owned))
+            );
+        }
+
+        #[tokio::test]
+        async fn falls_back_to_the_object_name_before_the_first_create() {
+            let name_until_created =
+                ValueExpr::Coalesce(&[ValueExpr::ExternalName, ValueExpr::Field("/metadata/name")]);
+            assert_eq!(
+                resolved(None, www(), &[], &name_until_created).await,
+                Ok(Some("www".to_owned()))
+            );
+        }
+
+        #[rstest]
+        #[case::object_is_not_a_scalar(
+            ValueExpr::Field("/spec/forProvider/settings"),
+            json!({ "settings": { "ipv4_only": true } }),
+            &[],
+            "field \"/spec/forProvider/settings\" is not a scalar value"
+        )]
+        #[case::reference_not_set(ZONE_ID, json!({}), &[], "resource reference /spec/forProvider/zoneRef is not set")]
+        #[case::referenced_object_not_created_yet(
+            ZONE_ID,
+            json!({ "zoneRef": { "name": "example" } }),
+            &[object("Zone", "example", None, json!({ "forProvider": { "name": "example.com" } }))],
+            "reference not ready: Zone referenced via zone has no external_id yet"
+        )]
+        #[tokio::test]
+        async fn explains_what_is_missing(
+            #[case] expression: ValueExpr,
+            #[case] for_provider: Value,
+            #[case] objects: &[Value],
+            #[case] error: &str,
+        ) {
+            assert_eq!(
+                resolved(Some("record-1"), for_provider, objects, &expression).await,
+                Err(error.to_owned())
+            );
+        }
+
+        #[tokio::test]
+        async fn referenced_object_missing_from_the_cluster_is_waited_for() {
+            let node = Node::of(&record(None, www())).expect("node");
+
+            let error = resolve_value(&kubernetes(&[]), &node, &ZONE_ID)
+                .await
+                .expect_err("missing zone");
+
+            assert_eq!(
+                crate::retry::classify(&error.into()),
+                crate::retry::Failure::Waiting
+            );
+        }
+
+        fn object(kind: &str, name: &str, external_name: Option<&str>, spec: Value) -> Value {
+            crate::testing::object(kind, name, external_name, spec)
+        }
+
+        async fn credentials(node: Node, objects: &[Value]) -> Result<Auth, String> {
+            resolve_credentials(&kubernetes(objects), &node)
+                .await
+                .map_err(|error| error.to_string())
+        }
+
+        #[tokio::test]
+        async fn token_comes_from_the_secret_at_the_end_of_the_chain() {
+            let node = Node::of(&record(None, www())).expect("node");
+
+            let auth = credentials(
+                node,
+                &[zone(), account(), secret("cloudflare", "token", "t0ken")],
+            )
+            .await;
+
+            assert!(matches!(auth, Ok(Auth::Bearer(token)) if token == "t0ken"));
+        }
+
+        #[tokio::test]
+        async fn each_kind_applies_the_token_with_its_own_scheme() {
+            let node =
+                Node::of(&serde_json::from_value::<crate::testing::Zone>(zone()).expect("zone"))
+                    .expect("node");
+
+            let auth =
+                credentials(node, &[account(), secret("cloudflare", "token", "t0ken")]).await;
+
+            assert!(
+                matches!(auth, Ok(Auth::Header { name, value }) if name == "X-Auth-Key" && value == "t0ken")
+            );
+        }
+
+        #[rstest]
+        #[case::secret_without_the_key(
+            &[zone(), account(), secret("cloudflare", "other", "t0ken")],
+            "Secret default/cloudflare does not contain key \"token\""
+        )]
+        #[case::account_without_a_secret(
+            &[zone(), object("Account", "main", Some("account-1"), json!({ "forProvider": {} }))],
+            "credential field /spec/forProvider/apiTokenSecretRef is not set"
+        )]
+        #[tokio::test]
+        async fn explains_missing_credentials(#[case] objects: &[Value], #[case] error: &str) {
+            let node = Node::of(&record(None, www())).expect("node");
+
+            assert_eq!(
+                credentials(node, objects).await.err(),
+                Some(error.to_owned())
+            );
+        }
+    }
 }

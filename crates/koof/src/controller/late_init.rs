@@ -99,3 +99,41 @@ pub async fn apply<R: ManagedResource>(
     object::patch_guarded(client, resource, patch).await?;
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::testing::record;
+    use pretty_assertions::assert_eq;
+    use rstest::rstest;
+    use serde_json::json;
+
+    fn late_initialized(spec: Value, observed: &Value) -> Value {
+        Value::Object(candidates(&record(None, spec), observed).expect("candidates"))
+    }
+
+    #[rstest]
+    #[case::copies_a_value_the_user_left_unset(json!({}), json!({ "ttl": 300 }), json!({ "ttl": 300 }))]
+    #[case::copies_every_unset_field(
+        json!({ "proxied": true }),
+        json!({ "name": "www.example.com", "ttl": 300 }),
+        json!({ "name": "www.example.com", "ttl": 300 })
+    )]
+    #[case::keeps_what_the_user_set(json!({ "ttl": 60 }), json!({ "ttl": 300 }), json!({}))]
+    #[case::ignores_fields_not_marked_for_late_initialization(json!({}), json!({ "proxied": true }), json!({}))]
+    #[case::ignores_values_the_api_does_not_have(json!({}), json!({ "ttl": null }), json!({}))]
+    #[case::ignores_values_that_do_not_fit_the_spec(json!({}), json!({ "ttl": "automatic" }), json!({}))]
+    #[case::ignores_values_the_spec_cannot_show_as_set(json!({}), json!({ "tags": [] }), json!({}))]
+    #[case::drops_nulls_inside_copied_objects(
+        json!({}),
+        json!({ "settings": { "ipv4_only": true, "flatten_cname": null } }),
+        json!({ "settings": { "ipv4_only": true } })
+    )]
+    fn fills_unset_spec_fields_from_the_api(
+        #[case] spec: Value,
+        #[case] observed: Value,
+        #[case] fields: Value,
+    ) {
+        assert_eq!(late_initialized(spec, &observed), fields);
+    }
+}

@@ -169,3 +169,36 @@ pub fn run(
         )),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::testing::{Account, PROVIDER, Record, Zone};
+    use kube::CustomResourceExt as _;
+
+    fn crds() -> Vec<CustomResourceDefinition> {
+        vec![Account::crd(), Zone::crd(), Record::crd()]
+    }
+
+    #[test]
+    fn cluster_role_grants_the_controller_its_kinds_secrets_and_events() {
+        insta::assert_json_snapshot!(cluster_role(&crds()));
+    }
+
+    #[test]
+    fn role_limits_lease_access_to_the_provider_lease() {
+        insta::assert_json_snapshot!(role(&PROVIDER));
+    }
+
+    #[test]
+    fn kustomization_puts_the_provider_in_its_own_namespace() {
+        insta::with_settings!({ filters => vec![(env!("CARGO_PKG_VERSION"), "[version]")] }, {
+            insta::assert_snapshot!(kustomization(&PROVIDER, "ghcr.io/example/koof-example"));
+        });
+    }
+
+    #[test]
+    fn documents_are_a_multi_document_stream() {
+        insta::assert_snapshot!(documents(&[role(&PROVIDER)]).expect("documents"));
+    }
+}

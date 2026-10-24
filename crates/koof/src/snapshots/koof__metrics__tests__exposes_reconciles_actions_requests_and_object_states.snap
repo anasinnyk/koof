@@ -1,0 +1,19 @@
+---
+source: crates/koof/src/metrics.rs
+expression: samples(&metrics)
+---
+koof_actions_total{group="example.dev",kind="Record",action="created"} 1
+koof_drift_detected_total{group="example.dev",kind="Record"} 1
+koof_external_request_duration_seconds_count{operation="RecordCreate"} 1
+koof_external_request_duration_seconds_count{operation="RecordObserve"} 1
+koof_external_request_duration_seconds_sum{operation="RecordCreate"} 0.2
+koof_external_request_duration_seconds_sum{operation="RecordObserve"} 0.08
+koof_external_requests_total{operation="RecordCreate",status_class="4xx"} 1
+koof_external_requests_total{operation="RecordObserve",status_class="2xx"} 1
+koof_late_initialized_total{group="example.dev",kind="Record"} 1
+koof_managed_resources{group="example.dev",kind="Record",ready="false",synced="true"} 1
+koof_managed_resources{group="example.dev",kind="Record",ready="true",synced="true"} 1
+koof_reconcile_duration_seconds_count{group="example.dev",kind="Record"} 2
+koof_reconcile_duration_seconds_sum{group="example.dev",kind="Record"} 3.12
+koof_reconcile_total{group="example.dev",kind="Record",result="error"} 1
+koof_reconcile_total{group="example.dev",kind="Record",result="success"} 1

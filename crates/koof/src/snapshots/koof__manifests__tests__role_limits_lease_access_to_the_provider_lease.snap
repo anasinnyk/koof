@@ -1,0 +1,39 @@
+---
+source: crates/koof/src/manifests.rs
+expression: role(&PROVIDER)
+---
+{
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "Role",
+  "metadata": {
+    "name": "provider"
+  },
+  "rules": [
+    {
+      "apiGroups": [
+        "coordination.k8s.io"
+      ],
+      "resourceNames": [
+        "koof-example"
+      ],
+      "resources": [
+        "leases"
+      ],
+      "verbs": [
+        "get",
+        "update"
+      ]
+    },
+    {
+      "apiGroups": [
+        "coordination.k8s.io"
+      ],
+      "resources": [
+        "leases"
+      ],
+      "verbs": [
+        "create"
+      ]
+    }
+  ]
+}

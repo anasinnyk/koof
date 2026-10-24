@@ -291,3 +291,114 @@ fn node_mut<'a>(
     }
     Some(current)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use pretty_assertions::assert_eq;
+    use rstest::rstest;
+    use serde_json::json;
+
+    fn flattened(schema: Value) -> Value {
+        let mut schema = schemars::Schema::try_from(schema).expect("schema");
+        flatten_unions(&mut schema);
+        schema.to_value()
+    }
+
+    #[rstest]
+    #[case::optional_value_becomes_nullable(
+        json!({ "anyOf": [{ "type": "string" }, { "type": "null" }] }),
+        json!({ "type": "string", "nullable": true })
+    )]
+    #[case::single_variant_is_inlined_keeping_the_description(
+        json!({ "description": "Zone settings", "oneOf": [{ "type": "object", "properties": { "ttl": { "type": "integer" } } }] }),
+        json!({ "description": "Zone settings", "type": "object", "properties": { "ttl": { "type": "integer" } } })
+    )]
+    #[case::object_variants_merge_their_properties(
+        json!({ "oneOf": [
+            { "type": "object", "properties": { "url": { "type": "string" } }, "required": ["url", "kind"] },
+            { "type": "object", "properties": { "path": { "type": "string" } }, "required": ["kind"] },
+        ] }),
+        json!({
+            "type": "object",
+            "properties": { "url": { "type": "string" }, "path": { "type": "string" } },
+            "required": ["kind"],
+        })
+    )]
+    #[case::conflicting_property_types_accept_anything(
+        json!({ "oneOf": [
+            { "type": "object", "properties": { "value": { "type": "string" } } },
+            { "type": "object", "properties": { "value": { "type": "integer" } } },
+        ] }),
+        json!({ "type": "object", "properties": { "value": { "x-kubernetes-preserve-unknown-fields": true } } })
+    )]
+    #[case::string_enums_are_combined(
+        json!({ "anyOf": [{ "type": "string", "enum": ["A", "AAAA"] }, { "type": "string", "enum": ["CNAME"] }] }),
+        json!({ "type": "string", "enum": ["A", "AAAA", "CNAME"] })
+    )]
+    #[case::integer_or_string(
+        json!({ "anyOf": [{ "type": "integer" }, { "type": "string" }] }),
+        json!({ "x-kubernetes-int-or-string": true })
+    )]
+    #[case::object_or_string_accepts_anything(
+        json!({ "anyOf": [{ "type": "object", "properties": {} }, { "type": "string" }] }),
+        json!({ "x-kubernetes-preserve-unknown-fields": true })
+    )]
+    #[case::unions_inside_properties_are_flattened_too(
+        json!({ "type": "object", "properties": { "ttl": { "anyOf": [{ "type": "integer" }, { "type": "null" }] } } }),
+        json!({ "type": "object", "properties": { "ttl": { "type": "integer", "nullable": true } } })
+    )]
+    fn unions_become_structural_schemas(#[case] schema: Value, #[case] structural: Value) {
+        assert_eq!(flattened(schema), structural);
+    }
+
+    #[rstest]
+    #[case::untyped_property(
+        json!({ "type": "object", "properties": { "data": {} } }),
+        json!({ "type": "object", "properties": { "data": { "x-kubernetes-preserve-unknown-fields": true } } })
+    )]
+    #[case::any_map_value(
+        json!({ "type": "object", "additionalProperties": true }),
+        json!({ "type": "object", "additionalProperties": { "x-kubernetes-preserve-unknown-fields": true } })
+    )]
+    #[case::null_in_an_enum_means_nullable(
+        json!({ "type": "string", "enum": ["low", "high", null] }),
+        json!({ "type": "string", "enum": ["low", "high"], "nullable": true })
+    )]
+    fn untyped_values_are_preserved_as_is(#[case] schema: Value, #[case] structural: Value) {
+        assert_eq!(flattened(schema), structural);
+    }
+
+    fn with_validations(validations: &[Validation]) -> Value {
+        let mut schema = schemars::Schema::try_from(json!({
+            "type": "object",
+            "properties": { "forProvider": { "type": "object", "properties": { "ttl": { "type": "integer" } } } },
+        }))
+        .expect("schema");
+        add_validations(&mut schema, validations);
+        schema.to_value()
+    }
+
+    #[test]
+    fn validations_are_attached_to_their_field() {
+        let schema = with_validations(&[Validation {
+            rule: "self.ttl >= 30",
+            message: "ttl must be at least 30",
+            field: "forProvider",
+        }]);
+        assert_eq!(
+            schema.pointer("/properties/forProvider/x-kubernetes-validations"),
+            Some(&json!([{ "rule": "self.ttl >= 30", "message": "ttl must be at least 30" }]))
+        );
+    }
+
+    #[test]
+    fn validation_of_an_unknown_field_is_skipped() {
+        let schema = with_validations(&[Validation {
+            rule: "self == oldSelf",
+            message: "name is immutable",
+            field: "forProvider.name",
+        }]);
+        assert_eq!(schema, with_validations(&[]));
+    }
+}
