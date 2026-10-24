@@ -406,4 +406,294 @@ mod tests {
             "POST /zones returned 400 Bad Request: Invalid zone"
         );
     }
+
+    mod requests {
+        use super::*;
+        use crate::testing::{RecordCreate, RecordDelete, RecordObserve, RecordUpdate};
+        use pretty_assertions::assert_eq;
+        use serde_json::{Value, json};
+        use wiremock::{
+            Mock, MockServer, ResponseTemplate,
+            matchers::{body_json, header, method, path},
+        };
+
+        const RECORD: &[(&str, &str)] = &[("zone_id", "zone-1"), ("record_id", "record-1")];
+        const ZONE: &[(&str, &str)] = &[("zone_id", "zone-1")];
+
+        fn token() -> Auth {
+            Auth::Bearer("t0ken".to_owned())
+        }
+
+        async fn provider(
+            verb: &str,
+            url: &str,
+            response: ResponseTemplate,
+        ) -> (MockServer, HttpClient) {
+            let server = MockServer::start().await;
+            Mock::given(method(verb))
+                .and(path(url))
+                .respond_with(response)
+                .expect(1)
+                .mount(&server)
+                .await;
+            let client = HttpClient::new(reqwest::Client::new(), server.uri());
+            (server, client)
+        }
+
+        fn status_of(error: &HttpError) -> Option<(u16, Option<Duration>)> {
+            match error {
+                HttpError::Status {
+                    status,
+                    retry_after,
+                    ..
+                } => Some((status.as_u16(), *retry_after)),
+                _ => None,
+            }
+        }
+
+        #[tokio::test]
+        async fn observe_returns_the_decoded_resource() {
+            let record = json!({ "result": { "id": "record-1", "ttl": 300 } });
+            let (_server, client) = provider(
+                "GET",
+                "/zones/zone-1/records/record-1",
+                ResponseTemplate::new(200).set_body_json(&record),
+            )
+            .await;
+
+            let response = client.send::<RecordObserve>(&token(), RECORD, None).await;
+
+            assert_eq!(response.ok(), Some(Some(record)));
+        }
+
+        #[tokio::test]
+        async fn bearer_token_is_sent_in_the_authorization_header() {
+            let server = MockServer::start().await;
+            Mock::given(header("authorization", "Bearer t0ken"))
+                .respond_with(ResponseTemplate::new(200).set_body_json(json!({})))
+                .expect(1)
+                .mount(&server)
+                .await;
+            let client = HttpClient::new(reqwest::Client::new(), server.uri());
+
+            client
+                .send::<RecordObserve>(&token(), RECORD, None)
+                .await
+                .expect("authorized");
+        }
+
+        #[tokio::test]
+        async fn api_key_is_sent_in_its_own_header() {
+            let server = MockServer::start().await;
+            Mock::given(header("x-auth-key", "k3y"))
+                .respond_with(ResponseTemplate::new(200).set_body_json(json!({})))
+                .expect(1)
+                .mount(&server)
+                .await;
+            let client = HttpClient::new(reqwest::Client::new(), server.uri());
+            let auth = Auth::Header {
+                name: "X-Auth-Key".to_owned(),
+                value: "k3y".to_owned(),
+            };
+
+            client
+                .send::<RecordObserve>(&auth, RECORD, None)
+                .await
+                .expect("authorized");
+        }
+
+        #[tokio::test]
+        async fn create_sends_the_body_as_json() {
+            let server = MockServer::start().await;
+            Mock::given(method("POST"))
+                .and(path("/zones/zone-1/records"))
+                .and(body_json(json!({ "name": "www", "ttl": 300 })))
+                .respond_with(
+                    ResponseTemplate::new(200)
+                        .set_body_json(json!({ "result": { "id": "record-1" } })),
+                )
+                .expect(1)
+                .mount(&server)
+                .await;
+            let client = HttpClient::new(reqwest::Client::new(), server.uri());
+
+            let created = client
+                .send_json::<RecordCreate>(
+                    &token(),
+                    ZONE,
+                    Some(&json!({ "name": "www", "ttl": 300 })),
+                )
+                .await;
+
+            assert_eq!(
+                created
+                    .ok()
+                    .flatten()
+                    .and_then(|body| body.pointer("/result/id").cloned()),
+                Some(json!("record-1"))
+            );
+        }
+
+        #[tokio::test]
+        async fn missing_resource_is_none_on_observe() {
+            let (_server, client) = provider(
+                "GET",
+                "/zones/zone-1/records/record-1",
+                ResponseTemplate::new(404),
+            )
+            .await;
+
+            assert_eq!(
+                client
+                    .send::<RecordObserve>(&token(), RECORD, None)
+                    .await
+                    .ok(),
+                Some(None)
+            );
+        }
+
+        #[tokio::test]
+        async fn missing_resource_is_none_on_delete() {
+            let (_server, client) = provider(
+                "DELETE",
+                "/zones/zone-1/records/record-1",
+                ResponseTemplate::new(404),
+            )
+            .await;
+
+            assert_eq!(
+                client
+                    .send_discarding::<RecordDelete>(&token(), RECORD, None)
+                    .await
+                    .ok(),
+                Some(false)
+            );
+        }
+
+        #[tokio::test]
+        async fn missing_parent_is_an_error_on_create() {
+            let (_server, client) =
+                provider("POST", "/zones/zone-1/records", ResponseTemplate::new(404)).await;
+
+            let error = client
+                .send_json::<RecordCreate>(&token(), ZONE, Some(&json!({})))
+                .await
+                .expect_err("404");
+
+            assert_eq!(status_of(&error), Some((404, None)));
+        }
+
+        #[tokio::test]
+        async fn empty_success_body_is_null() {
+            let (_server, client) = provider(
+                "GET",
+                "/zones/zone-1/records/record-1",
+                ResponseTemplate::new(204),
+            )
+            .await;
+
+            assert_eq!(
+                client
+                    .send::<RecordObserve>(&token(), RECORD, None)
+                    .await
+                    .ok(),
+                Some(Some(Value::Null))
+            );
+        }
+
+        #[tokio::test]
+        async fn update_ignores_a_body_that_is_not_json() {
+            let (_server, client) = provider(
+                "PATCH",
+                "/zones/zone-1/records/record-1",
+                ResponseTemplate::new(200).set_body_string("OK"),
+            )
+            .await;
+
+            let updated = client
+                .send_discarding::<RecordUpdate>(&token(), RECORD, Some(&json!({ "ttl": 60 })))
+                .await;
+
+            assert_eq!(updated.ok(), Some(true));
+        }
+
+        #[tokio::test]
+        async fn observe_fails_on_a_body_that_is_not_json() {
+            let (_server, client) = provider(
+                "GET",
+                "/zones/zone-1/records/record-1",
+                ResponseTemplate::new(200).set_body_string("<html>"),
+            )
+            .await;
+
+            let error = client
+                .send::<RecordObserve>(&token(), RECORD, None)
+                .await
+                .expect_err("not JSON");
+
+            assert!(matches!(error, HttpError::Decode(_)));
+        }
+
+        #[tokio::test]
+        async fn rate_limit_keeps_the_retry_after_delay() {
+            let (_server, client) = provider(
+                "GET",
+                "/zones/zone-1/records/record-1",
+                ResponseTemplate::new(429).insert_header("retry-after", "7"),
+            )
+            .await;
+
+            let error = client
+                .send::<RecordObserve>(&token(), RECORD, None)
+                .await
+                .expect_err("429");
+
+            assert_eq!(status_of(&error), Some((429, Some(Duration::from_secs(7)))));
+        }
+
+        #[tokio::test]
+        async fn failure_reports_the_provider_message() {
+            let (_server, client) = provider(
+                "POST",
+                "/zones/zone-1/records",
+                ResponseTemplate::new(400)
+                    .set_body_json(json!({ "errors": [{ "message": "Invalid TTL" }] })),
+            )
+            .await;
+
+            let error = client
+                .send_json::<RecordCreate>(&token(), ZONE, Some(&json!({})))
+                .await
+                .expect_err("400");
+
+            assert_eq!(
+                error.to_string(),
+                "POST /zones/zone-1/records returned 400 Bad Request: Invalid TTL"
+            );
+        }
+
+        #[tokio::test]
+        async fn requests_are_counted_by_status_class() {
+            let (_server, client) = provider(
+                "GET",
+                "/zones/zone-1/records/record-1",
+                ResponseTemplate::new(404),
+            )
+            .await;
+            let metrics = std::sync::Arc::new(crate::metrics::Metrics::new());
+            let client = client.with_metrics(metrics.clone());
+
+            client
+                .send::<RecordObserve>(&token(), RECORD, None)
+                .await
+                .expect("404 is not an error");
+
+            assert!(
+                metrics
+                    .encode()
+                    .expect("encode")
+                    .contains(r#"koof_external_requests_total{operation="RecordObserve",status_class="not_found"} 1"#)
+            );
+        }
+    }
 }

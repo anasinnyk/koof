@@ -196,12 +196,12 @@ impl Fake {
 
 impl Shape {
     fn complete(&self, object: &mut Value) {
+        fill_required(&self.schema, &self.schema, object);
         if let Value::Object(object) = object {
             for (field, unset) in &self.fields {
                 object.entry(field.clone()).or_insert_with(|| unset.clone());
             }
         }
-        fill_required(&self.schema, &self.schema, object);
     }
 }
 
@@ -674,5 +674,211 @@ fn merge(target: &mut Value, patch: Value) {
         } else {
             merge(target.entry(key).or_insert(Value::Null), value);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::testing::Record;
+    use pretty_assertions::assert_eq;
+    use tower::ServiceExt as _;
+
+    const RECORDS: &str = "/zones/zone-1/records";
+    const WWW: &str = "/zones/zone-1/records/www";
+
+    fn api() -> Router {
+        Fake::new().resource::<Record>().router()
+    }
+
+    async fn call(api: &Router, method: Method, path: &str, body: Option<Value>) -> (u16, Value) {
+        let request = axum::http::Request::builder()
+            .method(method)
+            .uri(path)
+            .header("authorization", "Bearer t0ken")
+            .body(axum::body::Body::from(
+                body.map(|body| body.to_string()).unwrap_or_default(),
+            ))
+            .expect("request");
+        response(api, request).await
+    }
+
+    async fn response(
+        api: &Router,
+        request: axum::http::Request<axum::body::Body>,
+    ) -> (u16, Value) {
+        let response = api.clone().oneshot(request).await.expect("response");
+        let status = response.status().as_u16();
+        let body = axum::body::to_bytes(response.into_body(), usize::MAX)
+            .await
+            .expect("body");
+        (status, serde_json::from_slice(&body).unwrap_or(Value::Null))
+    }
+
+    #[tokio::test]
+    async fn create_assigns_an_id_and_fills_required_fields() {
+        let api = api();
+
+        let created = call(&api, Method::POST, RECORDS, Some(json!({ "ttl": 300 }))).await;
+
+        assert_eq!(
+            created,
+            (
+                200,
+                json!({ "result": {
+                    "id": "00000000000000000000000000000001",
+                    "name": "00000000000000000000000000000001",
+                    "ttl": 300,
+                    "created_on": null,
+                } })
+            )
+        );
+    }
+
+    #[tokio::test]
+    async fn created_resource_can_be_observed() {
+        let api = api();
+        call(
+            &api,
+            Method::POST,
+            RECORDS,
+            Some(json!({ "id": "www", "name": "www", "ttl": 300 })),
+        )
+        .await;
+
+        let observed = call(&api, Method::GET, WWW, None).await;
+
+        assert_eq!(
+            observed,
+            (
+                200,
+                json!({ "result": { "id": "www", "name": "www", "ttl": 300, "created_on": null } })
+            )
+        );
+    }
+
+    #[tokio::test]
+    async fn unknown_resource_is_not_found() {
+        assert_eq!(call(&api(), Method::GET, WWW, None).await.0, 404);
+    }
+
+    #[tokio::test]
+    async fn creating_the_same_id_twice_conflicts() {
+        let api = api();
+        call(&api, Method::POST, RECORDS, Some(json!({ "id": "www" }))).await;
+
+        assert_eq!(
+            call(&api, Method::POST, RECORDS, Some(json!({ "id": "www" })))
+                .await
+                .0,
+            409
+        );
+    }
+
+    #[tokio::test]
+    async fn patch_merges_and_null_removes_a_field() {
+        let api = api();
+        call(
+            &api,
+            Method::POST,
+            RECORDS,
+            Some(json!({ "id": "www", "name": "www", "ttl": 300, "comment": "old" })),
+        )
+        .await;
+
+        let updated = call(
+            &api,
+            Method::PATCH,
+            WWW,
+            Some(json!({ "ttl": 60, "comment": null })),
+        )
+        .await;
+
+        assert_eq!(
+            updated,
+            (
+                200,
+                json!({ "result": { "id": "www", "name": "www", "ttl": 60, "created_on": null } })
+            )
+        );
+    }
+
+    #[tokio::test]
+    async fn deleted_resource_is_gone() {
+        let api = api();
+        call(&api, Method::POST, RECORDS, Some(json!({ "id": "www" }))).await;
+
+        let deleted = call(&api, Method::DELETE, WWW, None).await;
+        let observed = call(&api, Method::GET, WWW, None).await;
+
+        assert_eq!(
+            (deleted, observed.0),
+            ((200, json!({ "result": { "id": "www" } })), 404)
+        );
+    }
+
+    #[tokio::test]
+    async fn resources_are_kept_per_parent() {
+        let api = api();
+        call(&api, Method::POST, RECORDS, Some(json!({ "id": "www" }))).await;
+
+        assert_eq!(
+            call(&api, Method::GET, "/zones/zone-2/records/www", None)
+                .await
+                .0,
+            404
+        );
+    }
+
+    #[tokio::test]
+    async fn request_without_credentials_is_unauthorized() {
+        let request = axum::http::Request::get(WWW)
+            .body(axum::body::Body::empty())
+            .expect("request");
+
+        assert_eq!(response(&api(), request).await.0, 401);
+    }
+
+    #[tokio::test]
+    async fn unknown_route_is_not_found() {
+        assert_eq!(
+            call(&api(), Method::GET, "/accounts", None).await,
+            (
+                404,
+                json!({ "success": false, "errors": [{ "message": "no such route in the fake API" }] })
+            )
+        );
+    }
+
+    #[tokio::test]
+    async fn invalid_json_is_a_bad_request() {
+        let request = axum::http::Request::post(RECORDS)
+            .header("authorization", "Bearer t0ken")
+            .body(axum::body::Body::from("{"))
+            .expect("request");
+
+        assert_eq!(response(&api(), request).await.0, 400);
+    }
+
+    #[tokio::test]
+    async fn state_shows_every_stored_resource() {
+        let api = api();
+        call(
+            &api,
+            Method::POST,
+            RECORDS,
+            Some(json!({ "id": "www", "name": "www", "ttl": 300 })),
+        )
+        .await;
+
+        assert_eq!(
+            call(&api, Method::GET, "/__fake/state", None).await,
+            (
+                200,
+                json!({ "example.dev/Record": {
+                    "zone-1/www": { "id": "www", "name": "www", "ttl": 300, "created_on": null }
+                } })
+            )
+        );
     }
 }

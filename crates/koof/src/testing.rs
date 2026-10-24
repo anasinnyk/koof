@@ -166,10 +166,7 @@ pub static RECORD: ResourceDescriptor = ResourceDescriptor::new(
     || kube::api::ApiResource::erase::<Record>(&()),
     GROUP,
     true,
-    ObserveDescriptor::new(
-        OperationDescriptor::new()
-            .with_path_parameters(&[("zone_id", ZONE_ID), ("record_id", ValueExpr::ExternalName)]),
-    ),
+    ObserveDescriptor::new(RECORD_OPERATION.with_response_path("/result")),
 )
 .with_identifiers(EXTERNAL_ID)
 .with_late_initialize(&["name", "ttl", "tags", "settings"])
@@ -190,10 +187,13 @@ pub static RECORD: ResourceDescriptor = ResourceDescriptor::new(
     "/result/id",
 ))
 .with_update(UpdateDescriptor::new(
-    OperationDescriptor::new()
-        .with_path_parameters(&[("zone_id", ZONE_ID), ("record_id", ValueExpr::ExternalName)]),
+    RECORD_OPERATION.with_response_path("/result"),
     RequestMapping::new("/spec/forProvider"),
-));
+))
+.with_delete(RECORD_OPERATION.with_response_path("/result"));
+
+const RECORD_OPERATION: OperationDescriptor = OperationDescriptor::new()
+    .with_path_parameters(&[("zone_id", ZONE_ID), ("record_id", ValueExpr::ExternalName)]);
 
 macro_rules! operation {
     ($name:ident, $method:ident, $path:literal) => {
@@ -212,15 +212,16 @@ macro_rules! operation {
 operation!(RecordObserve, GET, "/zones/{zone_id}/records/{record_id}");
 operation!(RecordCreate, POST, "/zones/{zone_id}/records");
 operation!(RecordUpdate, PATCH, "/zones/{zone_id}/records/{record_id}");
+operation!(RecordDelete, DELETE, "/zones/{zone_id}/records/{record_id}");
 
 macro_rules! managed {
-    ($kind:ident, $descriptor:ident, $at_provider:ty, $observe:ty, $create:ty, $update:ty) => {
+    ($kind:ident, $descriptor:ident, $at_provider:ty, $observe:ty, $create:ty, $update:ty, $delete:ty) => {
         impl ManagedResource for $kind {
             type AtProvider = $at_provider;
             type Observe = $observe;
             type Create = $create;
             type Update = $update;
-            type Delete = Unsupported;
+            type Delete = $delete;
 
             fn descriptor() -> &'static ResourceDescriptor {
                 &$descriptor
@@ -243,16 +244,26 @@ managed!(
     Value,
     Unsupported,
     Unsupported,
+    Unsupported,
     Unsupported
 );
-managed!(Zone, ZONE, Value, Unsupported, Unsupported, Unsupported);
+managed!(
+    Zone,
+    ZONE,
+    Value,
+    Unsupported,
+    Unsupported,
+    Unsupported,
+    Unsupported
+);
 managed!(
     Record,
     RECORD,
     RecordAtProvider,
     RecordObserve,
     RecordCreate,
-    RecordUpdate
+    RecordUpdate,
+    RecordDelete
 );
 
 /// A managed object of `kind` in [`NAMESPACE`] with `spec` and, when given, the
