@@ -36,7 +36,9 @@ spec:
 stopped between sending a create and recording its result. Check the provider:
 
 - the resource exists: set the `<group>/external-name` annotation to its ID;
-- it does not: remove the `<group>/external-create-pending` annotation.
+- it does not: remove the `<group>/external-create-pending` annotation;
+- the object is being deleted and the resource should stay: set
+  `deletionPolicy: Orphan`.
 
 ## Run more than one replica
 

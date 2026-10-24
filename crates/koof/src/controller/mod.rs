@@ -173,9 +173,7 @@ async fn reconcile_inner<R: ManagedResource>(
             return Ok(Action::requeue(WAITING));
         }
         PolicyAction::Delete => return delete_external(context, resource).await,
-        PolicyAction::Finalize => {
-            return release(context, resource, observation.exists.then_some(ORPHANED)).await;
-        }
+        PolicyAction::Finalize => return finalize(context, resource, observation.exists).await,
         PolicyAction::Create if R::descriptor().create.is_some() => {
             return create_external(context, resource).await;
         }
@@ -365,18 +363,35 @@ fn jitter(duration: Duration) -> Duration {
     duration.mul_f64(0.9 + f64::from(permille) / 1000.0)
 }
 
-async fn create_external<R: ManagedResource>(
+async fn finalize<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
+    exists: bool,
 ) -> Result<Action, ReconcileError> {
-    let state = CreateState::of(resource);
-    let descriptor = R::descriptor();
-    if state.is_incomplete() {
+    if exists {
+        return release(context, resource, Some(ORPHANED)).await;
+    }
+    refuse_while_create_pending(resource)?;
+    release(context, resource, None).await
+}
+
+fn refuse_while_create_pending<R: ManagedResource>(resource: &R) -> Result<(), ReconcileError> {
+    if CreateState::of(resource).is_incomplete() {
+        let descriptor = R::descriptor();
         return Err(ReconcileError::CreatePending {
             pending: descriptor.annotation(create_state::CREATE_PENDING),
             external_name: descriptor.annotation(EXTERNAL_NAME),
         });
     }
+    Ok(())
+}
+
+async fn create_external<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+) -> Result<Action, ReconcileError> {
+    refuse_while_create_pending(resource)?;
+    let state = CreateState::of(resource);
     if state.recently_succeeded(jiff::Timestamp::now()) {
         tracing::debug!("created recently and not visible yet; waiting");
         set_conditions(

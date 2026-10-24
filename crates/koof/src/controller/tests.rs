@@ -327,3 +327,39 @@ async fn waits_until_the_zone_has_an_id() {
         Some(pair("False", "ReconcileError"))
     );
 }
+
+#[tokio::test]
+async fn an_interrupted_create_keeps_the_object_while_it_is_deleted() {
+    let mut record = www(for_provider(&json!({ "name": "www.example.com" })));
+    record["metadata"]["annotations"][RECORD.annotation(create_state::CREATE_PENDING)] =
+        json!("2026-01-01T00:00:00Z");
+    record["metadata"]["finalizers"] = json!(["example.dev/finalizer"]);
+    let world = world(record).await;
+    world.cluster.delete("Record", "www");
+
+    let error = world.reconcile_record().await.expect_err("create pending");
+
+    assert!(matches!(error, ReconcileError::CreatePending { .. }));
+    assert_eq!(
+        world
+            .record()
+            .map(|record| record["metadata"]["finalizers"].clone()),
+        Some(json!(["example.dev/finalizer"]))
+    );
+}
+
+#[tokio::test]
+async fn an_interrupted_create_can_be_orphaned_on_delete() {
+    let mut spec = for_provider(&json!({ "name": "www.example.com" }));
+    spec["deletionPolicy"] = json!("Orphan");
+    let mut record = www(spec);
+    record["metadata"]["annotations"][RECORD.annotation(create_state::CREATE_PENDING)] =
+        json!("2026-01-01T00:00:00Z");
+    record["metadata"]["finalizers"] = json!(["example.dev/finalizer"]);
+    let world = world(record).await;
+    world.cluster.delete("Record", "www");
+
+    world.reconcile_record().await.expect("reconciled");
+
+    assert_eq!(world.record(), None);
+}
