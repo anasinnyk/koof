@@ -363,13 +363,10 @@ async fn create_external<R: ManagedResource>(
     let state = CreateState::of(resource);
     let descriptor = R::descriptor();
     if state.is_incomplete() {
-        return Err(ReconcileError::CreateIncomplete(format!(
-            "a previous create may have succeeded ({} is set, no outcome recorded); if the \
-             external resource exists set {} to its ID, otherwise remove {}",
-            descriptor.annotation(create_state::CREATE_PENDING),
-            descriptor.annotation(EXTERNAL_NAME),
-            descriptor.annotation(create_state::CREATE_PENDING),
-        )));
+        return Err(ReconcileError::CreatePending {
+            pending: descriptor.annotation(create_state::CREATE_PENDING),
+            external_name: descriptor.annotation(EXTERNAL_NAME),
+        });
     }
     if state.recently_succeeded(jiff::Timestamp::now()) {
         tracing::debug!("created recently and not visible yet; waiting");

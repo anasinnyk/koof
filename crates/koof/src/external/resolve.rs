@@ -62,20 +62,20 @@ pub fn resolve_value<'a>(
             ValueExpr::RelatedIdentifier { via, name } => {
                 let target = traverse(client, node, via).await?;
                 let identifier = target.descriptor.identifier(name).ok_or_else(|| {
-                    ResolveValueError::Missing(format!(
-                        "{} has no identifier {name}",
-                        target.descriptor.kind
-                    ))
+                    ResolveValueError::UnknownIdentifier {
+                        kind: target.descriptor.kind,
+                        name,
+                    }
                 })?;
                 resolve_value(client, &target, identifier)
                     .await?
                     .map_or_else(
                         || {
-                            Err(ResolveValueError::ReferenceNotReady(format!(
-                                "{} referenced via {} has no {name} yet",
-                                target.descriptor.kind,
-                                via.join(".")
-                            )))
+                            Err(ResolveValueError::ReferenceNotReady {
+                                kind: target.descriptor.kind,
+                                via: via.join("."),
+                                identifier: name,
+                            })
                         },
                         |value| Ok(Some(value)),
                     )
@@ -115,12 +115,9 @@ pub fn target(
             .find(|descriptor| descriptor.kind == kind),
     }
     .copied()
-    .ok_or_else(|| {
-        ResolveValueError::Missing(format!(
-            "resource reference {} cannot point at kind {}",
-            reference.from,
-            target.kind.as_deref().unwrap_or_default()
-        ))
+    .ok_or_else(|| ResolveValueError::ReferenceKind {
+        from: reference.from,
+        kind: target.kind.clone().unwrap_or_default(),
     })?;
     Ok(Some((descriptor, target.name)))
 }
@@ -139,13 +136,15 @@ pub async fn traverse(
     let mut current = node.clone();
     for relation in via {
         let reference = current.descriptor.reference(relation).ok_or_else(|| {
-            ResolveValueError::Missing(format!(
-                "{} has no reference {relation}",
-                current.descriptor.kind
-            ))
+            ResolveValueError::UnknownReference {
+                kind: current.descriptor.kind,
+                name: (*relation).to_owned(),
+            }
         })?;
         let (descriptor, name) = target(&current.value, reference)?.ok_or_else(|| {
-            ResolveValueError::Missing(format!("resource reference {} is not set", reference.from))
+            ResolveValueError::ReferenceNotSet {
+                from: reference.from,
+            }
         })?;
 
         let api_resource = (descriptor.api_resource)();
@@ -157,10 +156,10 @@ pub async fn traverse(
                     Some(namespace),
                 ),
                 (true, None) => {
-                    return Err(ResolveValueError::Missing(format!(
-                        "cluster-scoped {} cannot reference namespaced {}",
-                        current.descriptor.kind, descriptor.kind
-                    )));
+                    return Err(ResolveValueError::ClusterScopedReference {
+                        kind: current.descriptor.kind,
+                        target: descriptor.kind,
+                    });
                 }
             };
 
@@ -186,9 +185,13 @@ pub async fn resolve_credentials(
     client: &kube::Client,
     node: &Node,
 ) -> Result<Auth, CredentialError> {
-    let credentials = node.descriptor.credentials.as_ref().ok_or_else(|| {
-        CredentialError::MissingValue(format!("{} has no credentials", node.descriptor.kind))
-    })?;
+    let credentials =
+        node.descriptor
+            .credentials
+            .as_ref()
+            .ok_or_else(|| CredentialError::NoCredentials {
+                kind: node.descriptor.kind,
+            })?;
 
     let terminal = match &credentials.source {
         CredentialSource::Secret { .. } => node.clone(),
@@ -200,15 +203,14 @@ pub async fn resolve_credentials(
         .as_ref()
         .map(|credentials| &credentials.source)
     else {
-        return Err(CredentialError::MissingValue(format!(
-            "credentials of {} do not end at a Secret",
-            node.descriptor.kind
-        )));
+        return Err(CredentialError::NotSecret {
+            kind: node.descriptor.kind,
+        });
     };
 
-    let selector = non_null(&terminal.value, path).cloned().ok_or_else(|| {
-        CredentialError::MissingValue(format!("credential field {path} is not set"))
-    })?;
+    let selector = non_null(&terminal.value, path)
+        .cloned()
+        .ok_or_else(|| CredentialError::FieldNotSet { path })?;
     let secret = match terminal.namespace {
         Some(namespace) => {
             let SecretKeySelector { name, key } =
@@ -255,10 +257,9 @@ pub async fn resolve_secret_key(
         .data
         .as_ref()
         .and_then(|data| data.get(key))
-        .ok_or_else(|| {
-            CredentialError::MissingValue(format!(
-                "Secret {namespace}/{name} does not contain key {key:?}"
-            ))
+        .ok_or_else(|| CredentialError::SecretKeyMissing {
+            secret: format!("{namespace}/{name}"),
+            key: key.to_owned(),
         })?
         .0
         .clone();
