@@ -23,9 +23,9 @@ cargo run -p cloudflare-provider --bin koof-cloudflare        # run against the 
 
 ## Installation
 
-`deploy/base` holds the Deployment, ServiceAccount, ClusterRoleBinding and metrics
-Service; `deploy/providers/<name>` adds the generated CRDs and ClusterRole and puts
-everything in the namespace `koof-<name>`.
+`deploy/base` holds the Deployment, ServiceAccount, ClusterRoleBinding, RoleBinding
+and metrics Service; `deploy/providers/<name>` adds the generated CRDs, ClusterRole
+and leader election Role and puts everything in the namespace `koof-<name>`.
 
 ```sh
 kubectl apply --server-side -f https://github.com/anasinnyk/koof/releases/download/v<version>/koof-cloudflare.yaml
