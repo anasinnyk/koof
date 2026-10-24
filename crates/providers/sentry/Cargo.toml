@@ -18,7 +18,16 @@ doctest = false
 fake = ["koof/fake"]
 
 [[bin]]
-name = "fake"
+name = "koof-sentry"
+path = "src/bin/main.rs"
+
+[[bin]]
+name = "koof-sentry-manifests"
+path = "src/bin/manifests.rs"
+
+[[bin]]
+name = "koof-sentry-fake"
+path = "src/bin/fake.rs"
 required-features = ["fake"]
 
 [dependencies]

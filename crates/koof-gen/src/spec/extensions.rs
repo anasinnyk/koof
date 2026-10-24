@@ -1,7 +1,7 @@
 use super::SpecError;
 use crate::ir::{
-    CredentialsIr, FieldPath, ReferenceIr, RequestMappingIr, ResourceName, TestIr,
-    ValidationIr, ValueExpr,
+    CredentialsIr, FieldPath, ReferenceIr, RequestMappingIr, ResourceName, TestIr, ValidationIr,
+    ValueExpr,
 };
 use serde::{Deserialize, de::DeserializeOwned};
 use serde_json::Value;
@@ -225,7 +225,9 @@ pub struct KubeResource<'a> {
 /// # Errors
 ///
 /// Each item is [`SpecError::Extension`] when its extension is malformed.
-pub fn kube_resources(document: &Value) -> impl Iterator<Item = Result<KubeResource<'_>, SpecError>> {
+pub fn kube_resources(
+    document: &Value,
+) -> impl Iterator<Item = Result<KubeResource<'_>, SpecError>> {
     document
         .pointer("/components/schemas")
         .and_then(Value::as_object)

@@ -29,13 +29,13 @@ run() {
   local bin="$root/target/debug"
 
   cargo build --quiet --manifest-path "$root/Cargo.toml" -p "$provider-provider" --bins --features fake || return 1
-  "$bin/manifests" | kubectl apply --server-side --force-conflicts -f - >/dev/null || return 1
+  "$bin/koof-$provider-manifests" | kubectl apply --server-side --force-conflicts -f - >/dev/null || return 1
   kubectl wait --for condition=established crd --all --timeout=60s >/dev/null || return 1
 
-  KOOF_FAKE_ADDR="127.0.0.1:$fake_port" "$bin/fake" >"$logs/$provider-fake.log" 2>&1 &
+  KOOF_FAKE_ADDR="127.0.0.1:$fake_port" "$bin/koof-$provider-fake" >"$logs/$provider-fake.log" 2>&1 &
   pids+=($!)
   KOOF_BASE_URL="http://127.0.0.1:$fake_port" KOOF_METRICS_ADDR="127.0.0.1:$metrics_port" \
-    "$bin/main" >"$logs/$provider-controller.log" 2>&1 &
+    "$bin/koof-$provider" >"$logs/$provider-controller.log" 2>&1 &
   pids+=($!)
 
   local attempts=0
