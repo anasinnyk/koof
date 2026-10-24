@@ -26,6 +26,31 @@ async fn main() -> Result<(), koof::AppError> {
 }
 ```
 
+`run` installs the TLS provider, initialises logging (`RUST_LOG`), reads the
+configuration from the environment, connects to Kubernetes and stops on `SIGTERM`
+or Ctrl-C. To keep those under the binary's control, use `run_with`, which only
+serves the endpoints and runs the controllers until the given future completes:
+
+```rust,ignore
+let config = koof::config::Config::defaults(&PROVIDER);
+let client = kube::Client::try_default().await?;
+koof::App::new(&PROVIDER)
+    .with(controllers)
+    .run_with(config, client, shutdown)
+    .await?;
+```
+
+On shutdown the controllers stop taking new events and let running reconciles
+finish; a controller still running 20 seconds later is aborted.
+
+## Features
+
+| Feature      | Default | Enables                                                    |
+|--------------|---------|------------------------------------------------------------|
+| `env`        | yes     | `Config::from_env` (`KOOF_*` variables) used by `run`      |
+| `subscriber` | yes     | `tracing-subscriber` logging initialised by `run`          |
+| `fake`       | no      | `koof::fake`, the in-memory provider API for e2e tests     |
+
 ## Configuration
 
 Settings are resolved in layers, later wins: built-in defaults, the provider's
