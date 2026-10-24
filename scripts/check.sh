@@ -10,6 +10,6 @@ cargo fmt --all --check
 cargo clippy --workspace --all-targets --all-features --locked
 cargo clippy --workspace --all-targets --locked
 cargo clippy -p koof --all-targets --no-default-features --locked
-cargo test --workspace --locked
+cargo test --workspace --all-features --locked
 scripts/check-generated.sh
 RUSTDOCFLAGS="-D warnings" cargo doc --no-deps --locked -p koof -p koof-gen

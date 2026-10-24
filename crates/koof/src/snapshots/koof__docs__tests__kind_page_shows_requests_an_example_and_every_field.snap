@@ -13,6 +13,7 @@ expression: "page(&ResourceDoc::of::<Record>())"
 | observe | `GET /zones/{zone_id}/records/{record_id}` |
 | create | `POST /zones/{zone_id}/records` |
 | update | `PATCH /zones/{zone_id}/records/{record_id}` |
+| delete | `DELETE /zones/{zone_id}/records/{record_id}` |
 
 References: `zoneRef` → Zone.
 
