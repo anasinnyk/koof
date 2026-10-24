@@ -4,6 +4,9 @@
 
 # koof
 
+[![koof coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/anasinnyk/koof/badges/koof.json)](https://github.com/anasinnyk/koof/actions/workflows/ci.yml)
+[![koof-gen coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/anasinnyk/koof/badges/koof-gen.json)](https://github.com/anasinnyk/koof/actions/workflows/ci.yml)
+
 Kubernetes OpenAPI Operator Framework: Kubernetes operators generated from OpenAPI
 documents.
 

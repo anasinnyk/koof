@@ -43,6 +43,34 @@ jobs:
           RUSTDOCFLAGS: -D warnings
       - run: cargo publish --dry-run --locked -p koof -p koof-gen
 
+  coverage:
+    runs-on: ubuntu-latest
+    permissions:
+      # Pushes the badge JSON to the badges branch on main.
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable
+        with:
+          components: llvm-tools-preview
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2
+      - uses: taiki-e/install-action@1e29709c0ec63babbe8f266397a465f29a825f91 # v2.87.31
+        with:
+          tool: cargo-llvm-cov
+      - run: scripts/coverage.sh "$RUNNER_TEMP/badges" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Publish badges
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        working-directory: ${{ runner.temp }}/badges
+        run: |
+          git init -q -b badges
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -q -m "coverage of ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:$GH_TOKEN@github.com/$GITHUB_REPOSITORY" badges
+
   msrv:
     runs-on: ubuntu-latest
     steps:

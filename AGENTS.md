@@ -30,6 +30,7 @@ rejected; `crates/koof-gen/README.md` documents them.
 scripts/check.sh               # everything CI checks except e2e; run before committing
 scripts/regen.sh [provider]    # regenerate code, e2e tests and manifests
 scripts/check-generated.sh     # fail if generated files differ from a fresh regeneration
+scripts/coverage.sh            # line coverage of koof and koof-gen (needs cargo-llvm-cov)
 scripts/e2e.sh [provider]      # kind cluster + controller + fake API + chainsaw (needs kind, kubectl, chainsaw)
 ```
 

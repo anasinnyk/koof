@@ -1,5 +1,7 @@
 # koof-gen
 
+[![koof-gen coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/anasinnyk/koof/badges/koof-gen.json)](https://github.com/anasinnyk/koof/actions/workflows/ci.yml)
+
 Generates a Kubernetes operator (provider) from an OpenAPI document and
 [OpenAPI overlays](https://spec.openapis.org/overlay/latest.html). The generated
 code runs on the [`koof`](https://crates.io/crates/koof) runtime.
