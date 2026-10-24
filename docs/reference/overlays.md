@@ -60,7 +60,7 @@ On a property schema.
 
 | Key | Default | |
 |---|---|---|
-| `ignored` | `false` | Leave the property out of `forProvider` |
+| `ignored` | `false` | With `fields.mode: all`, leave the property out of `forProvider` |
 | `lateInitialize` | `true` | Copy the observed value into an unset spec field |
 
 ## Values

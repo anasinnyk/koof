@@ -202,3 +202,29 @@ pub fn synthesized_prefix(api_version: &str) -> String {
     let (group, version) = api_version.split_once('/').unwrap_or(("", api_version));
     format!("{}_{version}_", group_module(group))
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rstest::rstest;
+
+    #[rstest]
+    #[case::first_label_of_a_subgroup("zones.cloudflare.kube.nas1k.dev", "zones")]
+    #[case::first_label_of_the_root_group("cloudflare.kube.nas1k.dev", "cloudflare")]
+    #[case::snake_case("load-balancing.example.dev", "load_balancing")]
+    fn api_groups_become_modules(#[case] group: &str, #[case] module: &str) {
+        assert_eq!(group_module(group), module);
+    }
+
+    #[test]
+    fn synthesized_schemas_are_qualified_by_group_and_version() {
+        assert_eq!(
+            synthesized_schema(
+                "zones.cloudflare.kube.nas1k.dev/v1alpha1",
+                "DNSRecord",
+                "ForProvider"
+            ),
+            "zones_v1alpha1_DNSRecordForProvider"
+        );
+    }
+}

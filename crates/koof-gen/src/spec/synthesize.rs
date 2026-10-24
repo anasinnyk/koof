@@ -191,7 +191,8 @@ impl Resource<'_> {
 
         if out.contains_key(root) {
             return Err(self.error(&format!(
-                "synthesized schema {root} is already used by another resource"
+                "kind {} in {} is already used by another resource",
+                self.extension.kind, self.extension.api_version
             )));
         }
         let mut found = BTreeSet::new();

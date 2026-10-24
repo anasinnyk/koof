@@ -1,0 +1,10 @@
+overlay: 1.1.0
+info:
+  title: Targets a path the API no longer has
+  version: 0.0.1
+actions:
+  - target: $.paths['/gadgets'].get
+    update:
+      x-kube-operation:
+        resource: gadget
+        lifecycle: observe

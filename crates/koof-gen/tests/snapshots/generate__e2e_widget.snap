@@ -1,0 +1,92 @@
+---
+source: crates/koof-gen/tests/generate.rs
+expression: "&files[\"e2e/generated/widget/chainsaw-test.yaml\"]"
+---
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: widget
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: widgets.example.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: account
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+              name: e2e
+    - apply:
+        resource:
+          apiVersion: shop.widgets.example.dev/v1alpha1
+          kind: Widget
+          metadata:
+            name: widget
+          spec:
+            forProvider:
+              accountRef:
+                name: account
+              name: e2e
+              size: 10
+    - assert:
+        resource:
+          apiVersion: widgets.example.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: account
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: shop.widgets.example.dev/v1alpha1
+          kind: Widget
+          metadata:
+            name: widget
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: shop.widgets.example.dev/v1alpha1
+          kind: Widget
+          metadata:
+            name: widget
+          spec:
+            forProvider:
+              size: 20
+    - assert:
+        resource:
+          apiVersion: shop.widgets.example.dev/v1alpha1
+          kind: Widget
+          metadata:
+            name: widget
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              size: 20
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: shop.widgets.example.dev/v1alpha1
+          kind: Widget
+          name: widget

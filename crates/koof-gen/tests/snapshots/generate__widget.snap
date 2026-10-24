@@ -1,0 +1,193 @@
+---
+source: crates/koof-gen/tests/generate.rs
+expression: "&files[\"src/generated/shop/v1alpha1/widget.rs\"]"
+---
+//! This file is generated. Do not edit manually.
+#![allow(clippy::pedantic)]
+/// CRD schema of `spec.forProvider`: unions flattened for kube, then the
+/// overlay's CEL validations.
+fn for_provider_schema(schema: &mut schemars::Schema) {
+    koof::schema::flatten_unions(schema);
+    koof::schema::add_validations(
+        schema,
+        &[
+            koof::schema::Validation {
+                rule: "!has(self.size) || self.size <= 500",
+                message: "size must be at most 500",
+                field: "",
+            },
+            koof::schema::Validation {
+                rule: "self == oldSelf",
+                message: "name is immutable",
+                field: "name",
+            },
+            koof::schema::Validation {
+                rule: "!has(oldSelf.name) || has(self.name)",
+                message: "name cannot be removed once set",
+                field: "",
+            },
+        ],
+    );
+}
+/// `spec.forProvider`: the generated API fields plus references and
+/// credentials.
+#[derive(
+    Clone,
+    Debug,
+    PartialEq,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema
+)]
+#[schemars(transform = for_provider_schema)]
+pub struct WidgetForProviderSpec {
+    #[serde(flatten)]
+    pub fields: crate::generated::types::ShopV1alpha1WidgetForProvider,
+    #[serde(rename = "accountRef", default, skip_serializing_if = "Option::is_none")]
+    pub account_ref: Option<
+        crate::generated::widgets::v1alpha1::account::AccountReference,
+    >,
+}
+#[derive(
+    kube::CustomResource,
+    Clone,
+    Debug,
+    PartialEq,
+    serde::Serialize,
+    serde::Deserialize,
+    schemars::JsonSchema
+)]
+#[kube(
+    group = "shop.widgets.example.dev",
+    version = "v1alpha1",
+    kind = "Widget",
+    namespaced,
+    status = "WidgetStatus",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Ready\\\")].status\",\"name\":\"Ready\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".status.conditions[?(@.type==\\\"Synced\\\")].status\",\"name\":\"Synced\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.annotations.shop\\\\.widgets\\\\.example\\\\.dev/external-name\",\"name\":\"External-Name\",\"type\":\"string\"}",
+    printcolumn = "{\"jsonPath\":\".metadata.creationTimestamp\",\"name\":\"Age\",\"type\":\"date\"}"
+)]
+pub struct WidgetSpec {
+    #[serde(rename = "forProvider")]
+    pub for_provider: WidgetForProviderSpec,
+    #[serde(flatten)]
+    pub management: koof::managed::ManagedResourceSpec,
+}
+pub type WidgetStatus = koof::status::ManagedStatus<
+    crate::generated::types::ShopV1alpha1WidgetAtProvider,
+>;
+fn api_resource() -> kube::api::ApiResource {
+    kube::api::ApiResource::erase::<Widget>(&())
+}
+pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
+        "Widget",
+        api_resource,
+        "shop.widgets.example.dev",
+        true,
+        koof::resource::ObserveDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "account_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["account"],
+                                name: "external_id",
+                            },
+                        ),
+                        ("widget_id", koof::resource::ValueExpr::ExternalName),
+                    ],
+                )
+                .with_response_path("/result"),
+        ),
+    )
+    .with_identifiers(&[("external_id", koof::resource::ValueExpr::ExternalName)])
+    .with_late_initialize(&["color", "name", "size"])
+    .with_references(
+        &[
+            koof::resource::Reference::new(
+                "account",
+                "/spec/forProvider/accountRef",
+                &[
+                    &crate::generated::widgets::v1alpha1::account::DESCRIPTOR,
+                    &crate::generated::widgets::v1alpha1::cluster_account::DESCRIPTOR,
+                ],
+            ),
+        ],
+    )
+    .with_credentials(
+        koof::resource::Credentials::new(
+            koof::resource::CredentialSource::Related {
+                via: &["account"],
+            },
+            koof::resource::AuthScheme::Bearer,
+        ),
+    )
+    .with_create(
+        koof::resource::CreateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "account_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["account"],
+                                name: "external_id",
+                            },
+                        ),
+                    ],
+                ),
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+            "/result/id",
+        ),
+    )
+    .with_update(
+        koof::resource::UpdateDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "account_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["account"],
+                                name: "external_id",
+                            },
+                        ),
+                        ("widget_id", koof::resource::ValueExpr::ExternalName),
+                    ],
+                ),
+            koof::resource::RequestMapping::new("/spec/forProvider"),
+        ),
+    )
+    .with_delete(
+        koof::resource::OperationDescriptor::new()
+            .with_path_parameters(
+                &[
+                    (
+                        "account_id",
+                        koof::resource::ValueExpr::RelatedIdentifier {
+                            via: &["account"],
+                            name: "external_id",
+                        },
+                    ),
+                    ("widget_id", koof::resource::ValueExpr::ExternalName),
+                ],
+            ),
+    );
+impl koof::ManagedResource for Widget {
+    type AtProvider = crate::generated::types::ShopV1alpha1WidgetAtProvider;
+    type Observe = crate::generated::operations::WidgetObserve;
+    type Create = crate::generated::operations::WidgetCreate;
+    type Update = crate::generated::operations::WidgetUpdate;
+    type Delete = crate::generated::operations::WidgetDelete;
+    fn descriptor() -> &'static koof::ResourceDescriptor {
+        &DESCRIPTOR
+    }
+    fn status(&self) -> Option<&koof::status::ManagedStatus<Self::AtProvider>> {
+        self.status.as_ref()
+    }
+    fn management(&self) -> &koof::managed::ManagedResourceSpec {
+        &self.spec.management
+    }
+}

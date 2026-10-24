@@ -82,3 +82,24 @@ fn write_generated_file(output: &Path, relative_path: &Path, content: &str) -> R
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rstest::rstest;
+
+    #[rstest]
+    #[case::absolute_path("/etc/passwd")]
+    #[case::parent_directory("../outside.rs")]
+    #[case::parent_directory_inside("src/../../outside.rs")]
+    fn generated_files_stay_inside_the_output_directory(#[case] path: &str) {
+        let output = std::env::temp_dir().join("koof-gen-cli-test");
+
+        let error = write_generated_file(&output, Path::new(path), "").expect_err("rejected");
+
+        assert_eq!(
+            error.to_string(),
+            format!("generated path must be relative: {path}")
+        );
+    }
+}

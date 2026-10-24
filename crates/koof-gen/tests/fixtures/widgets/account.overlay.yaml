@@ -1,0 +1,50 @@
+overlay: 1.1.0
+info:
+  title: Widgets Account
+  version: 0.0.1
+actions:
+  - target: $.components.schemas.account
+    update:
+      x-kube-resource:
+        name: account
+        apiVersion: widgets.example.dev/v1alpha1
+        kind: Account
+        cluster: true
+        identifiers:
+          external_id:
+            type: external_name
+        credentials:
+          securityScheme: api_token
+          source:
+            type: secret_key_selector
+            path: spec.forProvider.apiTokenSecretRef
+        test:
+          forProvider:
+            name: e2e
+        fields:
+          mode: all
+
+  - target: $.components.schemas.account.properties.legacy_plan
+    update:
+      x-kube-field:
+        ignored: true
+
+  - target: $.paths['/accounts/{account_id}'].get
+    update:
+      x-kube-operation:
+        resource: account
+        lifecycle: observe
+        response:
+          path: result
+        pathParameters:
+          account_id:
+            type: external_name
+
+  - target: $.paths['/accounts'].post
+    update:
+      x-kube-operation:
+        resource: account
+        lifecycle: create
+        result:
+          identifiers:
+            external_id: response.body.result.id

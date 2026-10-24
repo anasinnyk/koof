@@ -1,0 +1,170 @@
+openapi: 3.0.3
+info:
+  title: Widgets
+  version: "1.0"
+servers:
+  - url: https://api.widgets.example/v1
+components:
+  securitySchemes:
+    api_token:
+      type: http
+      scheme: bearer
+  schemas:
+    account:
+      type: object
+      required: [name]
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          description: Account name.
+        legacy_plan:
+          type: string
+          description: Deprecated; set by the provider.
+    widget:
+      type: object
+      required: [name]
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          description: Widget name.
+          maxLength: 64
+        size:
+          type: integer
+          minimum: 1
+          description: Size in centimetres.
+        color:
+          type: string
+          enum: [red, green, blue]
+          nullable: true
+        tags:
+          type: array
+          items:
+            type: string
+        created_on:
+          type: string
+          format: date-time
+          readOnly: true
+    account_response:
+      type: object
+      properties:
+        result:
+          $ref: "#/components/schemas/account"
+    widget_response:
+      type: object
+      properties:
+        result:
+          $ref: "#/components/schemas/widget"
+security:
+  - api_token: []
+paths:
+  /accounts:
+    post:
+      operationId: createAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/account"
+      responses:
+        "200":
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account_response"
+  /accounts/{account_id}:
+    parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: getAccount
+      responses:
+        "200":
+          description: The account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/account_response"
+  /accounts/{account_id}/widgets:
+    parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      operationId: createWidget
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/widget"
+      responses:
+        "200":
+          description: Created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/widget_response"
+  /accounts/{account_id}/widgets/{widget_id}:
+    parameters:
+      - name: account_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: widget_id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      operationId: getWidget
+      responses:
+        "200":
+          description: The widget.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/widget_response"
+    patch:
+      operationId: updateWidget
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/widget"
+      responses:
+        "200":
+          description: Updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/widget_response"
+    delete:
+      operationId: deleteWidget
+      responses:
+        "200":
+          description: Deleted.
+  /stats:
+    get:
+      operationId: getStats
+      responses:
+        "200":
+          description: Not a resource; pruned.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
