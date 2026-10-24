@@ -44,11 +44,9 @@ impl Call {
     ) -> Result<Self, ReconcileError> {
         let parameters = resolve_parameters(context, node, operation)
             .await?
-            .map_err(|parameter| {
-                ResolveValueError::Missing(format!(
-                    "{}: could not resolve path parameter {parameter}",
-                    node.descriptor.kind
-                ))
+            .map_err(|parameter| ResolveValueError::PathParameterNotSet {
+                kind: node.descriptor.kind,
+                parameter,
             })?;
         let auth = resolve_credentials(&context.kube_client, node).await?;
         Ok(Self { parameters, auth })
@@ -78,8 +76,8 @@ async fn resolve_parameters(
     Ok(Ok(parameters))
 }
 
-fn unsupported(kind: &str, lifecycle: &str, hint: &str) -> ReconcileError {
-    ReconcileError::Unsupported(format!("{kind} has no {lifecycle} operation{hint}"))
+fn unsupported(kind: &'static str, lifecycle: &'static str) -> ReconcileError {
+    ReconcileError::Unsupported { kind, lifecycle }
 }
 
 /// Reads the external resource through `R::Observe`; `exists: false` when its
@@ -148,7 +146,7 @@ pub async fn create<R: ManagedResource>(
     let create = descriptor
         .create
         .as_ref()
-        .ok_or_else(|| unsupported(descriptor.kind, "create", ""))?;
+        .ok_or_else(|| unsupported(descriptor.kind, "create"))?;
 
     let call = Call::prepare_required(context, &node, &create.operation).await?;
     let body: <R::Create as Operation>::Request =
@@ -187,13 +185,9 @@ pub async fn create<R: ManagedResource>(
             Value::Number(number) => Some(number.to_string()),
             _ => None,
         })
-        .ok_or_else(|| {
-            ReconcileError::CreateIncomplete(format!(
-                "create succeeded but the response has no `{}`; set the {} annotation to \
-                 the new resource's ID",
-                create.external_name,
-                descriptor.annotation(EXTERNAL_NAME)
-            ))
+        .ok_or_else(|| ReconcileError::CreateNoIdentifier {
+            pointer: create.external_name,
+            annotation: descriptor.annotation(EXTERNAL_NAME),
         })?;
 
     tracing::info!(%external_name, "recording the external name of the created resource");
@@ -206,13 +200,10 @@ pub async fn create<R: ManagedResource>(
         ],
     )
     .await
-    .map_err(|error| {
-        ReconcileError::CreateIncomplete(format!(
-            "created external resource {external_name} but could not record it ({}); \
-             set {} to {external_name}",
-            crate::error::chain(&error),
-            descriptor.annotation(EXTERNAL_NAME)
-        ))
+    .map_err(|source| ReconcileError::CreateNotRecorded {
+        external_name: external_name.clone(),
+        annotation: descriptor.annotation(EXTERNAL_NAME),
+        source: Box::new(source),
     })?;
     Ok(external_name)
 }
@@ -243,7 +234,7 @@ pub async fn update<R: ManagedResource>(
     let update = descriptor
         .update
         .as_ref()
-        .ok_or_else(|| unsupported(descriptor.kind, "update", ""))?;
+        .ok_or_else(|| unsupported(descriptor.kind, "update"))?;
     let call = Call::prepare_required(context, &node, &update.operation).await?;
     let body: <R::Update as Operation>::Request =
         request::build(&context.kube_client, &node, &update.request).await?;
@@ -270,7 +261,7 @@ pub async fn delete<R: ManagedResource>(
     let operation = descriptor
         .delete
         .as_ref()
-        .ok_or_else(|| unsupported(descriptor.kind, "delete", "; set deletionPolicy: Orphan"))?;
+        .ok_or_else(|| unsupported(descriptor.kind, "delete"))?;
     let Some(call) = Call::prepare(context, &node, operation).await? else {
         return Ok(false);
     };

@@ -20,9 +20,13 @@ pub fn classify(error: &ReconcileError) -> Failure {
         ReconcileError::Credentials(error) => credentials(error),
         ReconcileError::Serialization(_)
         | ReconcileError::Policy(_)
-        | ReconcileError::Unsupported(_)
-        | ReconcileError::InvalidRequest(_)
-        | ReconcileError::CreateIncomplete(_) => Failure::Permanent,
+        | ReconcileError::Unsupported { .. }
+        | ReconcileError::RequestPath { .. }
+        | ReconcileError::RequestAssign { .. }
+        | ReconcileError::InvalidRequest { .. }
+        | ReconcileError::CreatePending { .. }
+        | ReconcileError::CreateNoIdentifier { .. }
+        | ReconcileError::CreateNotRecorded { .. } => Failure::Permanent,
     }
 }
 
@@ -45,10 +49,16 @@ fn http(error: &HttpError) -> Failure {
 
 fn resolve_value(error: &ResolveValueError) -> Failure {
     match error {
-        ResolveValueError::ReferenceNotReady(_) => Failure::Waiting,
+        ResolveValueError::ReferenceNotReady { .. } => Failure::Waiting,
         ResolveValueError::Kubernetes(error) => kubernetes(error),
         ResolveValueError::Serialization(_)
-        | ResolveValueError::Missing(_)
+        | ResolveValueError::RequestFieldNotSet { .. }
+        | ResolveValueError::PathParameterNotSet { .. }
+        | ResolveValueError::UnknownIdentifier { .. }
+        | ResolveValueError::UnknownReference { .. }
+        | ResolveValueError::ReferenceNotSet { .. }
+        | ResolveValueError::ReferenceKind { .. }
+        | ResolveValueError::ClusterScopedReference { .. }
         | ResolveValueError::NonScalar { .. } => Failure::Permanent,
     }
 }
@@ -57,9 +67,11 @@ fn credentials(error: &CredentialError) -> Failure {
     match error {
         CredentialError::Kubernetes(error) => kubernetes(error),
         CredentialError::Resolve(error) => resolve_value(error),
-        CredentialError::MissingValue(_) | CredentialError::InvalidSecretUtf8 { .. } => {
-            Failure::Permanent
-        }
+        CredentialError::NoCredentials { .. }
+        | CredentialError::NotSecret { .. }
+        | CredentialError::FieldNotSet { .. }
+        | CredentialError::SecretKeyMissing { .. }
+        | CredentialError::InvalidSecretUtf8 { .. } => Failure::Permanent,
     }
 }
 
