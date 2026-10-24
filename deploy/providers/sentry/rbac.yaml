@@ -91,6 +91,31 @@
         "create",
         "patch"
       ]
+    }
+  ]
+}
+---
+{
+  "apiVersion": "rbac.authorization.k8s.io/v1",
+  "kind": "Role",
+  "metadata": {
+    "name": "provider"
+  },
+  "rules": [
+    {
+      "apiGroups": [
+        "coordination.k8s.io"
+      ],
+      "resourceNames": [
+        "koof-sentry"
+      ],
+      "resources": [
+        "leases"
+      ],
+      "verbs": [
+        "get",
+        "update"
+      ]
     },
     {
       "apiGroups": [
@@ -100,9 +125,7 @@
         "leases"
       ],
       "verbs": [
-        "get",
-        "create",
-        "update"
+        "create"
       ]
     }
   ]

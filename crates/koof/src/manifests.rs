@@ -1,5 +1,5 @@
 use crate::app::ProviderInfo;
-use k8s_openapi::api::rbac::v1::{ClusterRole, PolicyRule};
+use k8s_openapi::api::rbac::v1::{ClusterRole, PolicyRule, Role};
 use k8s_openapi::apiextensions_apiserver::pkg::apis::apiextensions::v1::CustomResourceDefinition;
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::ObjectMeta;
 use serde::Serialize;
@@ -16,12 +16,6 @@ pub fn cluster_role(crds: &[CustomResourceDefinition]) -> ClusterRole {
             .or_default()
             .push(crd.spec.names.plural.as_str());
     }
-    let rule = |group: &str, resources: Vec<String>, verbs: &[&str]| PolicyRule {
-        api_groups: Some(vec![group.to_owned()]),
-        resources: Some(resources),
-        verbs: verbs.iter().map(|verb| (*verb).to_owned()).collect(),
-        ..PolicyRule::default()
-    };
     let mut rules = Vec::new();
     for (group, plurals) in groups {
         let with = |suffix: &str| -> Vec<String> {
@@ -44,11 +38,6 @@ pub fn cluster_role(crds: &[CustomResourceDefinition]) -> ClusterRole {
         vec!["events".to_owned()],
         &["create", "patch"],
     ));
-    rules.push(rule(
-        "coordination.k8s.io",
-        vec!["leases".to_owned()],
-        &["get", "create", "update"],
-    ));
     ClusterRole {
         metadata: ObjectMeta {
             name: Some(NAME.to_owned()),
@@ -56,6 +45,41 @@ pub fn cluster_role(crds: &[CustomResourceDefinition]) -> ClusterRole {
         },
         rules: Some(rules),
         ..ClusterRole::default()
+    }
+}
+
+#[must_use]
+pub fn role(provider: &ProviderInfo) -> Role {
+    let lease = format!("koof-{}", provider.name);
+    Role {
+        metadata: ObjectMeta {
+            name: Some(NAME.to_owned()),
+            ..ObjectMeta::default()
+        },
+        rules: Some(vec![
+            PolicyRule {
+                resource_names: Some(vec![lease]),
+                ..rule(
+                    "coordination.k8s.io",
+                    vec!["leases".to_owned()],
+                    &["get", "update"],
+                )
+            },
+            rule(
+                "coordination.k8s.io",
+                vec!["leases".to_owned()],
+                &["create"],
+            ),
+        ]),
+    }
+}
+
+fn rule(group: &str, resources: Vec<String>, verbs: &[&str]) -> PolicyRule {
+    PolicyRule {
+        api_groups: Some(vec![group.to_owned()]),
+        resources: Some(resources),
+        verbs: verbs.iter().map(|verb| (*verb).to_owned()).collect(),
+        ..PolicyRule::default()
     }
 }
 
@@ -111,10 +135,9 @@ pub fn write(
         directory.join("crds.yaml"),
         documents(crds).map_err(io::Error::other)?,
     )?;
-    fs::write(
-        directory.join("rbac.yaml"),
-        documents(&[cluster_role(crds)]).map_err(io::Error::other)?,
-    )?;
+    let rbac = documents(&[cluster_role(crds)]).map_err(io::Error::other)?
+        + &documents(&[role(provider)]).map_err(io::Error::other)?;
+    fs::write(directory.join("rbac.yaml"), rbac)?;
     fs::write(
         directory.join("kustomization.yaml"),
         kustomization(provider, image),

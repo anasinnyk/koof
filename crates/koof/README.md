@@ -97,9 +97,11 @@ at once. The namespace is resolved from `KOOF_LEADER_ELECTION__NAMESPACE`,
 `POD_NAMESPACE` (set by `deploy/base`) or the service account namespace file; the
 binary stops when none is available.
 
-The generated `ClusterRole` grants `get`, `create` and `update` on
-`coordination.k8s.io` `leases`; as a `ClusterRole` rule it applies to every
-namespace.
+The Lease is covered by a namespaced `Role` generated next to the `ClusterRole`
+and bound in `deploy/base`: `get` and `update` only on the Lease named
+`koof-<provider>`, and `create` (which cannot be limited by name) in the provider's
+namespace. A custom `KOOF_LEADER_ELECTION__NAME` or `KOOF_LEADER_ELECTION__NAMESPACE`
+needs matching RBAC.
 
 ## Compatibility
 
