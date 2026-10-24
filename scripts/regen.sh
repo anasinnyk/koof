@@ -29,7 +29,7 @@ regen() {
 
 manifests() {
   local provider="$1" output="$2"
-  cargo run --quiet --manifest-path "$root/Cargo.toml" -p "$provider-provider" --bin manifests -- \
+  cargo run --quiet --manifest-path "$root/Cargo.toml" -p "$provider-provider" --bin "koof-$provider-manifests" -- \
     "$output" "ghcr.io/anasinnyk/koof-$provider"
 }
 

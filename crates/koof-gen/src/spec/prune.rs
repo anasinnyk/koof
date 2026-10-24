@@ -69,9 +69,8 @@ pub fn prune(document: &Value) -> Result<Value, SpecError> {
 }
 
 fn keep_kube_operations(item: &Map<String, Value>) -> Option<Value> {
-    let is_kube_operation = |key: &str, value: &Value| {
-        HTTP_METHODS.contains(&key) && value.get(OPERATION).is_some()
-    };
+    let is_kube_operation =
+        |key: &str, value: &Value| HTTP_METHODS.contains(&key) && value.get(OPERATION).is_some();
     if !item
         .iter()
         .any(|(key, value)| is_kube_operation(key, value))

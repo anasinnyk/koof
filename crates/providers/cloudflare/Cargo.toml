@@ -18,7 +18,16 @@ doctest = false
 fake = ["koof/fake"]
 
 [[bin]]
-name = "fake"
+name = "koof-cloudflare"
+path = "src/bin/main.rs"
+
+[[bin]]
+name = "koof-cloudflare-manifests"
+path = "src/bin/manifests.rs"
+
+[[bin]]
+name = "koof-cloudflare-fake"
+path = "src/bin/fake.rs"
 required-features = ["fake"]
 
 [dependencies]

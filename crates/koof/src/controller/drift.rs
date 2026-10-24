@@ -69,10 +69,12 @@ fn collect(path: &str, desired: &Value, observed: &Value, out: &mut Vec<String>)
 
 fn equal(left: &Value, right: &Value) -> bool {
     match (left, right) {
-        (Value::Number(a), Value::Number(b)) => match (a.as_f64(), b.as_f64()) {
-            (Some(a), Some(b)) => (a - b).abs() < f64::EPSILON,
-            _ => a == b,
-        },
+        (Value::Number(a), Value::Number(b)) if a.is_f64() || b.is_f64() => {
+            match (a.as_f64(), b.as_f64()) {
+                (Some(a), Some(b)) => (a - b).abs() <= f64::EPSILON * a.abs().max(b.abs()),
+                _ => false,
+            }
+        }
         _ => left == right,
     }
 }

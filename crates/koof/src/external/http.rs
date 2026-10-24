@@ -46,7 +46,7 @@ pub enum HttpError {
     #[error("HTTP request failed")]
     Transport(#[from] reqwest::Error),
 
-    #[error("{method} {path} returned {status}: {body}")]
+    #[error("{method} {path} returned {status}: {}", summary(.body))]
     Status {
         method: reqwest::Method,
         path: String,
@@ -97,6 +97,22 @@ impl HttpClient {
         parameters: &[(&str, &str)],
         body: Option<&O::Request>,
     ) -> Result<Option<O::Response>, HttpError> {
+        self.send_raw::<O>(auth, parameters, body)
+            .await?
+            .map(|bytes| {
+                let bytes: &[u8] = if bytes.is_empty() { b"null" } else { &bytes };
+                serde_json::from_slice(bytes)
+            })
+            .transpose()
+            .map_err(HttpError::from)
+    }
+
+    async fn send_raw<O: Operation>(
+        &self,
+        auth: &Auth,
+        parameters: &[(&str, &str)],
+        body: Option<&O::Request>,
+    ) -> Result<Option<Vec<u8>>, HttpError> {
         let span = tracing::debug_span!(
             "http",
             operation = O::NAME,
@@ -127,11 +143,17 @@ impl HttpClient {
                 Err(HttpError::Status { status, .. }) => span.record("status", status.as_u16()),
                 Err(_) => span.record("status", "error"),
             };
-            if let Err(error) = &result {
-                tracing::debug!(
-                    error = crate::error::chain(error),
-                    "provider request failed"
-                );
+            match &result {
+                Err(HttpError::Status { body, .. }) => {
+                    tracing::debug!(%body, "provider request failed");
+                }
+                Err(error) => {
+                    tracing::debug!(
+                        error = crate::error::chain(error),
+                        "provider request failed"
+                    );
+                }
+                Ok(_) => {}
             }
             result
         }
@@ -163,9 +185,9 @@ impl HttpClient {
         self.send::<Json<O>>(auth, parameters, body).await
     }
 
-    /// Like [`send`](Self::send) but ignores the response body: `Ok(true)` on
-    /// success, `Ok(false)` on a `GET`/`DELETE` `404`. For operations whose body is irrelevant
-    /// (delete), so an unexpected body shape cannot fail the call.
+    /// Like [`send`](Self::send) but does not decode the response body: `Ok(true)` on
+    /// success, `Ok(false)` on a `GET`/`DELETE` `404`. For operations whose body is
+    /// irrelevant (update, delete), so a non-JSON body cannot fail the call.
     ///
     /// # Errors
     ///
@@ -176,18 +198,7 @@ impl HttpClient {
         parameters: &[(&str, &str)],
         body: Option<&O::Request>,
     ) -> Result<bool, HttpError> {
-        struct Discard<O>(std::marker::PhantomData<O>);
-        impl<O: Operation> Operation for Discard<O> {
-            const NAME: &'static str = O::NAME;
-            const METHOD: reqwest::Method = O::METHOD;
-            const PATH: &'static str = O::PATH;
-            type Request = O::Request;
-            type Response = serde::de::IgnoredAny;
-        }
-        Ok(self
-            .send::<Discard<O>>(auth, parameters, body)
-            .await?
-            .is_some())
+        Ok(self.send_raw::<O>(auth, parameters, body).await?.is_some())
     }
 
     async fn execute<O: Operation>(
@@ -195,7 +206,7 @@ impl HttpClient {
         auth: &Auth,
         parameters: &[(&str, &str)],
         body: Option<&O::Request>,
-    ) -> Result<Option<O::Response>, HttpError> {
+    ) -> Result<Option<Vec<u8>>, HttpError> {
         let path = render_path(O::PATH, parameters)?;
         let url = format!("{}{path}", self.base_url.trim_end_matches('/'));
 
@@ -233,9 +244,53 @@ impl HttpClient {
                 retry_after,
             });
         }
-        let bytes: &[u8] = if bytes.is_empty() { b"null" } else { &bytes };
-        Ok(Some(serde_json::from_slice(bytes)?))
+        Ok(Some(bytes.to_vec()))
     }
+}
+
+const MAX_SUMMARY: usize = 256;
+
+fn summary(body: &str) -> String {
+    let message = serde_json::from_str::<serde_json::Value>(body)
+        .ok()
+        .and_then(|json| provider_message(&json))
+        .unwrap_or_else(|| body.to_owned());
+    let message = message.split_whitespace().collect::<Vec<_>>().join(" ");
+    if message.chars().count() <= MAX_SUMMARY {
+        return message;
+    }
+    let mut short: String = message.chars().take(MAX_SUMMARY).collect();
+    short.push('…');
+    short
+}
+
+fn provider_message(json: &serde_json::Value) -> Option<String> {
+    use serde_json::Value;
+    let messages: Vec<&str> = json
+        .get("errors")
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(|error| {
+            error
+                .get("message")
+                .and_then(Value::as_str)
+                .or_else(|| error.as_str())
+        })
+        .collect();
+    if !messages.is_empty() {
+        return Some(messages.join("; "));
+    }
+    ["message", "detail", "error_description", "error"]
+        .iter()
+        .find_map(|key| match json.get(key)? {
+            Value::String(message) => Some(message.clone()),
+            Value::Object(error) => error
+                .get("message")
+                .and_then(Value::as_str)
+                .map(str::to_owned),
+            _ => None,
+        })
 }
 
 fn render_path(template: &str, parameters: &[(&str, &str)]) -> Result<String, HttpError> {

@@ -65,22 +65,26 @@ impl ConditionSpec {
         reason: &'static str,
         message: impl Into<String>,
     ) -> Self {
-        let mut message = message.into();
-        if message.len() > MAX_MESSAGE {
-            let mut end = MAX_MESSAGE;
-            while !message.is_char_boundary(end) {
-                end -= 1;
-            }
-            message.truncate(end);
-            message.push('…');
-        }
         Self {
             type_,
             status,
             reason,
-            message,
+            message: truncate(message.into()),
         }
     }
+}
+
+#[must_use]
+pub fn truncate(mut message: String) -> String {
+    if message.len() > MAX_MESSAGE {
+        let mut end = MAX_MESSAGE - '…'.len_utf8();
+        while !message.is_char_boundary(end) {
+            end -= 1;
+        }
+        message.truncate(end);
+        message.push('…');
+    }
+    message
 }
 
 #[must_use]
