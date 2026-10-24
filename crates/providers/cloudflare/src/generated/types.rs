@@ -10802,8 +10802,6 @@ pub struct CloudflareV1alpha1TurnstileWidgetAtProvider {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub region: ::std::option::Option<TurnstileRegion>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub secret: ::std::option::Option<TurnstileSecret>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub sitekey: ::std::option::Option<TurnstileSitekey>,
 }
 ///`TurnstileWidgetForProvider`

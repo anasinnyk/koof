@@ -162,7 +162,6 @@ Validation:
 | `atProvider.scrubIPAddresses` | boolean |  |  |
 | `atProvider.secondaryGroupingConfig` | string |  |  |
 | `atProvider.secondaryGroupingExpiry` | integer (int64) |  |  |
-| `atProvider.securityToken` | string |  |  |
 | `atProvider.securityTokenHeader` | string |  |  |
 | `atProvider.seerNightshiftTweaks` | any |  |  |
 | `atProvider.seerScannerAutomation` | boolean |  |  |

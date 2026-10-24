@@ -26,12 +26,55 @@ fn properties(document: &Value, schema: &str) -> Vec<String> {
     "widgets_v1alpha1_AccountForProvider",
     &["name"]
 )]
-#[case::all_keeps_every_field_in_at_provider(
+#[case::all_keeps_every_field_but_sensitive_ones_in_at_provider(
     "widgets_v1alpha1_AccountAtProvider",
     &["id", "legacy_plan", "name"]
 )]
 fn picks_the_fields_of_each_resource(#[case] schema: &str, #[case] fields: &[&str]) {
     assert_eq!(properties(&codegen(&widgets()).document, schema), fields);
+}
+
+const WEBHOOK: &str = "
+        type: object
+        required: [url, secret]
+        properties:
+          url:
+            type: string
+          secret:
+            type: string
+            x-kube-field:
+              sensitive: true
+";
+
+#[rstest]
+#[case::inline(format!(
+    "
+  - target: $.components.schemas.account.properties
+    update:
+      webhook:{WEBHOOK}"
+))]
+#[case::through_a_ref(format!(
+    "
+  - target: $.components.schemas
+    update:
+      webhook:{WEBHOOK}
+  - target: $.components.schemas.account.properties
+    update:
+      webhook:
+        $ref: '#/components/schemas/webhook'
+"
+))]
+fn sensitive_fields_are_left_out_of_nested_objects_in_at_provider(#[case] actions: String) {
+    let document = codegen(&widgets_with(&actions)).document;
+
+    assert_eq!(
+        document["components"]["schemas"]["widgets_v1alpha1_AccountAtProvider"]["properties"]["webhook"],
+        json!({
+            "type": "object",
+            "required": ["url"],
+            "properties": { "url": { "type": "string" } },
+        })
+    );
 }
 
 #[test]

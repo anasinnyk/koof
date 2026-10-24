@@ -93,3 +93,8 @@ actions:
             name: external_id
           sitekey:
             type: external_name
+
+  - target: $.components.schemas.turnstile_secret
+    update:
+      x-kube-field:
+        sensitive: true

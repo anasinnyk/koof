@@ -3633,10 +3633,6 @@
                         "nullable": true,
                         "type": "integer"
                       },
-                      "securityToken": {
-                        "nullable": true,
-                        "type": "string"
-                      },
                       "securityTokenHeader": {
                         "nullable": true,
                         "type": "string"
@@ -4026,9 +4022,6 @@
                           "public": {
                             "type": "string"
                           },
-                          "secret": {
-                            "type": "string"
-                          },
                           "security": {
                             "type": "string"
                           },
@@ -4047,7 +4040,6 @@
                           "otlp_traces",
                           "playstation",
                           "public",
-                          "secret",
                           "security",
                           "unreal"
                         ],
@@ -4125,10 +4117,6 @@
                           "window"
                         ],
                         "type": "object"
-                      },
-                      "secret": {
-                        "nullable": true,
-                        "type": "string"
                       },
                       "useCase": {
                         "nullable": true,
@@ -4350,10 +4338,6 @@
                         "type": "array"
                       },
                       "id": {
-                        "nullable": true,
-                        "type": "string"
-                      },
-                      "secret": {
                         "nullable": true,
                         "type": "string"
                       },

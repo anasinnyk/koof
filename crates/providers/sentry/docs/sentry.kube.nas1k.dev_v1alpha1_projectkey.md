@@ -69,7 +69,6 @@ Validation:
 | `atProvider.dsn.otlp_traces` | string | yes |  |
 | `atProvider.dsn.playstation` | string | yes |  |
 | `atProvider.dsn.public` | string | yes |  |
-| `atProvider.dsn.secret` | string | yes |  |
 | `atProvider.dsn.security` | string | yes |  |
 | `atProvider.dsn.unreal` | string | yes |  |
 | `atProvider.dynamicSdkLoaderOptions` | object |  |  |
@@ -87,5 +86,4 @@ Validation:
 | `atProvider.rateLimit` | object |  |  |
 | `atProvider.rateLimit.count` | integer (int64) | yes |  |
 | `atProvider.rateLimit.window` | integer (int64) | yes |  |
-| `atProvider.secret` | string |  |  |
 | `atProvider.useCase` | string |  |  |

@@ -124,8 +124,8 @@ For APIs that soft-delete (the observe endpoint keeps answering `200`),
 `response.deletedWhen: deleted_at` on `observe` treats the resource as gone once
 that field is set.
 Request bodies default to `spec.forProvider`; `request.set` adds values such as
-identifiers of referenced resources. `x-kube-field` on a property sets `ignored`
-or `lateInitialize: false`.
+identifiers of referenced resources. `x-kube-field` on a property sets `ignored`,
+`lateInitialize: false` or `sensitive` (kept out of `status.atProvider`).
 
 ## Provider crate
 

@@ -72,5 +72,4 @@ Validation:
 | `atProvider.name` | string |  | Human readable widget name. Not unique. Cloudflare suggests that you set this to a meaningful string to make it easier to identify your widget, and where it is used. |
 | `atProvider.offlabel` | boolean |  | Do not show any Cloudflare branding on the widget (ENT only). |
 | `atProvider.region` | string |  | Region where this widget can be used. This cannot be changed after creation. One of `world`, `china`. |
-| `atProvider.secret` | string |  | Secret key for this widget. |
 | `atProvider.sitekey` | string |  | Widget item identifier tag. |

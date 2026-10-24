@@ -62,6 +62,7 @@ On a property schema.
 |---|---|---|
 | `ignored` | `false` | With `fields.mode: all`, leave the property out of `forProvider` |
 | `lateInitialize` | `true` | Copy the observed value into an unset spec field |
+| `sensitive` | `false` | Never copy the property into `status.atProvider`, at any depth (secrets the API returns) |
 
 ## Values
 
