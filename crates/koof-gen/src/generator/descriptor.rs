@@ -184,16 +184,10 @@ fn request_mapping(operation: Operation<'_>) -> TokenStream {
 
 fn observe_descriptor(operation: Operation<'_>) -> TokenStream {
     let descriptor = operation_descriptor(operation);
-    let deleted_when = optional(
-        operation
-            .ir
-            .deleted_when
-            .as_deref()
-            .map(|path| {
-                let path = pointer(path);
-                quote!(#path)
-            }),
-    );
+    let deleted_when = optional(operation.ir.deleted_when.as_deref().map(|path| {
+        let path = pointer(path);
+        quote!(#path)
+    }));
     quote! {
         koof::resource::ObserveDescriptor {
             operation: #descriptor,

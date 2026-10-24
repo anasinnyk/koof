@@ -17,8 +17,8 @@ writes the provider's kustomization (`deploy/providers/<name>`).
 
 ```sh
 scripts/regen.sh cloudflare                                  # regenerate code and manifests
-cargo run -p cloudflare-provider --bin manifests | kubectl apply -f -
-cargo run -p cloudflare-provider --bin main                  # run against the current kubeconfig
+cargo run -p cloudflare-provider --bin koof-cloudflare-manifests | kubectl apply -f -
+cargo run -p cloudflare-provider --bin koof-cloudflare        # run against the current kubeconfig
 ```
 
 ## Installation
@@ -28,8 +28,8 @@ Service; `deploy/providers/<name>` adds the generated CRDs and ClusterRole and p
 everything in the namespace `koof-<name>`.
 
 ```sh
-kubectl apply --server-side -f https://github.com/anasinnyk/openapi-operator-framework/releases/download/v<version>/koof-cloudflare.yaml
-kubectl apply --server-side -k 'github.com/anasinnyk/openapi-operator-framework//deploy/providers/cloudflare?ref=v<version>'
+kubectl apply --server-side -f https://github.com/anasinnyk/koof/releases/download/v<version>/koof-cloudflare.yaml
+kubectl apply --server-side -k 'github.com/anasinnyk/koof//deploy/providers/cloudflare?ref=v<version>'
 ```
 
 ## End-to-end tests

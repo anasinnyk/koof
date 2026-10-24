@@ -389,7 +389,7 @@ async fn publish<R: ManagedResource>(
     let event = Event {
         type_,
         reason: reason.to_owned(),
-        note: Some(note.to_owned()),
+        note: Some(conditions::truncate(note.to_owned())),
         action: "Reconcile".to_owned(),
         secondary: None,
     };
@@ -441,8 +441,15 @@ pub async fn run<R: ManagedResource>(context: Arc<ControllerContext>) {
         .shutdown_on_signal()
         .run(reconcile::<R>, error_policy::<R>, context)
         .for_each(|result| async move {
-            if let Err(error) = result {
-                tracing::debug!(resource = kind, %error, "controller event");
+            match result {
+                Err(kube::runtime::controller::Error::ReconcilerFailed(..)) | Ok(_) => {}
+                Err(error) => {
+                    tracing::warn!(
+                        resource = kind,
+                        error = crate::error::chain(&error),
+                        "controller error"
+                    );
+                }
             }
         })
         .await;

@@ -1,13 +1,12 @@
 use super::{
-    ApiKeyLocationIr, HttpIr, HttpMethod, LifecycleIr, OperationId, OperationIr, ProviderIr, ResourceIr,
-    ResourceName, SchemaName, SecuritySchemeIr, SecuritySchemeName,
+    ApiKeyLocationIr, HttpIr, HttpMethod, LifecycleIr, OperationId, OperationIr, ProviderIr,
+    ResourceIr, ResourceName, SchemaName, SecuritySchemeIr, SecuritySchemeName,
 };
 use crate::spec::{
     self, SpecError,
     extensions::{
-        HttpExtension, LifecycleAction, OperationExtension, ResourceExtension, kube_operations,
-        kube_provider,
-        kube_resources,
+        HttpExtension, LifecycleAction, OperationExtension, ProviderExtension, ResourceExtension,
+        kube_operations, kube_provider, kube_resources,
     },
 };
 use serde_json::Value;
@@ -125,13 +124,12 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
         .collect::<Result<_, ExtractError>>()?;
 
     let extension = kube_provider(prepared)?;
-    let provider = match extension.as_ref().map(|extension| extension.name.as_str()).or_else(|| {
-        prepared.pointer("/info/title").and_then(Value::as_str)
-    }) {
-        Some(provider) => provider.to_owned(),
-        None => return Err(ExtractError::InvalidOpenApi("missing info.title".to_owned())),
-    };
-    let http = http_defaults(extension.map(|extension| extension.http).unwrap_or_default())?;
+    let provider = provider_name(prepared, extension.as_ref())?;
+    let http = http_defaults(
+        extension
+            .map(|extension| extension.http)
+            .unwrap_or_default(),
+    )?;
 
     let base_url = prepared
         .pointer("/servers/0/url")
@@ -168,6 +166,17 @@ fn http_defaults(extension: HttpExtension) -> Result<HttpIr, ExtractError> {
         pool_max_idle_per_host: extension.pool_max_idle_per_host,
         user_agent: extension.user_agent,
     })
+}
+
+fn provider_name(
+    prepared: &Value,
+    extension: Option<&ProviderExtension>,
+) -> Result<String, ExtractError> {
+    extension
+        .map(|extension| extension.name.as_str())
+        .or_else(|| prepared.pointer("/info/title").and_then(Value::as_str))
+        .map(str::to_owned)
+        .ok_or_else(|| ExtractError::InvalidOpenApi("missing info.title".to_owned()))
 }
 
 fn extract_resources(

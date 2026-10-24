@@ -70,8 +70,9 @@ enum Trial {
 
 fn trial<R: ManagedResource>(resource: &Value, field: &str, candidate: &Value) -> Trial {
     let mut trial = resource.clone();
-    let Some(for_provider) =
-        trial.pointer_mut(FOR_PROVIDER).and_then(Value::as_object_mut)
+    let Some(for_provider) = trial
+        .pointer_mut(FOR_PROVIDER)
+        .and_then(Value::as_object_mut)
     else {
         return Trial::DoesNotFit;
     };

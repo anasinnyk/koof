@@ -39,7 +39,11 @@ pub fn cluster_role(crds: &[CustomResourceDefinition]) -> ClusterRole {
         rules.push(rule(group, with("/finalizers"), &["update"]));
     }
     rules.push(rule("", vec!["secrets".to_owned()], &["get"]));
-    rules.push(rule("events.k8s.io", vec!["events".to_owned()], &["create", "patch"]));
+    rules.push(rule(
+        "events.k8s.io",
+        vec!["events".to_owned()],
+        &["create", "patch"],
+    ));
     ClusterRole {
         metadata: ObjectMeta {
             name: Some(NAME.to_owned()),
@@ -98,7 +102,10 @@ pub fn write(
     image: &str,
 ) -> io::Result<()> {
     fs::create_dir_all(directory)?;
-    fs::write(directory.join("crds.yaml"), documents(crds).map_err(io::Error::other)?)?;
+    fs::write(
+        directory.join("crds.yaml"),
+        documents(crds).map_err(io::Error::other)?,
+    )?;
     fs::write(
         directory.join("rbac.yaml"),
         documents(&[cluster_role(crds)]).map_err(io::Error::other)?,
