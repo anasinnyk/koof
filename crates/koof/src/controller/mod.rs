@@ -35,6 +35,7 @@ const RESYNC: Duration = Duration::from_mins(5);
 const MISSING: Duration = Duration::from_secs(30);
 const WAITING: Duration = Duration::from_secs(15);
 const CONFIRM: Duration = Duration::from_secs(5);
+const SHUTDOWN_GRACE: Duration = Duration::from_secs(20);
 const ORPHANED: &str = "External resource kept (orphaned)";
 const NOT_DELETABLE: &str = "External resource kept: the API has no delete operation";
 const RECONCILE_RETRY: RetryPolicy = RetryPolicy {
@@ -402,7 +403,17 @@ async fn publish<R: ManagedResource>(
     }
 }
 
-pub async fn run<R: ManagedResource>(context: Arc<ControllerContext>) {
+pub async fn run<R: ManagedResource>(
+    context: Arc<ControllerContext>,
+    stopped: tokio::sync::watch::Receiver<bool>,
+) {
+    let stopping = move |grace: Duration| {
+        let mut stopped = stopped.clone();
+        async move {
+            let _ = stopped.wait_for(|stopped| *stopped).await;
+            tokio::time::sleep(grace).await;
+        }
+    };
     let kind = R::descriptor().kind;
     let api = kube::Api::<R>::all(context.kube_client.clone());
     tracing::info!(resource = kind, "starting controller");
@@ -437,8 +448,8 @@ pub async fn run<R: ManagedResource>(context: Arc<ControllerContext>) {
             PredicateConfig::default(),
         );
 
-    Controller::for_stream(stream, reader)
-        .shutdown_on_signal()
+    let controller = Controller::for_stream(stream, reader)
+        .graceful_shutdown_on(stopping(Duration::ZERO))
         .run(reconcile::<R>, error_policy::<R>, context)
         .for_each(|result| async move {
             match result {
@@ -451,6 +462,11 @@ pub async fn run<R: ManagedResource>(context: Arc<ControllerContext>) {
                     );
                 }
             }
-        })
-        .await;
+        });
+    tokio::select! {
+        () = controller => {}
+        () = stopping(SHUTDOWN_GRACE) => {
+            tracing::warn!(resource = kind, "controller did not stop in time; aborting");
+        }
+    }
 }
