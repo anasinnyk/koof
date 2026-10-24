@@ -10,10 +10,27 @@ use kube::runtime::events::{Recorder, Reporter};
 use std::sync::Arc;
 
 #[derive(Debug)]
+#[non_exhaustive]
 pub struct ProviderInfo {
     pub name: &'static str,
     pub base_url: &'static str,
     pub http: fn(HttpConfig) -> HttpConfig,
+}
+
+impl ProviderInfo {
+    #[must_use]
+    pub const fn new(name: &'static str, base_url: &'static str) -> Self {
+        Self {
+            name,
+            base_url,
+            http: std::convert::identity,
+        }
+    }
+
+    #[must_use]
+    pub const fn with_http(self, http: fn(HttpConfig) -> HttpConfig) -> Self {
+        Self { http, ..self }
+    }
 }
 
 type ControllerFn =

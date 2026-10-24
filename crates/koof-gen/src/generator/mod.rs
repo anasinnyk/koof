@@ -127,11 +127,8 @@ fn mod_file(provider: &Provider<'_>) -> Result<GeneratedFile, GeneratorError> {
 
         #http
 
-        pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo {
-            name: #name,
-            base_url: #base_url,
-            http,
-        };
+        pub static PROVIDER: koof::ProviderInfo =
+            koof::ProviderInfo::new(#name, #base_url).with_http(http);
 
         /// Registers the controllers of every resource of this provider.
         #[must_use]

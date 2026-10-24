@@ -36,11 +36,11 @@ pub mod zone_ruleset;
 fn http(http: koof::config::HttpConfig) -> koof::config::HttpConfig {
     http
 }
-pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo {
-    name: "cloudflare",
-    base_url: "https://api.cloudflare.com/client/v4",
-    http,
-};
+pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo::new(
+        "cloudflare",
+        "https://api.cloudflare.com/client/v4",
+    )
+    .with_http(http);
 /// Registers the controllers of every resource of this provider.
 #[must_use]
 pub fn controllers(app: koof::App) -> koof::App {
