@@ -42,6 +42,7 @@ pub struct Config {
     pub base_url: String,
     pub metrics_addr: String,
     pub pod_name: Option<String>,
+    pub concurrency: u16,
     pub http: HttpConfig,
 }
 
@@ -56,6 +57,7 @@ impl Config {
             base_url: provider.base_url.to_owned(),
             metrics_addr: "0.0.0.0:8080".to_owned(),
             pod_name: None,
+            concurrency: 8,
             http: (provider.http)(http),
         }
     }

@@ -7,10 +7,10 @@ const MAX_MESSAGE: usize = 1024;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct ConditionSpec {
-    pub type_: &'static str,
-    pub status: &'static str,
-    pub reason: &'static str,
-    pub message: String,
+    type_: &'static str,
+    status: &'static str,
+    reason: &'static str,
+    message: String,
 }
 
 impl ConditionSpec {

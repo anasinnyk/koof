@@ -8,7 +8,7 @@ pub mod policy;
 pub mod status;
 mod usage;
 
-pub use context::{Backoff, ControllerContext, SyncTracker};
+pub use context::{Attempts, Backoff, ControllerContext, SyncTracker};
 
 use crate::{
     error::ReconcileError,
@@ -36,6 +36,7 @@ const MISSING: Duration = Duration::from_secs(30);
 const WAITING: Duration = Duration::from_secs(15);
 const CONFIRM: Duration = Duration::from_secs(5);
 const SHUTDOWN_GRACE: Duration = Duration::from_secs(20);
+const DELETE_RETRY: Duration = Duration::from_mins(1);
 const ORPHANED: &str = "External resource kept (orphaned)";
 const NOT_DELETABLE: &str = "External resource kept: the API has no delete operation";
 const RECONCILE_RETRY: RetryPolicy = RetryPolicy {
@@ -133,10 +134,21 @@ async fn reconcile_inner<R: ManagedResource>(
     } else {
         Vec::new()
     };
+    let key = object_key(resource);
+    let known_drift = !drifted_fields.is_empty()
+        && context
+            .attempts
+            .known_drift(&key, resource.meta().generation, &drifted_fields);
+    if known_drift {
+        tracing::debug!(
+            ?drifted_fields,
+            "drift persisted after the last update; not updating again"
+        );
+    }
     let decision = policy::decide(
         State {
             exists: observation.exists,
-            up_to_date: drifted_fields.is_empty(),
+            up_to_date: drifted_fields.is_empty() || known_drift,
             deleting,
         },
         resource.management(),
@@ -148,27 +160,17 @@ async fn reconcile_inner<R: ManagedResource>(
 
     if decision.late_initialize
         && let Some(observed) = &observation.at_provider
+        && late_initialize(context, resource, observed).await?
     {
-        let fields = late_init::candidates(resource, observed)?;
-        if !fields.is_empty() {
-            late_init::apply(&context.kube_client, resource, &fields).await?;
-            let names: Vec<&str> = fields.keys().map(String::as_str).collect();
-            tracing::info!(fields = ?names, "late-initialized");
-            context.metrics.late_initialized(R::descriptor().kind);
-            publish(
-                context,
-                resource,
-                EventType::Normal,
-                "LateInitialized",
-                &format!("Filled from the provider: {}", names.join(", ")),
-            )
-            .await;
-            return Ok(Action::requeue(CONFIRM));
-        }
+        return Ok(Action::requeue(CONFIRM));
     }
 
     match decision.action {
         PolicyAction::None => {}
+        PolicyAction::Delete if context.attempts.delete_pending(&key, DELETE_RETRY) => {
+            tracing::debug!("delete sent recently; waiting for the external resource to go");
+            return Ok(Action::requeue(WAITING));
+        }
         PolicyAction::Delete => return delete_external(context, resource).await,
         PolicyAction::Finalize => {
             return release(context, resource, observation.exists.then_some(ORPHANED)).await;
@@ -202,11 +204,35 @@ async fn reconcile_inner<R: ManagedResource>(
         .await;
     }
 
-    Ok(Action::requeue(if observation.exists {
+    Ok(Action::requeue(jitter(if observation.exists {
         RESYNC
     } else {
         MISSING
-    }))
+    })))
+}
+
+async fn late_initialize<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+    observed: &serde_json::Value,
+) -> Result<bool, ReconcileError> {
+    let fields = late_init::candidates(resource, observed)?;
+    if fields.is_empty() {
+        return Ok(false);
+    }
+    late_init::apply(&context.kube_client, resource, &fields).await?;
+    let names: Vec<&str> = fields.keys().map(String::as_str).collect();
+    tracing::info!(fields = ?names, "late-initialized");
+    context.metrics.late_initialized(R::descriptor().kind);
+    publish(
+        context,
+        resource,
+        EventType::Normal,
+        "LateInitialized",
+        &format!("Filled from the provider: {}", names.join(", ")),
+    )
+    .await;
+    Ok(true)
 }
 
 async fn delete_external<R: ManagedResource>(
@@ -214,6 +240,7 @@ async fn delete_external<R: ManagedResource>(
     resource: &R,
 ) -> Result<Action, ReconcileError> {
     let existed = external::delete(context, resource).await?;
+    context.attempts.deleted(&object_key(resource));
     tracing::info!(existed, "external resource deleted");
     context.metrics.action(R::descriptor().kind, "deleted");
     set_conditions(
@@ -270,9 +297,11 @@ async fn release<R: ManagedResource>(
         publish(context, resource, EventType::Normal, "Orphaned", note).await;
     }
     finalizer::remove(&context.kube_client, resource).await?;
+    let key = object_key(resource);
+    context.attempts.forget(&key);
     context
         .metrics
-        .object_state(&object_key(resource), R::descriptor().kind, None);
+        .object_state(&key, R::descriptor().kind, None);
     Ok(Action::await_change())
 }
 
@@ -295,6 +324,11 @@ async fn update_external<R: ManagedResource>(
 
     let observation = external::observe(context, resource).await?;
     let remaining = drift(resource, &observation)?;
+    context.attempts.drift_persisted(
+        &object_key(resource),
+        resource.meta().generation,
+        remaining.clone(),
+    );
     if !remaining.is_empty() {
         tracing::warn!(?remaining, "drift persists after update");
         publish(
@@ -310,7 +344,16 @@ async fn update_external<R: ManagedResource>(
         .await;
     }
     update_status(context, resource, &observation).await?;
-    Ok(Action::requeue(RESYNC))
+    Ok(Action::requeue(jitter(RESYNC)))
+}
+
+fn jitter(duration: Duration) -> Duration {
+    use std::hash::{BuildHasher as _, Hasher as _};
+    let random = std::collections::hash_map::RandomState::new()
+        .build_hasher()
+        .finish();
+    let permille = u32::try_from(random % 201).unwrap_or(100);
+    duration.mul_f64(0.9 + f64::from(permille) / 1000.0)
 }
 
 async fn create_external<R: ManagedResource>(
@@ -364,9 +407,11 @@ pub fn error_policy<R: ManagedResource>(
     context: Arc<ControllerContext>,
 ) -> Action {
     let attempts = context.backoff.failed(&object_key(resource.as_ref()));
-    let delay = RECONCILE_RETRY
-        .delay(retry::classify(error), attempts)
-        .unwrap_or(RESYNC);
+    let delay = jitter(
+        RECONCILE_RETRY
+            .delay(retry::classify(error), attempts)
+            .unwrap_or(RESYNC),
+    );
     tracing::debug!(attempts, ?delay, "requeue after failure");
     Action::requeue(delay)
 }
@@ -448,7 +493,9 @@ pub async fn run<R: ManagedResource>(
             PredicateConfig::default(),
         );
 
+    let config = kube::runtime::controller::Config::default().concurrency(context.concurrency);
     let controller = Controller::for_stream(stream, reader)
+        .with_config(config)
         .graceful_shutdown_on(stopping(Duration::ZERO))
         .run(reconcile::<R>, error_policy::<R>, context)
         .for_each(|result| async move {
