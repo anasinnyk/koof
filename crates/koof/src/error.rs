@@ -170,3 +170,48 @@ pub fn chain(error: &dyn std::error::Error) -> String {
     }
     message
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use pretty_assertions::assert_eq;
+
+    #[derive(Debug, thiserror::Error)]
+    #[error("cannot load token: {0}")]
+    struct RepeatsItsSource(#[source] std::io::Error);
+
+    fn invalid_utf8() -> std::string::FromUtf8Error {
+        String::from_utf8(vec![0xff]).expect_err("invalid UTF-8")
+    }
+
+    #[test]
+    fn chain_appends_every_cause() {
+        let error = ReconcileError::Serialization(
+            serde_json::from_str::<serde_json::Value>("{").expect_err("invalid JSON"),
+        );
+        assert_eq!(
+            chain(&error),
+            "JSON (de)serialization failed: EOF while parsing an object at line 1 column 1"
+        );
+    }
+
+    #[test]
+    fn chain_does_not_repeat_transparent_wrappers() {
+        let error = ReconcileError::from(CredentialError::InvalidSecretUtf8 {
+            secret: "cloudflare".to_owned(),
+            key: "token".to_owned(),
+            source: invalid_utf8(),
+        });
+        assert_eq!(
+            chain(&error),
+            "Secret \"cloudflare\" key \"token\" is not valid UTF-8: \
+             invalid utf-8 sequence of 1 bytes from index 0"
+        );
+    }
+
+    #[test]
+    fn chain_skips_a_cause_already_in_the_message() {
+        let error = RepeatsItsSource(std::io::Error::other("permission denied"));
+        assert_eq!(chain(&error), "cannot load token: permission denied");
+    }
+}

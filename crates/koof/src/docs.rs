@@ -413,3 +413,32 @@ fn plain(value: &Value) -> String {
         other => other.to_string(),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::testing::{Account, PROVIDER, Record, Zone};
+
+    fn resources() -> Vec<ResourceDoc> {
+        vec![
+            ResourceDoc::of::<Record>(),
+            ResourceDoc::of::<Zone>(),
+            ResourceDoc::of::<Account>(),
+        ]
+    }
+
+    #[test]
+    fn readme_lists_every_kind_with_its_operations_references_and_credentials() {
+        insta::assert_snapshot!(readme(&PROVIDER, &resources()));
+    }
+
+    #[test]
+    fn kind_page_shows_requests_an_example_and_every_field() {
+        insta::assert_snapshot!(page(&ResourceDoc::of::<Record>()));
+    }
+
+    #[test]
+    fn example_of_a_root_resource_names_its_secret() {
+        insta::assert_snapshot!(example(&ResourceDoc::of::<Account>()));
+    }
+}

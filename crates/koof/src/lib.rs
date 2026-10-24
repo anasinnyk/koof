@@ -18,6 +18,8 @@ pub mod resource;
 pub mod retry;
 pub mod schema;
 pub mod status;
+#[cfg(test)]
+mod testing;
 
 pub use app::{App, AppError, ProviderInfo};
 pub use external::http;

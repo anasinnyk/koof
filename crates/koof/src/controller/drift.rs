@@ -78,3 +78,56 @@ fn equal(left: &Value, right: &Value) -> bool {
         _ => left == right,
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use pretty_assertions::assert_eq;
+    use rstest::rstest;
+    use serde_json::json;
+
+    #[rstest]
+    #[case::equal_values(json!({ "ttl": 300 }), json!({ "ttl": 300 }))]
+    #[case::fields_the_user_did_not_set(json!({ "ttl": null }), json!({ "ttl": 300 }))]
+    #[case::fields_the_api_does_not_return(json!({ "comment": "x" }), json!({}))]
+    #[case::read_only_fields_the_api_adds(json!({ "ttl": 300 }), json!({ "ttl": 300, "id": "1" }))]
+    #[case::empty_list_and_null(json!({ "tags": [] }), json!({ "tags": null }))]
+    #[case::empty_object_and_null(json!({ "settings": {} }), json!({ "settings": null }))]
+    #[case::float_rounding(json!({ "weight": 0.3 }), json!({ "weight": 0.1 + 0.2 }))]
+    #[case::integer_written_as_float(json!({ "ttl": 300 }), json!({ "ttl": 300.0 }))]
+    #[case::extra_fields_inside_list_items(
+        json!({ "rules": [{ "action": "allow" }] }),
+        json!({ "rules": [{ "action": "allow", "id": "r1" }] })
+    )]
+    fn is_not_drift(#[case] desired: Value, #[case] observed: Value) {
+        assert_eq!(drifted(&desired, &observed), Vec::<String>::new());
+    }
+
+    #[rstest]
+    #[case::changed_value(json!({ "ttl": 300 }), json!({ "ttl": 60 }), &["ttl"])]
+    #[case::changed_nested_value(
+        json!({ "settings": { "ipv4_only": true } }),
+        json!({ "settings": { "ipv4_only": false } }),
+        &["settings.ipv4_only"]
+    )]
+    #[case::large_integers_compared_exactly(
+        json!({ "id": 9_007_199_254_740_993_u64 }),
+        json!({ "id": 9_007_199_254_740_992_u64 }),
+        &["id"]
+    )]
+    #[case::list_with_another_length(json!({ "tags": ["a"] }), json!({ "tags": ["a", "b"] }), &["tags"])]
+    #[case::list_in_another_order(json!({ "tags": ["a", "b"] }), json!({ "tags": ["b", "a"] }), &["tags"])]
+    #[case::changed_field_in_a_list_item(
+        json!({ "rules": [{ "action": "allow" }] }),
+        json!({ "rules": [{ "action": "block" }] }),
+        &["rules"]
+    )]
+    #[case::every_changed_field(
+        json!({ "ttl": 300, "proxied": true }),
+        json!({ "ttl": 60, "proxied": false }),
+        &["proxied", "ttl"]
+    )]
+    fn is_drift(#[case] desired: Value, #[case] observed: Value, #[case] fields: &[&str]) {
+        assert_eq!(drifted(&desired, &observed), fields);
+    }
+}

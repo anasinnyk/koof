@@ -309,3 +309,101 @@ fn render_path(template: &str, parameters: &[(&str, &str)]) -> Result<String, Ht
     }
     Ok(path)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use pretty_assertions::assert_eq;
+    use rstest::rstest;
+
+    #[rstest]
+    #[case::fills_parameters(
+        "/zones/{zone_id}/dns_records/{record_id}",
+        &[("zone_id", "z1"), ("record_id", "r1")],
+        "/zones/z1/dns_records/r1"
+    )]
+    #[case::encodes_reserved_characters("/projects/{name}", &[("name", "a/b c?")], "/projects/a%2Fb%20c%3F")]
+    #[case::allows_dots_inside_a_value("/zones/{zone}", &[("zone", "example.com")], "/zones/example.com")]
+    #[case::ignores_unused_parameters("/accounts", &[("account_id", "a1")], "/accounts")]
+    fn renders_request_paths(
+        #[case] template: &str,
+        #[case] parameters: &[(&str, &str)],
+        #[case] path: &str,
+    ) {
+        assert_eq!(
+            render_path(template, parameters).ok(),
+            Some(path.to_owned())
+        );
+    }
+
+    #[rstest]
+    #[case::current_directory(".")]
+    #[case::parent_directory("..")]
+    fn rejects_values_that_would_change_the_path(#[case] value: &str) {
+        assert!(matches!(
+            render_path("/zones/{zone_id}/dns_records", &[("zone_id", value)]),
+            Err(HttpError::InvalidParameter { .. })
+        ));
+    }
+
+    #[test]
+    fn rejects_a_path_with_a_missing_parameter() {
+        assert!(matches!(
+            render_path("/zones/{zone_id}", &[]),
+            Err(HttpError::MissingParameter(path)) if path == "/zones/{zone_id}"
+        ));
+    }
+
+    #[rstest]
+    #[case::cloudflare_errors(
+        r#"{"success":false,"errors":[{"code":1003,"message":"Invalid zone"}]}"#,
+        "Invalid zone"
+    )]
+    #[case::several_errors(
+        r#"{"errors":[{"message":"name is required"},{"message":"ttl is invalid"}]}"#,
+        "name is required; ttl is invalid"
+    )]
+    #[case::errors_as_strings(r#"{"errors":["name is required"]}"#, "name is required")]
+    #[case::top_level_message(r#"{"message":"Not Found","documentation_url":"…"}"#, "Not Found")]
+    #[case::sentry_detail(
+        r#"{"detail":"You do not have permission"}"#,
+        "You do not have permission"
+    )]
+    #[case::oauth_error(
+        r#"{"error":"invalid_token","error_description":"Token expired"}"#,
+        "Token expired"
+    )]
+    #[case::nested_error_object(r#"{"error":{"code":403,"message":"Forbidden"}}"#, "Forbidden")]
+    #[case::json_without_a_known_field(r#"{"status":"failed"}"#, r#"{"status":"failed"}"#)]
+    #[case::plain_text("Bad Gateway", "Bad Gateway")]
+    #[case::html_whitespace_collapsed(
+        "<html>\n  <body>Bad   Gateway</body>\n</html>",
+        "<html> <body>Bad Gateway</body> </html>"
+    )]
+    fn summarizes_the_provider_error(#[case] body: &str, #[case] summary_text: &str) {
+        assert_eq!(summary(body), summary_text);
+    }
+
+    #[test]
+    fn summary_of_a_huge_body_is_cut() {
+        assert_eq!(
+            summary(&"x".repeat(10_000)),
+            format!("{}…", "x".repeat(256))
+        );
+    }
+
+    #[test]
+    fn status_error_shows_the_summary_not_the_whole_body() {
+        let error = HttpError::Status {
+            method: reqwest::Method::POST,
+            path: "/zones".to_owned(),
+            status: reqwest::StatusCode::BAD_REQUEST,
+            body: r#"{"errors":[{"message":"Invalid zone"}],"result":null}"#.to_owned(),
+            retry_after: None,
+        };
+        assert_eq!(
+            error.to_string(),
+            "POST /zones returned 400 Bad Request: Invalid zone"
+        );
+    }
+}

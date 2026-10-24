@@ -112,3 +112,54 @@ fn annotations<R: ManagedResource>(values: &[(&str, Option<String>)]) -> Value {
 pub fn now() -> String {
     jiff::Timestamp::now().to_string()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use rstest::rstest;
+
+    fn at(time: &str) -> jiff::Timestamp {
+        format!("2026-01-01T{time}Z").parse().expect("timestamp")
+    }
+
+    fn state(pending: Option<&str>, succeeded: Option<&str>, failed: Option<&str>) -> CreateState {
+        CreateState {
+            pending: pending.map(at),
+            succeeded: succeeded.map(at),
+            failed: failed.map(at),
+        }
+    }
+
+    #[rstest]
+    #[case::never_created(state(None, None, None), false)]
+    #[case::create_sent_and_no_outcome(state(Some("10:00:00"), None, None), true)]
+    #[case::create_succeeded(state(Some("10:00:00"), Some("10:00:01"), None), false)]
+    #[case::create_failed(state(Some("10:00:00"), None, Some("10:00:01")), false)]
+    #[case::new_create_after_a_success(state(Some("11:00:00"), Some("10:00:01"), None), true)]
+    #[case::new_create_after_a_failure(state(Some("11:00:00"), None, Some("10:00:01")), true)]
+    #[case::retried_after_a_failure_and_succeeded(
+        state(Some("11:00:00"), Some("11:00:01"), Some("10:00:01")),
+        false
+    )]
+    fn create_with_unknown_outcome_blocks_another_create(
+        #[case] state: CreateState,
+        #[case] incomplete: bool,
+    ) {
+        assert_eq!(state.is_incomplete(), incomplete);
+    }
+
+    #[rstest]
+    #[case::just_created("10:00:30", true)]
+    #[case::still_within_the_grace_period("10:00:59", true)]
+    #[case::grace_period_over("10:01:00", false)]
+    #[case::long_ago("12:00:00", false)]
+    fn freshly_created_resource_may_not_be_visible_yet(#[case] now: &str, #[case] recent: bool) {
+        let created = state(Some("09:59:59"), Some("10:00:00"), None);
+        assert_eq!(created.recently_succeeded(at(now)), recent);
+    }
+
+    #[test]
+    fn never_created_resource_is_not_recent() {
+        assert!(!CreateState::default().recently_succeeded(at("10:00:00")));
+    }
+}

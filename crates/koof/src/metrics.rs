@@ -257,3 +257,76 @@ fn state_labels(object: &TrackedObject) -> StateLabels {
         synced: object.state.synced.to_string(),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::testing::RECORD;
+
+    fn samples(metrics: &Metrics) -> String {
+        let text = metrics.encode().expect("encode");
+        let mut lines: Vec<&str> = text
+            .lines()
+            .filter(|line| !line.starts_with('#') && !line.contains("_bucket{"))
+            .collect();
+        lines.sort_unstable();
+        lines.join("\n")
+    }
+
+    #[test]
+    fn exposes_reconciles_actions_requests_and_object_states() {
+        let metrics = Metrics::new();
+        let kind = RECORD.group_kind();
+
+        metrics.reconciled(kind, "success", Duration::from_millis(120));
+        metrics.reconciled(kind, "error", Duration::from_secs(3));
+        metrics.action(kind, "created");
+        metrics.drift_detected(kind);
+        metrics.late_initialized(kind);
+        metrics.request("RecordObserve", "2xx", Duration::from_millis(80));
+        metrics.request("RecordCreate", "4xx", Duration::from_millis(200));
+        metrics.object_state(
+            "default/www",
+            kind,
+            Some(ObjectState {
+                ready: true,
+                synced: true,
+            }),
+        );
+        metrics.object_state(
+            "default/api",
+            kind,
+            Some(ObjectState {
+                ready: false,
+                synced: true,
+            }),
+        );
+
+        insta::assert_snapshot!(samples(&metrics));
+    }
+
+    #[test]
+    fn object_state_counts_each_object_once() {
+        let metrics = Metrics::new();
+        let kind = RECORD.group_kind();
+        let ready = Some(ObjectState {
+            ready: true,
+            synced: true,
+        });
+
+        metrics.object_state(
+            "default/www",
+            kind,
+            Some(ObjectState {
+                ready: false,
+                synced: true,
+            }),
+        );
+        metrics.object_state("default/www", kind, ready);
+        metrics.object_state("default/www", kind, ready);
+        metrics.object_state("default/gone", kind, ready);
+        metrics.object_state("default/gone", kind, None);
+
+        insta::assert_snapshot!(samples(&metrics));
+    }
+}
