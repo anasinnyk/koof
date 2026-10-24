@@ -76,6 +76,11 @@ spec:
 | `forProvider.origins[].weight` | number (double) |  | The weight of this origin relative to other origins in the pool. Based on the configured weight the total traffic is distributed among origins within the pool. - `origin_steering.policy="least_outstanding_requests"`: Use weight to scale the origin's outstanding requests. - `origin_steering.policy="least_connections"`: Use weight to scale the origin's open connections. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
 
+Validation:
+
+- `forProvider`: accountRef cannot be removed once set
+- `forProvider.accountRef`: accountRef is immutable
+
 ## Status
 
 `conditions` holds `Ready` and `Synced`; `atProvider` is the resource as the API returns it.

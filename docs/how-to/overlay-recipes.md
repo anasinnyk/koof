@@ -114,7 +114,9 @@ validations:
 
 Both become CEL rules in the CRD
 ([`x-kubernetes-validations`](https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/#validation-rules)),
-so the API server rejects invalid changes.
+so the API server rejects invalid changes. A reference used in the observe path
+(`zoneRef` of a DNSRecord) is immutable without being listed: pointing it at
+another parent would make koof look for the resource there.
 
 ## A field koof should not touch
 

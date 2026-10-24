@@ -42,6 +42,11 @@ spec:
 | `forProvider.slug` | string |  | Uniquely identifies a team and is used for the interface. If not provided, it is automatically generated from the name. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
 
+Validation:
+
+- `forProvider`: organizationRef cannot be removed once set
+- `forProvider.organizationRef`: organizationRef is immutable
+
 ## Status
 
 `conditions` holds `Ready` and `Synced`; `atProvider` is the resource as the API returns it.

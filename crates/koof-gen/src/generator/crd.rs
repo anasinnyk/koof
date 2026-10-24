@@ -11,6 +11,7 @@ use crate::{
 };
 use proc_macro2::TokenStream;
 use quote::quote;
+use std::collections::BTreeSet;
 
 pub fn generate_spec(
     resource: &Resource<'_>,
@@ -131,7 +132,7 @@ fn validation_tokens(resource: &Resource<'_>) -> Vec<TokenStream> {
         .iter()
         .map(|rule| validation(&rule.rule, &rule.message, &rule.field))
         .collect();
-    for field in resource.immutable {
+    for field in immutable_fields(resource) {
         let (parent, leaf) = field.rsplit_once('.').unwrap_or(("", field));
         tokens.push(validation(
             "self == oldSelf",
@@ -145,6 +146,41 @@ fn validation_tokens(resource: &Resource<'_>) -> Vec<TokenStream> {
         ));
     }
     tokens
+}
+
+/// The overlay's `immutable` fields plus the references that locate the external
+/// resource: changing one would point observe at another parent and create a new
+/// resource there, leaving the old one unmanaged.
+fn immutable_fields<'a>(resource: &'a Resource<'_>) -> BTreeSet<&'a str> {
+    let locating: BTreeSet<&str> = resource
+        .observe
+        .ir
+        .path_parameters
+        .values()
+        .flat_map(first_hops)
+        .collect();
+    resource
+        .immutable
+        .iter()
+        .map(String::as_str)
+        .chain(
+            resource
+                .references
+                .iter()
+                .filter(|reference| locating.contains(reference.name))
+                .map(|reference| reference.field),
+        )
+        .collect()
+}
+
+fn first_hops(expression: &ValueExpr) -> Vec<&str> {
+    match expression {
+        ValueExpr::RelatedIdentifier { via, .. } => {
+            via.first().map(String::as_str).into_iter().collect()
+        }
+        ValueExpr::Coalesce { values } => values.iter().flat_map(first_hops).collect(),
+        ValueExpr::Field { .. } | ValueExpr::ExternalName | ValueExpr::Literal { .. } => Vec::new(),
+    }
 }
 
 pub fn generate_status(

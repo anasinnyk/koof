@@ -88,6 +88,11 @@ spec:
 | `forProvider.widgets[].widget_type` | string |  | * `discover` * `issue` * `metrics` * `error-events` * `transaction-like` * `spans` * `logs` * `tracemetrics` * `preprod-app-size` One of `discover`, `issue`, `metrics`, `error-events`, `transaction-like`, `spans`, `logs`, `tracemetrics`, `preprod-app-size`. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
 
+Validation:
+
+- `forProvider`: organizationRef cannot be removed once set
+- `forProvider.organizationRef`: organizationRef is immutable
+
 ## Status
 
 `conditions` holds `Ready` and `Synced`; `atProvider` is the resource as the API returns it.

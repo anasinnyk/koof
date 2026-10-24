@@ -34,7 +34,7 @@ request body.
 | `fields.mode` | `all` or `explicit` | `explicit` exposes only the listed properties |
 | `fields.forProvider` | list | Properties in `spec.forProvider` |
 | `fields.atProvider` | list | Properties in `status.atProvider` |
-| `immutable` | list | `forProvider` fields that cannot change once set |
+| `immutable` | list | `forProvider` fields that cannot change once set. References used by the observe path are immutable without being listed |
 | `validations` | list of `{rule, message, field?}` | CEL rules on `forProvider` |
 | `test.forProvider` | object | Fixture for the generated e2e test |
 | `test.update` | object | Fields the e2e test changes in its update step |

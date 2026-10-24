@@ -46,6 +46,11 @@ spec:
 | `forProvider.read_replication.mode` | string | yes | The read replication mode for the database. Use 'auto' to create replicas and allow D1 automatically place them around the world, or 'disabled' to not use any database replicas (it can take a few hours for all replicas to be deleted). One of `auto`, `disabled`. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
 
+Validation:
+
+- `forProvider`: accountRef cannot be removed once set
+- `forProvider.accountRef`: accountRef is immutable
+
 ## Status
 
 `conditions` holds `Ready` and `Synced`; `atProvider` is the resource as the API returns it.

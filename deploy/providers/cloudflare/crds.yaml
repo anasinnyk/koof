@@ -80,7 +80,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "allow_authenticate_via_warp": {
                         "description": "When set to true, users can authenticate to this application using their WARP session.  When set to false this application will always require direct IdP authentication. This setting always overrides the organization setting for WARP authentication.",
@@ -879,7 +885,13 @@
                         "type": "boolean"
                       }
                     },
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -2576,13 +2588,25 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "zoneRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
                     "required": [
                       "hostname"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "zoneRef cannot be removed once set",
+                        "rule": "!has(oldSelf.zoneRef) || has(self.zoneRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -3181,7 +3205,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "jurisdiction": {
                         "description": "Specify the location to restrict the D1 database to run and store data. If this option is present, the location hint is ignored.",
@@ -3232,7 +3262,13 @@
                     "required": [
                       "name"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -3545,7 +3581,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "zoneRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
                     "type": "object",
@@ -3553,6 +3595,10 @@
                       {
                         "message": "ttl must be 1 (automatic) or between 30 and 86400 seconds",
                         "rule": "!has(self.ttl) || self.ttl == 1 || (self.ttl >= 30 && self.ttl <= 86400)"
+                      },
+                      {
+                        "message": "zoneRef cannot be removed once set",
+                        "rule": "!has(oldSelf.zoneRef) || has(self.zoneRef)"
                       }
                     ]
                   },
@@ -4157,14 +4203,26 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "zoneRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
                     "required": [
                       "actions",
                       "matchers"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "zoneRef cannot be removed once set",
+                        "rule": "!has(oldSelf.zoneRef) || has(self.zoneRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -4454,7 +4512,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "description": {
                         "description": "Provide the list description.",
@@ -4506,7 +4570,13 @@
                       "name",
                       "type"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -4770,7 +4840,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "action": {
                         "description": "Specify the action to perform when the associated traffic, identity, and device posture expressions either absent or evaluate to `true`.",
@@ -5426,7 +5502,13 @@
                       "action",
                       "name"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -6461,14 +6543,26 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "zoneRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
                     "required": [
                       "address",
                       "name"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "zoneRef cannot be removed once set",
+                        "rule": "!has(oldSelf.zoneRef) || has(self.zoneRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -6851,7 +6945,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "caching": {
                         "description": "`HyperdriveHyperdriveCaching`",
@@ -6968,7 +7068,13 @@
                       "name",
                       "origin"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -7291,7 +7397,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "description": {
                         "description": "An informative summary of the list.",
@@ -7317,7 +7429,13 @@
                       "kind",
                       "name"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -7553,7 +7671,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "jurisdiction": {
                         "description": "Specify the jurisdiction to restrict the KV namespace to durably store data within. Can only be set at namespace creation time.",
@@ -7573,7 +7697,13 @@
                     "required": [
                       "title"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -7786,7 +7916,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "allow_insecure": {
                         "description": "Do not validate the certificate when monitor use HTTPS. This parameter is currently only valid for HTTP and HTTPS monitors.",
@@ -7889,7 +8025,13 @@
                         "type": "string"
                       }
                     },
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -8194,7 +8336,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "description": {
                         "description": "A human-readable description of the pool.",
@@ -8413,7 +8561,13 @@
                       "name",
                       "origins"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -9393,7 +9547,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "zoneRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
                     "required": [
@@ -9401,7 +9561,13 @@
                       "fallback_pool",
                       "name"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "zoneRef cannot be removed once set",
+                        "rule": "!has(oldSelf.zoneRef) || has(self.zoneRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -10457,13 +10623,25 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "zoneRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
                     "required": [
                       "destination_conf"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "zoneRef cannot be removed once set",
+                        "rule": "!has(oldSelf.zoneRef) || has(self.zoneRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -10858,7 +11036,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "alert_interval": {
                         "description": "Optional specification of how often to re-alert from the same incident, not support on all alert types.",
@@ -11327,7 +11511,13 @@
                       "mechanisms",
                       "name"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -12097,14 +12287,26 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "zoneRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
                     "required": [
                       "actions",
                       "targets"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "zoneRef cannot be removed once set",
+                        "rule": "!has(oldSelf.zoneRef) || has(self.zoneRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -12425,7 +12627,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "build_config": {
                         "description": "Configs for the project build process.",
@@ -13231,7 +13439,13 @@
                       "name",
                       "production_branch"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -13477,7 +13691,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "queue_name": {
                         "description": "`MqQueueName`",
@@ -13487,7 +13707,13 @@
                     "required": [
                       "queue_name"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -13797,7 +14023,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "locationHint": {
                         "description": "Location of the bucket.",
@@ -13829,7 +14061,13 @@
                     "required": [
                       "name"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -14192,14 +14430,26 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "zoneRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
                     "required": [
                       "dns",
                       "protocol"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "zoneRef cannot be removed once set",
+                        "rule": "!has(oldSelf.zoneRef) || has(self.zoneRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -14552,7 +14802,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "config_src": {
                         "description": "Indicates if this is a locally or remotely configured tunnel. If `local`, manage the tunnel using a YAML file on the origin machine. If `cloudflare`, manage the tunnel on the Zero Trust dashboard.",
@@ -14576,7 +14832,13 @@
                     "required": [
                       "name"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -14902,7 +15164,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "tunnelRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "virtual_network_id": {
                         "description": "UUID of the virtual network.",
@@ -14914,7 +15182,13 @@
                     "required": [
                       "network"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "tunnelRef cannot be removed once set",
+                        "rule": "!has(oldSelf.tunnelRef) || has(self.tunnelRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -15384,10 +15658,22 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "tunnelRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "tunnelRef cannot be removed once set",
+                        "rule": "!has(oldSelf.tunnelRef) || has(self.tunnelRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -15854,10 +16140,22 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "tunnelRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "tunnelRef cannot be removed once set",
+                        "rule": "!has(oldSelf.tunnelRef) || has(self.tunnelRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -16084,7 +16382,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "bot_fight_mode": {
                         "description": "If bot_fight_mode is set to `true`, Cloudflare issues computationally\nexpensive challenges in response to malicious bots (ENT only).",
@@ -16147,7 +16451,13 @@
                       "mode",
                       "name"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -16415,7 +16725,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       },
                       "config": {
                         "description": "Specifies the type of configuration to use for the index.",
@@ -16463,7 +16779,13 @@
                       "config",
                       "name"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -16894,7 +17216,13 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "zoneRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
                     "required": [
@@ -16903,7 +17231,13 @@
                       "new_users_per_minute",
                       "total_active_users"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "zoneRef cannot be removed once set",
+                        "rule": "!has(oldSelf.zoneRef) || has(self.zoneRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -17326,13 +17660,25 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "zoneRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
                     "required": [
                       "pattern"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "zoneRef cannot be removed once set",
+                        "rule": "!has(oldSelf.zoneRef) || has(self.zoneRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [
@@ -18083,14 +18429,26 @@
                         "required": [
                           "name"
                         ],
-                        "type": "object"
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "zoneRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
                       }
                     },
                     "required": [
                       "kind",
                       "phase"
                     ],
-                    "type": "object"
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "zoneRef cannot be removed once set",
+                        "rule": "!has(oldSelf.zoneRef) || has(self.zoneRef)"
+                      }
+                    ]
                   },
                   "managementPolicies": {
                     "default": [

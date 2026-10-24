@@ -69,6 +69,11 @@ spec:
 | `forProvider.zoneRef.name` | string | yes |  |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
 
+Validation:
+
+- `forProvider`: zoneRef cannot be removed once set
+- `forProvider.zoneRef`: zoneRef is immutable
+
 ## Status
 
 `conditions` holds `Ready` and `Synced`; `atProvider` is the resource as the API returns it.

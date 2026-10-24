@@ -48,6 +48,11 @@ spec:
 | `forProvider.type` | string | yes | Specify the list type. One of `SERIAL`, `URL`, `DOMAIN`, `EMAIL`, `IP`, `CATEGORY`, `LOCATION`, `DEVICE`, `AAGUID`. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
 
+Validation:
+
+- `forProvider`: accountRef cannot be removed once set
+- `forProvider.accountRef`: accountRef is immutable
+
 ## Status
 
 `conditions` holds `Ready` and `Synced`; `atProvider` is the resource as the API returns it.

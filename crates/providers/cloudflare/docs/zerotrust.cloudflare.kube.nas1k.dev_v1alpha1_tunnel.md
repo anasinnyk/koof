@@ -44,6 +44,11 @@ spec:
 | `forProvider.tunnel_secret` | string |  | Sets the password required to run a locally-managed tunnel. Must be at least 32 bytes and encoded as a base64 string. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
 
+Validation:
+
+- `forProvider`: accountRef cannot be removed once set
+- `forProvider.accountRef`: accountRef is immutable
+
 ## Status
 
 `conditions` holds `Ready` and `Synced`; `atProvider` is the resource as the API returns it.

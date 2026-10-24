@@ -4,7 +4,21 @@
 /// overlay's CEL validations.
 fn for_provider_schema(schema: &mut schemars::Schema) {
     koof::schema::flatten_unions(schema);
-    koof::schema::add_validations(schema, &[]);
+    koof::schema::add_validations(
+        schema,
+        &[
+            koof::schema::Validation {
+                rule: "self == oldSelf",
+                message: "accountRef is immutable",
+                field: "accountRef",
+            },
+            koof::schema::Validation {
+                rule: "!has(oldSelf.accountRef) || has(self.accountRef)",
+                message: "accountRef cannot be removed once set",
+                field: "",
+            },
+        ],
+    );
 }
 /// `spec.forProvider`: the generated API fields plus references and
 /// credentials.
