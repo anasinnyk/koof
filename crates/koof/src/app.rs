@@ -2,12 +2,16 @@ use crate::{
     config::{Config, HttpConfig},
     controller::{ControllerContext, run},
     http::HttpClient,
+    leader::{self, LeaderElector, LeaderError},
     metrics::Metrics,
     resource::{ManagedResource, ResourceDescriptor},
 };
 use futures::future::BoxFuture;
 use kube::runtime::events::{Recorder, Reporter};
-use std::sync::Arc;
+use std::sync::{
+    Arc,
+    atomic::{AtomicBool, Ordering},
+};
 
 #[derive(Debug)]
 #[non_exhaustive]
@@ -93,12 +97,14 @@ impl App {
 
     /// Serves `/metrics`, `/healthz` and `/readyz` and runs all controllers until
     /// `shutdown` completes, then lets running reconciles finish. Installs no global
-    /// logger or TLS provider.
+    /// logger or TLS provider. With leader election enabled the controllers start
+    /// only once the lease is acquired.
     ///
     /// # Errors
     ///
     /// Returns an error when the HTTP client cannot be created, the metrics address
-    /// cannot be bound or the metrics server fails.
+    /// cannot be bound, the metrics server fails, the leader election namespace
+    /// cannot be determined or the lease is lost.
     pub async fn run_with(
         self,
         config: Config,
@@ -107,6 +113,17 @@ impl App {
     ) -> Result<(), AppError> {
         tracing::info!(provider = self.provider.name, ?config, "configuration");
         let http = config.http.client().map_err(AppError::HttpClient)?;
+        let elector = if config.leader_election.enabled {
+            Some(LeaderElector::new(
+                kube_client.clone(),
+                &config.leader_election,
+                leader::namespace(&config.leader_election)?,
+                leader::identity(config.pod_name.as_deref()),
+            ))
+        } else {
+            None
+        };
+        let leading = Arc::new(AtomicBool::new(elector.is_none()));
         let reporter = Reporter {
             controller: format!("koof-{}", self.provider.name),
             instance: config.pod_name.clone(),
@@ -157,7 +174,12 @@ impl App {
         };
 
         let metrics_server = async {
-            let result = axum::serve(listener, router(context.clone(), kinds.clone()))
+            let state = ServerState {
+                context: context.clone(),
+                kinds: kinds.clone().into(),
+                leading: leading.clone(),
+            };
+            let result = axum::serve(listener, router(state))
                 .with_graceful_shutdown(stopping())
                 .await;
             if let Err(error) = &result {
@@ -167,16 +189,52 @@ impl App {
             result
         };
 
-        tracing::info!(controllers = ?kinds, "starting operator");
-        let controllers = futures::future::join_all(
-            self.controllers
-                .iter()
-                .map(|(_, controller)| controller(context.clone(), stopped.clone())),
-        );
-        let (_, served) = tokio::join!(controllers, metrics_server);
+        let controllers = async {
+            tracing::info!(controllers = ?kinds, "starting operator");
+            futures::future::join_all(
+                self.controllers
+                    .iter()
+                    .map(|(_, controller)| controller(context.clone(), stopped.clone())),
+            )
+            .await;
+        };
+        let elected = lead(elector, controllers, stopping(), &stop, &leading);
+        let (elected, served) = tokio::join!(elected, metrics_server);
         signal.abort();
+        elected?;
         served.map_err(AppError::Serve)
     }
+}
+
+async fn lead(
+    elector: Option<LeaderElector>,
+    controllers: impl Future<Output = ()>,
+    stopping: impl Future<Output = ()>,
+    stop: &tokio::sync::watch::Sender<bool>,
+    leading: &AtomicBool,
+) -> Result<(), LeaderError> {
+    let Some(mut elector) = elector else {
+        controllers.await;
+        return Ok(());
+    };
+    tokio::select! {
+        () = elector.acquire() => {}
+        () = stopping => return Ok(()),
+    }
+    leading.store(true, Ordering::Relaxed);
+    let mut controllers = std::pin::pin!(controllers);
+    let lost = tokio::select! {
+        () = &mut controllers => None,
+        lost = elector.keep() => Some(lost),
+    };
+    if let Some(lost) = lost {
+        leading.store(false, Ordering::Relaxed);
+        stop.send_replace(true);
+        controllers.await;
+        return Err(lost);
+    }
+    elector.release().await;
+    Ok(())
 }
 
 async fn shutdown_signal() {
@@ -215,15 +273,19 @@ pub enum AppError {
 
     #[error("metrics server failed")]
     Serve(#[source] std::io::Error),
+
+    #[error(transparent)]
+    Leader(#[from] LeaderError),
 }
 
 #[derive(Clone)]
 struct ServerState {
     context: Arc<ControllerContext>,
     kinds: Arc<[&'static str]>,
+    leading: Arc<AtomicBool>,
 }
 
-fn router(context: Arc<ControllerContext>, kinds: Vec<&'static str>) -> axum::Router {
+fn router(state: ServerState) -> axum::Router {
     use axum::{extract::State, http::StatusCode, routing::get};
 
     async fn metrics(State(state): State<ServerState>) -> (StatusCode, String) {
@@ -233,7 +295,9 @@ fn router(context: Arc<ControllerContext>, kinds: Vec<&'static str>) -> axum::Ro
         }
     }
     async fn readyz(State(state): State<ServerState>) -> (StatusCode, &'static str) {
-        if state.context.synced.all(&state.kinds) {
+        if !state.leading.load(Ordering::Relaxed) {
+            (StatusCode::SERVICE_UNAVAILABLE, "not leading")
+        } else if state.context.synced.all(&state.kinds) {
             (StatusCode::OK, "ok")
         } else {
             (StatusCode::SERVICE_UNAVAILABLE, "initial sync in progress")
@@ -244,8 +308,5 @@ fn router(context: Arc<ControllerContext>, kinds: Vec<&'static str>) -> axum::Ro
         .route("/metrics", get(metrics))
         .route("/healthz", get(|| async { "ok" }))
         .route("/readyz", get(readyz))
-        .with_state(ServerState {
-            context,
-            kinds: kinds.into(),
-        })
+        .with_state(state)
 }
