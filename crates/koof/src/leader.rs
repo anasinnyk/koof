@@ -253,3 +253,145 @@ fn conflict<T>(result: Result<T, kube::Error>) -> Result<Outcome, kube::Error> {
         Err(error) => Err(error),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::testing::Cluster;
+    use pretty_assertions::assert_eq;
+
+    const LEASE_DURATION: Duration = Duration::from_secs(15);
+
+    fn config() -> LeaderElectionConfig {
+        LeaderElectionConfig {
+            enabled: true,
+            name: "koof-example".to_owned(),
+            namespace: Some("koof".to_owned()),
+            lease_duration: LEASE_DURATION,
+            renew_interval: Duration::from_secs(5),
+        }
+    }
+
+    fn elector(cluster: &Cluster, identity: &str) -> LeaderElector {
+        LeaderElector::new(
+            cluster.client(),
+            &config(),
+            "koof".to_owned(),
+            identity.to_owned(),
+        )
+    }
+
+    fn holder(cluster: &Cluster) -> Option<String> {
+        cluster.get("Lease", "koof-example")?["spec"]["holderIdentity"]
+            .as_str()
+            .map(str::to_owned)
+    }
+
+    async fn becomes_leader_within(elector: &mut LeaderElector, time: Duration) -> bool {
+        tokio::time::timeout(time, elector.acquire()).await.is_ok()
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn first_instance_creates_the_lease_and_leads() {
+        let cluster = Cluster::default();
+
+        elector(&cluster, "pod-a").acquire().await;
+
+        assert_eq!(holder(&cluster).as_deref(), Some("pod-a"));
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn second_instance_waits_while_the_lease_is_fresh() {
+        let cluster = Cluster::default();
+        elector(&cluster, "pod-a").acquire().await;
+
+        let leading =
+            becomes_leader_within(&mut elector(&cluster, "pod-b"), LEASE_DURATION / 2).await;
+
+        assert_eq!(
+            (leading, holder(&cluster).as_deref()),
+            (false, Some("pod-a"))
+        );
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn second_instance_takes_over_a_lease_nobody_renews() {
+        let cluster = Cluster::default();
+        elector(&cluster, "pod-a").acquire().await;
+
+        let leading =
+            becomes_leader_within(&mut elector(&cluster, "pod-b"), LEASE_DURATION * 2).await;
+
+        assert_eq!(
+            (leading, holder(&cluster).as_deref()),
+            (true, Some("pod-b"))
+        );
+        assert_eq!(
+            cluster
+                .get("Lease", "koof-example")
+                .map(|lease| lease["spec"]["leaseTransitions"].clone()),
+            Some(serde_json::json!(1))
+        );
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn released_lease_is_taken_over_at_once() {
+        let cluster = Cluster::default();
+        let mut leader = elector(&cluster, "pod-a");
+        leader.acquire().await;
+
+        leader.release().await;
+        let leading =
+            becomes_leader_within(&mut elector(&cluster, "pod-b"), Duration::from_secs(1)).await;
+
+        assert_eq!(
+            (leading, holder(&cluster).as_deref()),
+            (true, Some("pod-b"))
+        );
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn leader_keeps_renewing_the_lease() {
+        let cluster = Cluster::default();
+        let mut leader = elector(&cluster, "pod-a");
+        leader.acquire().await;
+
+        let lost = tokio::time::timeout(LEASE_DURATION * 4, leader.keep()).await;
+
+        assert_eq!(
+            (lost.is_err(), holder(&cluster).as_deref()),
+            (true, Some("pod-a"))
+        );
+    }
+
+    #[tokio::test(start_paused = true)]
+    async fn leader_notices_another_holder_and_steps_down() {
+        let cluster = Cluster::default();
+        let mut leader = elector(&cluster, "pod-a");
+        leader.acquire().await;
+        let mut lease = cluster.get("Lease", "koof-example").expect("lease");
+        lease["spec"]["holderIdentity"] = serde_json::json!("pod-b");
+        cluster.put(lease);
+
+        let error = leader.keep().await;
+
+        assert_eq!(
+            error.to_string(),
+            "lost the leader election lease koof/koof-example"
+        );
+    }
+
+    #[test]
+    fn configured_namespace_wins() {
+        let config = LeaderElectionConfig {
+            namespace: Some(" koof-system \n".to_owned()),
+            ..config()
+        };
+        assert_eq!(namespace(&config).ok().as_deref(), Some("koof-system"));
+    }
+
+    #[test]
+    fn pod_name_is_the_identity() {
+        assert_eq!(identity(Some("koof-example-7d9f")), "koof-example-7d9f");
+    }
+}

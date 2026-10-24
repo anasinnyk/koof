@@ -311,3 +311,7 @@ fn router(state: ServerState) -> axum::Router {
         .route("/readyz", get(readyz))
         .with_state(state)
 }
+
+#[cfg(test)]
+#[cfg(feature = "fake")]
+mod tests;

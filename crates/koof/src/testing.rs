@@ -14,7 +14,14 @@ use kube::{CustomResource, client::Body};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
-use std::{collections::BTreeMap, convert::Infallible, sync::Arc};
+use std::{
+    collections::BTreeMap,
+    convert::Infallible,
+    sync::{
+        Arc, Mutex,
+        atomic::{AtomicU64, Ordering},
+    },
+};
 
 pub const GROUP: &str = "example.dev";
 pub const NAMESPACE: &str = "default";
@@ -328,29 +335,283 @@ pub fn secret(name: &str, key: &str, value: &str) -> Value {
 
 /// A Kubernetes API that serves `GET` of the given objects and `404` for anything else.
 pub fn kubernetes(objects: &[Value]) -> kube::Client {
-    let objects: Arc<BTreeMap<String, Value>> = Arc::new(
-        objects
-            .iter()
-            .map(|object| (object_path(object), object.clone()))
-            .collect(),
-    );
-    let service = tower::service_fn(move |request: http::Request<Body>| {
-        let objects = objects.clone();
-        async move {
-            let (status, body) = match objects.get(request.uri().path()) {
-                Some(object) => (200, object.clone()),
-                None => (
-                    404,
-                    json!({ "kind": "Status", "apiVersion": "v1", "status": "Failure", "reason": "NotFound", "code": 404 }),
-                ),
-            };
-            let mut response =
-                http::Response::new(Body::from(serde_json::to_vec(&body).unwrap_or_default()));
-            *response.status_mut() = http::StatusCode::from_u16(status).unwrap_or_default();
-            Ok::<_, Infallible>(response)
+    Cluster::new(objects).client()
+}
+
+/// An in-memory Kubernetes API: get, list (per namespace or across namespaces),
+/// create, merge-patch and JSON-patch of objects and their status, with
+/// `resourceVersion` conflicts and deletion once the last finalizer is gone.
+#[derive(Clone, Default)]
+pub struct Cluster {
+    objects: Arc<Mutex<BTreeMap<String, Value>>>,
+    version: Arc<AtomicU64>,
+}
+
+#[cfg_attr(not(feature = "fake"), allow(dead_code))]
+impl Cluster {
+    pub fn new(objects: &[Value]) -> Self {
+        let cluster = Self::default();
+        for object in objects {
+            cluster.put(object.clone());
         }
-    });
-    kube::Client::new(service, NAMESPACE)
+        cluster
+    }
+
+    pub fn client(&self) -> kube::Client {
+        let cluster = self.clone();
+        let service = tower::service_fn(move |request: http::Request<Body>| {
+            let cluster = cluster.clone();
+            async move {
+                let (parts, body) = request.into_parts();
+                let body = http_body_util::BodyExt::collect(body)
+                    .await
+                    .map(http_body_util::Collected::to_bytes)
+                    .unwrap_or_default();
+                let content_type = parts
+                    .headers
+                    .get(http::header::CONTENT_TYPE)
+                    .and_then(|value| value.to_str().ok())
+                    .unwrap_or_default()
+                    .to_owned();
+                if parts
+                    .uri
+                    .query()
+                    .is_some_and(|query| query.contains("watch=true"))
+                {
+                    std::future::pending::<()>().await;
+                }
+                let (status, body) =
+                    cluster.handle(&parts.method, parts.uri.path(), &content_type, &body);
+                let mut response =
+                    http::Response::new(Body::from(serde_json::to_vec(&body).unwrap_or_default()));
+                *response.status_mut() = http::StatusCode::from_u16(status).unwrap_or_default();
+                Ok::<_, Infallible>(response)
+            }
+        });
+        kube::Client::new(service, NAMESPACE)
+    }
+
+    /// Stores `object` as is, with a new `resourceVersion`.
+    pub fn put(&self, mut object: Value) {
+        object["metadata"]["resourceVersion"] = json!(self.next_version());
+        self.lock().insert(object_path(&object), object);
+    }
+
+    pub fn get(&self, kind: &str, name: &str) -> Option<Value> {
+        self.find(kind, name)
+    }
+
+    pub fn typed<R: serde::de::DeserializeOwned>(&self, kind: &str, name: &str) -> R {
+        serde_json::from_value(self.find(kind, name).expect("object exists")).expect("typed object")
+    }
+
+    /// Deletes like `kubectl delete`: an object with finalizers only gets a
+    /// `deletionTimestamp`.
+    pub fn delete(&self, kind: &str, name: &str) {
+        let mut objects = self.lock();
+        let Some((path, object)) = objects
+            .iter_mut()
+            .find(|(_, object)| object["kind"] == kind && object["metadata"]["name"] == name)
+        else {
+            return;
+        };
+        let path = path.clone();
+        if has_finalizers(object) {
+            object["metadata"]["deletionTimestamp"] = json!("2026-01-01T00:00:00Z");
+        } else {
+            objects.remove(&path);
+        }
+    }
+
+    /// `(reason, note)` of every published event, oldest first.
+    pub fn events(&self) -> Vec<(String, String)> {
+        let mut events: Vec<(u64, String, String)> = self
+            .lock()
+            .values()
+            .filter(|object| object["kind"] == "Event")
+            .map(|event| {
+                (
+                    event["metadata"]["resourceVersion"]
+                        .as_str()
+                        .and_then(|version| version.parse().ok())
+                        .unwrap_or_default(),
+                    event["reason"].as_str().unwrap_or_default().to_owned(),
+                    event["note"].as_str().unwrap_or_default().to_owned(),
+                )
+            })
+            .collect();
+        events.sort();
+        events
+            .into_iter()
+            .map(|(_, reason, note)| (reason, note))
+            .collect()
+    }
+
+    pub fn event_reasons(&self) -> Vec<String> {
+        self.events()
+            .into_iter()
+            .map(|(reason, _)| reason)
+            .collect()
+    }
+
+    fn find(&self, kind: &str, name: &str) -> Option<Value> {
+        self.lock()
+            .values()
+            .find(|object| object["kind"] == kind && object["metadata"]["name"] == name)
+            .cloned()
+    }
+
+    fn lock(&self) -> std::sync::MutexGuard<'_, BTreeMap<String, Value>> {
+        self.objects
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+    }
+
+    fn next_version(&self) -> String {
+        (self.version.fetch_add(1, Ordering::Relaxed) + 1).to_string()
+    }
+
+    fn handle(
+        &self,
+        method: &http::Method,
+        path: &str,
+        content_type: &str,
+        body: &[u8],
+    ) -> (u16, Value) {
+        let body: Value = serde_json::from_slice(body).unwrap_or(Value::Null);
+        match *method {
+            http::Method::GET => self.read(path),
+            http::Method::POST => self.create(path, body),
+            http::Method::PUT => self.replace(path, body),
+            http::Method::PATCH => match path.strip_suffix("/status") {
+                Some(path) => self.patch(path, content_type, &json!({ "status": null }), body),
+                None => self.patch(path, content_type, &Value::Null, body),
+            },
+            _ => status(405, "MethodNotAllowed"),
+        }
+    }
+
+    fn read(&self, path: &str) -> (u16, Value) {
+        let objects = self.lock();
+        if let Some(object) = objects.get(path) {
+            return (200, object.clone());
+        }
+        let items: Vec<Value> = objects
+            .iter()
+            .filter(|(candidate, _)| in_collection(candidate, path))
+            .map(|(_, object)| object.clone())
+            .collect();
+        if items.is_empty() && !is_collection(path) {
+            return status(404, "NotFound");
+        }
+        (
+            200,
+            json!({ "kind": "List", "apiVersion": "v1", "metadata": { "resourceVersion": "1" }, "items": items }),
+        )
+    }
+
+    fn create(&self, path: &str, mut object: Value) -> (u16, Value) {
+        let name = object["metadata"]["name"]
+            .as_str()
+            .unwrap_or_default()
+            .to_owned();
+        let key = format!("{path}/{name}");
+        if self.lock().contains_key(&key) {
+            return status(409, "AlreadyExists");
+        }
+        object["metadata"]["resourceVersion"] = json!(self.next_version());
+        self.lock().insert(key, object.clone());
+        (201, object)
+    }
+
+    fn replace(&self, path: &str, mut object: Value) -> (u16, Value) {
+        let mut objects = self.lock();
+        let Some(current) = objects.get_mut(path) else {
+            return status(404, "NotFound");
+        };
+        if object["metadata"]["resourceVersion"] != current["metadata"]["resourceVersion"] {
+            return status(409, "Conflict");
+        }
+        object["metadata"]["resourceVersion"] = json!(self.next_version());
+        *current = object.clone();
+        (200, object)
+    }
+
+    fn patch(&self, path: &str, content_type: &str, only: &Value, changes: Value) -> (u16, Value) {
+        let mut objects = self.lock();
+        let Some(object) = objects.get_mut(path) else {
+            return status(404, "NotFound");
+        };
+        let expected = changes.pointer("/metadata/resourceVersion").cloned();
+        if expected
+            .as_ref()
+            .is_some_and(|expected| *expected != object["metadata"]["resourceVersion"])
+        {
+            return status(409, "Conflict");
+        }
+        let mut patched = object.clone();
+        let applied = if content_type.contains("json-patch") {
+            serde_json::from_value::<json_patch::Patch>(changes)
+                .map_err(|error| error.to_string())
+                .and_then(|patch| {
+                    json_patch::patch(&mut patched, &patch).map_err(|error| error.to_string())
+                })
+        } else {
+            json_patch::merge(&mut patched, &changes);
+            Ok(())
+        };
+        if applied.is_err() {
+            return status(422, "Invalid");
+        }
+        if only.get("status").is_some() {
+            object["status"] = patched["status"].clone();
+        } else {
+            let status = object.get("status").cloned();
+            *object = patched;
+            if let Some(status) = status {
+                object["status"] = status;
+            }
+        }
+        object["metadata"]["resourceVersion"] = json!(self.next_version());
+        let result = object.clone();
+        if object["metadata"].get("deletionTimestamp").is_some() && !has_finalizers(object) {
+            objects.remove(path);
+        }
+        (200, result)
+    }
+}
+
+fn has_finalizers(object: &Value) -> bool {
+    object["metadata"]["finalizers"]
+        .as_array()
+        .is_some_and(|finalizers| !finalizers.is_empty())
+}
+
+fn is_collection(path: &str) -> bool {
+    let segments: Vec<&str> = path.trim_start_matches('/').split('/').collect();
+    let after_version = match segments.first() {
+        Some(&"api") => 2,
+        _ => 3,
+    };
+    match segments.get(after_version) {
+        Some(&"namespaces") => segments.len() == after_version + 3,
+        _ => segments.len() == after_version + 1,
+    }
+}
+
+fn in_collection(object_path: &str, collection: &str) -> bool {
+    let (prefix, plural) = collection.rsplit_once('/').unwrap_or_default();
+    object_path.starts_with(&format!("{collection}/"))
+        || (object_path.starts_with(&format!("{prefix}/namespaces/"))
+            && object_path.contains(&format!("/{plural}/"))
+            && !collection.contains("/namespaces/"))
+}
+
+fn status(code: u16, reason: &str) -> (u16, Value) {
+    (
+        code,
+        json!({ "kind": "Status", "apiVersion": "v1", "status": "Failure", "reason": reason, "code": code }),
+    )
 }
 
 fn object_path(object: &Value) -> String {
@@ -365,9 +626,28 @@ fn object_path(object: &Value) -> String {
         "v1" => "/api/v1".to_owned(),
         api_version => format!("/apis/{api_version}"),
     };
-    format!(
-        "{prefix}/namespaces/{}/{plural}/{}",
-        field("/metadata/namespace"),
-        field("/metadata/name")
-    )
+    match field("/metadata/namespace") {
+        "" => format!("{prefix}/{plural}/{}", field("/metadata/name")),
+        namespace => format!(
+            "{prefix}/namespaces/{namespace}/{plural}/{}",
+            field("/metadata/name")
+        ),
+    }
+}
+
+/// `koof::fake` serving [`Record`]s on a local port; returns its base URL.
+#[cfg(feature = "fake")]
+pub async fn provider() -> String {
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
+        .await
+        .expect("port");
+    let url = format!("http://{}", listener.local_addr().expect("address"));
+    tokio::spawn(
+        axum::serve(
+            listener,
+            crate::fake::Fake::new().resource::<Record>().router(),
+        )
+        .into_future(),
+    );
+    url
 }
