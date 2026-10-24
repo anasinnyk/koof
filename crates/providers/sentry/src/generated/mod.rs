@@ -55,3 +55,20 @@ pub fn crds() -> Vec<
         kube::CustomResourceExt > ::crd()
     ]
 }
+/// Documentation of every resource of this provider.
+#[must_use]
+pub fn docs() -> Vec<koof::docs::ResourceDoc> {
+    vec![
+        koof::docs::ResourceDoc::of:: < sentry::v1alpha1::dashboard::Dashboard > (),
+        koof::docs::ResourceDoc::of:: < sentry::v1alpha1::monitor::Monitor > (),
+        koof::docs::ResourceDoc::of:: < sentry::v1alpha1::organization::Organization >
+        (), koof::docs::ResourceDoc::of:: <
+        sentry::v1alpha1::cluster_organization::ClusterOrganization > (),
+        koof::docs::ResourceDoc::of:: <
+        sentry::v1alpha1::organization_member::OrganizationMember > (),
+        koof::docs::ResourceDoc::of:: < sentry::v1alpha1::project::Project > (),
+        koof::docs::ResourceDoc::of:: < sentry::v1alpha1::project_key::ProjectKey > (),
+        koof::docs::ResourceDoc::of:: < sentry::v1alpha1::service_hook::ServiceHook > (),
+        koof::docs::ResourceDoc::of:: < sentry::v1alpha1::team::Team > ()
+    ]
+}

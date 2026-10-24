@@ -14,8 +14,10 @@ reconciles its resources Crossplane-style.
 | `crates/providers/<name>/src/bin/` | Provider binaries `koof-<name>`, `koof-<name>-manifests`, `koof-<name>-fake` | rarely |
 | `crates/providers/<name>/src/generated/` | Generated Rust | **no**, regenerate |
 | `crates/providers/<name>/e2e/generated/` | Generated chainsaw tests | **no**, regenerate |
+| `crates/providers/<name>/README.md`, `docs/` | Generated provider docs: kinds table, one page per kind | **no**, regenerate |
 | `deploy/providers/<name>/` | Generated CRDs, RBAC, kustomization | **no**, regenerate |
 | `deploy/base/` | Deployment, ServiceAccount, bindings | yes |
+| `docs/` | User docs ([Diátaxis](https://diataxis.fr/)): tutorials, how-to, explanation, reference | yes, keep in sync with behaviour |
 
 A change to a provider's resources goes into its overlay (`x-kube-resource`,
 `x-kube-operation`, `x-kube-field`, `x-kube-provider`), followed by

@@ -3,6 +3,7 @@
 pub mod app;
 pub mod config;
 pub mod controller;
+pub mod docs;
 pub mod error;
 pub mod external;
 #[cfg(feature = "fake")]

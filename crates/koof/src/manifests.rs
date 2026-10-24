@@ -148,17 +148,24 @@ pub fn write(
 /// # Errors
 ///
 /// Returns an error on wrong arguments or when the manifests cannot be written.
-pub fn run(provider: &ProviderInfo, crds: &[CustomResourceDefinition]) -> io::Result<()> {
+pub fn run(
+    provider: &ProviderInfo,
+    crds: &[CustomResourceDefinition],
+    docs: &[crate::docs::ResourceDoc],
+) -> io::Result<()> {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
     match arguments.as_slice() {
         [] => {
             print!("{}", documents(crds).map_err(io::Error::other)?);
             Ok(())
         }
+        [flag, directory] if flag == "--docs" => {
+            crate::docs::write(Path::new(directory), provider, docs)
+        }
         [directory, image] => write(Path::new(directory), provider, crds, image),
         _ => Err(io::Error::new(
             io::ErrorKind::InvalidInput,
-            "usage: manifests [<directory> <image>]",
+            "usage: manifests [<directory> <image> | --docs <directory>]",
         )),
     }
 }
