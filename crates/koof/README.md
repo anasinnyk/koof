@@ -69,8 +69,37 @@ logged at startup; an invalid value stops the binary.
 | `KOOF_HTTP__POOL_IDLE_TIMEOUT`     | `90s`                       | How long an idle connection is kept         |
 | `KOOF_HTTP__POOL_MAX_IDLE_PER_HOST` | `16`                        | Idle connections kept per host              |
 | `KOOF_HTTP__USER_AGENT`            | `koof-<provider>/<version>` | `User-Agent` of provider API requests       |
+| `KOOF_LEADER_ELECTION__ENABLED`    | `false`                     | Run controllers only while holding a Lease  |
+| `KOOF_LEADER_ELECTION__NAME`       | `koof-<provider>`           | Name of the `coordination.k8s.io` Lease     |
+| `KOOF_LEADER_ELECTION__NAMESPACE`  | the pod's namespace         | Namespace of the Lease                      |
+| `KOOF_LEADER_ELECTION__LEASE_DURATION` | `15s`                   | How long a lease is valid without renewal   |
+| `KOOF_LEADER_ELECTION__RENEW_INTERVAL` | `5s`                    | How often the lease is renewed or retried   |
 | `KOOF_FAKE_ADDR`                   | `0.0.0.0:8081`              | Address of the `fake` test API binary       |
 | `RUST_LOG`                         | `info`                      | Log filter                                  |
+
+## Replicas and leader election
+
+Without leader election every instance reconciles every object, so a provider
+must run as a single replica: `deploy/base` uses `replicas: 1` and the `Recreate`
+strategy. To run more replicas, or a `RollingUpdate` strategy, set
+`KOOF_LEADER_ELECTION__ENABLED=true`.
+
+With leader election enabled, each instance serves `/healthz` and `/metrics`
+immediately, while `/readyz` reports not ready until it holds the Lease. The
+holder identity is `KOOF_POD_NAME`, else the hostname. Only the holder runs the
+controllers; it renews the Lease every `RENEW_INTERVAL` with
+`resourceVersion`-guarded updates, and a standby takes over once the Lease has not
+changed for `LEASE_DURATION`. When the holder cannot renew within
+`LEASE_DURATION - RENEW_INTERVAL`, or finds another holder, it stops the controllers
+through the graceful shutdown path and exits with an error so that it is restarted
+as a standby. On a normal shutdown the Lease is released, so a standby takes over
+at once. The namespace is resolved from `KOOF_LEADER_ELECTION__NAMESPACE`,
+`POD_NAMESPACE` (set by `deploy/base`) or the service account namespace file; the
+binary stops when none is available.
+
+The generated `ClusterRole` grants `get`, `create` and `update` on
+`coordination.k8s.io` `leases`; as a `ClusterRole` rule it applies to every
+namespace.
 
 ## Compatibility
 
