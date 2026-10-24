@@ -22,6 +22,33 @@ koof-gen \
 descriptors, operations and typify-generated API types. Overlays are applied in
 order; `--preprocessed-spec FILE` writes the schema set used for type generation.
 
+## Generated code
+
+```text
+src/generated/
+  mod.rs                      PROVIDER, controllers(), fake(), crds()
+  operations.rs               provider API operations
+  types.rs                    typify-generated API types
+  <group>/mod.rs
+  <group>/<version>/mod.rs    <Kind>ForProvider, <Kind>AtProvider and their nested types
+  <group>/<version>/<resource>.rs
+```
+
+`<group>` is the first DNS label of the API group in snake case, so
+`zones.cloudflare.kube.nas1k.dev` is `zones` and the provider's root group
+`cloudflare.kube.nas1k.dev` is `cloudflare`; two groups with the same first label,
+or a group named `types` or `operations`, are rejected. `<resource>` is the
+`x-kube-resource` name. For example, kind `DNSRecord` of
+`zones.cloudflare.kube.nas1k.dev/v1alpha1` is
+`generated::zones::v1alpha1::dns_record::DNSRecord`, and its `spec.forProvider`
+fields are `generated::zones::v1alpha1::DnsRecordForProvider`.
+
+A kind is unique per `apiVersion`, so the same kind can exist in several groups.
+The `ForProvider` / `AtProvider` schemas are synthesized as
+`<group>_<version>_<Kind>ForProvider`, so `types.rs` names them
+`ZonesV1alpha1DnsRecordForProvider`; the group/version module re-exports them
+under their unqualified names.
+
 ## Overlays
 
 The provider:
@@ -87,8 +114,8 @@ Every resource is namespaced: references point at resources in the same
 namespace and the credentials Secret is read from it. `cluster: true` on
 `x-kube-resource` also generates a cluster-scoped `Cluster<Kind>` (its Secret
 reference names a namespace); references to the resource then take
-`kind: <Kind> | Cluster<Kind>` (default `<Kind>`), and a cluster variant can only
-reference resources that have one too.
+`kind: <Kind> | Cluster<Kind>` (default `<Kind>`) and an optional `apiVersion`, and
+a cluster variant can only reference resources that have one too.
 
 `lifecycle` is one of `observe` (required), `create`, `update` and `delete`.
 For APIs that soft-delete (the observe endpoint keeps answering `200`),

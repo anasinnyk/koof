@@ -1,7 +1,7 @@
 use crate::{
     generator::{
         errors::GeneratorError,
-        naming::{field_ident, kind_ident},
+        naming::{field_ident, kind_ident, module_path, schema_name},
         types::GeneratedTypes,
     },
     ir::{
@@ -22,7 +22,7 @@ pub fn generate_spec(
     let status_name = format!("{kind}Status");
     let spec_ident = kind_ident(&format!("{kind}Spec"))?;
     let for_provider_ident = kind_ident(&format!("{kind}ForProviderSpec"))?;
-    let fields_type = types.path(&format!("{}ForProvider", resource.base_kind))?;
+    let fields_type = types.path(&schema_name(resource, "ForProvider"))?;
 
     let validations = validation_tokens(resource);
     let print_columns = print_columns(resource);
@@ -152,7 +152,7 @@ pub fn generate_status(
     types: &GeneratedTypes,
 ) -> Result<TokenStream, GeneratorError> {
     let status_ident = kind_ident(&format!("{}Status", resource.kind))?;
-    let at_provider_type = types.path(&format!("{}AtProvider", resource.base_kind))?;
+    let at_provider_type = types.path(&schema_name(resource, "AtProvider"))?;
 
     Ok(quote! {
         pub type #status_ident = koof::status::ManagedStatus<#at_provider_type>;
@@ -167,9 +167,13 @@ fn reference_fields(resource: &Resource<'_>) -> Result<Vec<TokenStream>, Generat
             let json_name = reference.field;
             let ident = field_ident(json_name)?;
             let reference_type = if reference.targets.len() > 1 {
-                let module = field_ident(&reference.target.0)?;
+                let module = module_path(
+                    reference.target_group,
+                    reference.target_version,
+                    reference.target,
+                )?;
                 let type_ident = kind_ident(&format!("{}Reference", reference.target_kind))?;
-                quote!(crate::generated::#module::#type_ident)
+                quote!(#module::#type_ident)
             } else {
                 quote!(koof::reference::ResourceReference)
             };
@@ -211,6 +215,9 @@ pub fn generate_variant_reference(resource: &Resource<'_>) -> Result<TokenStream
             pub name: String,
             #[serde(default)]
             pub kind: #kind_enum_ident,
+            /// `apiVersion` of the referenced object; needed when its kind is in several groups.
+            #[serde(rename = "apiVersion", default, skip_serializing_if = "Option::is_none")]
+            pub api_version: Option<String>,
         }
 
         #[derive(

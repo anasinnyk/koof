@@ -85,17 +85,21 @@ pub fn resolve_value<'a>(
 }
 
 #[derive(serde::Deserialize)]
+#[serde(rename_all = "camelCase")]
 struct KindedReference {
     name: String,
     kind: Option<String>,
+    api_version: Option<String>,
 }
 
 /// The kind and name `reference` points at in `value`; `Ok(None)` when it is not set.
+/// `kind` defaults to the kind of the first target; `apiVersion` tells apart targets
+/// of the same kind in different API groups.
 ///
 /// # Errors
 ///
-/// Returns [`ResolveValueError`] when the reference is malformed or names a kind it
-/// cannot point at.
+/// Returns [`ResolveValueError`] when the reference is malformed, names a kind it
+/// cannot point at, or matches several targets.
 pub fn target(
     value: &Value,
     reference: &Reference,
@@ -107,18 +111,32 @@ pub fn target(
     else {
         return Ok(None);
     };
-    let descriptor = match target.kind.as_deref() {
-        None => reference.targets.first(),
-        Some(kind) => reference
-            .targets
-            .iter()
-            .find(|descriptor| descriptor.kind == kind),
+    let kind = target
+        .kind
+        .as_deref()
+        .or_else(|| reference.targets.first().map(|descriptor| descriptor.kind))
+        .unwrap_or_default();
+    let api_version = target.api_version.as_deref();
+    let mut matching = reference.targets.iter().copied().filter(|descriptor| {
+        descriptor.kind == kind
+            && api_version.is_none_or(|version| (descriptor.api_resource)().api_version == version)
+    });
+    let qualified = || match api_version {
+        Some(version) => format!("{version}, kind={kind}"),
+        None => kind.to_owned(),
+    };
+    let descriptor = matching
+        .next()
+        .ok_or_else(|| ResolveValueError::ReferenceKind {
+            from: reference.from,
+            kind: qualified(),
+        })?;
+    if matching.next().is_some() {
+        return Err(ResolveValueError::AmbiguousReference {
+            from: reference.from,
+            kind: qualified(),
+        });
     }
-    .copied()
-    .ok_or_else(|| ResolveValueError::ReferenceKind {
-        from: reference.from,
-        kind: target.kind.clone().unwrap_or_default(),
-    })?;
     Ok(Some((descriptor, target.name)))
 }
 
@@ -284,5 +302,66 @@ fn scalar(value: &Value, pointer: &str) -> Result<Option<String>, ResolveValueEr
         Some(_) => Err(ResolveValueError::NonScalar {
             path: pointer.to_owned(),
         }),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::resource::{ObserveDescriptor, OperationDescriptor};
+    use serde_json::json;
+
+    fn api_resource(group: &str) -> kube::api::ApiResource {
+        kube::api::ApiResource {
+            group: group.to_owned(),
+            version: "v1".to_owned(),
+            api_version: format!("{group}/v1"),
+            kind: "Record".to_owned(),
+            plural: "records".to_owned(),
+        }
+    }
+
+    static ZONES: ResourceDescriptor = ResourceDescriptor::new(
+        "Record",
+        || api_resource("zones.example.dev"),
+        "zones.example.dev",
+        true,
+        ObserveDescriptor::new(OperationDescriptor::new()),
+    );
+    static DNS: ResourceDescriptor = ResourceDescriptor::new(
+        "Record",
+        || api_resource("dns.example.dev"),
+        "dns.example.dev",
+        true,
+        ObserveDescriptor::new(OperationDescriptor::new()),
+    );
+    static REFERENCE: Reference = Reference::new("record", "/ref", &[&ZONES, &DNS]);
+
+    fn resolve(reference: &Value) -> Result<Option<&'static str>, ResolveValueError> {
+        Ok(target(&json!({ "ref": reference }), &REFERENCE)?
+            .map(|(descriptor, _)| descriptor.group))
+    }
+
+    #[test]
+    fn same_kind_in_two_groups_needs_api_version() -> Result<(), ResolveValueError> {
+        assert!(matches!(
+            resolve(&json!({ "name": "a" })),
+            Err(ResolveValueError::AmbiguousReference { .. })
+        ));
+        assert_eq!(
+            resolve(&json!({ "name": "a", "apiVersion": "dns.example.dev/v1" }))?,
+            Some("dns.example.dev")
+        );
+        assert_eq!(
+            resolve(
+                &json!({ "name": "a", "kind": "Record", "apiVersion": "zones.example.dev/v1" })
+            )?,
+            Some("zones.example.dev")
+        );
+        assert!(matches!(
+            resolve(&json!({ "name": "a", "apiVersion": "other.example.dev/v1" })),
+            Err(ResolveValueError::ReferenceKind { .. })
+        ));
+        Ok(())
     }
 }

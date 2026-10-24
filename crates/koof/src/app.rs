@@ -4,7 +4,7 @@ use crate::{
     http::HttpClient,
     leader::{self, LeaderElector, LeaderError},
     metrics::Metrics,
-    resource::{ManagedResource, ResourceDescriptor},
+    resource::{GroupKind, ManagedResource, ResourceDescriptor},
 };
 use futures::future::BoxFuture;
 use kube::runtime::events::{Recorder, Reporter};
@@ -143,9 +143,9 @@ impl App {
             config.concurrency,
         ));
 
-        let kinds: Vec<&'static str> = descriptors
+        let kinds: Vec<GroupKind> = descriptors
             .iter()
-            .map(|descriptor| descriptor.kind)
+            .map(|descriptor| descriptor.group_kind())
             .collect();
         let listener = tokio::net::TcpListener::bind(&config.metrics_addr)
             .await
@@ -190,7 +190,8 @@ impl App {
         };
 
         let controllers = async {
-            tracing::info!(controllers = ?kinds, "starting operator");
+            let controllers: Vec<String> = kinds.iter().map(ToString::to_string).collect();
+            tracing::info!(?controllers, "starting operator");
             futures::future::join_all(
                 self.controllers
                     .iter()
@@ -281,7 +282,7 @@ pub enum AppError {
 #[derive(Clone)]
 struct ServerState {
     context: Arc<ControllerContext>,
-    kinds: Arc<[&'static str]>,
+    kinds: Arc<[GroupKind]>,
     leading: Arc<AtomicBool>,
 }
 

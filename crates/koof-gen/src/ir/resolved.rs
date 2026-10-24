@@ -54,6 +54,8 @@ pub struct Reference<'a> {
     pub field: &'a str,
     pub target: &'a ResourceName,
     pub target_kind: &'a str,
+    pub target_group: &'a str,
+    pub target_version: &'a str,
     pub targets: Vec<ResourceName>,
 }
 

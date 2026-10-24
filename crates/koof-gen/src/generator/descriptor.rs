@@ -1,7 +1,7 @@
 use crate::{
     generator::{
         errors::GeneratorError,
-        naming::{field_ident, kind_ident, operation_ident},
+        naming::{kind_ident, module_path, operation_ident, schema_name},
         types::GeneratedTypes,
     },
     ir::{
@@ -32,8 +32,9 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
                 .targets
                 .iter()
                 .map(|target| {
-                    let module = field_ident(&target.0)?;
-                    Ok(quote!(&crate::generated::#module::DESCRIPTOR))
+                    let module =
+                        module_path(reference.target_group, reference.target_version, target)?;
+                    Ok(quote!(&#module::DESCRIPTOR))
                 })
                 .collect::<Result<Vec<_>, GeneratorError>>()?;
             Ok(quote! {
@@ -115,7 +116,7 @@ pub fn generate_managed_resource(
     types: &GeneratedTypes,
 ) -> Result<TokenStream, GeneratorError> {
     let resource_ident = kind_ident(&resource.kind)?;
-    let at_provider_type = types.path(&format!("{}AtProvider", resource.base_kind))?;
+    let at_provider_type = types.path(&schema_name(resource, "AtProvider"))?;
     let observe = operation_ident(resource.observe.id)?;
     let operation_type = |operation: Option<Operation<'_>>| -> Result<TokenStream, GeneratorError> {
         let Some(operation) = operation else {

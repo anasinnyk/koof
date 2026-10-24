@@ -211,12 +211,16 @@ impl<'a> Checker<'a, '_> {
             if target.cluster {
                 targets.push(cluster_name(&reference.target));
             }
+            let (target_group, target_version) =
+                target.api_version.split_once('/').unwrap_or_default();
             references.push(Reference {
                 name,
                 from: &reference.from.0,
                 field,
                 target: &reference.target,
                 target_kind: &target.kind,
+                target_group,
+                target_version,
                 targets,
             });
         }

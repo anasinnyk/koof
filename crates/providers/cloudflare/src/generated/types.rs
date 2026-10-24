@@ -2673,1048 +2673,6 @@ pub struct AccessAppResponse {
     #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
     pub subtype_12: ::std::option::Option<McpServerPortalApplication>,
 }
-///`AccessApplicationAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationAtProvider {
-    Variant0(AccessApplicationAtProviderVariant0),
-    Variant1(AccessApplicationAtProviderVariant1),
-    Variant2(AccessApplicationAtProviderVariant2),
-    Variant3(AccessApplicationAtProviderVariant3),
-    Variant4(AccessApplicationAtProviderVariant4),
-    Variant5(AccessApplicationAtProviderVariant5),
-    Variant6(AccessApplicationAtProviderVariant6),
-    Variant7(AccessApplicationAtProviderVariant7),
-    Variant8(AccessApplicationAtProviderVariant8),
-    Variant9(AccessApplicationAtProviderVariant9),
-    Variant10(AccessApplicationAtProviderVariant10),
-    Variant11(AccessApplicationAtProviderVariant11),
-    Variant12(AccessApplicationAtProviderVariant12),
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant0>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant0) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant1>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant1) -> Self {
-        Self::Variant1(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant2>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant2) -> Self {
-        Self::Variant2(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant3>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant3) -> Self {
-        Self::Variant3(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant4>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant4) -> Self {
-        Self::Variant4(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant5>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant5) -> Self {
-        Self::Variant5(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant6>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant6) -> Self {
-        Self::Variant6(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant7>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant7) -> Self {
-        Self::Variant7(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant8>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant8) -> Self {
-        Self::Variant8(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant9>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant9) -> Self {
-        Self::Variant9(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant10>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant10) -> Self {
-        Self::Variant10(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant11>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant11) -> Self {
-        Self::Variant11(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationAtProviderVariant12>
-for AccessApplicationAtProvider {
-    fn from(value: AccessApplicationAtProviderVariant12) -> Self {
-        Self::Variant12(value)
-    }
-}
-///`AccessApplicationAtProviderVariant0`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant0 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<AccessDomain>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub eager_redirect_cookie_setting: ::std::option::Option<
-        AccessEagerRedirectCookieSetting,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub read_service_tokens_from_header: ::std::option::Option<
-        AccessReadServiceTokensFromHeader,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessType>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
-        AccessUseClientlessIsolationAppLauncherUrl,
-    >,
-}
-///`AccessApplicationAtProviderVariant1`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant1 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub saas_app: ::std::option::Option<AccessApplicationAtProviderVariant1SaasApp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessType>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-}
-///`AccessApplicationAtProviderVariant10`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant10 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<AccessDomain>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub eager_redirect_cookie_setting: ::std::option::Option<
-        AccessEagerRedirectCookieSetting,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub read_service_tokens_from_header: ::std::option::Option<
-        AccessReadServiceTokensFromHeader,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub target_criteria: ::std::vec::Vec<AccessTargetCriteriaSelfHostedApp>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationAtProviderVariant10Type>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
-        AccessUseClientlessIsolationAppLauncherUrl,
-    >,
-}
-///`AccessApplicationAtProviderVariant10Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant10Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationAtProviderVariant11`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant11 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessType>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-}
-///`AccessApplicationAtProviderVariant12`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant12 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<AccessDomain>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessType>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-}
-///`AccessApplicationAtProviderVariant1SaasApp`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationAtProviderVariant1SaasApp {
-    SamlSaasApp(AccessSamlSaasApp),
-    OidcSaasApp(AccessOidcSaasApp),
-}
-impl ::std::convert::From<AccessSamlSaasApp>
-for AccessApplicationAtProviderVariant1SaasApp {
-    fn from(value: AccessSamlSaasApp) -> Self {
-        Self::SamlSaasApp(value)
-    }
-}
-impl ::std::convert::From<AccessOidcSaasApp>
-for AccessApplicationAtProviderVariant1SaasApp {
-    fn from(value: AccessOidcSaasApp) -> Self {
-        Self::OidcSaasApp(value)
-    }
-}
-///`AccessApplicationAtProviderVariant2`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant2 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<AccessDomain>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub eager_redirect_cookie_setting: ::std::option::Option<
-        AccessEagerRedirectCookieSetting,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub read_service_tokens_from_header: ::std::option::Option<
-        AccessReadServiceTokensFromHeader,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationAtProviderVariant2Type>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
-        AccessUseClientlessIsolationAppLauncherUrl,
-    >,
-}
-///`AccessApplicationAtProviderVariant2Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant2Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationAtProviderVariant3`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant3 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<AccessDomain>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub eager_redirect_cookie_setting: ::std::option::Option<
-        AccessEagerRedirectCookieSetting,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub read_service_tokens_from_header: ::std::option::Option<
-        AccessReadServiceTokensFromHeader,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationAtProviderVariant3Type>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
-        AccessUseClientlessIsolationAppLauncherUrl,
-    >,
-}
-///`AccessApplicationAtProviderVariant3Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant3Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationAtProviderVariant4`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant4 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_logo_url: ::std::option::Option<AccessAppLauncherLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub bg_color: ::std::option::Option<AccessBgColor>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    ///The primary hostname and path secured by Access. This domain will be displayed if the app is visible in the App Launcher.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub footer_links: ::std::option::Option<AccessFooterLinks>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub header_bg_color: ::std::option::Option<AccessHeaderBgColor>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub landing_page_design: ::std::option::Option<AccessLandingPageDesign>,
-    ///The name of the application.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub skip_app_launcher_login_page: ::std::option::Option<
-        AccessSkipAppLauncherLoginPage,
-    >,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationAtProviderVariant4Type>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-}
-///`AccessApplicationAtProviderVariant4Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant4Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationAtProviderVariant5`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant5 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    ///The primary hostname and path secured by Access. This domain will be displayed if the app is visible in the App Launcher.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    ///The name of the application.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationAtProviderVariant5Type>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-}
-///`AccessApplicationAtProviderVariant5Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant5Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationAtProviderVariant6`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant6 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    ///The primary hostname and path secured by Access. This domain will be displayed if the app is visible in the App Launcher.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    ///The name of the application.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationAtProviderVariant6Type>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-}
-///`AccessApplicationAtProviderVariant6Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant6Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationAtProviderVariant7`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant7 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    ///The primary hostname and path secured by Access. This domain will be displayed if the app is visible in the App Launcher.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    ///The name of the application.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationAtProviderVariant7Type>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-}
-///`AccessApplicationAtProviderVariant7Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant7Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationAtProviderVariant8`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant8 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    ///The URL or domain of the bookmark.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessType>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-}
-///`AccessApplicationAtProviderVariant9`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationAtProviderVariant9 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub aud: ::std::option::Option<AccessAud2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<AccessCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessInfraMfaConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessInfraPolicyResp>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub target_criteria: ::std::vec::Vec<AccessTargetCriteriaInfraApp>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessType>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
-}
 ///`AccessApplicationCreateResponse`
 #[derive(
     ::serde::Deserialize,
@@ -3731,1649 +2689,6 @@ pub struct AccessApplicationCreateResponse {
     pub result: ::std::option::Option<AccessAppResponse>,
     ///Whether the API call was successful. Allowed values: true.
     pub success: bool,
-}
-///`AccessApplicationForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProvider {
-    Variant0(AccessApplicationForProviderVariant0),
-    Variant1(AccessApplicationForProviderVariant1),
-    Variant2(AccessApplicationForProviderVariant2),
-    Variant3(AccessApplicationForProviderVariant3),
-    Variant4(AccessApplicationForProviderVariant4),
-    Variant5(AccessApplicationForProviderVariant5),
-    Variant6(AccessApplicationForProviderVariant6),
-    Variant7(AccessApplicationForProviderVariant7),
-    Variant8(AccessApplicationForProviderVariant8),
-    Variant9(AccessApplicationForProviderVariant9),
-    Variant10(AccessApplicationForProviderVariant10),
-    Variant11(AccessApplicationForProviderVariant11),
-    Variant12(AccessApplicationForProviderVariant12),
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant0>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant0) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant1>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant1) -> Self {
-        Self::Variant1(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant2>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant2) -> Self {
-        Self::Variant2(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant3>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant3) -> Self {
-        Self::Variant3(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant4>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant4) -> Self {
-        Self::Variant4(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant5>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant5) -> Self {
-        Self::Variant5(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant6>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant6) -> Self {
-        Self::Variant6(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant7>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant7) -> Self {
-        Self::Variant7(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant8>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant8) -> Self {
-        Self::Variant8(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant9>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant9) -> Self {
-        Self::Variant9(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant10>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant10) -> Self {
-        Self::Variant10(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant11>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant11) -> Self {
-        Self::Variant11(value)
-    }
-}
-impl ::std::convert::From<AccessApplicationForProviderVariant12>
-for AccessApplicationForProvider {
-    fn from(value: AccessApplicationForProviderVariant12) -> Self {
-        Self::Variant12(value)
-    }
-}
-///`AccessApplicationForProviderVariant0`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant0 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    pub domain: AccessDomain,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub eager_redirect_cookie_setting: ::std::option::Option<
-        AccessEagerRedirectCookieSetting,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant0PoliciesItem>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub read_service_tokens_from_header: ::std::option::Option<
-        AccessReadServiceTokensFromHeader,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type")]
-    pub type_: AccessType,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
-        AccessUseClientlessIsolationAppLauncherUrl,
-    >,
-}
-///`AccessApplicationForProviderVariant0PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant0PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessApplicationForProviderVariant0PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for AccessApplicationForProviderVariant0PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant1`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant1 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant1PoliciesItem>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub saas_app: ::std::option::Option<AccessApplicationForProviderVariant1SaasApp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationForProviderVariant10`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant10 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    pub domain: AccessDomain,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub eager_redirect_cookie_setting: ::std::option::Option<
-        AccessEagerRedirectCookieSetting,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant10PoliciesItem>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub read_service_tokens_from_header: ::std::option::Option<
-        AccessReadServiceTokensFromHeader,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub target_criteria: ::std::vec::Vec<AccessTargetCriteriaSelfHostedApp>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationForProviderVariant10Type>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
-        AccessUseClientlessIsolationAppLauncherUrl,
-    >,
-}
-///`AccessApplicationForProviderVariant10PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant10PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessApplicationForProviderVariant10PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for AccessApplicationForProviderVariant10PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant10Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant10Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationForProviderVariant11`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant11 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant11PoliciesItem>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type")]
-    pub type_: AccessType,
-}
-///`AccessApplicationForProviderVariant11PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant11PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessApplicationForProviderVariant11PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for AccessApplicationForProviderVariant11PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant12`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant12 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<AccessDomain>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant12PoliciesItem>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type")]
-    pub type_: AccessType,
-}
-///`AccessApplicationForProviderVariant12PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant12PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessApplicationForProviderVariant12PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for AccessApplicationForProviderVariant12PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant1PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant1PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessApplicationForProviderVariant1PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for AccessApplicationForProviderVariant1PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant1SaasApp`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant1SaasApp {
-    SamlSaasApp(AccessSamlSaasApp),
-    OidcSaasApp(AccessOidcSaasApp),
-}
-impl ::std::convert::From<AccessSamlSaasApp>
-for AccessApplicationForProviderVariant1SaasApp {
-    fn from(value: AccessSamlSaasApp) -> Self {
-        Self::SamlSaasApp(value)
-    }
-}
-impl ::std::convert::From<AccessOidcSaasApp>
-for AccessApplicationForProviderVariant1SaasApp {
-    fn from(value: AccessOidcSaasApp) -> Self {
-        Self::OidcSaasApp(value)
-    }
-}
-///`AccessApplicationForProviderVariant2`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant2 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    pub domain: AccessDomain,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub eager_redirect_cookie_setting: ::std::option::Option<
-        AccessEagerRedirectCookieSetting,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant2PoliciesItem>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub read_service_tokens_from_header: ::std::option::Option<
-        AccessReadServiceTokensFromHeader,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationForProviderVariant2Type>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
-        AccessUseClientlessIsolationAppLauncherUrl,
-    >,
-}
-///`AccessApplicationForProviderVariant2PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant2PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessApplicationForProviderVariant2PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for AccessApplicationForProviderVariant2PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant2Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant2Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationForProviderVariant3`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant3 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    pub domain: AccessDomain,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub eager_redirect_cookie_setting: ::std::option::Option<
-        AccessEagerRedirectCookieSetting,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant3PoliciesItem>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub read_service_tokens_from_header: ::std::option::Option<
-        AccessReadServiceTokensFromHeader,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationForProviderVariant3Type>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
-        AccessUseClientlessIsolationAppLauncherUrl,
-    >,
-}
-///`AccessApplicationForProviderVariant3PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant3PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessApplicationForProviderVariant3PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for AccessApplicationForProviderVariant3PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant3Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant3Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationForProviderVariant4`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant4 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_logo_url: ::std::option::Option<AccessAppLauncherLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub bg_color: ::std::option::Option<AccessBgColor>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<AccessDomain>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub footer_links: ::std::option::Option<AccessFooterLinks>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub header_bg_color: ::std::option::Option<AccessHeaderBgColor>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub landing_page_design: ::std::option::Option<AccessLandingPageDesign>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant4PoliciesItem>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub skip_app_launcher_login_page: ::std::option::Option<
-        AccessSkipAppLauncherLoginPage,
-    >,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationForProviderVariant4Type>,
-}
-///`AccessApplicationForProviderVariant4PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant4PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessApplicationForProviderVariant4PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for AccessApplicationForProviderVariant4PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant4Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant4Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationForProviderVariant5`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant5 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<AccessDomain>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant5PoliciesItem>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationForProviderVariant5Type>,
-}
-///`AccessApplicationForProviderVariant5PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant5PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessApplicationForProviderVariant5PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for AccessApplicationForProviderVariant5PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant5Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant5Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationForProviderVariant6`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant6 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<AccessDomain>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant6PoliciesItem>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationForProviderVariant6Type>,
-}
-///`AccessApplicationForProviderVariant6PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant6PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessApplicationForProviderVariant6PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for AccessApplicationForProviderVariant6PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant6Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant6Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationForProviderVariant7`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant7 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    ///The primary hostname and path secured by Access. This domain will be displayed if the app is visible in the App Launcher.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<::std::string::String>,
-    ///The name of the application.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<::std::string::String>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant7PoliciesItem>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessApplicationForProviderVariant7Type>,
-}
-///`AccessApplicationForProviderVariant7PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant7PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessApplicationForProviderVariant7PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for AccessApplicationForProviderVariant7PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant7Type`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant7Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationForProviderVariant8`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant8 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    ///The URL or domain of the bookmark.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessApplicationForProviderVariant8PoliciesItem>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessType>,
-}
-///`AccessApplicationForProviderVariant8PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum AccessApplicationForProviderVariant8PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessApplicationForProviderVariant8PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for AccessApplicationForProviderVariant8PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant9`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessApplicationForProviderVariant9 {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessInfraMfaConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessInfraPolicyReq>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub target_criteria: ::std::vec::Vec<AccessTargetCriteriaInfraApp>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessType>,
 }
 ///`AccessApplicationUpdateResponse`
 #[derive(
@@ -11664,297 +8979,6 @@ impl ::std::convert::From<AccessFeatureAppProps> for AccessWarpProps {
         Self(value)
     }
 }
-///`AccountAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccountAtProvider {
-    ///Timestamp for the creation of the account
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<IamCommonComponentsSchemasIdentifier>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub managed_by: ::std::option::Option<AccountAtProviderManagedBy>,
-    ///Account name
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccountAtProviderName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<AccountAtProviderSettings>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<IamAccountType>,
-}
-///Parent container details
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccountAtProviderManagedBy {
-    ///ID of the parent Organization, if one exists
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub parent_org_id: ::std::option::Option<AccountAtProviderManagedByParentOrgId>,
-    ///Name of the parent Organization, if one exists
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub parent_org_name: ::std::option::Option<::std::string::String>,
-}
-///ID of the parent Organization, if one exists
-#[derive(
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-#[serde(transparent)]
-pub struct AccountAtProviderManagedByParentOrgId(::std::string::String);
-impl ::std::ops::Deref for AccountAtProviderManagedByParentOrgId {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<AccountAtProviderManagedByParentOrgId>
-for ::std::string::String {
-    fn from(value: AccountAtProviderManagedByParentOrgId) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for AccountAtProviderManagedByParentOrgId {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() > 32usize {
-            return Err("longer than 32 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for AccountAtProviderManagedByParentOrgId {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for AccountAtProviderManagedByParentOrgId {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for AccountAtProviderManagedByParentOrgId {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///Account name
-#[derive(
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-#[serde(transparent)]
-pub struct AccountAtProviderName(::std::string::String);
-impl ::std::ops::Deref for AccountAtProviderName {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<AccountAtProviderName> for ::std::string::String {
-    fn from(value: AccountAtProviderName) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for AccountAtProviderName {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() > 100usize {
-            return Err("longer than 100 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for AccountAtProviderName {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for AccountAtProviderName {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for AccountAtProviderName {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///Account settings
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccountAtProviderSettings {
-    ///Sets an abuse contact email to notify for abuse reports.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub abuse_contact_email: ::std::option::Option<::std::string::String>,
-    /**Indicates whether membership in this account requires that
-Two-Factor Authentication is enabled*/
-    #[serde(default)]
-    pub enforce_twofactor: bool,
-}
-///`AccountForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccountForProvider {
-    ///Account name
-    pub name: AccountForProviderName,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<AccountForProviderSettings>,
-}
-///Account name
-#[derive(
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-#[serde(transparent)]
-pub struct AccountForProviderName(::std::string::String);
-impl ::std::ops::Deref for AccountForProviderName {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<AccountForProviderName> for ::std::string::String {
-    fn from(value: AccountForProviderName) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for AccountForProviderName {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() > 100usize {
-            return Err("longer than 100 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for AccountForProviderName {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for AccountForProviderName {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for AccountForProviderName {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///Account settings
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccountForProviderSettings {
-    ///Sets an abuse contact email to notify for abuse reports.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub abuse_contact_email: ::std::option::Option<::std::string::String>,
-    /**Indicates whether membership in this account requires that
-Two-Factor Authentication is enabled*/
-    #[serde(default)]
-    pub enforce_twofactor: bool,
-}
 ///How the header value is treated when building the cache key.
 #[derive(
     ::serde::Deserialize,
@@ -13271,6 +10295,1117 @@ impl<'de> ::serde::Deserialize<'de> for Characteristic {
             })
     }
 }
+///`AccountAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1AccountAtProvider {
+    ///Timestamp for the creation of the account
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<IamCommonComponentsSchemasIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub managed_by: ::std::option::Option<CloudflareV1alpha1AccountAtProviderManagedBy>,
+    ///Account name
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<CloudflareV1alpha1AccountAtProviderName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<CloudflareV1alpha1AccountAtProviderSettings>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<IamAccountType>,
+}
+///Parent container details
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1AccountAtProviderManagedBy {
+    ///ID of the parent Organization, if one exists
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub parent_org_id: ::std::option::Option<
+        CloudflareV1alpha1AccountAtProviderManagedByParentOrgId,
+    >,
+    ///Name of the parent Organization, if one exists
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub parent_org_name: ::std::option::Option<::std::string::String>,
+}
+///ID of the parent Organization, if one exists
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudflareV1alpha1AccountAtProviderManagedByParentOrgId(
+    ::std::string::String,
+);
+impl ::std::ops::Deref for CloudflareV1alpha1AccountAtProviderManagedByParentOrgId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudflareV1alpha1AccountAtProviderManagedByParentOrgId>
+for ::std::string::String {
+    fn from(value: CloudflareV1alpha1AccountAtProviderManagedByParentOrgId) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CloudflareV1alpha1AccountAtProviderManagedByParentOrgId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 32usize {
+            return Err("longer than 32 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1AccountAtProviderManagedByParentOrgId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1AccountAtProviderManagedByParentOrgId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for CloudflareV1alpha1AccountAtProviderManagedByParentOrgId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Account name
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudflareV1alpha1AccountAtProviderName(::std::string::String);
+impl ::std::ops::Deref for CloudflareV1alpha1AccountAtProviderName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudflareV1alpha1AccountAtProviderName>
+for ::std::string::String {
+    fn from(value: CloudflareV1alpha1AccountAtProviderName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CloudflareV1alpha1AccountAtProviderName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CloudflareV1alpha1AccountAtProviderName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1AccountAtProviderName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CloudflareV1alpha1AccountAtProviderName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Account settings
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1AccountAtProviderSettings {
+    ///Sets an abuse contact email to notify for abuse reports.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub abuse_contact_email: ::std::option::Option<::std::string::String>,
+    /**Indicates whether membership in this account requires that
+Two-Factor Authentication is enabled*/
+    #[serde(default)]
+    pub enforce_twofactor: bool,
+}
+///`AccountForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1AccountForProvider {
+    ///Account name
+    pub name: CloudflareV1alpha1AccountForProviderName,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<CloudflareV1alpha1AccountForProviderSettings>,
+}
+///Account name
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudflareV1alpha1AccountForProviderName(::std::string::String);
+impl ::std::ops::Deref for CloudflareV1alpha1AccountForProviderName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudflareV1alpha1AccountForProviderName>
+for ::std::string::String {
+    fn from(value: CloudflareV1alpha1AccountForProviderName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CloudflareV1alpha1AccountForProviderName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 100usize {
+            return Err("longer than 100 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CloudflareV1alpha1AccountForProviderName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1AccountForProviderName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CloudflareV1alpha1AccountForProviderName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Account settings
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1AccountForProviderSettings {
+    ///Sets an abuse contact email to notify for abuse reports.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub abuse_contact_email: ::std::option::Option<::std::string::String>,
+    /**Indicates whether membership in this account requires that
+Two-Factor Authentication is enabled*/
+    #[serde(default)]
+    pub enforce_twofactor: bool,
+}
+///`IpListAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1IpListAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<ListsCreatedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<ListsDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<ListsListId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub kind: ::std::option::Option<ListsKind>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<ListsModifiedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<ListsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub num_items: ::std::option::Option<ListsNumItems>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub num_referencing_filters: ::std::option::Option<ListsNumReferencingFilters>,
+}
+///`IpListForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1IpListForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<ListsDescription>,
+    pub kind: ListsKind,
+    pub name: ListsName,
+}
+///`NotificationPolicyAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1NotificationPolicyAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub alert_interval: ::std::option::Option<AaaAlertInterval>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub alert_type: ::std::option::Option<AaaAlertType>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created: ::std::option::Option<AaaTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<AaaSchemasDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<AaaEnabled>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub filters: ::std::option::Option<AaaFilters>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AaaPolicyId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mechanisms: ::std::option::Option<AaaMechanisms>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified: ::std::option::Option<AaaTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AaaSchemasName>,
+}
+///`NotificationPolicyForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1NotificationPolicyForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub alert_interval: ::std::option::Option<AaaAlertInterval>,
+    pub alert_type: AaaAlertType,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<AaaSchemasDescription>,
+    pub enabled: AaaEnabled,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub filters: ::std::option::Option<AaaFilters>,
+    pub mechanisms: AaaMechanisms,
+    pub name: AaaSchemasName,
+}
+///`PagesProjectAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectAtProvider {
+    ///When the project was created.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    ///A list of associated custom domains for the project.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub domains: ::std::vec::Vec<::std::string::String>,
+    ///Framework the project is using.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub framework: ::std::option::Option<::std::string::String>,
+    ///Version of the framework the project is using.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub framework_version: ::std::option::Option<::std::string::String>,
+    ///ID of the project.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<PagesProjectName>,
+    ///Name of the preview script.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub preview_script_name: ::std::option::Option<::std::string::String>,
+    ///Production branch of the project. Used to identify production deployments.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub production_branch: ::std::option::Option<::std::string::String>,
+    ///Name of the production script.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub production_script_name: ::std::option::Option<::std::string::String>,
+    ///The Cloudflare subdomain associated with the project.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub subdomain: ::std::option::Option<::std::string::String>,
+    ///Whether the project uses functions.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub uses_functions: ::std::option::Option<bool>,
+}
+///`PagesProjectForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub build_config: ::std::option::Option<PagesBuildConfig>,
+    pub deployment_configs: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigs,
+    pub name: PagesProjectName,
+    ///Production branch of the project. Used to identify production deployments.
+    pub production_branch: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub source: ::std::option::Option<PagesSource>,
+}
+///Configs for deployments in a project.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigs {
+    ///Configs for preview deploys.
+    pub preview: PagesDeploymentConfigValues,
+    ///Configs for production deploys.
+    pub production: PagesDeploymentConfigValues,
+}
+///`TurnstileWidgetAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1TurnstileWidgetAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub bot_fight_mode: ::std::option::Option<TurnstileBotFightMode>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub clearance_level: ::std::option::Option<TurnstileClearanceLevel>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<TurnstileCreatedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domains: ::std::option::Option<TurnstileDomains>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ephemeral_id: ::std::option::Option<TurnstileEphemeralId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode: ::std::option::Option<TurnstileWidgetMode>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<TurnstileModifiedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<TurnstileName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub offlabel: ::std::option::Option<TurnstileOfflabel>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub region: ::std::option::Option<TurnstileRegion>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub secret: ::std::option::Option<TurnstileSecret>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub sitekey: ::std::option::Option<TurnstileSitekey>,
+}
+///`TurnstileWidgetForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1TurnstileWidgetForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub bot_fight_mode: ::std::option::Option<TurnstileBotFightMode>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub clearance_level: ::std::option::Option<TurnstileClearanceLevel>,
+    pub domains: TurnstileDomains,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ephemeral_id: ::std::option::Option<TurnstileEphemeralId>,
+    pub mode: TurnstileWidgetMode,
+    pub name: TurnstileName,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub offlabel: ::std::option::Option<TurnstileOfflabel>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub region: ::std::option::Option<TurnstileRegion>,
+}
+///`ZoneAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1ZoneAtProvider {
+    /**The last time proof of ownership was detected and the zone was made
+active.*/
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub activated_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    ///When the zone was created.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    /**The interval (in seconds) from when development mode expires
+(positive integer) or last expired (negative integer) for the
+domain. If development mode has never been enabled, this value is 0.*/
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub development_mode: ::std::option::Option<f64>,
+    ///Identifier
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<CloudflareV1alpha1ZoneAtProviderId>,
+    ///When the zone was last modified.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    ///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<CloudflareV1alpha1ZoneAtProviderName>,
+    ///The name servers Cloudflare assigns to a zone.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub name_servers: ::std::vec::Vec<::std::string::String>,
+    ///DNS host at the time of switching to Cloudflare.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub original_dnshost: ::std::option::Option<
+        CloudflareV1alpha1ZoneAtProviderOriginalDnshost,
+    >,
+    ///Original name servers before moving to Cloudflare.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub original_name_servers: ::std::option::Option<
+        ::std::vec::Vec<::std::string::String>,
+    >,
+    ///Registrar for the domain at the time of switching to Cloudflare.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub original_registrar: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub paused: ::std::option::Option<ZonesPaused>,
+    ///The zone status on Cloudflare.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<CloudflareV1alpha1ZoneAtProviderStatus>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesType>,
+    ///An array of domains used for custom name servers. This is only available for Business and Enterprise plans.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub vanity_name_servers: ::std::vec::Vec<
+        CloudflareV1alpha1ZoneAtProviderVanityNameServersItem,
+    >,
+    ///Verification key for partial zone setup.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub verification_key: ::std::option::Option<::std::string::String>,
+}
+///Identifier
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudflareV1alpha1ZoneAtProviderId(::std::string::String);
+impl ::std::ops::Deref for CloudflareV1alpha1ZoneAtProviderId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudflareV1alpha1ZoneAtProviderId> for ::std::string::String {
+    fn from(value: CloudflareV1alpha1ZoneAtProviderId) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CloudflareV1alpha1ZoneAtProviderId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 32usize {
+            return Err("longer than 32 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CloudflareV1alpha1ZoneAtProviderId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1ZoneAtProviderId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CloudflareV1alpha1ZoneAtProviderId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudflareV1alpha1ZoneAtProviderName(::std::string::String);
+impl ::std::ops::Deref for CloudflareV1alpha1ZoneAtProviderName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudflareV1alpha1ZoneAtProviderName>
+for ::std::string::String {
+    fn from(value: CloudflareV1alpha1ZoneAtProviderName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CloudflareV1alpha1ZoneAtProviderName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 253usize {
+            return Err("longer than 253 characters".into());
+        }
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        {
+            ::regress::Regex::new(
+                    "^([a-zA-Z0-9][\\-a-zA-Z0-9]*\\.)+[\\-a-zA-Z0-9]{2,20}$",
+                )
+                .unwrap()
+        });
+        if PATTERN.find(value).is_none() {
+            return Err(
+                "doesn't match pattern \"^([a-zA-Z0-9][\\-a-zA-Z0-9]*\\.)+[\\-a-zA-Z0-9]{2,20}$\""
+                    .into(),
+            );
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CloudflareV1alpha1ZoneAtProviderName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1ZoneAtProviderName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CloudflareV1alpha1ZoneAtProviderName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///DNS host at the time of switching to Cloudflare.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudflareV1alpha1ZoneAtProviderOriginalDnshost(::std::string::String);
+impl ::std::ops::Deref for CloudflareV1alpha1ZoneAtProviderOriginalDnshost {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudflareV1alpha1ZoneAtProviderOriginalDnshost>
+for ::std::string::String {
+    fn from(value: CloudflareV1alpha1ZoneAtProviderOriginalDnshost) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CloudflareV1alpha1ZoneAtProviderOriginalDnshost {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 50usize {
+            return Err("longer than 50 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CloudflareV1alpha1ZoneAtProviderOriginalDnshost {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1ZoneAtProviderOriginalDnshost {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CloudflareV1alpha1ZoneAtProviderOriginalDnshost {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///The zone status on Cloudflare.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudflareV1alpha1ZoneAtProviderStatus {
+    #[serde(rename = "initializing")]
+    Initializing,
+    #[serde(rename = "pending")]
+    Pending,
+    #[serde(rename = "active")]
+    Active,
+    #[serde(rename = "moved")]
+    Moved,
+}
+impl ::std::fmt::Display for CloudflareV1alpha1ZoneAtProviderStatus {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Initializing => f.write_str("initializing"),
+            Self::Pending => f.write_str("pending"),
+            Self::Active => f.write_str("active"),
+            Self::Moved => f.write_str("moved"),
+        }
+    }
+}
+impl ::std::str::FromStr for CloudflareV1alpha1ZoneAtProviderStatus {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "initializing" => Ok(Self::Initializing),
+            "pending" => Ok(Self::Pending),
+            "active" => Ok(Self::Active),
+            "moved" => Ok(Self::Moved),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for CloudflareV1alpha1ZoneAtProviderStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1ZoneAtProviderStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`ZoneAtProviderVanityNameServersItem`
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudflareV1alpha1ZoneAtProviderVanityNameServersItem(::std::string::String);
+impl ::std::ops::Deref for CloudflareV1alpha1ZoneAtProviderVanityNameServersItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudflareV1alpha1ZoneAtProviderVanityNameServersItem>
+for ::std::string::String {
+    fn from(value: CloudflareV1alpha1ZoneAtProviderVanityNameServersItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CloudflareV1alpha1ZoneAtProviderVanityNameServersItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 253usize {
+            return Err("longer than 253 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1ZoneAtProviderVanityNameServersItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1ZoneAtProviderVanityNameServersItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for CloudflareV1alpha1ZoneAtProviderVanityNameServersItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`ZoneForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1ZoneForProvider {
+    ///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
+    pub name: CloudflareV1alpha1ZoneForProviderName,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub paused: ::std::option::Option<ZonesPaused>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesType>,
+    ///An array of domains used for custom name servers. This is only available for Business and Enterprise plans.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub vanity_name_servers: ::std::vec::Vec<
+        CloudflareV1alpha1ZoneForProviderVanityNameServersItem,
+    >,
+}
+///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudflareV1alpha1ZoneForProviderName(::std::string::String);
+impl ::std::ops::Deref for CloudflareV1alpha1ZoneForProviderName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudflareV1alpha1ZoneForProviderName>
+for ::std::string::String {
+    fn from(value: CloudflareV1alpha1ZoneForProviderName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CloudflareV1alpha1ZoneForProviderName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 253usize {
+            return Err("longer than 253 characters".into());
+        }
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        {
+            ::regress::Regex::new(
+                    "^([a-zA-Z0-9][\\-a-zA-Z0-9]*\\.)+[\\-a-zA-Z0-9]{2,20}$",
+                )
+                .unwrap()
+        });
+        if PATTERN.find(value).is_none() {
+            return Err(
+                "doesn't match pattern \"^([a-zA-Z0-9][\\-a-zA-Z0-9]*\\.)+[\\-a-zA-Z0-9]{2,20}$\""
+                    .into(),
+            );
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CloudflareV1alpha1ZoneForProviderName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1ZoneForProviderName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CloudflareV1alpha1ZoneForProviderName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`ZoneForProviderVanityNameServersItem`
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudflareV1alpha1ZoneForProviderVanityNameServersItem(::std::string::String);
+impl ::std::ops::Deref for CloudflareV1alpha1ZoneForProviderVanityNameServersItem {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudflareV1alpha1ZoneForProviderVanityNameServersItem>
+for ::std::string::String {
+    fn from(value: CloudflareV1alpha1ZoneForProviderVanityNameServersItem) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CloudflareV1alpha1ZoneForProviderVanityNameServersItem {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 253usize {
+            return Err("longer than 253 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1ZoneForProviderVanityNameServersItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1ZoneForProviderVanityNameServersItem {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de>
+for CloudflareV1alpha1ZoneForProviderVanityNameServersItem {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
 ///The content to return.
 #[derive(
     ::serde::Serialize,
@@ -13540,52 +11675,6 @@ impl<'de> ::serde::Deserialize<'de> for CountingExpression {
             })
     }
 }
-///`CustomHostnameAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct CustomHostnameAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<TlsCertificatesAndHostnamesCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_metadata: ::std::option::Option<
-        TlsCertificatesAndHostnamesCustomMetadata,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_origin_server: ::std::option::Option<
-        TlsCertificatesAndHostnamesCustomOriginServer,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_origin_sni: ::std::option::Option<
-        TlsCertificatesAndHostnamesCustomOriginSni,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub hostname: ::std::option::Option<TlsCertificatesAndHostnamesHostname>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<TlsCertificatesAndHostnamesIdentifier>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ownership_verification: ::std::option::Option<
-        TlsCertificatesAndHostnamesOwnershipVerification,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ownership_verification_http: ::std::option::Option<
-        TlsCertificatesAndHostnamesOwnershipVerificationHttp,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ssl: ::std::option::Option<TlsCertificatesAndHostnamesSsl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub status: ::std::option::Option<TlsCertificatesAndHostnamesStatus3>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub verification_errors: ::std::option::Option<
-        TlsCertificatesAndHostnamesVerificationErrors,
-    >,
-}
 ///`CustomHostnameCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -13625,32 +11714,6 @@ pub struct CustomHostnameCreateRequest {
 pub struct CustomHostnameDeleteResponse {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<TlsCertificatesAndHostnamesIdentifier>,
-}
-///`CustomHostnameForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct CustomHostnameForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_metadata: ::std::option::Option<
-        TlsCertificatesAndHostnamesCustomMetadata,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_origin_server: ::std::option::Option<
-        TlsCertificatesAndHostnamesCustomOriginServer,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_origin_sni: ::std::option::Option<
-        TlsCertificatesAndHostnamesCustomOriginSni,
-    >,
-    pub hostname: TlsCertificatesAndHostnamesHostnamePost,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ssl: ::std::option::Option<TlsCertificatesAndHostnamesSslpost>,
 }
 ///`CustomHostnameUpdateRequest`
 #[derive(
@@ -13841,34 +11904,6 @@ impl ::std::convert::TryFrom<String> for D1CreatedAt {
         value.parse()
     }
 }
-///`D1DatabaseAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct D1DatabaseAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<D1CreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub file_size: ::std::option::Option<D1FileSize>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub jurisdiction: ::std::option::Option<D1JurisdictionNullable>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<D1DatabaseName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub num_tables: ::std::option::Option<D1TableCount>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub read_replication: ::std::option::Option<D1ReadReplicationDetailsForResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub uuid: ::std::option::Option<D1DatabaseIdentifier>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub version: ::std::option::Option<D1DatabaseVersion>,
-}
 ///`D1DatabaseCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -13957,24 +11992,6 @@ pub struct D1DatabaseDetailsResponse {
     pub uuid: ::std::option::Option<D1DatabaseIdentifier>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub version: ::std::option::Option<D1DatabaseVersion>,
-}
-///`D1DatabaseForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct D1DatabaseForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub jurisdiction: ::std::option::Option<D1Jurisdiction>,
-    pub name: D1DatabaseName,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub primary_location_hint: ::std::option::Option<D1PrimaryLocationHint>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub read_replication: ::std::option::Option<D1ReadReplicationDetailsForRequest>,
 }
 ///D1 database identifier (UUID).
 #[derive(
@@ -14854,688 +12871,6 @@ for DeviceEnrollmentPermissionsApplicationPoliciesItem {
         Self::Variant1(value)
     }
 }
-///`DnsRecordAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///A valid IPv4 address.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    ///When the record was created.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordAtProviderData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<DnsRecordsIdentifier>,
-    ///When the record was last modified.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<DnsRecordsPriority>,
-    ///Whether the record can be proxied by Cloudflare or not.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxiable: ::std::option::Option<bool>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordAtProviderSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordAtProviderType>,
-}
-///`DnsRecordAtProviderData`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderData {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<DnsRecordAtProviderDataSubtype0>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<DnsRecordAtProviderDataSubtype1>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_2: ::std::option::Option<DnsRecordAtProviderDataSubtype2>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_3: ::std::option::Option<DnsRecordAtProviderDataSubtype3>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_4: ::std::option::Option<DnsRecordAtProviderDataSubtype4>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_5: ::std::option::Option<DnsRecordAtProviderDataSubtype5>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_6: ::std::option::Option<DnsRecordAtProviderDataSubtype6>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_7: ::std::option::Option<DnsRecordAtProviderDataSubtype7>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_8: ::std::option::Option<DnsRecordAtProviderDataSubtype8>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_9: ::std::option::Option<DnsRecordAtProviderDataSubtype9>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_10: ::std::option::Option<DnsRecordAtProviderDataSubtype10>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_11: ::std::option::Option<DnsRecordAtProviderDataSubtype11>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_12: ::std::option::Option<DnsRecordAtProviderDataSubtype12>,
-}
-///Components of a CAA record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype0 {
-    ///Flags for the CAA record.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub flags: ::std::option::Option<f64>,
-    ///Name of the property controlled by this record (e.g.: issue, issuewild, iodef).
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tag: ::std::option::Option<::std::string::String>,
-    ///Value of the record. This field's semantics depend on the chosen tag.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub value: ::std::option::Option<::std::string::String>,
-}
-///Components of a CERT record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype1 {
-    ///Algorithm.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub algorithm: ::std::option::Option<f64>,
-    ///Certificate.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub certificate: ::std::option::Option<::std::string::String>,
-    ///Key Tag.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub key_tag: ::std::option::Option<f64>,
-    ///Type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<f64>,
-}
-///Components of a SVCB record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype10 {
-    ///Priority.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<f64>,
-    ///Target.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub target: ::std::option::Option<::std::string::String>,
-    ///Value.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub value: ::std::option::Option<::std::string::String>,
-}
-///Components of a TLSA record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype11 {
-    ///Certificate.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub certificate: ::std::option::Option<::std::string::String>,
-    ///Matching Type.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub matching_type: ::std::option::Option<f64>,
-    ///Selector.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub selector: ::std::option::Option<f64>,
-    ///Usage.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub usage: ::std::option::Option<f64>,
-}
-///Components of a URI record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype12 {
-    ///The record content.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub target: ::std::option::Option<::std::string::String>,
-    ///The record weight.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub weight: ::std::option::Option<f64>,
-}
-///Components of a DNSKEY record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype2 {
-    ///Algorithm.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub algorithm: ::std::option::Option<f64>,
-    ///Flags.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub flags: ::std::option::Option<f64>,
-    ///Protocol.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub protocol: ::std::option::Option<f64>,
-    ///Public Key.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub public_key: ::std::option::Option<::std::string::String>,
-}
-///Components of a DS record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype3 {
-    ///Algorithm.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub algorithm: ::std::option::Option<f64>,
-    ///Digest.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub digest: ::std::option::Option<::std::string::String>,
-    ///Digest Type.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub digest_type: ::std::option::Option<f64>,
-    ///Key Tag.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub key_tag: ::std::option::Option<f64>,
-}
-///Components of a HTTPS record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype4 {
-    ///Priority.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<f64>,
-    ///Target.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub target: ::std::option::Option<::std::string::String>,
-    ///Value.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub value: ::std::option::Option<::std::string::String>,
-}
-///Components of a LOC record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype5 {
-    ///Altitude of location in meters.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub altitude: ::std::option::Option<f64>,
-    ///Degrees of latitude.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub lat_degrees: ::std::option::Option<f64>,
-    ///Latitude direction.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub lat_direction: ::std::option::Option<
-        DnsRecordAtProviderDataSubtype5LatDirection,
-    >,
-    ///Minutes of latitude.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub lat_minutes: ::std::option::Option<f64>,
-    ///Seconds of latitude.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub lat_seconds: ::std::option::Option<f64>,
-    ///Degrees of longitude.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub long_degrees: ::std::option::Option<f64>,
-    ///Longitude direction.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub long_direction: ::std::option::Option<
-        DnsRecordAtProviderDataSubtype5LongDirection,
-    >,
-    ///Minutes of longitude.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub long_minutes: ::std::option::Option<f64>,
-    ///Seconds of longitude.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub long_seconds: ::std::option::Option<f64>,
-    ///Horizontal precision of location.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub precision_horz: ::std::option::Option<f64>,
-    ///Vertical precision of location.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub precision_vert: ::std::option::Option<f64>,
-    ///Size of location in meters.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub size: ::std::option::Option<f64>,
-}
-///Latitude direction.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordAtProviderDataSubtype5LatDirection {
-    N,
-    S,
-}
-impl ::std::fmt::Display for DnsRecordAtProviderDataSubtype5LatDirection {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::N => f.write_str("N"),
-            Self::S => f.write_str("S"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordAtProviderDataSubtype5LatDirection {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "N" => Ok(Self::N),
-            "S" => Ok(Self::S),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordAtProviderDataSubtype5LatDirection {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordAtProviderDataSubtype5LatDirection {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Longitude direction.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordAtProviderDataSubtype5LongDirection {
-    E,
-    W,
-}
-impl ::std::fmt::Display for DnsRecordAtProviderDataSubtype5LongDirection {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::E => f.write_str("E"),
-            Self::W => f.write_str("W"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordAtProviderDataSubtype5LongDirection {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "E" => Ok(Self::E),
-            "W" => Ok(Self::W),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordAtProviderDataSubtype5LongDirection {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordAtProviderDataSubtype5LongDirection {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Components of a NAPTR record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype6 {
-    ///Flags.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub flags: ::std::option::Option<::std::string::String>,
-    ///Order.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub order: ::std::option::Option<f64>,
-    ///Preference.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub preference: ::std::option::Option<f64>,
-    ///Regex.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub regex: ::std::option::Option<::std::string::String>,
-    ///Replacement.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub replacement: ::std::option::Option<::std::string::String>,
-    ///Service.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub service: ::std::option::Option<::std::string::String>,
-}
-///Components of a SMIMEA record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype7 {
-    ///Certificate.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub certificate: ::std::option::Option<::std::string::String>,
-    ///Matching Type.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub matching_type: ::std::option::Option<f64>,
-    ///Selector.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub selector: ::std::option::Option<f64>,
-    ///Usage.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub usage: ::std::option::Option<f64>,
-}
-///Components of a SRV record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype8 {
-    ///The port of the service.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub port: ::std::option::Option<f64>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<DnsRecordsPriority>,
-    ///A valid hostname.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub target: ::std::option::Option<::std::string::String>,
-    ///The record weight.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub weight: ::std::option::Option<f64>,
-}
-///Components of a SSHFP record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderDataSubtype9 {
-    ///Algorithm.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub algorithm: ::std::option::Option<f64>,
-    ///Fingerprint.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub fingerprint: ::std::option::Option<::std::string::String>,
-    ///Type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<f64>,
-}
-///`DnsRecordAtProviderSettings`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderSettings {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<DnsRecordAtProviderSettingsSubtype1>,
-}
-///`DnsRecordAtProviderSettingsSubtype1`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordAtProviderSettingsSubtype1 {
-    ///If enabled, causes the CNAME record to be resolved externally and the resulting address records (e.g., A and AAAA) to be returned instead of the CNAME record itself. This setting is unavailable for proxied records, since they are always flattened.
-    #[serde(default)]
-    pub flatten_cname: bool,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordAtProviderType {
-    A,
-    #[serde(rename = "AAAA")]
-    Aaaa,
-    #[serde(rename = "CNAME")]
-    Cname,
-    #[serde(rename = "MX")]
-    Mx,
-    #[serde(rename = "NS")]
-    Ns,
-    #[serde(rename = "OPENPGPKEY")]
-    Openpgpkey,
-    #[serde(rename = "PTR")]
-    Ptr,
-    #[serde(rename = "TXT")]
-    Txt,
-    #[serde(rename = "CAA")]
-    Caa,
-    #[serde(rename = "CERT")]
-    Cert,
-    #[serde(rename = "DNSKEY")]
-    Dnskey,
-    #[serde(rename = "DS")]
-    Ds,
-    #[serde(rename = "HTTPS")]
-    Https,
-    #[serde(rename = "LOC")]
-    Loc,
-    #[serde(rename = "NAPTR")]
-    Naptr,
-    #[serde(rename = "SMIMEA")]
-    Smimea,
-    #[serde(rename = "SRV")]
-    Srv,
-    #[serde(rename = "SSHFP")]
-    Sshfp,
-    #[serde(rename = "SVCB")]
-    Svcb,
-    #[serde(rename = "TLSA")]
-    Tlsa,
-    #[serde(rename = "URI")]
-    Uri,
-}
-impl ::std::fmt::Display for DnsRecordAtProviderType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::A => f.write_str("A"),
-            Self::Aaaa => f.write_str("AAAA"),
-            Self::Cname => f.write_str("CNAME"),
-            Self::Mx => f.write_str("MX"),
-            Self::Ns => f.write_str("NS"),
-            Self::Openpgpkey => f.write_str("OPENPGPKEY"),
-            Self::Ptr => f.write_str("PTR"),
-            Self::Txt => f.write_str("TXT"),
-            Self::Caa => f.write_str("CAA"),
-            Self::Cert => f.write_str("CERT"),
-            Self::Dnskey => f.write_str("DNSKEY"),
-            Self::Ds => f.write_str("DS"),
-            Self::Https => f.write_str("HTTPS"),
-            Self::Loc => f.write_str("LOC"),
-            Self::Naptr => f.write_str("NAPTR"),
-            Self::Smimea => f.write_str("SMIMEA"),
-            Self::Srv => f.write_str("SRV"),
-            Self::Sshfp => f.write_str("SSHFP"),
-            Self::Svcb => f.write_str("SVCB"),
-            Self::Tlsa => f.write_str("TLSA"),
-            Self::Uri => f.write_str("URI"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordAtProviderType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "A" => Ok(Self::A),
-            "AAAA" => Ok(Self::Aaaa),
-            "CNAME" => Ok(Self::Cname),
-            "MX" => Ok(Self::Mx),
-            "NS" => Ok(Self::Ns),
-            "OPENPGPKEY" => Ok(Self::Openpgpkey),
-            "PTR" => Ok(Self::Ptr),
-            "TXT" => Ok(Self::Txt),
-            "CAA" => Ok(Self::Caa),
-            "CERT" => Ok(Self::Cert),
-            "DNSKEY" => Ok(Self::Dnskey),
-            "DS" => Ok(Self::Ds),
-            "HTTPS" => Ok(Self::Https),
-            "LOC" => Ok(Self::Loc),
-            "NAPTR" => Ok(Self::Naptr),
-            "SMIMEA" => Ok(Self::Smimea),
-            "SRV" => Ok(Self::Srv),
-            "SSHFP" => Ok(Self::Sshfp),
-            "SVCB" => Ok(Self::Svcb),
-            "TLSA" => Ok(Self::Tlsa),
-            "URI" => Ok(Self::Uri),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordAtProviderType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for DnsRecordAtProviderType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
 ///`DnsRecordDeleteResponse`
 #[derive(
     ::serde::Deserialize,
@@ -15563,2388 +12898,6 @@ pub struct DnsRecordDeleteResponse {
 pub struct DnsRecordDeleteResponseResult {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<DnsRecordsIdentifier>,
-}
-///`DnsRecordForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum DnsRecordForProvider {
-    ARecord(DnsRecordForProviderARecord),
-    AaaaRecord(DnsRecordForProviderAaaaRecord),
-    CnameRecord(DnsRecordForProviderCnameRecord),
-    MxRecord(DnsRecordForProviderMxRecord),
-    NsRecord(DnsRecordForProviderNsRecord),
-    OpenpgpkeyRecord(DnsRecordForProviderOpenpgpkeyRecord),
-    PtrRecord(DnsRecordForProviderPtrRecord),
-    TxtRecord(DnsRecordForProviderTxtRecord),
-    CaaRecord(DnsRecordForProviderCaaRecord),
-    CertRecord(DnsRecordForProviderCertRecord),
-    DnskeyRecord(DnsRecordForProviderDnskeyRecord),
-    DsRecord(DnsRecordForProviderDsRecord),
-    HttpsRecord(DnsRecordForProviderHttpsRecord),
-    LocRecord(DnsRecordForProviderLocRecord),
-    NaptrRecord(DnsRecordForProviderNaptrRecord),
-    SmimeaRecord(DnsRecordForProviderSmimeaRecord),
-    SrvRecord(DnsRecordForProviderSrvRecord),
-    SshfpRecord(DnsRecordForProviderSshfpRecord),
-    SvcbRecord(DnsRecordForProviderSvcbRecord),
-    TlsaRecord(DnsRecordForProviderTlsaRecord),
-    UriRecord(DnsRecordForProviderUriRecord),
-}
-impl ::std::convert::From<DnsRecordForProviderARecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderARecord) -> Self {
-        Self::ARecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderAaaaRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderAaaaRecord) -> Self {
-        Self::AaaaRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderCnameRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderCnameRecord) -> Self {
-        Self::CnameRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderMxRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderMxRecord) -> Self {
-        Self::MxRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderNsRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderNsRecord) -> Self {
-        Self::NsRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderOpenpgpkeyRecord>
-for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderOpenpgpkeyRecord) -> Self {
-        Self::OpenpgpkeyRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderPtrRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderPtrRecord) -> Self {
-        Self::PtrRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderTxtRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderTxtRecord) -> Self {
-        Self::TxtRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderCaaRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderCaaRecord) -> Self {
-        Self::CaaRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderCertRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderCertRecord) -> Self {
-        Self::CertRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderDnskeyRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderDnskeyRecord) -> Self {
-        Self::DnskeyRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderDsRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderDsRecord) -> Self {
-        Self::DsRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderHttpsRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderHttpsRecord) -> Self {
-        Self::HttpsRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderLocRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderLocRecord) -> Self {
-        Self::LocRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderNaptrRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderNaptrRecord) -> Self {
-        Self::NaptrRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderSmimeaRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderSmimeaRecord) -> Self {
-        Self::SmimeaRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderSrvRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderSrvRecord) -> Self {
-        Self::SrvRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderSshfpRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderSshfpRecord) -> Self {
-        Self::SshfpRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderSvcbRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderSvcbRecord) -> Self {
-        Self::SvcbRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderTlsaRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderTlsaRecord) -> Self {
-        Self::TlsaRecord(value)
-    }
-}
-impl ::std::convert::From<DnsRecordForProviderUriRecord> for DnsRecordForProvider {
-    fn from(value: DnsRecordForProviderUriRecord) -> Self {
-        Self::UriRecord(value)
-    }
-}
-///`DnsRecordForProviderARecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderARecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///A valid IPv4 address.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::net::Ipv4Addr>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderARecordType>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderARecordType {
-    A,
-}
-impl ::std::fmt::Display for DnsRecordForProviderARecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::A => f.write_str("A"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderARecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "A" => Ok(Self::A),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderARecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for DnsRecordForProviderARecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderAaaaRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderAaaaRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///A valid IPv6 address.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::net::Ipv6Addr>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderAaaaRecordType>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderAaaaRecordType {
-    #[serde(rename = "AAAA")]
-    Aaaa,
-}
-impl ::std::fmt::Display for DnsRecordForProviderAaaaRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Aaaa => f.write_str("AAAA"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderAaaaRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "AAAA" => Ok(Self::Aaaa),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderAaaaRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderAaaaRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderCaaRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderCaaRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Formatted CAA content. See 'data' to set CAA properties.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderCaaRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderCaaRecordType>,
-}
-///Components of a CAA record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderCaaRecordData {
-    ///Flags for the CAA record.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub flags: ::std::option::Option<f64>,
-    ///Name of the property controlled by this record (e.g.: issue, issuewild, iodef).
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tag: ::std::option::Option<::std::string::String>,
-    ///Value of the record. This field's semantics depend on the chosen tag.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub value: ::std::option::Option<::std::string::String>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderCaaRecordType {
-    #[serde(rename = "CAA")]
-    Caa,
-}
-impl ::std::fmt::Display for DnsRecordForProviderCaaRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Caa => f.write_str("CAA"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderCaaRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "CAA" => Ok(Self::Caa),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderCaaRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderCaaRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderCertRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderCertRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Formatted CERT content. See 'data' to set CERT properties.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderCertRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderCertRecordType>,
-}
-///Components of a CERT record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderCertRecordData {
-    ///Algorithm.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub algorithm: ::std::option::Option<f64>,
-    ///Certificate.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub certificate: ::std::option::Option<::std::string::String>,
-    ///Key Tag.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub key_tag: ::std::option::Option<f64>,
-    ///Type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<f64>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderCertRecordType {
-    #[serde(rename = "CERT")]
-    Cert,
-}
-impl ::std::fmt::Display for DnsRecordForProviderCertRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Cert => f.write_str("CERT"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderCertRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "CERT" => Ok(Self::Cert),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderCertRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderCertRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderCnameRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderCnameRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///A valid hostname. Must not match the record's name.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordForProviderCnameRecordSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderCnameRecordType>,
-}
-///`DnsRecordForProviderCnameRecordSettings`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderCnameRecordSettings {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<
-        DnsRecordForProviderCnameRecordSettingsSubtype1,
-    >,
-}
-///`DnsRecordForProviderCnameRecordSettingsSubtype1`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderCnameRecordSettingsSubtype1 {
-    ///If enabled, causes the CNAME record to be resolved externally and the resulting address records (e.g., A and AAAA) to be returned instead of the CNAME record itself. This setting is unavailable for proxied records, since they are always flattened.
-    #[serde(default)]
-    pub flatten_cname: bool,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderCnameRecordType {
-    #[serde(rename = "CNAME")]
-    Cname,
-}
-impl ::std::fmt::Display for DnsRecordForProviderCnameRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Cname => f.write_str("CNAME"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderCnameRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "CNAME" => Ok(Self::Cname),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderCnameRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderCnameRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderDnskeyRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderDnskeyRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Formatted DNSKEY content. See 'data' to set DNSKEY properties.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderDnskeyRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderDnskeyRecordType>,
-}
-///Components of a DNSKEY record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderDnskeyRecordData {
-    ///Algorithm.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub algorithm: ::std::option::Option<f64>,
-    ///Flags.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub flags: ::std::option::Option<f64>,
-    ///Protocol.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub protocol: ::std::option::Option<f64>,
-    ///Public Key.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub public_key: ::std::option::Option<::std::string::String>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderDnskeyRecordType {
-    #[serde(rename = "DNSKEY")]
-    Dnskey,
-}
-impl ::std::fmt::Display for DnsRecordForProviderDnskeyRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Dnskey => f.write_str("DNSKEY"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderDnskeyRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "DNSKEY" => Ok(Self::Dnskey),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderDnskeyRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderDnskeyRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderDsRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderDsRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Formatted DS content. See 'data' to set DS properties.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderDsRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderDsRecordType>,
-}
-///Components of a DS record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderDsRecordData {
-    ///Algorithm.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub algorithm: ::std::option::Option<f64>,
-    ///Digest.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub digest: ::std::option::Option<::std::string::String>,
-    ///Digest Type.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub digest_type: ::std::option::Option<f64>,
-    ///Key Tag.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub key_tag: ::std::option::Option<f64>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderDsRecordType {
-    #[serde(rename = "DS")]
-    Ds,
-}
-impl ::std::fmt::Display for DnsRecordForProviderDsRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Ds => f.write_str("DS"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderDsRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "DS" => Ok(Self::Ds),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderDsRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderDsRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderHttpsRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderHttpsRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Formatted HTTPS content. See 'data' to set HTTPS properties.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderHttpsRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderHttpsRecordType>,
-}
-///Components of a HTTPS record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderHttpsRecordData {
-    ///Priority.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<f64>,
-    ///Target.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub target: ::std::option::Option<::std::string::String>,
-    ///Value.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub value: ::std::option::Option<::std::string::String>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderHttpsRecordType {
-    #[serde(rename = "HTTPS")]
-    Https,
-}
-impl ::std::fmt::Display for DnsRecordForProviderHttpsRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Https => f.write_str("HTTPS"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderHttpsRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "HTTPS" => Ok(Self::Https),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderHttpsRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderHttpsRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderLocRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderLocRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Formatted LOC content. See 'data' to set LOC properties.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderLocRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderLocRecordType>,
-}
-///Components of a LOC record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderLocRecordData {
-    ///Altitude of location in meters.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub altitude: ::std::option::Option<f64>,
-    ///Degrees of latitude.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub lat_degrees: ::std::option::Option<f64>,
-    ///Latitude direction.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub lat_direction: ::std::option::Option<
-        DnsRecordForProviderLocRecordDataLatDirection,
-    >,
-    ///Minutes of latitude.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub lat_minutes: ::std::option::Option<f64>,
-    ///Seconds of latitude.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub lat_seconds: ::std::option::Option<f64>,
-    ///Degrees of longitude.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub long_degrees: ::std::option::Option<f64>,
-    ///Longitude direction.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub long_direction: ::std::option::Option<
-        DnsRecordForProviderLocRecordDataLongDirection,
-    >,
-    ///Minutes of longitude.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub long_minutes: ::std::option::Option<f64>,
-    ///Seconds of longitude.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub long_seconds: ::std::option::Option<f64>,
-    ///Horizontal precision of location.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub precision_horz: ::std::option::Option<f64>,
-    ///Vertical precision of location.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub precision_vert: ::std::option::Option<f64>,
-    ///Size of location in meters.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub size: ::std::option::Option<f64>,
-}
-///Latitude direction.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderLocRecordDataLatDirection {
-    N,
-    S,
-}
-impl ::std::fmt::Display for DnsRecordForProviderLocRecordDataLatDirection {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::N => f.write_str("N"),
-            Self::S => f.write_str("S"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderLocRecordDataLatDirection {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "N" => Ok(Self::N),
-            "S" => Ok(Self::S),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderLocRecordDataLatDirection {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderLocRecordDataLatDirection {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Longitude direction.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderLocRecordDataLongDirection {
-    E,
-    W,
-}
-impl ::std::fmt::Display for DnsRecordForProviderLocRecordDataLongDirection {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::E => f.write_str("E"),
-            Self::W => f.write_str("W"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderLocRecordDataLongDirection {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "E" => Ok(Self::E),
-            "W" => Ok(Self::W),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderLocRecordDataLongDirection {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderLocRecordDataLongDirection {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderLocRecordType {
-    #[serde(rename = "LOC")]
-    Loc,
-}
-impl ::std::fmt::Display for DnsRecordForProviderLocRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Loc => f.write_str("LOC"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderLocRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "LOC" => Ok(Self::Loc),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderLocRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderLocRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderMxRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderMxRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///A valid mail server hostname.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<DnsRecordsPriority>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderMxRecordType>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderMxRecordType {
-    #[serde(rename = "MX")]
-    Mx,
-}
-impl ::std::fmt::Display for DnsRecordForProviderMxRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Mx => f.write_str("MX"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderMxRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "MX" => Ok(Self::Mx),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderMxRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderMxRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderNaptrRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderNaptrRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Formatted NAPTR content. See 'data' to set NAPTR properties.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderNaptrRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderNaptrRecordType>,
-}
-///Components of a NAPTR record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderNaptrRecordData {
-    ///Flags.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub flags: ::std::option::Option<::std::string::String>,
-    ///Order.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub order: ::std::option::Option<f64>,
-    ///Preference.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub preference: ::std::option::Option<f64>,
-    ///Regex.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub regex: ::std::option::Option<::std::string::String>,
-    ///Replacement.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub replacement: ::std::option::Option<::std::string::String>,
-    ///Service.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub service: ::std::option::Option<::std::string::String>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderNaptrRecordType {
-    #[serde(rename = "NAPTR")]
-    Naptr,
-}
-impl ::std::fmt::Display for DnsRecordForProviderNaptrRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Naptr => f.write_str("NAPTR"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderNaptrRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "NAPTR" => Ok(Self::Naptr),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderNaptrRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderNaptrRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderNsRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderNsRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///A valid name server host name.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderNsRecordType>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderNsRecordType {
-    #[serde(rename = "NS")]
-    Ns,
-}
-impl ::std::fmt::Display for DnsRecordForProviderNsRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Ns => f.write_str("NS"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderNsRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "NS" => Ok(Self::Ns),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderNsRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderNsRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderOpenpgpkeyRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderOpenpgpkeyRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderOpenpgpkeyRecordType>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderOpenpgpkeyRecordType {
-    #[serde(rename = "OPENPGPKEY")]
-    Openpgpkey,
-}
-impl ::std::fmt::Display for DnsRecordForProviderOpenpgpkeyRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Openpgpkey => f.write_str("OPENPGPKEY"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderOpenpgpkeyRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "OPENPGPKEY" => Ok(Self::Openpgpkey),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderOpenpgpkeyRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderOpenpgpkeyRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderPtrRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderPtrRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Domain name pointing to the address.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderPtrRecordType>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderPtrRecordType {
-    #[serde(rename = "PTR")]
-    Ptr,
-}
-impl ::std::fmt::Display for DnsRecordForProviderPtrRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Ptr => f.write_str("PTR"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderPtrRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "PTR" => Ok(Self::Ptr),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderPtrRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderPtrRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderSmimeaRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderSmimeaRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Formatted SMIMEA content. See 'data' to set SMIMEA properties.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderSmimeaRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderSmimeaRecordType>,
-}
-///Components of a SMIMEA record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderSmimeaRecordData {
-    ///Certificate.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub certificate: ::std::option::Option<::std::string::String>,
-    ///Matching Type.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub matching_type: ::std::option::Option<f64>,
-    ///Selector.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub selector: ::std::option::Option<f64>,
-    ///Usage.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub usage: ::std::option::Option<f64>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderSmimeaRecordType {
-    #[serde(rename = "SMIMEA")]
-    Smimea,
-}
-impl ::std::fmt::Display for DnsRecordForProviderSmimeaRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Smimea => f.write_str("SMIMEA"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderSmimeaRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "SMIMEA" => Ok(Self::Smimea),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderSmimeaRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderSmimeaRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderSrvRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderSrvRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Priority, weight, port, and SRV target. See 'data' for setting the individual component values.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderSrvRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderSrvRecordType>,
-}
-///Components of a SRV record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderSrvRecordData {
-    ///The port of the service.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub port: ::std::option::Option<f64>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<DnsRecordsPriority>,
-    ///A valid hostname.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub target: ::std::option::Option<::std::string::String>,
-    ///The record weight.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub weight: ::std::option::Option<f64>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderSrvRecordType {
-    #[serde(rename = "SRV")]
-    Srv,
-}
-impl ::std::fmt::Display for DnsRecordForProviderSrvRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Srv => f.write_str("SRV"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderSrvRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "SRV" => Ok(Self::Srv),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderSrvRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderSrvRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderSshfpRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderSshfpRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Formatted SSHFP content. See 'data' to set SSHFP properties.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderSshfpRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderSshfpRecordType>,
-}
-///Components of a SSHFP record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderSshfpRecordData {
-    ///Algorithm.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub algorithm: ::std::option::Option<f64>,
-    ///Fingerprint.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub fingerprint: ::std::option::Option<::std::string::String>,
-    ///Type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<f64>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderSshfpRecordType {
-    #[serde(rename = "SSHFP")]
-    Sshfp,
-}
-impl ::std::fmt::Display for DnsRecordForProviderSshfpRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Sshfp => f.write_str("SSHFP"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderSshfpRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "SSHFP" => Ok(Self::Sshfp),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderSshfpRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderSshfpRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderSvcbRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderSvcbRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Formatted SVCB content. See 'data' to set SVCB properties.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderSvcbRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderSvcbRecordType>,
-}
-///Components of a SVCB record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderSvcbRecordData {
-    ///Priority.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<f64>,
-    ///Target.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub target: ::std::option::Option<::std::string::String>,
-    ///Value.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub value: ::std::option::Option<::std::string::String>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderSvcbRecordType {
-    #[serde(rename = "SVCB")]
-    Svcb,
-}
-impl ::std::fmt::Display for DnsRecordForProviderSvcbRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Svcb => f.write_str("SVCB"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderSvcbRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "SVCB" => Ok(Self::Svcb),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderSvcbRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderSvcbRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderTlsaRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderTlsaRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Formatted TLSA content. See 'data' to set TLSA properties.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderTlsaRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderTlsaRecordType>,
-}
-///Components of a TLSA record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderTlsaRecordData {
-    ///Certificate.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub certificate: ::std::option::Option<::std::string::String>,
-    ///Matching Type.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub matching_type: ::std::option::Option<f64>,
-    ///Selector.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub selector: ::std::option::Option<f64>,
-    ///Usage.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub usage: ::std::option::Option<f64>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderTlsaRecordType {
-    #[serde(rename = "TLSA")]
-    Tlsa,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTlsaRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Tlsa => f.write_str("TLSA"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTlsaRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "TLSA" => Ok(Self::Tlsa),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTlsaRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTlsaRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderTxtRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderTxtRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    /**Text content for the record. The content must consist of quoted "character strings" (RFC 1035), each with a length of up to 255 bytes. Strings exceeding this allowed maximum length are automatically split.
-
-Learn more at <https://www.cloudflare.com/learning/dns/dns-records/dns-txt-record/>.*/
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderTxtRecordType>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderTxtRecordType {
-    #[serde(rename = "TXT")]
-    Txt,
-}
-impl ::std::fmt::Display for DnsRecordForProviderTxtRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Txt => f.write_str("TXT"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderTxtRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "TXT" => Ok(Self::Txt),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderTxtRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderTxtRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`DnsRecordForProviderUriRecord`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderUriRecord {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<DnsRecordsComment>,
-    ///Formatted URI content. See 'data' to set URI properties.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub content: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub data: ::std::option::Option<DnsRecordForProviderUriRecordData>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<DnsRecordsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<DnsRecordsPriority>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<DnsRecordsProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<DnsRecordsSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<DnsRecordsTags>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<DnsRecordsTtl>,
-    ///Record type.
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<DnsRecordForProviderUriRecordType>,
-}
-///Components of a URI record.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct DnsRecordForProviderUriRecordData {
-    ///The record content.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub target: ::std::option::Option<::std::string::String>,
-    ///The record weight.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub weight: ::std::option::Option<f64>,
-}
-///Record type.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Copy,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-pub enum DnsRecordForProviderUriRecordType {
-    #[serde(rename = "URI")]
-    Uri,
-}
-impl ::std::fmt::Display for DnsRecordForProviderUriRecordType {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Uri => f.write_str("URI"),
-        }
-    }
-}
-impl ::std::str::FromStr for DnsRecordForProviderUriRecordType {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "URI" => Ok(Self::Uri),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for DnsRecordForProviderUriRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for DnsRecordForProviderUriRecordType {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
 }
 ///`DnsRecordsARecord`
 #[derive(
@@ -23113,57 +18066,6 @@ pub struct EmailMessagesItemSource {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub pointer: ::std::option::Option<::std::string::String>,
 }
-///`EmailRoutingRuleAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct EmailRoutingRuleAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub actions: ::std::option::Option<EmailRuleActions>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enabled: ::std::option::Option<EmailRuleEnabled>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<EmailRuleIdentifier>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub matchers: ::std::option::Option<EmailRuleMatchers>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<EmailRuleName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<EmailRulePriority>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub source: ::std::option::Option<EmailRuleSource>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tag: ::std::option::Option<EmailRuleTag>,
-}
-///`EmailRoutingRuleForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct EmailRoutingRuleForProvider {
-    pub actions: EmailRuleActions,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enabled: ::std::option::Option<EmailRuleEnabled>,
-    pub matchers: EmailRuleMatchers,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<EmailRuleName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub owner_worker_tag: ::std::option::Option<EmailRuleOwnerWorkerTag>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<EmailRulePriority>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub source: ::std::option::Option<EmailRuleSource>,
-}
 ///Actions pattern.
 #[derive(
     ::serde::Deserialize,
@@ -24316,34 +19218,6 @@ for GatewayIdentityProxyEndpointApplicationPoliciesItem {
         Self::Variant1(value)
     }
 }
-///`GatewayListAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct GatewayListAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub count: ::std::option::Option<ZeroTrustGatewayCount>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<ZeroTrustGatewayReadOnlyTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<ZeroTrustGatewayDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<ZeroTrustGatewayUuid2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub items: ::std::option::Option<ZeroTrustGatewayItems>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<ZeroTrustGatewayName>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<ZeroTrustGatewayType2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<ZeroTrustGatewayReadOnlyTimestamp>,
-}
 ///`GatewayListCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -24354,24 +19228,6 @@ pub struct GatewayListAtProvider {
     schemars::JsonSchema
 )]
 pub struct GatewayListCreateRequest {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<ZeroTrustGatewayDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub items: ::std::option::Option<ZeroTrustGatewayItemsInput>,
-    pub name: ZeroTrustGatewayName,
-    #[serde(rename = "type")]
-    pub type_: ZeroTrustGatewayType2,
-}
-///`GatewayListForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct GatewayListForProvider {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<ZeroTrustGatewayDescription>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -24396,60 +19252,6 @@ pub struct GatewayListUpdateRequest {
     pub items: ::std::option::Option<ZeroTrustGatewayItemsInput>,
     pub name: ZeroTrustGatewayName,
 }
-///`GatewayRuleAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct GatewayRuleAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub action: ::std::option::Option<ZeroTrustGatewayAction>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<ZeroTrustGatewayReadOnlyTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub deleted_at: ::std::option::Option<ZeroTrustGatewayDeletedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<ZeroTrustGatewayDescription2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub device_posture: ::std::option::Option<ZeroTrustGatewayDevicePosture>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enabled: ::std::option::Option<ZeroTrustGatewayEnabled>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub expiration: ::std::option::Option<ZeroTrustGatewayExpiration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub filters: ::std::option::Option<ZeroTrustGatewayFilters>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<ZeroTrustGatewayUuid2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub identity: ::std::option::Option<ZeroTrustGatewayIdentity>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<ZeroTrustGatewayName3>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub precedence: ::std::option::Option<ZeroTrustGatewayPrecedence>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub read_only: ::std::option::Option<ZeroTrustGatewayReadOnly>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub rule_settings: ::std::option::Option<ZeroTrustGatewayRuleSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub schedule: ::std::option::Option<ZeroTrustGatewaySchedule>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub sharable: ::std::option::Option<ZeroTrustGatewaySharable>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub source_account: ::std::option::Option<ZeroTrustGatewaySourceAccount>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub traffic: ::std::option::Option<ZeroTrustGatewayTraffic>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub updated_at: ::std::option::Option<ZeroTrustGatewayReadOnlyTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub version: ::std::option::Option<ZeroTrustGatewayVersion>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub warning_status: ::std::option::Option<ZeroTrustGatewayWarningStatus>,
-}
 ///`GatewayRuleCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -24460,39 +19262,6 @@ pub struct GatewayRuleAtProvider {
     schemars::JsonSchema
 )]
 pub struct GatewayRuleCreateRequest {
-    pub action: ZeroTrustGatewayAction,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<ZeroTrustGatewayDescription2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub device_posture: ::std::option::Option<ZeroTrustGatewayDevicePosture>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enabled: ::std::option::Option<ZeroTrustGatewayEnabled>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub expiration: ::std::option::Option<ZeroTrustGatewayExpiration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub filters: ::std::option::Option<ZeroTrustGatewayFilters>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub identity: ::std::option::Option<ZeroTrustGatewayIdentity>,
-    pub name: ZeroTrustGatewayName3,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub precedence: ::std::option::Option<ZeroTrustGatewayPrecedence>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub rule_settings: ::std::option::Option<ZeroTrustGatewayRuleSettings>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub schedule: ::std::option::Option<ZeroTrustGatewaySchedule>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub traffic: ::std::option::Option<ZeroTrustGatewayTraffic>,
-}
-///`GatewayRuleForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct GatewayRuleForProvider {
     pub action: ZeroTrustGatewayAction,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<ZeroTrustGatewayDescription2>,
@@ -24740,89 +19509,6 @@ impl<'de> ::serde::Deserialize<'de> for HeaderValue {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
     }
-}
-///`HealthcheckAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct HealthcheckAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub address: ::std::option::Option<HealthchecksAddress>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub check_regions: ::std::option::Option<HealthchecksCheckRegions>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub consecutive_fails: ::std::option::Option<HealthchecksConsecutiveFails>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub consecutive_successes: ::std::option::Option<HealthchecksConsecutiveSuccesses>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<HealthchecksTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<HealthchecksDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub failure_reason: ::std::option::Option<HealthchecksFailureReason>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_config: ::std::option::Option<HealthchecksHttpConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<HealthchecksIdentifier>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub interval: ::std::option::Option<HealthchecksInterval>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<HealthchecksTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<HealthchecksName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub retries: ::std::option::Option<HealthchecksRetries>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub status: ::std::option::Option<HealthchecksStatus>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub suspended: ::std::option::Option<HealthchecksSuspended>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tcp_config: ::std::option::Option<HealthchecksTcpConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub timeout: ::std::option::Option<HealthchecksTimeout>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<HealthchecksType>,
-}
-///`HealthcheckForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct HealthcheckForProvider {
-    pub address: HealthchecksAddress,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub check_regions: ::std::option::Option<HealthchecksCheckRegions>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub consecutive_fails: ::std::option::Option<HealthchecksConsecutiveFails>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub consecutive_successes: ::std::option::Option<HealthchecksConsecutiveSuccesses>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<HealthchecksDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_config: ::std::option::Option<HealthchecksHttpConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub interval: ::std::option::Option<HealthchecksInterval>,
-    pub name: HealthchecksName,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub retries: ::std::option::Option<HealthchecksRetries>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub suspended: ::std::option::Option<HealthchecksSuspended>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tcp_config: ::std::option::Option<HealthchecksTcpConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub timeout: ::std::option::Option<HealthchecksTimeout>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<HealthchecksType>,
 }
 ///The hostname or IP address of the origin server to run health checks on.
 #[derive(
@@ -26343,92 +21029,6 @@ impl ::std::convert::From<HyperdriveApiResponseCommon> for HyperdriveApiResponse
         Self(value)
     }
 }
-///`HyperdriveAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct HyperdriveAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub caching: ::std::option::Option<HyperdriveHyperdriveCaching>,
-    ///Defines the creation time of the Hyperdrive configuration.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<HyperdriveIdentifier>,
-    ///Defines the last modified time of the Hyperdrive configuration.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mtls: ::std::option::Option<HyperdriveHyperdriveMtls>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<HyperdriveHyperdriveName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin: ::std::option::Option<HyperdriveAtProviderOrigin>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin_connection_limit: ::std::option::Option<
-        HyperdriveHyperdriveOriginConnectionLimit,
-    >,
-    ///Defines the last time the Hyperdrive connection pool was explicitly restarted via the restart endpoint. Omitted if the pool has never been explicitly restarted.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub restarted_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-}
-///`HyperdriveAtProviderOrigin`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum HyperdriveAtProviderOrigin {
-    PublicDatabase {
-        ///Set the name of your origin database.
-        database: ::std::string::String,
-        ///Defines the host (hostname or IP) of your origin database.
-        host: ::std::string::String,
-        ///Set the password needed to access your origin database. The API never returns this write-only value.
-        password: ::std::string::String,
-        ///Defines the port of your origin database. Defaults to 5432 for PostgreSQL or 3306 for MySQL if not specified.
-        port: i64,
-        scheme: HyperdriveHyperdriveScheme,
-        ///Set the user of your origin database.
-        user: ::std::string::String,
-    },
-    AccessProtectedDatabaseBehindCloudflareTunnel {
-        ///Defines the Client ID of the Access token to use when connecting to the origin database.
-        access_client_id: ::std::string::String,
-        ///Defines the Client Secret of the Access Token to use when connecting to the origin database. The API never returns this write-only value.
-        access_client_secret: ::std::string::String,
-        ///Set the name of your origin database.
-        database: ::std::string::String,
-        ///Defines the host (hostname or IP) of your origin database.
-        host: ::std::string::String,
-        ///Set the password needed to access your origin database. The API never returns this write-only value.
-        password: ::std::string::String,
-        scheme: HyperdriveHyperdriveScheme,
-        ///Set the user of your origin database.
-        user: ::std::string::String,
-    },
-    DatabaseReachableThroughAWorkersVpc {
-        ///Set the name of your origin database.
-        database: ::std::string::String,
-        ///Set the password needed to access your origin database. The API never returns this write-only value.
-        password: ::std::string::String,
-        scheme: HyperdriveHyperdriveScheme,
-        ///The identifier of the Workers VPC Service to connect through. Hyperdrive will egress through the specified VPC Service to reach the origin database.
-        service_id: ::std::string::String,
-        ///Set the user of your origin database.
-        user: ::std::string::String,
-    },
-}
 ///`HyperdriveCreateResponse`
 #[derive(
     ::serde::Deserialize,
@@ -26553,78 +21153,6 @@ impl ::std::convert::From<HyperdriveApiResponseCommon> for HyperdriveDeleteRespo
     fn from(value: HyperdriveApiResponseCommon) -> Self {
         Self(value)
     }
-}
-///`HyperdriveForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct HyperdriveForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub caching: ::std::option::Option<HyperdriveHyperdriveCaching>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mtls: ::std::option::Option<HyperdriveHyperdriveMtls>,
-    pub name: HyperdriveHyperdriveName,
-    pub origin: HyperdriveForProviderOrigin,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin_connection_limit: ::std::option::Option<
-        HyperdriveHyperdriveOriginConnectionLimit,
-    >,
-}
-///`HyperdriveForProviderOrigin`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum HyperdriveForProviderOrigin {
-    PublicDatabase {
-        ///Set the name of your origin database.
-        database: ::std::string::String,
-        ///Defines the host (hostname or IP) of your origin database.
-        host: ::std::string::String,
-        ///Set the password needed to access your origin database. The API never returns this write-only value.
-        password: ::std::string::String,
-        ///Defines the port of your origin database. Defaults to 5432 for PostgreSQL or 3306 for MySQL if not specified.
-        port: i64,
-        scheme: HyperdriveHyperdriveScheme,
-        ///Set the user of your origin database.
-        user: ::std::string::String,
-    },
-    AccessProtectedDatabaseBehindCloudflareTunnel {
-        ///Defines the Client ID of the Access token to use when connecting to the origin database.
-        access_client_id: ::std::string::String,
-        ///Defines the Client Secret of the Access Token to use when connecting to the origin database. The API never returns this write-only value.
-        access_client_secret: ::std::string::String,
-        ///Set the name of your origin database.
-        database: ::std::string::String,
-        ///Defines the host (hostname or IP) of your origin database.
-        host: ::std::string::String,
-        ///Set the password needed to access your origin database. The API never returns this write-only value.
-        password: ::std::string::String,
-        scheme: HyperdriveHyperdriveScheme,
-        ///Set the user of your origin database.
-        user: ::std::string::String,
-    },
-    DatabaseReachableThroughAWorkersVpc {
-        ///Set the name of your origin database.
-        database: ::std::string::String,
-        ///Set the password needed to access your origin database. The API never returns this write-only value.
-        password: ::std::string::String,
-        scheme: HyperdriveHyperdriveScheme,
-        ///The identifier of the Workers VPC Service to connect through. Hyperdrive will egress through the specified VPC Service to reach the origin database.
-        service_id: ::std::string::String,
-        ///Set the user of your origin database.
-        user: ::std::string::String,
-    },
 }
 ///`HyperdriveHyperdriveCaching`
 #[derive(
@@ -28110,34 +22638,6 @@ pub struct InfrastructureApplication {
     #[serde(rename = "type")]
     pub type_: AccessType,
 }
-///`IpListAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct IpListAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<ListsCreatedOn>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<ListsDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<ListsListId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub kind: ::std::option::Option<ListsKind>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<ListsModifiedOn>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<ListsName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub num_items: ::std::option::Option<ListsNumItems>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub num_referencing_filters: ::std::option::Option<ListsNumReferencingFilters>,
-}
 ///`IpListCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -28148,21 +22648,6 @@ pub struct IpListAtProvider {
     schemars::JsonSchema
 )]
 pub struct IpListCreateRequest {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<ListsDescription>,
-    pub kind: ListsKind,
-    pub name: ListsName,
-}
-///`IpListForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct IpListForProvider {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<ListsDescription>,
     pub kind: ListsKind,
@@ -28182,27 +22667,6 @@ pub struct IpListUpdateRequest {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub description: ::std::option::Option<ListsDescription>,
 }
-///`KvNamespaceAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct KvNamespaceAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<WorkersKvNamespaceIdentifier>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub jurisdiction: ::std::option::Option<WorkersKvJurisdiction>,
-    ///True if keys written on the URL will be URL-decoded before storing. For example, if set to "true", a key written on the URL as "%3F" will be stored as "?".
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub supports_url_encoding: ::std::option::Option<bool>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub title: ::std::option::Option<WorkersKvNamespaceTitle>,
-}
 ///`KvNamespaceCreateResponse`
 #[derive(
     ::serde::Deserialize,
@@ -28219,20 +22683,6 @@ pub struct KvNamespaceCreateResponse {
     pub result: ::std::option::Option<WorkersKvNamespace>,
     ///Whether the API call was successful. Allowed values: true.
     pub success: bool,
-}
-///`KvNamespaceForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct KvNamespaceForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub jurisdiction: ::std::option::Option<WorkersKvJurisdiction>,
-    pub title: WorkersKvNamespaceTitle,
 }
 ///`KvNamespaceObserveResponse`
 #[derive(
@@ -29245,68 +23695,6 @@ impl ::std::convert::TryFrom<String> for ListsNumReferencingFilters {
         value.parse()
     }
 }
-///`LoadBalancerAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct LoadBalancerAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub adaptive_routing: ::std::option::Option<LoadBalancingAdaptiveRouting>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub country_pools: ::std::option::Option<LoadBalancingCountryPools>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<LoadBalancingTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub default_pools: ::std::option::Option<LoadBalancingDefaultPools>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<LoadBalancingComponentsSchemasDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enabled: ::std::option::Option<LoadBalancingComponentsSchemasEnabled>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub fallback_pool: ::std::option::Option<LoadBalancingFallbackPool>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<LoadBalancingLoadBalancerComponentsSchemasIdentifier>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub location_strategy: ::std::option::Option<LoadBalancingLocationStrategy>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<LoadBalancingTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<LoadBalancingComponentsSchemasName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub networks: ::std::option::Option<LoadBalancingNetworks>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub pool_sets: ::std::option::Option<LoadBalancingPoolSets>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub pop_pools: ::std::option::Option<LoadBalancingPopPools>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<LoadBalancingProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub random_steering: ::std::option::Option<LoadBalancingRandomSteering>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub region_pools: ::std::option::Option<LoadBalancingRegionPools>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub rules: ::std::option::Option<LoadBalancingRules>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_affinity: ::std::option::Option<LoadBalancingSessionAffinity>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_affinity_attributes: ::std::option::Option<
-        LoadBalancingSessionAffinityAttributes,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_affinity_ttl: ::std::option::Option<LoadBalancingSessionAffinityTtl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub steering_policy: ::std::option::Option<LoadBalancingSteeringPolicy>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<LoadBalancingTtl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub zone_name: ::std::option::Option<LoadBalancingComponentsSchemasZoneName>,
-}
 ///`LoadBalancerCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -29352,233 +23740,6 @@ pub struct LoadBalancerCreateRequest {
     pub steering_policy: ::std::option::Option<LoadBalancingSteeringPolicy>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub ttl: ::std::option::Option<LoadBalancingTtl>,
-}
-///`LoadBalancerForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct LoadBalancerForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub adaptive_routing: ::std::option::Option<LoadBalancingAdaptiveRouting>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub country_pools: ::std::option::Option<LoadBalancingCountryPools>,
-    pub default_pools: LoadBalancingDefaultPools,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<LoadBalancingComponentsSchemasDescription>,
-    pub fallback_pool: LoadBalancingFallbackPool,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub location_strategy: ::std::option::Option<LoadBalancingLocationStrategy>,
-    pub name: LoadBalancingComponentsSchemasName,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub networks: ::std::option::Option<LoadBalancingNetworks>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub pop_pools: ::std::option::Option<LoadBalancingPopPools>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxied: ::std::option::Option<LoadBalancingProxied>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub random_steering: ::std::option::Option<LoadBalancingRandomSteering>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub region_pools: ::std::option::Option<LoadBalancingRegionPools>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub rules: ::std::option::Option<LoadBalancingRules>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_affinity: ::std::option::Option<LoadBalancingSessionAffinity>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_affinity_attributes: ::std::option::Option<
-        LoadBalancingSessionAffinityAttributes,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_affinity_ttl: ::std::option::Option<LoadBalancingSessionAffinityTtl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub steering_policy: ::std::option::Option<LoadBalancingSteeringPolicy>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ttl: ::std::option::Option<LoadBalancingTtl>,
-}
-///`LoadBalancerMonitorAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct LoadBalancerMonitorAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_insecure: ::std::option::Option<LoadBalancingAllowInsecure>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub consecutive_down: ::std::option::Option<LoadBalancingConsecutiveDown>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub consecutive_up: ::std::option::Option<LoadBalancingConsecutiveUp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<LoadBalancingTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<LoadBalancingDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub expected_body: ::std::option::Option<LoadBalancingExpectedBody>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub expected_codes: ::std::option::Option<LoadBalancingExpectedCodes>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub follow_redirects: ::std::option::Option<LoadBalancingFollowRedirects>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub header: ::std::option::Option<LoadBalancingHeader>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<LoadBalancingIdentifier>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub interval: ::std::option::Option<LoadBalancingInterval>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub method: ::std::option::Option<LoadBalancingMethod>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<LoadBalancingTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path: ::std::option::Option<LoadBalancingPath>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub port: ::std::option::Option<LoadBalancingPort>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub probe_zone: ::std::option::Option<LoadBalancingProbeZone>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub retries: ::std::option::Option<LoadBalancingRetries>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub timeout: ::std::option::Option<LoadBalancingTimeout>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<LoadBalancingType>,
-}
-///`LoadBalancerMonitorForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct LoadBalancerMonitorForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_insecure: ::std::option::Option<LoadBalancingAllowInsecure>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub consecutive_down: ::std::option::Option<LoadBalancingConsecutiveDown>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub consecutive_up: ::std::option::Option<LoadBalancingConsecutiveUp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<LoadBalancingDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub expected_body: ::std::option::Option<LoadBalancingExpectedBody>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub expected_codes: ::std::option::Option<LoadBalancingExpectedCodes>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub follow_redirects: ::std::option::Option<LoadBalancingFollowRedirects>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub header: ::std::option::Option<LoadBalancingHeader>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub interval: ::std::option::Option<LoadBalancingInterval>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub method: ::std::option::Option<LoadBalancingMethod>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path: ::std::option::Option<LoadBalancingPath>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub port: ::std::option::Option<LoadBalancingPort>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub probe_zone: ::std::option::Option<LoadBalancingProbeZone>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub retries: ::std::option::Option<LoadBalancingRetries>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub timeout: ::std::option::Option<LoadBalancingTimeout>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<LoadBalancingType>,
-}
-///`LoadBalancerPoolAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct LoadBalancerPoolAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub check_regions: ::std::option::Option<LoadBalancingCheckRegions>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<LoadBalancingTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<LoadBalancingSchemasDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub disabled_at: ::std::option::Option<LoadBalancingSchemasDisabledAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enabled: ::std::option::Option<LoadBalancingEnabled>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub health_sources: ::std::option::Option<LoadBalancingHealthSources>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<LoadBalancingSchemasIdentifier>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub latitude: ::std::option::Option<LoadBalancingLatitude>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub load_shedding: ::std::option::Option<LoadBalancingLoadShedding>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub longitude: ::std::option::Option<LoadBalancingLongitude>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub minimum_origins: ::std::option::Option<LoadBalancingMinimumOrigins>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<LoadBalancingTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub monitor: ::std::option::Option<LoadBalancingMonitorId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub monitor_group: ::std::option::Option<LoadBalancingMonitorGroupId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<LoadBalancingName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub networks: ::std::option::Option<LoadBalancingNetworks>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub notification_email: ::std::option::Option<LoadBalancingNotificationEmail>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub notification_filter: ::std::option::Option<LoadBalancingNotificationFilter>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin_steering: ::std::option::Option<LoadBalancingOriginSteering>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origins: ::std::option::Option<LoadBalancingOrigins>,
-}
-///`LoadBalancerPoolForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct LoadBalancerPoolForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<LoadBalancingSchemasDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enabled: ::std::option::Option<LoadBalancingEnabled>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub latitude: ::std::option::Option<LoadBalancingLatitude>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub load_shedding: ::std::option::Option<LoadBalancingLoadShedding>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub longitude: ::std::option::Option<LoadBalancingLongitude>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub minimum_origins: ::std::option::Option<LoadBalancingMinimumOrigins>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub monitor: ::std::option::Option<LoadBalancingMonitorId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub monitor_group: ::std::option::Option<LoadBalancingMonitorGroupId>,
-    pub name: LoadBalancingName,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub notification_email: ::std::option::Option<LoadBalancingNotificationEmail>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub notification_filter: ::std::option::Option<LoadBalancingNotificationFilter>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin_steering: ::std::option::Option<LoadBalancingOriginSteering>,
-    pub origins: LoadBalancingOrigins,
 }
 ///`LoadBalancerUpdateRequest`
 #[derive(
@@ -34727,6 +28888,295 @@ impl ::std::convert::TryFrom<String> for LoadBalancingWeight {
         value.parse()
     }
 }
+///`LoadBalancerAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct LoadbalancingV1alpha1LoadBalancerAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub adaptive_routing: ::std::option::Option<LoadBalancingAdaptiveRouting>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub country_pools: ::std::option::Option<LoadBalancingCountryPools>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<LoadBalancingTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_pools: ::std::option::Option<LoadBalancingDefaultPools>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<LoadBalancingComponentsSchemasDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<LoadBalancingComponentsSchemasEnabled>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub fallback_pool: ::std::option::Option<LoadBalancingFallbackPool>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<LoadBalancingLoadBalancerComponentsSchemasIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub location_strategy: ::std::option::Option<LoadBalancingLocationStrategy>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<LoadBalancingTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<LoadBalancingComponentsSchemasName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub networks: ::std::option::Option<LoadBalancingNetworks>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub pool_sets: ::std::option::Option<LoadBalancingPoolSets>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub pop_pools: ::std::option::Option<LoadBalancingPopPools>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<LoadBalancingProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub random_steering: ::std::option::Option<LoadBalancingRandomSteering>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub region_pools: ::std::option::Option<LoadBalancingRegionPools>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rules: ::std::option::Option<LoadBalancingRules>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_affinity: ::std::option::Option<LoadBalancingSessionAffinity>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_affinity_attributes: ::std::option::Option<
+        LoadBalancingSessionAffinityAttributes,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_affinity_ttl: ::std::option::Option<LoadBalancingSessionAffinityTtl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub steering_policy: ::std::option::Option<LoadBalancingSteeringPolicy>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<LoadBalancingTtl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub zone_name: ::std::option::Option<LoadBalancingComponentsSchemasZoneName>,
+}
+///`LoadBalancerForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct LoadbalancingV1alpha1LoadBalancerForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub adaptive_routing: ::std::option::Option<LoadBalancingAdaptiveRouting>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub country_pools: ::std::option::Option<LoadBalancingCountryPools>,
+    pub default_pools: LoadBalancingDefaultPools,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<LoadBalancingComponentsSchemasDescription>,
+    pub fallback_pool: LoadBalancingFallbackPool,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub location_strategy: ::std::option::Option<LoadBalancingLocationStrategy>,
+    pub name: LoadBalancingComponentsSchemasName,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub networks: ::std::option::Option<LoadBalancingNetworks>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub pop_pools: ::std::option::Option<LoadBalancingPopPools>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<LoadBalancingProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub random_steering: ::std::option::Option<LoadBalancingRandomSteering>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub region_pools: ::std::option::Option<LoadBalancingRegionPools>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rules: ::std::option::Option<LoadBalancingRules>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_affinity: ::std::option::Option<LoadBalancingSessionAffinity>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_affinity_attributes: ::std::option::Option<
+        LoadBalancingSessionAffinityAttributes,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_affinity_ttl: ::std::option::Option<LoadBalancingSessionAffinityTtl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub steering_policy: ::std::option::Option<LoadBalancingSteeringPolicy>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<LoadBalancingTtl>,
+}
+///`LoadBalancerMonitorAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct LoadbalancingV1alpha1LoadBalancerMonitorAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_insecure: ::std::option::Option<LoadBalancingAllowInsecure>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub consecutive_down: ::std::option::Option<LoadBalancingConsecutiveDown>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub consecutive_up: ::std::option::Option<LoadBalancingConsecutiveUp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<LoadBalancingTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<LoadBalancingDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expected_body: ::std::option::Option<LoadBalancingExpectedBody>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expected_codes: ::std::option::Option<LoadBalancingExpectedCodes>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub follow_redirects: ::std::option::Option<LoadBalancingFollowRedirects>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub header: ::std::option::Option<LoadBalancingHeader>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<LoadBalancingIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub interval: ::std::option::Option<LoadBalancingInterval>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub method: ::std::option::Option<LoadBalancingMethod>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<LoadBalancingTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path: ::std::option::Option<LoadBalancingPath>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub port: ::std::option::Option<LoadBalancingPort>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub probe_zone: ::std::option::Option<LoadBalancingProbeZone>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub retries: ::std::option::Option<LoadBalancingRetries>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub timeout: ::std::option::Option<LoadBalancingTimeout>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<LoadBalancingType>,
+}
+///`LoadBalancerMonitorForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct LoadbalancingV1alpha1LoadBalancerMonitorForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_insecure: ::std::option::Option<LoadBalancingAllowInsecure>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub consecutive_down: ::std::option::Option<LoadBalancingConsecutiveDown>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub consecutive_up: ::std::option::Option<LoadBalancingConsecutiveUp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<LoadBalancingDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expected_body: ::std::option::Option<LoadBalancingExpectedBody>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expected_codes: ::std::option::Option<LoadBalancingExpectedCodes>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub follow_redirects: ::std::option::Option<LoadBalancingFollowRedirects>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub header: ::std::option::Option<LoadBalancingHeader>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub interval: ::std::option::Option<LoadBalancingInterval>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub method: ::std::option::Option<LoadBalancingMethod>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path: ::std::option::Option<LoadBalancingPath>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub port: ::std::option::Option<LoadBalancingPort>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub probe_zone: ::std::option::Option<LoadBalancingProbeZone>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub retries: ::std::option::Option<LoadBalancingRetries>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub timeout: ::std::option::Option<LoadBalancingTimeout>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<LoadBalancingType>,
+}
+///`LoadBalancerPoolAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct LoadbalancingV1alpha1LoadBalancerPoolAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub check_regions: ::std::option::Option<LoadBalancingCheckRegions>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<LoadBalancingTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<LoadBalancingSchemasDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub disabled_at: ::std::option::Option<LoadBalancingSchemasDisabledAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<LoadBalancingEnabled>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub health_sources: ::std::option::Option<LoadBalancingHealthSources>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<LoadBalancingSchemasIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub latitude: ::std::option::Option<LoadBalancingLatitude>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub load_shedding: ::std::option::Option<LoadBalancingLoadShedding>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub longitude: ::std::option::Option<LoadBalancingLongitude>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub minimum_origins: ::std::option::Option<LoadBalancingMinimumOrigins>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<LoadBalancingTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub monitor: ::std::option::Option<LoadBalancingMonitorId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub monitor_group: ::std::option::Option<LoadBalancingMonitorGroupId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<LoadBalancingName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub networks: ::std::option::Option<LoadBalancingNetworks>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub notification_email: ::std::option::Option<LoadBalancingNotificationEmail>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub notification_filter: ::std::option::Option<LoadBalancingNotificationFilter>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin_steering: ::std::option::Option<LoadBalancingOriginSteering>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origins: ::std::option::Option<LoadBalancingOrigins>,
+}
+///`LoadBalancerPoolForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct LoadbalancingV1alpha1LoadBalancerPoolForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<LoadBalancingSchemasDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<LoadBalancingEnabled>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub latitude: ::std::option::Option<LoadBalancingLatitude>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub load_shedding: ::std::option::Option<LoadBalancingLoadShedding>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub longitude: ::std::option::Option<LoadBalancingLongitude>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub minimum_origins: ::std::option::Option<LoadBalancingMinimumOrigins>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub monitor: ::std::option::Option<LoadBalancingMonitorId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub monitor_group: ::std::option::Option<LoadBalancingMonitorGroupId>,
+    pub name: LoadBalancingName,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub notification_email: ::std::option::Option<LoadBalancingNotificationEmail>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub notification_filter: ::std::option::Option<LoadBalancingNotificationFilter>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin_steering: ::std::option::Option<LoadBalancingOriginSteering>,
+    pub origins: LoadBalancingOrigins,
+}
 ///`LogpushApiResponseCommon`
 #[derive(
     ::serde::Deserialize,
@@ -35422,50 +29872,6 @@ impl<'de> ::serde::Deserialize<'de> for LogpushIdentifier {
             })
     }
 }
-///`LogpushJobAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct LogpushJobAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub dataset: ::std::option::Option<LogpushDataset>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destination_conf: ::std::option::Option<LogpushDestinationConf>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enabled: ::std::option::Option<LogpushEnabled>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub error_message: ::std::option::Option<LogpushErrorMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub frequency: ::std::option::Option<LogpushFrequency>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<LogpushId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub kind: ::std::option::Option<LogpushKind>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub last_complete: ::std::option::Option<LogpushLastComplete>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub last_error: ::std::option::Option<LogpushLastError>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logpull_options: ::std::option::Option<LogpushLogpullOptions>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub max_upload_bytes: ::std::option::Option<LogpushMaxUploadBytes>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub max_upload_interval_seconds: ::std::option::Option<
-        LogpushMaxUploadIntervalSeconds,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub max_upload_records: ::std::option::Option<LogpushMaxUploadRecords>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<LogpushName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub output_options: ::std::option::Option<LogpushOutputOptions>,
-}
 ///`LogpushJobCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -35534,44 +29940,6 @@ pub struct LogpushJobDeleteResponse {
 pub struct LogpushJobDeleteResponseResult {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<LogpushId>,
-}
-///`LogpushJobForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct LogpushJobForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub dataset: ::std::option::Option<LogpushDataset>,
-    pub destination_conf: LogpushDestinationConf,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enabled: ::std::option::Option<LogpushEnabled>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub filter: ::std::option::Option<LogpushFilter>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub frequency: ::std::option::Option<LogpushFrequency>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub kind: ::std::option::Option<LogpushKind>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logpull_options: ::std::option::Option<LogpushLogpullOptions>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub max_upload_bytes: ::std::option::Option<LogpushMaxUploadBytes>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub max_upload_interval_seconds: ::std::option::Option<
-        LogpushMaxUploadIntervalSeconds,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub max_upload_records: ::std::option::Option<LogpushMaxUploadRecords>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<LogpushName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub output_options: ::std::option::Option<LogpushOutputOptions>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ownership_challenge: ::std::option::Option<LogpushOwnershipChallenge>,
 }
 ///`LogpushJobUpdateRequest`
 #[derive(
@@ -38147,38 +32515,6 @@ impl<'de> ::serde::Deserialize<'de> for Name {
             })
     }
 }
-///`NotificationPolicyAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct NotificationPolicyAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub alert_interval: ::std::option::Option<AaaAlertInterval>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub alert_type: ::std::option::Option<AaaAlertType>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created: ::std::option::Option<AaaTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<AaaSchemasDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enabled: ::std::option::Option<AaaEnabled>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub filters: ::std::option::Option<AaaFilters>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AaaPolicyId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mechanisms: ::std::option::Option<AaaMechanisms>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified: ::std::option::Option<AaaTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AaaSchemasName>,
-}
 ///`NotificationPolicyCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -38189,27 +32525,6 @@ pub struct NotificationPolicyAtProvider {
     schemars::JsonSchema
 )]
 pub struct NotificationPolicyCreateRequest {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub alert_interval: ::std::option::Option<AaaAlertInterval>,
-    pub alert_type: AaaAlertType,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<AaaSchemasDescription>,
-    pub enabled: AaaEnabled,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub filters: ::std::option::Option<AaaFilters>,
-    pub mechanisms: AaaMechanisms,
-    pub name: AaaSchemasName,
-}
-///`NotificationPolicyForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct NotificationPolicyForProvider {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub alert_interval: ::std::option::Option<AaaAlertInterval>,
     pub alert_type: AaaAlertType,
@@ -38247,32 +32562,6 @@ pub struct NotificationPolicyUpdateRequest {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AaaSchemasName>,
 }
-///`PageRuleAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct PageRuleAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub actions: ::std::option::Option<ZonesActions>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<ZonesCreatedOn>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<ZonesIdentifier2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<ZonesModifiedOn>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<ZonesPriority>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub status: ::std::option::Option<ZonesStatus>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub targets: ::std::option::Option<ZonesTargets>,
-}
 ///`PageRuleCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -38306,23 +32595,6 @@ pub struct PageRuleCreateResponse {
     pub result: ::std::option::Option<ZonesPageRule>,
     ///Whether the API call was successful. Allowed values: true.
     pub success: bool,
-}
-///`PageRuleForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct PageRuleForProvider {
-    pub actions: ZonesActions,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub priority: ::std::option::Option<ZonesPriority>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub status: ::std::option::Option<ZonesStatus>,
-    pub targets: ZonesTargets,
 }
 ///`PageRuleObserveResponse`
 #[derive(
@@ -39863,50 +34135,6 @@ pub struct PagesProject {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub uses_functions: ::std::option::Option<bool>,
 }
-///`PagesProjectAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct PagesProjectAtProvider {
-    ///When the project was created.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    ///A list of associated custom domains for the project.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub domains: ::std::vec::Vec<::std::string::String>,
-    ///Framework the project is using.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub framework: ::std::option::Option<::std::string::String>,
-    ///Version of the framework the project is using.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub framework_version: ::std::option::Option<::std::string::String>,
-    ///ID of the project.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<PagesProjectName>,
-    ///Name of the preview script.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub preview_script_name: ::std::option::Option<::std::string::String>,
-    ///Production branch of the project. Used to identify production deployments.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub production_branch: ::std::option::Option<::std::string::String>,
-    ///Name of the production script.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub production_script_name: ::std::option::Option<::std::string::String>,
-    ///The Cloudflare subdomain associated with the project.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub subdomain: ::std::option::Option<::std::string::String>,
-    ///Whether the project uses functions.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub uses_functions: ::std::option::Option<bool>,
-}
 ///`PagesProjectCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -40214,40 +34442,6 @@ pub struct PagesProjectDeleteResponse {
     schemars::JsonSchema
 )]
 pub struct PagesProjectDeploymentConfigs {
-    ///Configs for preview deploys.
-    pub preview: PagesDeploymentConfigValues,
-    ///Configs for production deploys.
-    pub production: PagesDeploymentConfigValues,
-}
-///`PagesProjectForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct PagesProjectForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub build_config: ::std::option::Option<PagesBuildConfig>,
-    pub deployment_configs: PagesProjectForProviderDeploymentConfigs,
-    pub name: PagesProjectName,
-    ///Production branch of the project. Used to identify production deployments.
-    pub production_branch: ::std::string::String,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub source: ::std::option::Option<PagesSource>,
-}
-///Configs for deployments in a project.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct PagesProjectForProviderDeploymentConfigs {
     ///Configs for preview deploys.
     pub preview: PagesDeploymentConfigValues,
     ///Configs for production deploys.
@@ -41905,36 +36099,6 @@ impl<'de> ::serde::Deserialize<'de> for QueryExpression {
             })
     }
 }
-///`QueueAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct QueueAtProvider {
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub consumers: ::std::vec::Vec<MqConsumerResponse>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub consumers_total_count: ::std::option::Option<f64>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<::std::string::String>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub producers: ::std::vec::Vec<MqProducer>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub producers_total_count: ::std::option::Option<f64>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub queue_id: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub queue_name: ::std::option::Option<MqQueueName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub settings: ::std::option::Option<MqQueueSettings>,
-}
 ///`QueueCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -41967,18 +36131,6 @@ pub struct QueueCreateResponse {
     ///Indicates if the API call was successful or not. Allowed values: true.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub success: ::std::option::Option<bool>,
-}
-///`QueueForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct QueueForProvider {
-    pub queue_name: MqQueueName,
 }
 ///`QueueObserveResponse`
 #[derive(
@@ -42109,29 +36261,6 @@ pub struct R2Bucket {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub storage_class: ::std::option::Option<R2StorageClass>,
 }
-///`R2BucketAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct R2BucketAtProvider {
-    ///Creation timestamp.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub creation_date: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub jurisdiction: ::std::option::Option<R2Jurisdiction>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub location: ::std::option::Option<R2BucketLocation>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<R2BucketName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub storage_class: ::std::option::Option<R2StorageClass>,
-}
 ///`R2BucketCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -42169,28 +36298,6 @@ pub struct R2BucketCreateResponse {
     pub result: R2Bucket,
     ///Whether the API call was successful. Allowed values: true.
     pub success: bool,
-}
-///`R2BucketForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct R2BucketForProvider {
-    #[serde(
-        rename = "locationHint",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub location_hint: ::std::option::Option<R2BucketLocation>,
-    pub name: R2BucketName,
-    #[serde(
-        rename = "storageClass",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub storage_class: ::std::option::Option<R2StorageClass>,
 }
 ///Location of the bucket.
 #[derive(
@@ -43166,58 +37273,6 @@ pub struct RuleOverride {
     pub score_threshold: ::std::option::Option<i64>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub sensitivity_level: ::std::option::Option<RulesetsExecuteSensitivityLevel>,
-}
-///`RulesetAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct RulesetAtProvider {
-    ///An informative description of the ruleset.
-    #[serde(default)]
-    pub description: ::std::string::String,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<RulesetsRulesetId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub kind: ::std::option::Option<RulesetsRulesetKind>,
-    ///The timestamp of when the ruleset was last modified.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    ///The human-readable name of the ruleset.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<Name>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub phase: ::std::option::Option<RulesetsRulesetPhase>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub rules: ::std::option::Option<RulesetsResponseRules>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub version: ::std::option::Option<RulesetsRulesetVersion>,
-}
-///`RulesetForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct RulesetForProvider {
-    ///An informative description of the ruleset.
-    #[serde(default)]
-    pub description: ::std::string::String,
-    pub kind: RulesetsRulesetKind,
-    ///The human-readable name of the ruleset.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<Name>,
-    pub phase: RulesetsRulesetPhase,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub rules: ::std::option::Option<RulesetsRequestRules>,
 }
 ///`RulesetsBlockRule`
 #[derive(
@@ -51324,6 +45379,58 @@ pub struct RulesetsTransformResponseHtmlRuleActionParameters {
     ///Enables the link maze transformation on the response.
     pub link_maze: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
 }
+///`RulesetAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct RulesetsV1alpha1RulesetAtProvider {
+    ///An informative description of the ruleset.
+    #[serde(default)]
+    pub description: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<RulesetsRulesetId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub kind: ::std::option::Option<RulesetsRulesetKind>,
+    ///The timestamp of when the ruleset was last modified.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    ///The human-readable name of the ruleset.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<Name>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub phase: ::std::option::Option<RulesetsRulesetPhase>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rules: ::std::option::Option<RulesetsResponseRules>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<RulesetsRulesetVersion>,
+}
+///`RulesetForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct RulesetsV1alpha1RulesetForProvider {
+    ///An informative description of the ruleset.
+    #[serde(default)]
+    pub description: ::std::string::String,
+    pub kind: RulesetsRulesetKind,
+    ///The human-readable name of the ruleset.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<Name>,
+    pub phase: RulesetsRulesetPhase,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rules: ::std::option::Option<RulesetsRequestRules>,
+}
 ///The unique ID of the zone.
 #[derive(
     ::serde::Serialize,
@@ -52083,175 +46190,6 @@ impl ::std::convert::TryFrom<::std::string::String> for SetStaticHeaderOperation
 pub struct Source {
     ///A JSON pointer to the field that is the source of the message.
     pub pointer: Pointer,
-}
-///`SpectrumApplicationAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum SpectrumApplicationAtProvider {
-    Providerconfig(SpectrumApplicationAtProviderconfig),
-    ProviderspectrumConfigPaygoAppConfig(
-        SpectrumApplicationAtProviderspectrumConfigPaygoAppConfig,
-    ),
-}
-impl ::std::convert::From<SpectrumApplicationAtProviderconfig>
-for SpectrumApplicationAtProvider {
-    fn from(value: SpectrumApplicationAtProviderconfig) -> Self {
-        Self::Providerconfig(value)
-    }
-}
-impl ::std::convert::From<SpectrumApplicationAtProviderspectrumConfigPaygoAppConfig>
-for SpectrumApplicationAtProvider {
-    fn from(value: SpectrumApplicationAtProviderspectrumConfigPaygoAppConfig) -> Self {
-        Self::ProviderspectrumConfigPaygoAppConfig(value)
-    }
-}
-///`SpectrumApplicationAtProviderconfig`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SpectrumApplicationAtProviderconfig {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub argo_smart_routing: ::std::option::Option<SpectrumConfigArgoSmartRouting>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<SpectrumConfigCreated>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub dns: ::std::option::Option<SpectrumConfigDns>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub edge_ips: ::std::option::Option<SpectrumConfigEdgeIps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<SpectrumConfigAppIdentifier>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ip_firewall: ::std::option::Option<SpectrumConfigIpFirewall>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<SpectrumConfigModified>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin_direct: ::std::option::Option<SpectrumConfigOriginDirect>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin_dns: ::std::option::Option<SpectrumConfigOriginDns>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin_port: ::std::option::Option<SpectrumConfigOriginPort>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub protocol: ::std::option::Option<SpectrumConfigProtocol>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxy_protocol: ::std::option::Option<SpectrumConfigProxyProtocol>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tls: ::std::option::Option<SpectrumConfigTls>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub traffic_type: ::std::option::Option<SpectrumConfigTrafficType>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub virtual_network_id: ::std::option::Option<SpectrumConfigVirtualNetworkId>,
-}
-///`SpectrumApplicationAtProviderspectrumConfigPaygoAppConfig`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SpectrumApplicationAtProviderspectrumConfigPaygoAppConfig {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<SpectrumConfigCreated>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub dns: ::std::option::Option<SpectrumConfigDns>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<SpectrumConfigAppIdentifier>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<SpectrumConfigModified>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin_direct: ::std::option::Option<SpectrumConfigOriginDirect>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub protocol: ::std::option::Option<SpectrumConfigProtocol>,
-}
-///`SpectrumApplicationForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum SpectrumApplicationForProvider {
-    Providerconfig(SpectrumApplicationForProviderconfig),
-    ProviderspectrumConfigPaygoAppConfig(
-        SpectrumApplicationForProviderspectrumConfigPaygoAppConfig,
-    ),
-}
-impl ::std::convert::From<SpectrumApplicationForProviderconfig>
-for SpectrumApplicationForProvider {
-    fn from(value: SpectrumApplicationForProviderconfig) -> Self {
-        Self::Providerconfig(value)
-    }
-}
-impl ::std::convert::From<SpectrumApplicationForProviderspectrumConfigPaygoAppConfig>
-for SpectrumApplicationForProvider {
-    fn from(value: SpectrumApplicationForProviderspectrumConfigPaygoAppConfig) -> Self {
-        Self::ProviderspectrumConfigPaygoAppConfig(value)
-    }
-}
-///`SpectrumApplicationForProviderconfig`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SpectrumApplicationForProviderconfig {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub argo_smart_routing: ::std::option::Option<SpectrumConfigArgoSmartRouting>,
-    pub dns: SpectrumConfigDns,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub edge_ips: ::std::option::Option<SpectrumConfigEdgeIps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ip_firewall: ::std::option::Option<SpectrumConfigIpFirewall>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin_direct: ::std::option::Option<SpectrumConfigOriginDirect>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin_dns: ::std::option::Option<SpectrumConfigOriginDns>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin_port: ::std::option::Option<SpectrumConfigOriginPort>,
-    pub protocol: SpectrumConfigProtocol,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub proxy_protocol: ::std::option::Option<SpectrumConfigProxyProtocol>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tls: ::std::option::Option<SpectrumConfigTls>,
-    pub traffic_type: SpectrumConfigTrafficType,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub virtual_network_id: ::std::option::Option<SpectrumConfigVirtualNetworkId>,
-}
-///`SpectrumApplicationForProviderspectrumConfigPaygoAppConfig`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SpectrumApplicationForProviderspectrumConfigPaygoAppConfig {
-    pub dns: SpectrumConfigDns,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub origin_direct: ::std::option::Option<SpectrumConfigOriginDirect>,
-    pub protocol: SpectrumConfigProtocol,
 }
 ///`SpectrumConfigApiResponseCommon`
 #[derive(
@@ -53933,6 +47871,371 @@ pub struct StatusCodeRange {
     ///The upper bound of the range.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub to: ::std::option::Option<i64>,
+}
+///`D1DatabaseAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct StorageV1alpha1D1DatabaseAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<D1CreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub file_size: ::std::option::Option<D1FileSize>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub jurisdiction: ::std::option::Option<D1JurisdictionNullable>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<D1DatabaseName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub num_tables: ::std::option::Option<D1TableCount>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub read_replication: ::std::option::Option<D1ReadReplicationDetailsForResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub uuid: ::std::option::Option<D1DatabaseIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<D1DatabaseVersion>,
+}
+///`D1DatabaseForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct StorageV1alpha1D1DatabaseForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub jurisdiction: ::std::option::Option<D1Jurisdiction>,
+    pub name: D1DatabaseName,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub primary_location_hint: ::std::option::Option<D1PrimaryLocationHint>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub read_replication: ::std::option::Option<D1ReadReplicationDetailsForRequest>,
+}
+///`HyperdriveAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct StorageV1alpha1HyperdriveAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub caching: ::std::option::Option<HyperdriveHyperdriveCaching>,
+    ///Defines the creation time of the Hyperdrive configuration.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<HyperdriveIdentifier>,
+    ///Defines the last modified time of the Hyperdrive configuration.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mtls: ::std::option::Option<HyperdriveHyperdriveMtls>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<HyperdriveHyperdriveName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin: ::std::option::Option<StorageV1alpha1HyperdriveAtProviderOrigin>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin_connection_limit: ::std::option::Option<
+        HyperdriveHyperdriveOriginConnectionLimit,
+    >,
+    ///Defines the last time the Hyperdrive connection pool was explicitly restarted via the restart endpoint. Omitted if the pool has never been explicitly restarted.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub restarted_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+}
+///`HyperdriveAtProviderOrigin`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum StorageV1alpha1HyperdriveAtProviderOrigin {
+    PublicDatabase {
+        ///Set the name of your origin database.
+        database: ::std::string::String,
+        ///Defines the host (hostname or IP) of your origin database.
+        host: ::std::string::String,
+        ///Set the password needed to access your origin database. The API never returns this write-only value.
+        password: ::std::string::String,
+        ///Defines the port of your origin database. Defaults to 5432 for PostgreSQL or 3306 for MySQL if not specified.
+        port: i64,
+        scheme: HyperdriveHyperdriveScheme,
+        ///Set the user of your origin database.
+        user: ::std::string::String,
+    },
+    AccessProtectedDatabaseBehindCloudflareTunnel {
+        ///Defines the Client ID of the Access token to use when connecting to the origin database.
+        access_client_id: ::std::string::String,
+        ///Defines the Client Secret of the Access Token to use when connecting to the origin database. The API never returns this write-only value.
+        access_client_secret: ::std::string::String,
+        ///Set the name of your origin database.
+        database: ::std::string::String,
+        ///Defines the host (hostname or IP) of your origin database.
+        host: ::std::string::String,
+        ///Set the password needed to access your origin database. The API never returns this write-only value.
+        password: ::std::string::String,
+        scheme: HyperdriveHyperdriveScheme,
+        ///Set the user of your origin database.
+        user: ::std::string::String,
+    },
+    DatabaseReachableThroughAWorkersVpc {
+        ///Set the name of your origin database.
+        database: ::std::string::String,
+        ///Set the password needed to access your origin database. The API never returns this write-only value.
+        password: ::std::string::String,
+        scheme: HyperdriveHyperdriveScheme,
+        ///The identifier of the Workers VPC Service to connect through. Hyperdrive will egress through the specified VPC Service to reach the origin database.
+        service_id: ::std::string::String,
+        ///Set the user of your origin database.
+        user: ::std::string::String,
+    },
+}
+///`HyperdriveForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct StorageV1alpha1HyperdriveForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub caching: ::std::option::Option<HyperdriveHyperdriveCaching>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mtls: ::std::option::Option<HyperdriveHyperdriveMtls>,
+    pub name: HyperdriveHyperdriveName,
+    pub origin: StorageV1alpha1HyperdriveForProviderOrigin,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin_connection_limit: ::std::option::Option<
+        HyperdriveHyperdriveOriginConnectionLimit,
+    >,
+}
+///`HyperdriveForProviderOrigin`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum StorageV1alpha1HyperdriveForProviderOrigin {
+    PublicDatabase {
+        ///Set the name of your origin database.
+        database: ::std::string::String,
+        ///Defines the host (hostname or IP) of your origin database.
+        host: ::std::string::String,
+        ///Set the password needed to access your origin database. The API never returns this write-only value.
+        password: ::std::string::String,
+        ///Defines the port of your origin database. Defaults to 5432 for PostgreSQL or 3306 for MySQL if not specified.
+        port: i64,
+        scheme: HyperdriveHyperdriveScheme,
+        ///Set the user of your origin database.
+        user: ::std::string::String,
+    },
+    AccessProtectedDatabaseBehindCloudflareTunnel {
+        ///Defines the Client ID of the Access token to use when connecting to the origin database.
+        access_client_id: ::std::string::String,
+        ///Defines the Client Secret of the Access Token to use when connecting to the origin database. The API never returns this write-only value.
+        access_client_secret: ::std::string::String,
+        ///Set the name of your origin database.
+        database: ::std::string::String,
+        ///Defines the host (hostname or IP) of your origin database.
+        host: ::std::string::String,
+        ///Set the password needed to access your origin database. The API never returns this write-only value.
+        password: ::std::string::String,
+        scheme: HyperdriveHyperdriveScheme,
+        ///Set the user of your origin database.
+        user: ::std::string::String,
+    },
+    DatabaseReachableThroughAWorkersVpc {
+        ///Set the name of your origin database.
+        database: ::std::string::String,
+        ///Set the password needed to access your origin database. The API never returns this write-only value.
+        password: ::std::string::String,
+        scheme: HyperdriveHyperdriveScheme,
+        ///The identifier of the Workers VPC Service to connect through. Hyperdrive will egress through the specified VPC Service to reach the origin database.
+        service_id: ::std::string::String,
+        ///Set the user of your origin database.
+        user: ::std::string::String,
+    },
+}
+///`KvNamespaceAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct StorageV1alpha1KvNamespaceAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<WorkersKvNamespaceIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub jurisdiction: ::std::option::Option<WorkersKvJurisdiction>,
+    ///True if keys written on the URL will be URL-decoded before storing. For example, if set to "true", a key written on the URL as "%3F" will be stored as "?".
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub supports_url_encoding: ::std::option::Option<bool>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub title: ::std::option::Option<WorkersKvNamespaceTitle>,
+}
+///`KvNamespaceForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct StorageV1alpha1KvNamespaceForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub jurisdiction: ::std::option::Option<WorkersKvJurisdiction>,
+    pub title: WorkersKvNamespaceTitle,
+}
+///`QueueAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct StorageV1alpha1QueueAtProvider {
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub consumers: ::std::vec::Vec<MqConsumerResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub consumers_total_count: ::std::option::Option<f64>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub producers: ::std::vec::Vec<MqProducer>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub producers_total_count: ::std::option::Option<f64>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub queue_id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub queue_name: ::std::option::Option<MqQueueName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<MqQueueSettings>,
+}
+///`QueueForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct StorageV1alpha1QueueForProvider {
+    pub queue_name: MqQueueName,
+}
+///`R2BucketAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct StorageV1alpha1R2BucketAtProvider {
+    ///Creation timestamp.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub creation_date: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub jurisdiction: ::std::option::Option<R2Jurisdiction>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub location: ::std::option::Option<R2BucketLocation>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<R2BucketName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub storage_class: ::std::option::Option<R2StorageClass>,
+}
+///`R2BucketForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct StorageV1alpha1R2BucketForProvider {
+    #[serde(
+        rename = "locationHint",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub location_hint: ::std::option::Option<R2BucketLocation>,
+    pub name: R2BucketName,
+    #[serde(
+        rename = "storageClass",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub storage_class: ::std::option::Option<R2StorageClass>,
+}
+///`VectorizeIndexAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct StorageV1alpha1VectorizeIndexAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub config: ::std::option::Option<VectorizeIndexDimensionConfiguration>,
+    ///Specifies the timestamp the resource was created as an ISO8601 string.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<VectorizeIndexDescription>,
+    ///Specifies the timestamp the resource was modified as an ISO8601 string.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<VectorizeIndexName>,
+}
+///`VectorizeIndexForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct StorageV1alpha1VectorizeIndexForProvider {
+    pub config: VectorizeIndexConfiguration,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<VectorizeIndexDescription>,
+    pub name: VectorizeIndexName,
 }
 ///A URL to redirect the request to.
 #[derive(
@@ -56323,44 +50626,6 @@ impl ::std::convert::From<TunnelApiResponseCommon2> for TunnelApiResponseSingle2
         Self(value)
     }
 }
-///`TunnelAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TunnelAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub account_tag: ::std::option::Option<TunnelAccountId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub config_src: ::std::option::Option<TunnelConfigSrc>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub connections: ::std::option::Option<TunnelConnectionsDeprecated>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub conns_active_at: ::std::option::Option<TunnelConnsActiveAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub conns_inactive_at: ::std::option::Option<TunnelConnsInactiveAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<TunnelCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub deleted_at: ::std::option::Option<TunnelDeletedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<TunnelTunnelId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub metadata: ::std::option::Option<TunnelMetadata>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<TunnelTunnelName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub remote_config: ::std::option::Option<TunnelRemoteConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub status: ::std::option::Option<TunnelStatus>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tun_type: ::std::option::Option<TunnelTunnelType>,
-}
 ///A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 #[derive(
     ::serde::Deserialize,
@@ -56415,32 +50680,6 @@ pub struct TunnelCfdTunnelResponseSingle {
     ///Whether the API call was successful Allowed values: true.
     pub success: bool,
 }
-///`TunnelCidrRouteAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TunnelCidrRouteAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<TunnelRouteComment>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<TunnelCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub deleted_at: ::std::option::Option<TunnelDeletedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<TunnelRouteId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub network: ::std::option::Option<TunnelIpNetwork>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tunnel_id: ::std::option::Option<TunnelTunnelId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub virtual_network_id: ::std::option::Option<TunnelVirtualNetworkId>,
-}
 ///`TunnelCidrRouteCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -56456,24 +50695,6 @@ pub struct TunnelCidrRouteCreateRequest {
     pub network: TunnelIpNetwork,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub tunnel_id: ::std::option::Option<TunnelTunnelId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub virtual_network_id: ::std::option::Option<
-        TunnelVirtualNetworkIdComputedOptional,
-    >,
-}
-///`TunnelCidrRouteForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TunnelCidrRouteForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<TunnelRouteComment>,
-    pub network: TunnelIpNetwork,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub virtual_network_id: ::std::option::Option<
         TunnelVirtualNetworkIdComputedOptional,
@@ -56823,40 +51044,6 @@ pub struct TunnelConfiguration {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub version: ::std::option::Option<TunnelConfigVersion2>,
 }
-///`TunnelConfigurationAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TunnelConfigurationAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub config: ::std::option::Option<TunnelConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<TunnelTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub source: ::std::option::Option<TunnelConfigSrc2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub version: ::std::option::Option<TunnelConfigVersion2>,
-}
-///`TunnelConfigurationForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TunnelConfigurationForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub config: ::std::option::Option<TunnelConfig>,
-}
 ///`TunnelConfigurationResponse`
 #[derive(
     ::serde::Deserialize,
@@ -57191,22 +51378,6 @@ impl ::std::convert::TryFrom<String> for TunnelDeletedAt {
         value.parse()
     }
 }
-///`TunnelForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TunnelForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub config_src: ::std::option::Option<TunnelConfigSrc>,
-    pub name: TunnelTunnelName,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tunnel_secret: ::std::option::Option<TunnelTunnelSecret>,
-}
 ///The hostname of the route.
 #[derive(
     ::serde::Deserialize,
@@ -57319,32 +51490,6 @@ pub struct TunnelHostnameRoute {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub tunnel_name: ::std::option::Option<TunnelTunnelName2>,
 }
-///`TunnelHostnameRouteAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TunnelHostnameRouteAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<TunnelHostnameComment>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_at: ::std::option::Option<TunnelCreatedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub deleted_at: ::std::option::Option<TunnelDeletedAt>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub hostname: ::std::option::Option<TunnelHostname>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<TunnelHostnameRouteId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tunnel_id: ::std::option::Option<TunnelTunnelId3>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tunnel_name: ::std::option::Option<TunnelTunnelName2>,
-}
 ///`TunnelHostnameRouteCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -57362,22 +51507,6 @@ pub struct TunnelHostnameRouteCreateRequest {
     pub hostname: ::std::option::Option<TunnelHostname>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub tunnel_id: ::std::option::Option<TunnelTunnelId3>,
-}
-///`TunnelHostnameRouteForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TunnelHostnameRouteForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub comment: ::std::option::Option<TunnelHostnameComment>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub hostname: ::std::option::Option<TunnelHostname>,
 }
 ///The hostname route ID.
 #[derive(
@@ -59628,42 +53757,6 @@ impl<'de> ::serde::Deserialize<'de> for TurnstileSitekey {
             })
     }
 }
-///`TurnstileWidgetAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TurnstileWidgetAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub bot_fight_mode: ::std::option::Option<TurnstileBotFightMode>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub clearance_level: ::std::option::Option<TurnstileClearanceLevel>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<TurnstileCreatedOn>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domains: ::std::option::Option<TurnstileDomains>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ephemeral_id: ::std::option::Option<TurnstileEphemeralId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mode: ::std::option::Option<TurnstileWidgetMode>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<TurnstileModifiedOn>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<TurnstileName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub offlabel: ::std::option::Option<TurnstileOfflabel>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub region: ::std::option::Option<TurnstileRegion>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub secret: ::std::option::Option<TurnstileSecret>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub sitekey: ::std::option::Option<TurnstileSitekey>,
-}
 ///`TurnstileWidgetCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -59748,30 +53841,6 @@ pub struct TurnstileWidgetDetail {
     pub region: TurnstileRegion,
     pub secret: TurnstileSecret,
     pub sitekey: TurnstileSitekey,
-}
-///`TurnstileWidgetForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TurnstileWidgetForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub bot_fight_mode: ::std::option::Option<TurnstileBotFightMode>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub clearance_level: ::std::option::Option<TurnstileClearanceLevel>,
-    pub domains: TurnstileDomains,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub ephemeral_id: ::std::option::Option<TurnstileEphemeralId>,
-    pub mode: TurnstileWidgetMode,
-    pub name: TurnstileName,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub offlabel: ::std::option::Option<TurnstileOfflabel>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub region: ::std::option::Option<TurnstileRegion>,
 }
 ///Widget Mode
 #[derive(
@@ -60216,30 +54285,6 @@ impl<'de> ::serde::Deserialize<'de> for VectorizeIdentifier {
             })
     }
 }
-///`VectorizeIndexAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct VectorizeIndexAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub config: ::std::option::Option<VectorizeIndexDimensionConfiguration>,
-    ///Specifies the timestamp the resource was created as an ISO8601 string.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<VectorizeIndexDescription>,
-    ///Specifies the timestamp the resource was modified as an ISO8601 string.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<VectorizeIndexName>,
-}
 ///Specifies the type of configuration to use for the index.
 #[derive(
     ::serde::Deserialize,
@@ -60402,21 +54447,6 @@ impl ::std::convert::TryFrom<String> for VectorizeIndexDimensions {
     fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
         value.parse()
     }
-}
-///`VectorizeIndexForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct VectorizeIndexForProvider {
-    pub config: VectorizeIndexConfiguration,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<VectorizeIndexDescription>,
-    pub name: VectorizeIndexName,
 }
 ///Specifies the type of metric to use calculating distance.
 #[derive(
@@ -60804,125 +54834,6 @@ for ViaMcpServerPortalDestinationType {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
-}
-///`WaitingRoomAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct WaitingRoomAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub additional_routes: ::std::option::Option<WaitingroomAdditionalRoutes>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cookie_attributes: ::std::option::Option<WaitingroomCookieAttributes>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cookie_suffix: ::std::option::Option<WaitingroomCookieSuffix>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<WaitingroomTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_page_html: ::std::option::Option<WaitingroomCustomPageHtml>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub default_template_language: ::std::option::Option<
-        WaitingroomDefaultTemplateLanguage,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<WaitingroomDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub disable_session_renewal: ::std::option::Option<WaitingroomDisableSessionRenewal>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enabled_origin_commands: ::std::option::Option<WaitingroomEnabledOriginCommands>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub host: ::std::option::Option<WaitingroomHost>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<WaitingroomWaitingRoomId>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub json_response_enabled: ::std::option::Option<WaitingroomJsonResponseEnabled>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<WaitingroomTimestamp>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<WaitingroomName>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub new_users_per_minute: ::std::option::Option<WaitingroomNewUsersPerMinute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub next_event_prequeue_start_time: ::std::option::Option<
-        WaitingroomNextEventPrequeueStartTime,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub next_event_start_time: ::std::option::Option<WaitingroomNextEventStartTime>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path: ::std::option::Option<WaitingroomPath>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub queue_all: ::std::option::Option<WaitingroomQueueAll>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub queueing_method: ::std::option::Option<WaitingroomQueueingMethod>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub queueing_status_code: ::std::option::Option<WaitingroomQueueingStatusCode>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<WaitingroomSessionDuration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub suspended: ::std::option::Option<WaitingroomSuspended>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub total_active_users: ::std::option::Option<WaitingroomTotalActiveUsers>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub turnstile_action: ::std::option::Option<WaitingroomTurnstileAction>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub turnstile_mode: ::std::option::Option<WaitingroomTurnstileMode>,
-}
-///`WaitingRoomForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct WaitingRoomForProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub additional_routes: ::std::option::Option<WaitingroomAdditionalRoutes>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cookie_attributes: ::std::option::Option<WaitingroomCookieAttributes>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cookie_suffix: ::std::option::Option<WaitingroomCookieSuffix>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_page_html: ::std::option::Option<WaitingroomCustomPageHtml>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub default_template_language: ::std::option::Option<
-        WaitingroomDefaultTemplateLanguage,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub description: ::std::option::Option<WaitingroomDescription>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub disable_session_renewal: ::std::option::Option<WaitingroomDisableSessionRenewal>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enabled_origin_commands: ::std::option::Option<WaitingroomEnabledOriginCommands>,
-    pub host: WaitingroomHost,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub json_response_enabled: ::std::option::Option<WaitingroomJsonResponseEnabled>,
-    pub name: WaitingroomName,
-    pub new_users_per_minute: WaitingroomNewUsersPerMinute,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path: ::std::option::Option<WaitingroomPath>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub queue_all: ::std::option::Option<WaitingroomQueueAll>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub queueing_method: ::std::option::Option<WaitingroomQueueingMethod>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub queueing_status_code: ::std::option::Option<WaitingroomQueueingStatusCode>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<WaitingroomSessionDuration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub suspended: ::std::option::Option<WaitingroomSuspended>,
-    pub total_active_users: WaitingroomTotalActiveUsers,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub turnstile_action: ::std::option::Option<WaitingroomTurnstileAction>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub turnstile_mode: ::std::option::Option<WaitingroomTurnstileMode>,
 }
 ///Only available for the Waiting Room Advanced subscription. Additional hostname and path combinations to which this waiting room will be applied. There is an implied wildcard at the end of the path. The hostname and path combination must be unique to this and all other waiting rooms.
 #[derive(
@@ -62994,26 +56905,6 @@ impl ::std::convert::TryFrom<::std::string::String> for WorkerDestinationType {
         value.parse()
     }
 }
-///`WorkerRouteAtProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct WorkerRouteAtProvider {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<WorkersIdentifier>,
-    ///Pattern to match incoming requests against. [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub pattern: ::std::option::Option<::std::string::String>,
-    ///Name of the script to run if the route matches.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub script: ::std::option::Option<::std::string::String>,
-}
 ///`WorkerRouteCreateResponse`
 #[derive(
     ::serde::Deserialize,
@@ -63059,22 +56950,6 @@ pub struct WorkerRouteDeleteResponse {
 pub struct WorkerRouteDeleteResponseResult {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<WorkersIdentifier>,
-}
-///`WorkerRouteForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct WorkerRouteForProvider {
-    ///Pattern to match incoming requests against. [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
-    pub pattern: ::std::string::String,
-    ///Name of the script to run if the route matches.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub script: ::std::option::Option<::std::string::String>,
 }
 ///`WorkerRouteObserveResponse`
 #[derive(
@@ -63711,6 +57586,42 @@ pub struct WorkersMessagesItemSource {
 pub struct WorkersRoute {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<WorkersIdentifier>,
+    ///Pattern to match incoming requests against. [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
+    pub pattern: ::std::string::String,
+    ///Name of the script to run if the route matches.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub script: ::std::option::Option<::std::string::String>,
+}
+///`WorkerRouteAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct WorkersV1alpha1WorkerRouteAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<WorkersIdentifier>,
+    ///Pattern to match incoming requests against. [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub pattern: ::std::option::Option<::std::string::String>,
+    ///Name of the script to run if the route matches.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub script: ::std::option::Option<::std::string::String>,
+}
+///`WorkerRouteForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct WorkersV1alpha1WorkerRouteForProvider {
     ///Pattern to match incoming requests against. [Learn more](https://developers.cloudflare.com/workers/configuration/routing/routes/#matching-behavior).
     pub pattern: ::std::string::String,
     ///Name of the script to run if the route matches.
@@ -66615,7 +60526,110 @@ for ZeroTrustGatewayWarningStatus {
         Self(value)
     }
 }
-///`ZoneAtProvider`
+///`AccessApplicationAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationAtProvider {
+    Variant0(ZerotrustV1alpha1AccessApplicationAtProviderVariant0),
+    Variant1(ZerotrustV1alpha1AccessApplicationAtProviderVariant1),
+    Variant2(ZerotrustV1alpha1AccessApplicationAtProviderVariant2),
+    Variant3(ZerotrustV1alpha1AccessApplicationAtProviderVariant3),
+    Variant4(ZerotrustV1alpha1AccessApplicationAtProviderVariant4),
+    Variant5(ZerotrustV1alpha1AccessApplicationAtProviderVariant5),
+    Variant6(ZerotrustV1alpha1AccessApplicationAtProviderVariant6),
+    Variant7(ZerotrustV1alpha1AccessApplicationAtProviderVariant7),
+    Variant8(ZerotrustV1alpha1AccessApplicationAtProviderVariant8),
+    Variant9(ZerotrustV1alpha1AccessApplicationAtProviderVariant9),
+    Variant10(ZerotrustV1alpha1AccessApplicationAtProviderVariant10),
+    Variant11(ZerotrustV1alpha1AccessApplicationAtProviderVariant11),
+    Variant12(ZerotrustV1alpha1AccessApplicationAtProviderVariant12),
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant0>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant0) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant1>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant1) -> Self {
+        Self::Variant1(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant2>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant2) -> Self {
+        Self::Variant2(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant3>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant3) -> Self {
+        Self::Variant3(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant4>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant4) -> Self {
+        Self::Variant4(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant5>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant5) -> Self {
+        Self::Variant5(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant6>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant6) -> Self {
+        Self::Variant6(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant7>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant7) -> Self {
+        Self::Variant7(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant8>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant8) -> Self {
+        Self::Variant8(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant9>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant9) -> Self {
+        Self::Variant9(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant10>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant10) -> Self {
+        Self::Variant10(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant11>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant11) -> Self {
+        Self::Variant11(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationAtProviderVariant12>
+for ZerotrustV1alpha1AccessApplicationAtProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationAtProviderVariant12) -> Self {
+        Self::Variant12(value)
+    }
+}
+///`AccessApplicationAtProviderVariant0`
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -66625,390 +60639,2940 @@ for ZeroTrustGatewayWarningStatus {
     PartialEq,
     schemars::JsonSchema
 )]
-pub struct ZoneAtProvider {
-    /**The last time proof of ownership was detected and the zone was made
-active.*/
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant0 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub activated_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    ///When the zone was created.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    /**The interval (in seconds) from when development mode expires
-(positive integer) or last expired (negative integer) for the
-domain. If development mode has never been enabled, this value is 0.*/
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub development_mode: ::std::option::Option<f64>,
-    ///Identifier
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<ZoneAtProviderId>,
-    ///When the zone was last modified.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    ///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<ZoneAtProviderName>,
-    ///The name servers Cloudflare assigns to a zone.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub name_servers: ::std::vec::Vec<::std::string::String>,
-    ///DNS host at the time of switching to Cloudflare.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub original_dnshost: ::std::option::Option<ZoneAtProviderOriginalDnshost>,
-    ///Original name servers before moving to Cloudflare.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub original_name_servers: ::std::option::Option<
-        ::std::vec::Vec<::std::string::String>,
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
     >,
-    ///Registrar for the domain at the time of switching to Cloudflare.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub original_registrar: ::std::option::Option<::std::string::String>,
+    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub paused: ::std::option::Option<ZonesPaused>,
-    ///The zone status on Cloudflare.
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub status: ::std::option::Option<ZoneAtProviderStatus>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<ZonesType>,
-    ///An array of domains used for custom name servers. This is only available for Business and Enterprise plans.
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub eager_redirect_cookie_setting: ::std::option::Option<
+        AccessEagerRedirectCookieSetting,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub vanity_name_servers: ::std::vec::Vec<ZoneAtProviderVanityNameServersItem>,
-    ///Verification key for partial zone setup.
+    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub verification_key: ::std::option::Option<::std::string::String>,
+    pub read_service_tokens_from_header: ::std::option::Option<
+        AccessReadServiceTokensFromHeader,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<AccessType>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
+        AccessUseClientlessIsolationAppLauncherUrl,
+    >,
 }
-///Identifier
-#[derive(
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-#[serde(transparent)]
-pub struct ZoneAtProviderId(::std::string::String);
-impl ::std::ops::Deref for ZoneAtProviderId {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ZoneAtProviderId> for ::std::string::String {
-    fn from(value: ZoneAtProviderId) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ZoneAtProviderId {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() > 32usize {
-            return Err("longer than 32 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ZoneAtProviderId {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for ZoneAtProviderId {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ZoneAtProviderId {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
-#[derive(
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-#[serde(transparent)]
-pub struct ZoneAtProviderName(::std::string::String);
-impl ::std::ops::Deref for ZoneAtProviderName {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ZoneAtProviderName> for ::std::string::String {
-    fn from(value: ZoneAtProviderName) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ZoneAtProviderName {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() > 253usize {
-            return Err("longer than 253 characters".into());
-        }
-        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
-        {
-            ::regress::Regex::new(
-                    "^([a-zA-Z0-9][\\-a-zA-Z0-9]*\\.)+[\\-a-zA-Z0-9]{2,20}$",
-                )
-                .unwrap()
-        });
-        if PATTERN.find(value).is_none() {
-            return Err(
-                "doesn't match pattern \"^([a-zA-Z0-9][\\-a-zA-Z0-9]*\\.)+[\\-a-zA-Z0-9]{2,20}$\""
-                    .into(),
-            );
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ZoneAtProviderName {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for ZoneAtProviderName {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ZoneAtProviderName {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///DNS host at the time of switching to Cloudflare.
-#[derive(
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-#[serde(transparent)]
-pub struct ZoneAtProviderOriginalDnshost(::std::string::String);
-impl ::std::ops::Deref for ZoneAtProviderOriginalDnshost {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ZoneAtProviderOriginalDnshost> for ::std::string::String {
-    fn from(value: ZoneAtProviderOriginalDnshost) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ZoneAtProviderOriginalDnshost {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() > 50usize {
-            return Err("longer than 50 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ZoneAtProviderOriginalDnshost {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for ZoneAtProviderOriginalDnshost {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ZoneAtProviderOriginalDnshost {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///The zone status on Cloudflare.
+///`AccessApplicationAtProviderVariant1`
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
     Clone,
-    Copy,
     Debug,
-    Eq,
-    Hash,
-    Ord,
+    Default,
     PartialEq,
-    PartialOrd,
     schemars::JsonSchema
 )]
-pub enum ZoneAtProviderStatus {
-    #[serde(rename = "initializing")]
-    Initializing,
-    #[serde(rename = "pending")]
-    Pending,
-    #[serde(rename = "active")]
-    Active,
-    #[serde(rename = "moved")]
-    Moved,
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant1 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub saas_app: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationAtProviderVariant1SaasApp,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<AccessType>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
 }
-impl ::std::fmt::Display for ZoneAtProviderStatus {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        match *self {
-            Self::Initializing => f.write_str("initializing"),
-            Self::Pending => f.write_str("pending"),
-            Self::Active => f.write_str("active"),
-            Self::Moved => f.write_str("moved"),
-        }
-    }
-}
-impl ::std::str::FromStr for ZoneAtProviderStatus {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        match value {
-            "initializing" => Ok(Self::Initializing),
-            "pending" => Ok(Self::Pending),
-            "active" => Ok(Self::Active),
-            "moved" => Ok(Self::Moved),
-            _ => Err("invalid value".into()),
-        }
-    }
-}
-impl ::std::convert::TryFrom<&str> for ZoneAtProviderStatus {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for ZoneAtProviderStatus {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-///`ZoneAtProviderVanityNameServersItem`
+///`AccessApplicationAtProviderVariant10`
 #[derive(
+    ::serde::Deserialize,
     ::serde::Serialize,
     Clone,
     Debug,
-    Eq,
-    Hash,
-    Ord,
+    Default,
     PartialEq,
-    PartialOrd,
     schemars::JsonSchema
 )]
-#[serde(transparent)]
-pub struct ZoneAtProviderVanityNameServersItem(::std::string::String);
-impl ::std::ops::Deref for ZoneAtProviderVanityNameServersItem {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant10 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub eager_redirect_cookie_setting: ::std::option::Option<
+        AccessEagerRedirectCookieSetting,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub read_service_tokens_from_header: ::std::option::Option<
+        AccessReadServiceTokensFromHeader,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub target_criteria: ::std::vec::Vec<AccessTargetCriteriaSelfHostedApp>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationAtProviderVariant10Type,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
+        AccessUseClientlessIsolationAppLauncherUrl,
+    >,
+}
+///`AccessApplicationAtProviderVariant10Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant10Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationAtProviderVariant11`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant11 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<AccessType>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+}
+///`AccessApplicationAtProviderVariant12`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant12 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<AccessType>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+}
+///`AccessApplicationAtProviderVariant1SaasApp`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationAtProviderVariant1SaasApp {
+    SamlSaasApp(AccessSamlSaasApp),
+    OidcSaasApp(AccessOidcSaasApp),
+}
+impl ::std::convert::From<AccessSamlSaasApp>
+for ZerotrustV1alpha1AccessApplicationAtProviderVariant1SaasApp {
+    fn from(value: AccessSamlSaasApp) -> Self {
+        Self::SamlSaasApp(value)
     }
 }
-impl ::std::convert::From<ZoneAtProviderVanityNameServersItem>
-for ::std::string::String {
-    fn from(value: ZoneAtProviderVanityNameServersItem) -> Self {
-        value.0
+impl ::std::convert::From<AccessOidcSaasApp>
+for ZerotrustV1alpha1AccessApplicationAtProviderVariant1SaasApp {
+    fn from(value: AccessOidcSaasApp) -> Self {
+        Self::OidcSaasApp(value)
     }
 }
-impl ::std::str::FromStr for ZoneAtProviderVanityNameServersItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() > 253usize {
-            return Err("longer than 253 characters".into());
-        }
-        Ok(Self(value.to_string()))
+///`AccessApplicationAtProviderVariant2`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant2 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub eager_redirect_cookie_setting: ::std::option::Option<
+        AccessEagerRedirectCookieSetting,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub read_service_tokens_from_header: ::std::option::Option<
+        AccessReadServiceTokensFromHeader,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationAtProviderVariant2Type,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
+        AccessUseClientlessIsolationAppLauncherUrl,
+    >,
+}
+///`AccessApplicationAtProviderVariant2Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant2Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationAtProviderVariant3`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant3 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub eager_redirect_cookie_setting: ::std::option::Option<
+        AccessEagerRedirectCookieSetting,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub read_service_tokens_from_header: ::std::option::Option<
+        AccessReadServiceTokensFromHeader,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationAtProviderVariant3Type,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
+        AccessUseClientlessIsolationAppLauncherUrl,
+    >,
+}
+///`AccessApplicationAtProviderVariant3Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant3Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationAtProviderVariant4`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant4 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_logo_url: ::std::option::Option<AccessAppLauncherLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub bg_color: ::std::option::Option<AccessBgColor>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    ///The primary hostname and path secured by Access. This domain will be displayed if the app is visible in the App Launcher.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub footer_links: ::std::option::Option<AccessFooterLinks>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub header_bg_color: ::std::option::Option<AccessHeaderBgColor>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub landing_page_design: ::std::option::Option<AccessLandingPageDesign>,
+    ///The name of the application.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub skip_app_launcher_login_page: ::std::option::Option<
+        AccessSkipAppLauncherLoginPage,
+    >,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationAtProviderVariant4Type,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+}
+///`AccessApplicationAtProviderVariant4Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant4Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationAtProviderVariant5`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant5 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    ///The primary hostname and path secured by Access. This domain will be displayed if the app is visible in the App Launcher.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    ///The name of the application.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationAtProviderVariant5Type,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+}
+///`AccessApplicationAtProviderVariant5Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant5Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationAtProviderVariant6`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant6 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    ///The primary hostname and path secured by Access. This domain will be displayed if the app is visible in the App Launcher.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    ///The name of the application.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationAtProviderVariant6Type,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+}
+///`AccessApplicationAtProviderVariant6Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant6Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationAtProviderVariant7`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant7 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    ///The primary hostname and path secured by Access. This domain will be displayed if the app is visible in the App Launcher.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    ///The name of the application.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationAtProviderVariant7Type,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+}
+///`AccessApplicationAtProviderVariant7Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant7Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationAtProviderVariant8`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant8 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    ///The URL or domain of the bookmark.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessAppPolicyResponse>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<AccessType>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+}
+///`AccessApplicationAtProviderVariant9`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationAtProviderVariant9 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessInfraMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessInfraPolicyResp>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub target_criteria: ::std::vec::Vec<AccessTargetCriteriaInfraApp>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<AccessType>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+}
+///`AccessApplicationForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProvider {
+    Variant0(ZerotrustV1alpha1AccessApplicationForProviderVariant0),
+    Variant1(ZerotrustV1alpha1AccessApplicationForProviderVariant1),
+    Variant2(ZerotrustV1alpha1AccessApplicationForProviderVariant2),
+    Variant3(ZerotrustV1alpha1AccessApplicationForProviderVariant3),
+    Variant4(ZerotrustV1alpha1AccessApplicationForProviderVariant4),
+    Variant5(ZerotrustV1alpha1AccessApplicationForProviderVariant5),
+    Variant6(ZerotrustV1alpha1AccessApplicationForProviderVariant6),
+    Variant7(ZerotrustV1alpha1AccessApplicationForProviderVariant7),
+    Variant8(ZerotrustV1alpha1AccessApplicationForProviderVariant8),
+    Variant9(ZerotrustV1alpha1AccessApplicationForProviderVariant9),
+    Variant10(ZerotrustV1alpha1AccessApplicationForProviderVariant10),
+    Variant11(ZerotrustV1alpha1AccessApplicationForProviderVariant11),
+    Variant12(ZerotrustV1alpha1AccessApplicationForProviderVariant12),
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant0>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant0) -> Self {
+        Self::Variant0(value)
     }
 }
-impl ::std::convert::TryFrom<&str> for ZoneAtProviderVanityNameServersItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant1>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant1) -> Self {
+        Self::Variant1(value)
     }
 }
-impl ::std::convert::TryFrom<::std::string::String>
-for ZoneAtProviderVanityNameServersItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant2>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant2) -> Self {
+        Self::Variant2(value)
     }
 }
-impl<'de> ::serde::Deserialize<'de> for ZoneAtProviderVanityNameServersItem {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant3>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant3) -> Self {
+        Self::Variant3(value)
     }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant4>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant4) -> Self {
+        Self::Variant4(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant5>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant5) -> Self {
+        Self::Variant5(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant6>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant6) -> Self {
+        Self::Variant6(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant7>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant7) -> Self {
+        Self::Variant7(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant8>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant8) -> Self {
+        Self::Variant8(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant9>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant9) -> Self {
+        Self::Variant9(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant10>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant10) -> Self {
+        Self::Variant10(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant11>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant11) -> Self {
+        Self::Variant11(value)
+    }
+}
+impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant12>
+for ZerotrustV1alpha1AccessApplicationForProvider {
+    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant12) -> Self {
+        Self::Variant12(value)
+    }
+}
+///`AccessApplicationForProviderVariant0`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant0 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    pub domain: AccessDomain,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub eager_redirect_cookie_setting: ::std::option::Option<
+        AccessEagerRedirectCookieSetting,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
+    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant0PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub read_service_tokens_from_header: ::std::option::Option<
+        AccessReadServiceTokensFromHeader,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type")]
+    pub type_: AccessType,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
+        AccessUseClientlessIsolationAppLauncherUrl,
+    >,
+}
+///`AccessApplicationForProviderVariant0PoliciesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant0PoliciesItem {
+    Variant0(AccessAppPolicyLink),
+    Variant1(AccessUuid2),
+    Variant2 {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_groups: ::std::option::Option<AccessApprovalGroups>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_required: ::std::option::Option<AccessApprovalRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        connection_rules: ::std::option::Option<AccessConnectionRules>,
+        decision: AccessDecision,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        exclude: ::std::option::Option<AccessExclude2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<AccessUuid2>,
+        include: AccessInclude2,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        isolation_required: ::std::option::Option<AccessIsolationRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        mfa_config: ::std::option::Option<AccessMfaConfig>,
+        name: AccessName9,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        precedence: ::std::option::Option<AccessPrecedence>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_prompt: ::std::option::Option<
+            AccessPurposeJustificationPrompt,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_required: ::std::option::Option<
+            AccessPurposeJustificationRequired,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        require: ::std::option::Option<AccessRequire2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        session_duration: ::std::option::Option<AccessSessionDuration3>,
+    },
+}
+impl ::std::convert::From<AccessAppPolicyLink>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant0PoliciesItem {
+    fn from(value: AccessAppPolicyLink) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessUuid2>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant0PoliciesItem {
+    fn from(value: AccessUuid2) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AccessApplicationForProviderVariant1`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant1 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant1PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub saas_app: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant1SaasApp,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationForProviderVariant10`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant10 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    pub domain: AccessDomain,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub eager_redirect_cookie_setting: ::std::option::Option<
+        AccessEagerRedirectCookieSetting,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
+    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant10PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub read_service_tokens_from_header: ::std::option::Option<
+        AccessReadServiceTokensFromHeader,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub target_criteria: ::std::vec::Vec<AccessTargetCriteriaSelfHostedApp>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant10Type,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
+        AccessUseClientlessIsolationAppLauncherUrl,
+    >,
+}
+///`AccessApplicationForProviderVariant10PoliciesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant10PoliciesItem {
+    Variant0(AccessAppPolicyLink),
+    Variant1(AccessUuid2),
+    Variant2 {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_groups: ::std::option::Option<AccessApprovalGroups>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_required: ::std::option::Option<AccessApprovalRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        connection_rules: ::std::option::Option<AccessConnectionRules>,
+        decision: AccessDecision,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        exclude: ::std::option::Option<AccessExclude2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<AccessUuid2>,
+        include: AccessInclude2,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        isolation_required: ::std::option::Option<AccessIsolationRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        mfa_config: ::std::option::Option<AccessMfaConfig>,
+        name: AccessName9,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        precedence: ::std::option::Option<AccessPrecedence>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_prompt: ::std::option::Option<
+            AccessPurposeJustificationPrompt,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_required: ::std::option::Option<
+            AccessPurposeJustificationRequired,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        require: ::std::option::Option<AccessRequire2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        session_duration: ::std::option::Option<AccessSessionDuration3>,
+    },
+}
+impl ::std::convert::From<AccessAppPolicyLink>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant10PoliciesItem {
+    fn from(value: AccessAppPolicyLink) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessUuid2>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant10PoliciesItem {
+    fn from(value: AccessUuid2) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AccessApplicationForProviderVariant10Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant10Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationForProviderVariant11`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant11 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant11PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type")]
+    pub type_: AccessType,
+}
+///`AccessApplicationForProviderVariant11PoliciesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant11PoliciesItem {
+    Variant0(AccessAppPolicyLink),
+    Variant1(AccessUuid2),
+    Variant2 {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_groups: ::std::option::Option<AccessApprovalGroups>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_required: ::std::option::Option<AccessApprovalRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        connection_rules: ::std::option::Option<AccessConnectionRules>,
+        decision: AccessDecision,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        exclude: ::std::option::Option<AccessExclude2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<AccessUuid2>,
+        include: AccessInclude2,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        isolation_required: ::std::option::Option<AccessIsolationRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        mfa_config: ::std::option::Option<AccessMfaConfig>,
+        name: AccessName9,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        precedence: ::std::option::Option<AccessPrecedence>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_prompt: ::std::option::Option<
+            AccessPurposeJustificationPrompt,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_required: ::std::option::Option<
+            AccessPurposeJustificationRequired,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        require: ::std::option::Option<AccessRequire2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        session_duration: ::std::option::Option<AccessSessionDuration3>,
+    },
+}
+impl ::std::convert::From<AccessAppPolicyLink>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant11PoliciesItem {
+    fn from(value: AccessAppPolicyLink) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessUuid2>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant11PoliciesItem {
+    fn from(value: AccessUuid2) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AccessApplicationForProviderVariant12`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant12 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant12PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type")]
+    pub type_: AccessType,
+}
+///`AccessApplicationForProviderVariant12PoliciesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant12PoliciesItem {
+    Variant0(AccessAppPolicyLink),
+    Variant1(AccessUuid2),
+    Variant2 {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_groups: ::std::option::Option<AccessApprovalGroups>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_required: ::std::option::Option<AccessApprovalRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        connection_rules: ::std::option::Option<AccessConnectionRules>,
+        decision: AccessDecision,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        exclude: ::std::option::Option<AccessExclude2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<AccessUuid2>,
+        include: AccessInclude2,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        isolation_required: ::std::option::Option<AccessIsolationRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        mfa_config: ::std::option::Option<AccessMfaConfig>,
+        name: AccessName9,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        precedence: ::std::option::Option<AccessPrecedence>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_prompt: ::std::option::Option<
+            AccessPurposeJustificationPrompt,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_required: ::std::option::Option<
+            AccessPurposeJustificationRequired,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        require: ::std::option::Option<AccessRequire2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        session_duration: ::std::option::Option<AccessSessionDuration3>,
+    },
+}
+impl ::std::convert::From<AccessAppPolicyLink>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant12PoliciesItem {
+    fn from(value: AccessAppPolicyLink) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessUuid2>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant12PoliciesItem {
+    fn from(value: AccessUuid2) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AccessApplicationForProviderVariant1PoliciesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant1PoliciesItem {
+    Variant0(AccessAppPolicyLink),
+    Variant1(AccessUuid2),
+    Variant2 {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_groups: ::std::option::Option<AccessApprovalGroups>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_required: ::std::option::Option<AccessApprovalRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        connection_rules: ::std::option::Option<AccessConnectionRules>,
+        decision: AccessDecision,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        exclude: ::std::option::Option<AccessExclude2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<AccessUuid2>,
+        include: AccessInclude2,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        isolation_required: ::std::option::Option<AccessIsolationRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        mfa_config: ::std::option::Option<AccessMfaConfig>,
+        name: AccessName9,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        precedence: ::std::option::Option<AccessPrecedence>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_prompt: ::std::option::Option<
+            AccessPurposeJustificationPrompt,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_required: ::std::option::Option<
+            AccessPurposeJustificationRequired,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        require: ::std::option::Option<AccessRequire2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        session_duration: ::std::option::Option<AccessSessionDuration3>,
+    },
+}
+impl ::std::convert::From<AccessAppPolicyLink>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant1PoliciesItem {
+    fn from(value: AccessAppPolicyLink) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessUuid2>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant1PoliciesItem {
+    fn from(value: AccessUuid2) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AccessApplicationForProviderVariant1SaasApp`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant1SaasApp {
+    SamlSaasApp(AccessSamlSaasApp),
+    OidcSaasApp(AccessOidcSaasApp),
+}
+impl ::std::convert::From<AccessSamlSaasApp>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant1SaasApp {
+    fn from(value: AccessSamlSaasApp) -> Self {
+        Self::SamlSaasApp(value)
+    }
+}
+impl ::std::convert::From<AccessOidcSaasApp>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant1SaasApp {
+    fn from(value: AccessOidcSaasApp) -> Self {
+        Self::OidcSaasApp(value)
+    }
+}
+///`AccessApplicationForProviderVariant2`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant2 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    pub domain: AccessDomain,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub eager_redirect_cookie_setting: ::std::option::Option<
+        AccessEagerRedirectCookieSetting,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
+    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant2PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub read_service_tokens_from_header: ::std::option::Option<
+        AccessReadServiceTokensFromHeader,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant2Type,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
+        AccessUseClientlessIsolationAppLauncherUrl,
+    >,
+}
+///`AccessApplicationForProviderVariant2PoliciesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant2PoliciesItem {
+    Variant0(AccessAppPolicyLink),
+    Variant1(AccessUuid2),
+    Variant2 {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_groups: ::std::option::Option<AccessApprovalGroups>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_required: ::std::option::Option<AccessApprovalRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        connection_rules: ::std::option::Option<AccessConnectionRules>,
+        decision: AccessDecision,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        exclude: ::std::option::Option<AccessExclude2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<AccessUuid2>,
+        include: AccessInclude2,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        isolation_required: ::std::option::Option<AccessIsolationRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        mfa_config: ::std::option::Option<AccessMfaConfig>,
+        name: AccessName9,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        precedence: ::std::option::Option<AccessPrecedence>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_prompt: ::std::option::Option<
+            AccessPurposeJustificationPrompt,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_required: ::std::option::Option<
+            AccessPurposeJustificationRequired,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        require: ::std::option::Option<AccessRequire2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        session_duration: ::std::option::Option<AccessSessionDuration3>,
+    },
+}
+impl ::std::convert::From<AccessAppPolicyLink>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant2PoliciesItem {
+    fn from(value: AccessAppPolicyLink) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessUuid2>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant2PoliciesItem {
+    fn from(value: AccessUuid2) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AccessApplicationForProviderVariant2Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant2Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationForProviderVariant3`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant3 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    pub domain: AccessDomain,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub eager_redirect_cookie_setting: ::std::option::Option<
+        AccessEagerRedirectCookieSetting,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
+    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant3PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub read_service_tokens_from_header: ::std::option::Option<
+        AccessReadServiceTokensFromHeader,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant3Type,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
+        AccessUseClientlessIsolationAppLauncherUrl,
+    >,
+}
+///`AccessApplicationForProviderVariant3PoliciesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant3PoliciesItem {
+    Variant0(AccessAppPolicyLink),
+    Variant1(AccessUuid2),
+    Variant2 {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_groups: ::std::option::Option<AccessApprovalGroups>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_required: ::std::option::Option<AccessApprovalRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        connection_rules: ::std::option::Option<AccessConnectionRules>,
+        decision: AccessDecision,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        exclude: ::std::option::Option<AccessExclude2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<AccessUuid2>,
+        include: AccessInclude2,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        isolation_required: ::std::option::Option<AccessIsolationRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        mfa_config: ::std::option::Option<AccessMfaConfig>,
+        name: AccessName9,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        precedence: ::std::option::Option<AccessPrecedence>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_prompt: ::std::option::Option<
+            AccessPurposeJustificationPrompt,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_required: ::std::option::Option<
+            AccessPurposeJustificationRequired,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        require: ::std::option::Option<AccessRequire2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        session_duration: ::std::option::Option<AccessSessionDuration3>,
+    },
+}
+impl ::std::convert::From<AccessAppPolicyLink>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant3PoliciesItem {
+    fn from(value: AccessAppPolicyLink) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessUuid2>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant3PoliciesItem {
+    fn from(value: AccessUuid2) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AccessApplicationForProviderVariant3Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant3Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationForProviderVariant4`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant4 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_logo_url: ::std::option::Option<AccessAppLauncherLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub bg_color: ::std::option::Option<AccessBgColor>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub footer_links: ::std::option::Option<AccessFooterLinks>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub header_bg_color: ::std::option::Option<AccessHeaderBgColor>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub landing_page_design: ::std::option::Option<AccessLandingPageDesign>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant4PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub skip_app_launcher_login_page: ::std::option::Option<
+        AccessSkipAppLauncherLoginPage,
+    >,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant4Type,
+    >,
+}
+///`AccessApplicationForProviderVariant4PoliciesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant4PoliciesItem {
+    Variant0(AccessAppPolicyLink),
+    Variant1(AccessUuid2),
+    Variant2 {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_groups: ::std::option::Option<AccessApprovalGroups>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_required: ::std::option::Option<AccessApprovalRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        connection_rules: ::std::option::Option<AccessConnectionRules>,
+        decision: AccessDecision,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        exclude: ::std::option::Option<AccessExclude2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<AccessUuid2>,
+        include: AccessInclude2,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        isolation_required: ::std::option::Option<AccessIsolationRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        mfa_config: ::std::option::Option<AccessMfaConfig>,
+        name: AccessName9,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        precedence: ::std::option::Option<AccessPrecedence>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_prompt: ::std::option::Option<
+            AccessPurposeJustificationPrompt,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_required: ::std::option::Option<
+            AccessPurposeJustificationRequired,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        require: ::std::option::Option<AccessRequire2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        session_duration: ::std::option::Option<AccessSessionDuration3>,
+    },
+}
+impl ::std::convert::From<AccessAppPolicyLink>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant4PoliciesItem {
+    fn from(value: AccessAppPolicyLink) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessUuid2>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant4PoliciesItem {
+    fn from(value: AccessUuid2) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AccessApplicationForProviderVariant4Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant4Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationForProviderVariant5`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant5 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant5PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant5Type,
+    >,
+}
+///`AccessApplicationForProviderVariant5PoliciesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant5PoliciesItem {
+    Variant0(AccessAppPolicyLink),
+    Variant1(AccessUuid2),
+    Variant2 {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_groups: ::std::option::Option<AccessApprovalGroups>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_required: ::std::option::Option<AccessApprovalRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        connection_rules: ::std::option::Option<AccessConnectionRules>,
+        decision: AccessDecision,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        exclude: ::std::option::Option<AccessExclude2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<AccessUuid2>,
+        include: AccessInclude2,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        isolation_required: ::std::option::Option<AccessIsolationRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        mfa_config: ::std::option::Option<AccessMfaConfig>,
+        name: AccessName9,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        precedence: ::std::option::Option<AccessPrecedence>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_prompt: ::std::option::Option<
+            AccessPurposeJustificationPrompt,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_required: ::std::option::Option<
+            AccessPurposeJustificationRequired,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        require: ::std::option::Option<AccessRequire2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        session_duration: ::std::option::Option<AccessSessionDuration3>,
+    },
+}
+impl ::std::convert::From<AccessAppPolicyLink>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant5PoliciesItem {
+    fn from(value: AccessAppPolicyLink) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessUuid2>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant5PoliciesItem {
+    fn from(value: AccessUuid2) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AccessApplicationForProviderVariant5Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant5Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationForProviderVariant6`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant6 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant6PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant6Type,
+    >,
+}
+///`AccessApplicationForProviderVariant6PoliciesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant6PoliciesItem {
+    Variant0(AccessAppPolicyLink),
+    Variant1(AccessUuid2),
+    Variant2 {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_groups: ::std::option::Option<AccessApprovalGroups>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_required: ::std::option::Option<AccessApprovalRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        connection_rules: ::std::option::Option<AccessConnectionRules>,
+        decision: AccessDecision,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        exclude: ::std::option::Option<AccessExclude2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<AccessUuid2>,
+        include: AccessInclude2,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        isolation_required: ::std::option::Option<AccessIsolationRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        mfa_config: ::std::option::Option<AccessMfaConfig>,
+        name: AccessName9,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        precedence: ::std::option::Option<AccessPrecedence>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_prompt: ::std::option::Option<
+            AccessPurposeJustificationPrompt,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_required: ::std::option::Option<
+            AccessPurposeJustificationRequired,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        require: ::std::option::Option<AccessRequire2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        session_duration: ::std::option::Option<AccessSessionDuration3>,
+    },
+}
+impl ::std::convert::From<AccessAppPolicyLink>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant6PoliciesItem {
+    fn from(value: AccessAppPolicyLink) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessUuid2>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant6PoliciesItem {
+    fn from(value: AccessUuid2) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AccessApplicationForProviderVariant6Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant6Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationForProviderVariant7`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant7 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    ///The primary hostname and path secured by Access. This domain will be displayed if the app is visible in the App Launcher.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<::std::string::String>,
+    ///The name of the application.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant7PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant7Type,
+    >,
+}
+///`AccessApplicationForProviderVariant7PoliciesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant7PoliciesItem {
+    Variant0(AccessAppPolicyLink),
+    Variant1(AccessUuid2),
+    Variant2 {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_groups: ::std::option::Option<AccessApprovalGroups>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_required: ::std::option::Option<AccessApprovalRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        connection_rules: ::std::option::Option<AccessConnectionRules>,
+        decision: AccessDecision,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        exclude: ::std::option::Option<AccessExclude2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<AccessUuid2>,
+        include: AccessInclude2,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        isolation_required: ::std::option::Option<AccessIsolationRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        mfa_config: ::std::option::Option<AccessMfaConfig>,
+        name: AccessName9,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        precedence: ::std::option::Option<AccessPrecedence>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_prompt: ::std::option::Option<
+            AccessPurposeJustificationPrompt,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_required: ::std::option::Option<
+            AccessPurposeJustificationRequired,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        require: ::std::option::Option<AccessRequire2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        session_duration: ::std::option::Option<AccessSessionDuration3>,
+    },
+}
+impl ::std::convert::From<AccessAppPolicyLink>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant7PoliciesItem {
+    fn from(value: AccessAppPolicyLink) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessUuid2>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant7PoliciesItem {
+    fn from(value: AccessUuid2) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AccessApplicationForProviderVariant7Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant7Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationForProviderVariant8`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant8 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    ///The URL or domain of the bookmark.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant8PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<AccessType>,
+}
+///`AccessApplicationForProviderVariant8PoliciesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant8PoliciesItem {
+    Variant0(AccessAppPolicyLink),
+    Variant1(AccessUuid2),
+    Variant2 {
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_groups: ::std::option::Option<AccessApprovalGroups>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        approval_required: ::std::option::Option<AccessApprovalRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        connection_rules: ::std::option::Option<AccessConnectionRules>,
+        decision: AccessDecision,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        exclude: ::std::option::Option<AccessExclude2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        id: ::std::option::Option<AccessUuid2>,
+        include: AccessInclude2,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        isolation_required: ::std::option::Option<AccessIsolationRequired>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        mfa_config: ::std::option::Option<AccessMfaConfig>,
+        name: AccessName9,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        precedence: ::std::option::Option<AccessPrecedence>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_prompt: ::std::option::Option<
+            AccessPurposeJustificationPrompt,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        purpose_justification_required: ::std::option::Option<
+            AccessPurposeJustificationRequired,
+        >,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        require: ::std::option::Option<AccessRequire2>,
+        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+        session_duration: ::std::option::Option<AccessSessionDuration3>,
+    },
+}
+impl ::std::convert::From<AccessAppPolicyLink>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant8PoliciesItem {
+    fn from(value: AccessAppPolicyLink) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessUuid2>
+for ZerotrustV1alpha1AccessApplicationForProviderVariant8PoliciesItem {
+    fn from(value: AccessUuid2) -> Self {
+        Self::Variant1(value)
+    }
+}
+///`AccessApplicationForProviderVariant9`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant9 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessInfraMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName8>,
+    ///The policies that Access applies to the application.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub policies: ::std::vec::Vec<AccessInfraPolicyReq>,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub target_criteria: ::std::vec::Vec<AccessTargetCriteriaInfraApp>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<AccessType>,
+}
+///`GatewayListAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1GatewayListAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub count: ::std::option::Option<ZeroTrustGatewayCount>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<ZeroTrustGatewayReadOnlyTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<ZeroTrustGatewayDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<ZeroTrustGatewayUuid2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub items: ::std::option::Option<ZeroTrustGatewayItems>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<ZeroTrustGatewayName>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZeroTrustGatewayType2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<ZeroTrustGatewayReadOnlyTimestamp>,
+}
+///`GatewayListForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1GatewayListForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<ZeroTrustGatewayDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub items: ::std::option::Option<ZeroTrustGatewayItemsInput>,
+    pub name: ZeroTrustGatewayName,
+    #[serde(rename = "type")]
+    pub type_: ZeroTrustGatewayType2,
+}
+///`GatewayRuleAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1GatewayRuleAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub action: ::std::option::Option<ZeroTrustGatewayAction>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<ZeroTrustGatewayReadOnlyTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deleted_at: ::std::option::Option<ZeroTrustGatewayDeletedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<ZeroTrustGatewayDescription2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub device_posture: ::std::option::Option<ZeroTrustGatewayDevicePosture>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<ZeroTrustGatewayEnabled>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expiration: ::std::option::Option<ZeroTrustGatewayExpiration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub filters: ::std::option::Option<ZeroTrustGatewayFilters>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<ZeroTrustGatewayUuid2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub identity: ::std::option::Option<ZeroTrustGatewayIdentity>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<ZeroTrustGatewayName3>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<ZeroTrustGatewayPrecedence>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub read_only: ::std::option::Option<ZeroTrustGatewayReadOnly>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rule_settings: ::std::option::Option<ZeroTrustGatewayRuleSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub schedule: ::std::option::Option<ZeroTrustGatewaySchedule>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub sharable: ::std::option::Option<ZeroTrustGatewaySharable>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub source_account: ::std::option::Option<ZeroTrustGatewaySourceAccount>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub traffic: ::std::option::Option<ZeroTrustGatewayTraffic>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<ZeroTrustGatewayReadOnlyTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<ZeroTrustGatewayVersion>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub warning_status: ::std::option::Option<ZeroTrustGatewayWarningStatus>,
+}
+///`GatewayRuleForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1GatewayRuleForProvider {
+    pub action: ZeroTrustGatewayAction,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<ZeroTrustGatewayDescription2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub device_posture: ::std::option::Option<ZeroTrustGatewayDevicePosture>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<ZeroTrustGatewayEnabled>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expiration: ::std::option::Option<ZeroTrustGatewayExpiration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub filters: ::std::option::Option<ZeroTrustGatewayFilters>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub identity: ::std::option::Option<ZeroTrustGatewayIdentity>,
+    pub name: ZeroTrustGatewayName3,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<ZeroTrustGatewayPrecedence>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rule_settings: ::std::option::Option<ZeroTrustGatewayRuleSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub schedule: ::std::option::Option<ZeroTrustGatewaySchedule>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub traffic: ::std::option::Option<ZeroTrustGatewayTraffic>,
+}
+///`TunnelAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1TunnelAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub account_tag: ::std::option::Option<TunnelAccountId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub config_src: ::std::option::Option<TunnelConfigSrc>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub connections: ::std::option::Option<TunnelConnectionsDeprecated>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub conns_active_at: ::std::option::Option<TunnelConnsActiveAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub conns_inactive_at: ::std::option::Option<TunnelConnsInactiveAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TunnelCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deleted_at: ::std::option::Option<TunnelDeletedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<TunnelTunnelId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub metadata: ::std::option::Option<TunnelMetadata>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<TunnelTunnelName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub remote_config: ::std::option::Option<TunnelRemoteConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<TunnelStatus>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tun_type: ::std::option::Option<TunnelTunnelType>,
+}
+///`TunnelCidrRouteAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1TunnelCidrRouteAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelRouteComment>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TunnelCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deleted_at: ::std::option::Option<TunnelDeletedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<TunnelRouteId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub network: ::std::option::Option<TunnelIpNetwork>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_id: ::std::option::Option<TunnelTunnelId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_network_id: ::std::option::Option<TunnelVirtualNetworkId>,
+}
+///`TunnelCidrRouteForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1TunnelCidrRouteForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelRouteComment>,
+    pub network: TunnelIpNetwork,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_network_id: ::std::option::Option<
+        TunnelVirtualNetworkIdComputedOptional,
+    >,
+}
+///`TunnelConfigurationAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1TunnelConfigurationAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub config: ::std::option::Option<TunnelConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TunnelTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub source: ::std::option::Option<TunnelConfigSrc2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub version: ::std::option::Option<TunnelConfigVersion2>,
+}
+///`TunnelConfigurationForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1TunnelConfigurationForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub config: ::std::option::Option<TunnelConfig>,
+}
+///`TunnelForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1TunnelForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub config_src: ::std::option::Option<TunnelConfigSrc>,
+    pub name: TunnelTunnelName,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_secret: ::std::option::Option<TunnelTunnelSecret>,
+}
+///`TunnelHostnameRouteAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1TunnelHostnameRouteAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelHostnameComment>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TunnelCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deleted_at: ::std::option::Option<TunnelDeletedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub hostname: ::std::option::Option<TunnelHostname>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<TunnelHostnameRouteId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_id: ::std::option::Option<TunnelTunnelId3>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_name: ::std::option::Option<TunnelTunnelName2>,
+}
+///`TunnelHostnameRouteForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1TunnelHostnameRouteForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<TunnelHostnameComment>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub hostname: ::std::option::Option<TunnelHostname>,
 }
 ///`ZoneCreateRequest`
 #[derive(
@@ -67055,169 +63619,6 @@ pub struct ZoneCreateResponse {
     pub result: ::std::option::Option<ZonesZone>,
     ///Whether the API call was successful.
     pub success: bool,
-}
-///`ZoneForProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct ZoneForProvider {
-    ///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
-    pub name: ZoneForProviderName,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub paused: ::std::option::Option<ZonesPaused>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<ZonesType>,
-    ///An array of domains used for custom name servers. This is only available for Business and Enterprise plans.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub vanity_name_servers: ::std::vec::Vec<ZoneForProviderVanityNameServersItem>,
-}
-///The domain name. Per [RFC 1035](https://datatracker.ietf.org/doc/html/rfc1035#section-2.3.4) the overall zone name can be up to 253 characters, with each segment ("label") not exceeding 63 characters.
-#[derive(
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-#[serde(transparent)]
-pub struct ZoneForProviderName(::std::string::String);
-impl ::std::ops::Deref for ZoneForProviderName {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ZoneForProviderName> for ::std::string::String {
-    fn from(value: ZoneForProviderName) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ZoneForProviderName {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() > 253usize {
-            return Err("longer than 253 characters".into());
-        }
-        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
-        {
-            ::regress::Regex::new(
-                    "^([a-zA-Z0-9][\\-a-zA-Z0-9]*\\.)+[\\-a-zA-Z0-9]{2,20}$",
-                )
-                .unwrap()
-        });
-        if PATTERN.find(value).is_none() {
-            return Err(
-                "doesn't match pattern \"^([a-zA-Z0-9][\\-a-zA-Z0-9]*\\.)+[\\-a-zA-Z0-9]{2,20}$\""
-                    .into(),
-            );
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ZoneForProviderName {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String> for ZoneForProviderName {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ZoneForProviderName {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
-}
-///`ZoneForProviderVanityNameServersItem`
-#[derive(
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Eq,
-    Hash,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    schemars::JsonSchema
-)]
-#[serde(transparent)]
-pub struct ZoneForProviderVanityNameServersItem(::std::string::String);
-impl ::std::ops::Deref for ZoneForProviderVanityNameServersItem {
-    type Target = ::std::string::String;
-    fn deref(&self) -> &::std::string::String {
-        &self.0
-    }
-}
-impl ::std::convert::From<ZoneForProviderVanityNameServersItem>
-for ::std::string::String {
-    fn from(value: ZoneForProviderVanityNameServersItem) -> Self {
-        value.0
-    }
-}
-impl ::std::str::FromStr for ZoneForProviderVanityNameServersItem {
-    type Err = self::error::ConversionError;
-    fn from_str(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        if value.chars().count() > 253usize {
-            return Err("longer than 253 characters".into());
-        }
-        Ok(Self(value.to_string()))
-    }
-}
-impl ::std::convert::TryFrom<&str> for ZoneForProviderVanityNameServersItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: &str,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl ::std::convert::TryFrom<::std::string::String>
-for ZoneForProviderVanityNameServersItem {
-    type Error = self::error::ConversionError;
-    fn try_from(
-        value: ::std::string::String,
-    ) -> ::std::result::Result<Self, self::error::ConversionError> {
-        value.parse()
-    }
-}
-impl<'de> ::serde::Deserialize<'de> for ZoneForProviderVanityNameServersItem {
-    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
-    where
-        D: ::serde::Deserializer<'de>,
-    {
-        ::std::string::String::deserialize(deserializer)?
-            .parse()
-            .map_err(|e: self::error::ConversionError| {
-                <D::Error as ::serde::de::Error>::custom(e.to_string())
-            })
-    }
 }
 ///`ZoneObserveResponse`
 #[derive(
@@ -74028,6 +70429,3732 @@ impl ::std::convert::TryFrom<::std::string::String> for ZonesUrlTargetTarget {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///`CustomHostnameAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1CustomHostnameAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TlsCertificatesAndHostnamesCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_metadata: ::std::option::Option<
+        TlsCertificatesAndHostnamesCustomMetadata,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_origin_server: ::std::option::Option<
+        TlsCertificatesAndHostnamesCustomOriginServer,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_origin_sni: ::std::option::Option<
+        TlsCertificatesAndHostnamesCustomOriginSni,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub hostname: ::std::option::Option<TlsCertificatesAndHostnamesHostname>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<TlsCertificatesAndHostnamesIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ownership_verification: ::std::option::Option<
+        TlsCertificatesAndHostnamesOwnershipVerification,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ownership_verification_http: ::std::option::Option<
+        TlsCertificatesAndHostnamesOwnershipVerificationHttp,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ssl: ::std::option::Option<TlsCertificatesAndHostnamesSsl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<TlsCertificatesAndHostnamesStatus3>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub verification_errors: ::std::option::Option<
+        TlsCertificatesAndHostnamesVerificationErrors,
+    >,
+}
+///`CustomHostnameForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1CustomHostnameForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_metadata: ::std::option::Option<
+        TlsCertificatesAndHostnamesCustomMetadata,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_origin_server: ::std::option::Option<
+        TlsCertificatesAndHostnamesCustomOriginServer,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_origin_sni: ::std::option::Option<
+        TlsCertificatesAndHostnamesCustomOriginSni,
+    >,
+    pub hostname: TlsCertificatesAndHostnamesHostnamePost,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ssl: ::std::option::Option<TlsCertificatesAndHostnamesSslpost>,
+}
+///`DnsRecordAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A valid IPv4 address.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    ///When the record was created.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<DnsRecordsIdentifier>,
+    ///When the record was last modified.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<DnsRecordsPriority>,
+    ///Whether the record can be proxied by Cloudflare or not.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxiable: ::std::option::Option<bool>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderType>,
+}
+///`DnsRecordAtProviderData`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderData {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype0>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype1>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_2: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype2>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_3: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype3>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_4: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype4>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_5: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype5>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_6: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype6>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_7: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype7>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_8: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype8>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_9: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype9>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_10: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype10>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_11: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype11>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_12: ::std::option::Option<ZonesV1alpha1DnsRecordAtProviderDataSubtype12>,
+}
+///Components of a CAA record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype0 {
+    ///Flags for the CAA record.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub flags: ::std::option::Option<f64>,
+    ///Name of the property controlled by this record (e.g.: issue, issuewild, iodef).
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tag: ::std::option::Option<::std::string::String>,
+    ///Value of the record. This field's semantics depend on the chosen tag.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
+}
+///Components of a CERT record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype1 {
+    ///Algorithm.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub algorithm: ::std::option::Option<f64>,
+    ///Certificate.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub certificate: ::std::option::Option<::std::string::String>,
+    ///Key Tag.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub key_tag: ::std::option::Option<f64>,
+    ///Type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<f64>,
+}
+///Components of a SVCB record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype10 {
+    ///Priority.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<f64>,
+    ///Target.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub target: ::std::option::Option<::std::string::String>,
+    ///Value.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
+}
+///Components of a TLSA record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype11 {
+    ///Certificate.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub certificate: ::std::option::Option<::std::string::String>,
+    ///Matching Type.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub matching_type: ::std::option::Option<f64>,
+    ///Selector.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub selector: ::std::option::Option<f64>,
+    ///Usage.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub usage: ::std::option::Option<f64>,
+}
+///Components of a URI record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype12 {
+    ///The record content.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub target: ::std::option::Option<::std::string::String>,
+    ///The record weight.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub weight: ::std::option::Option<f64>,
+}
+///Components of a DNSKEY record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype2 {
+    ///Algorithm.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub algorithm: ::std::option::Option<f64>,
+    ///Flags.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub flags: ::std::option::Option<f64>,
+    ///Protocol.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub protocol: ::std::option::Option<f64>,
+    ///Public Key.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub public_key: ::std::option::Option<::std::string::String>,
+}
+///Components of a DS record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype3 {
+    ///Algorithm.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub algorithm: ::std::option::Option<f64>,
+    ///Digest.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub digest: ::std::option::Option<::std::string::String>,
+    ///Digest Type.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub digest_type: ::std::option::Option<f64>,
+    ///Key Tag.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub key_tag: ::std::option::Option<f64>,
+}
+///Components of a HTTPS record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype4 {
+    ///Priority.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<f64>,
+    ///Target.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub target: ::std::option::Option<::std::string::String>,
+    ///Value.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
+}
+///Components of a LOC record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype5 {
+    ///Altitude of location in meters.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub altitude: ::std::option::Option<f64>,
+    ///Degrees of latitude.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub lat_degrees: ::std::option::Option<f64>,
+    ///Latitude direction.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub lat_direction: ::std::option::Option<
+        ZonesV1alpha1DnsRecordAtProviderDataSubtype5LatDirection,
+    >,
+    ///Minutes of latitude.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub lat_minutes: ::std::option::Option<f64>,
+    ///Seconds of latitude.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub lat_seconds: ::std::option::Option<f64>,
+    ///Degrees of longitude.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub long_degrees: ::std::option::Option<f64>,
+    ///Longitude direction.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub long_direction: ::std::option::Option<
+        ZonesV1alpha1DnsRecordAtProviderDataSubtype5LongDirection,
+    >,
+    ///Minutes of longitude.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub long_minutes: ::std::option::Option<f64>,
+    ///Seconds of longitude.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub long_seconds: ::std::option::Option<f64>,
+    ///Horizontal precision of location.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precision_horz: ::std::option::Option<f64>,
+    ///Vertical precision of location.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precision_vert: ::std::option::Option<f64>,
+    ///Size of location in meters.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub size: ::std::option::Option<f64>,
+}
+///Latitude direction.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordAtProviderDataSubtype5LatDirection {
+    N,
+    S,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordAtProviderDataSubtype5LatDirection {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::N => f.write_str("N"),
+            Self::S => f.write_str("S"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordAtProviderDataSubtype5LatDirection {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "N" => Ok(Self::N),
+            "S" => Ok(Self::S),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for ZonesV1alpha1DnsRecordAtProviderDataSubtype5LatDirection {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordAtProviderDataSubtype5LatDirection {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Longitude direction.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordAtProviderDataSubtype5LongDirection {
+    E,
+    W,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordAtProviderDataSubtype5LongDirection {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::E => f.write_str("E"),
+            Self::W => f.write_str("W"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordAtProviderDataSubtype5LongDirection {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "E" => Ok(Self::E),
+            "W" => Ok(Self::W),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for ZonesV1alpha1DnsRecordAtProviderDataSubtype5LongDirection {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordAtProviderDataSubtype5LongDirection {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Components of a NAPTR record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype6 {
+    ///Flags.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub flags: ::std::option::Option<::std::string::String>,
+    ///Order.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub order: ::std::option::Option<f64>,
+    ///Preference.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub preference: ::std::option::Option<f64>,
+    ///Regex.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub regex: ::std::option::Option<::std::string::String>,
+    ///Replacement.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub replacement: ::std::option::Option<::std::string::String>,
+    ///Service.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub service: ::std::option::Option<::std::string::String>,
+}
+///Components of a SMIMEA record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype7 {
+    ///Certificate.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub certificate: ::std::option::Option<::std::string::String>,
+    ///Matching Type.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub matching_type: ::std::option::Option<f64>,
+    ///Selector.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub selector: ::std::option::Option<f64>,
+    ///Usage.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub usage: ::std::option::Option<f64>,
+}
+///Components of a SRV record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype8 {
+    ///The port of the service.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub port: ::std::option::Option<f64>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<DnsRecordsPriority>,
+    ///A valid hostname.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub target: ::std::option::Option<::std::string::String>,
+    ///The record weight.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub weight: ::std::option::Option<f64>,
+}
+///Components of a SSHFP record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderDataSubtype9 {
+    ///Algorithm.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub algorithm: ::std::option::Option<f64>,
+    ///Fingerprint.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub fingerprint: ::std::option::Option<::std::string::String>,
+    ///Type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<f64>,
+}
+///`DnsRecordAtProviderSettings`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderSettings {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<
+        ZonesV1alpha1DnsRecordAtProviderSettingsSubtype1,
+    >,
+}
+///`DnsRecordAtProviderSettingsSubtype1`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordAtProviderSettingsSubtype1 {
+    ///If enabled, causes the CNAME record to be resolved externally and the resulting address records (e.g., A and AAAA) to be returned instead of the CNAME record itself. This setting is unavailable for proxied records, since they are always flattened.
+    #[serde(default)]
+    pub flatten_cname: bool,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordAtProviderType {
+    A,
+    #[serde(rename = "AAAA")]
+    Aaaa,
+    #[serde(rename = "CNAME")]
+    Cname,
+    #[serde(rename = "MX")]
+    Mx,
+    #[serde(rename = "NS")]
+    Ns,
+    #[serde(rename = "OPENPGPKEY")]
+    Openpgpkey,
+    #[serde(rename = "PTR")]
+    Ptr,
+    #[serde(rename = "TXT")]
+    Txt,
+    #[serde(rename = "CAA")]
+    Caa,
+    #[serde(rename = "CERT")]
+    Cert,
+    #[serde(rename = "DNSKEY")]
+    Dnskey,
+    #[serde(rename = "DS")]
+    Ds,
+    #[serde(rename = "HTTPS")]
+    Https,
+    #[serde(rename = "LOC")]
+    Loc,
+    #[serde(rename = "NAPTR")]
+    Naptr,
+    #[serde(rename = "SMIMEA")]
+    Smimea,
+    #[serde(rename = "SRV")]
+    Srv,
+    #[serde(rename = "SSHFP")]
+    Sshfp,
+    #[serde(rename = "SVCB")]
+    Svcb,
+    #[serde(rename = "TLSA")]
+    Tlsa,
+    #[serde(rename = "URI")]
+    Uri,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordAtProviderType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::A => f.write_str("A"),
+            Self::Aaaa => f.write_str("AAAA"),
+            Self::Cname => f.write_str("CNAME"),
+            Self::Mx => f.write_str("MX"),
+            Self::Ns => f.write_str("NS"),
+            Self::Openpgpkey => f.write_str("OPENPGPKEY"),
+            Self::Ptr => f.write_str("PTR"),
+            Self::Txt => f.write_str("TXT"),
+            Self::Caa => f.write_str("CAA"),
+            Self::Cert => f.write_str("CERT"),
+            Self::Dnskey => f.write_str("DNSKEY"),
+            Self::Ds => f.write_str("DS"),
+            Self::Https => f.write_str("HTTPS"),
+            Self::Loc => f.write_str("LOC"),
+            Self::Naptr => f.write_str("NAPTR"),
+            Self::Smimea => f.write_str("SMIMEA"),
+            Self::Srv => f.write_str("SRV"),
+            Self::Sshfp => f.write_str("SSHFP"),
+            Self::Svcb => f.write_str("SVCB"),
+            Self::Tlsa => f.write_str("TLSA"),
+            Self::Uri => f.write_str("URI"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordAtProviderType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "A" => Ok(Self::A),
+            "AAAA" => Ok(Self::Aaaa),
+            "CNAME" => Ok(Self::Cname),
+            "MX" => Ok(Self::Mx),
+            "NS" => Ok(Self::Ns),
+            "OPENPGPKEY" => Ok(Self::Openpgpkey),
+            "PTR" => Ok(Self::Ptr),
+            "TXT" => Ok(Self::Txt),
+            "CAA" => Ok(Self::Caa),
+            "CERT" => Ok(Self::Cert),
+            "DNSKEY" => Ok(Self::Dnskey),
+            "DS" => Ok(Self::Ds),
+            "HTTPS" => Ok(Self::Https),
+            "LOC" => Ok(Self::Loc),
+            "NAPTR" => Ok(Self::Naptr),
+            "SMIMEA" => Ok(Self::Smimea),
+            "SRV" => Ok(Self::Srv),
+            "SSHFP" => Ok(Self::Sshfp),
+            "SVCB" => Ok(Self::Svcb),
+            "TLSA" => Ok(Self::Tlsa),
+            "URI" => Ok(Self::Uri),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordAtProviderType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordAtProviderType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZonesV1alpha1DnsRecordForProvider {
+    ARecord(ZonesV1alpha1DnsRecordForProviderARecord),
+    AaaaRecord(ZonesV1alpha1DnsRecordForProviderAaaaRecord),
+    CnameRecord(ZonesV1alpha1DnsRecordForProviderCnameRecord),
+    MxRecord(ZonesV1alpha1DnsRecordForProviderMxRecord),
+    NsRecord(ZonesV1alpha1DnsRecordForProviderNsRecord),
+    OpenpgpkeyRecord(ZonesV1alpha1DnsRecordForProviderOpenpgpkeyRecord),
+    PtrRecord(ZonesV1alpha1DnsRecordForProviderPtrRecord),
+    TxtRecord(ZonesV1alpha1DnsRecordForProviderTxtRecord),
+    CaaRecord(ZonesV1alpha1DnsRecordForProviderCaaRecord),
+    CertRecord(ZonesV1alpha1DnsRecordForProviderCertRecord),
+    DnskeyRecord(ZonesV1alpha1DnsRecordForProviderDnskeyRecord),
+    DsRecord(ZonesV1alpha1DnsRecordForProviderDsRecord),
+    HttpsRecord(ZonesV1alpha1DnsRecordForProviderHttpsRecord),
+    LocRecord(ZonesV1alpha1DnsRecordForProviderLocRecord),
+    NaptrRecord(ZonesV1alpha1DnsRecordForProviderNaptrRecord),
+    SmimeaRecord(ZonesV1alpha1DnsRecordForProviderSmimeaRecord),
+    SrvRecord(ZonesV1alpha1DnsRecordForProviderSrvRecord),
+    SshfpRecord(ZonesV1alpha1DnsRecordForProviderSshfpRecord),
+    SvcbRecord(ZonesV1alpha1DnsRecordForProviderSvcbRecord),
+    TlsaRecord(ZonesV1alpha1DnsRecordForProviderTlsaRecord),
+    UriRecord(ZonesV1alpha1DnsRecordForProviderUriRecord),
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderARecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderARecord) -> Self {
+        Self::ARecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderAaaaRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderAaaaRecord) -> Self {
+        Self::AaaaRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderCnameRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderCnameRecord) -> Self {
+        Self::CnameRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderMxRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderMxRecord) -> Self {
+        Self::MxRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderNsRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderNsRecord) -> Self {
+        Self::NsRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderOpenpgpkeyRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderOpenpgpkeyRecord) -> Self {
+        Self::OpenpgpkeyRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderPtrRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderPtrRecord) -> Self {
+        Self::PtrRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderTxtRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderTxtRecord) -> Self {
+        Self::TxtRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderCaaRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderCaaRecord) -> Self {
+        Self::CaaRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderCertRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderCertRecord) -> Self {
+        Self::CertRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderDnskeyRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderDnskeyRecord) -> Self {
+        Self::DnskeyRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderDsRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderDsRecord) -> Self {
+        Self::DsRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderHttpsRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderHttpsRecord) -> Self {
+        Self::HttpsRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderLocRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderLocRecord) -> Self {
+        Self::LocRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderNaptrRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderNaptrRecord) -> Self {
+        Self::NaptrRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderSmimeaRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderSmimeaRecord) -> Self {
+        Self::SmimeaRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderSrvRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderSrvRecord) -> Self {
+        Self::SrvRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderSshfpRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderSshfpRecord) -> Self {
+        Self::SshfpRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderSvcbRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderSvcbRecord) -> Self {
+        Self::SvcbRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderTlsaRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderTlsaRecord) -> Self {
+        Self::TlsaRecord(value)
+    }
+}
+impl ::std::convert::From<ZonesV1alpha1DnsRecordForProviderUriRecord>
+for ZonesV1alpha1DnsRecordForProvider {
+    fn from(value: ZonesV1alpha1DnsRecordForProviderUriRecord) -> Self {
+        Self::UriRecord(value)
+    }
+}
+///`DnsRecordForProviderARecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderARecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A valid IPv4 address.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::net::Ipv4Addr>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderARecordType>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderARecordType {
+    A,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderARecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::A => f.write_str("A"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderARecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "A" => Ok(Self::A),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderARecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderARecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderAaaaRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderAaaaRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A valid IPv6 address.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::net::Ipv6Addr>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderAaaaRecordType>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderAaaaRecordType {
+    #[serde(rename = "AAAA")]
+    Aaaa,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderAaaaRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Aaaa => f.write_str("AAAA"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderAaaaRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "AAAA" => Ok(Self::Aaaa),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderAaaaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderAaaaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderCaaRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderCaaRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted CAA content. See 'data' to set CAA properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderCaaRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderCaaRecordType>,
+}
+///Components of a CAA record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderCaaRecordData {
+    ///Flags for the CAA record.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub flags: ::std::option::Option<f64>,
+    ///Name of the property controlled by this record (e.g.: issue, issuewild, iodef).
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tag: ::std::option::Option<::std::string::String>,
+    ///Value of the record. This field's semantics depend on the chosen tag.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderCaaRecordType {
+    #[serde(rename = "CAA")]
+    Caa,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderCaaRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Caa => f.write_str("CAA"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderCaaRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "CAA" => Ok(Self::Caa),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderCaaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderCaaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderCertRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderCertRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted CERT content. See 'data' to set CERT properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderCertRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderCertRecordType>,
+}
+///Components of a CERT record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderCertRecordData {
+    ///Algorithm.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub algorithm: ::std::option::Option<f64>,
+    ///Certificate.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub certificate: ::std::option::Option<::std::string::String>,
+    ///Key Tag.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub key_tag: ::std::option::Option<f64>,
+    ///Type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<f64>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderCertRecordType {
+    #[serde(rename = "CERT")]
+    Cert,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderCertRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Cert => f.write_str("CERT"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderCertRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "CERT" => Ok(Self::Cert),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderCertRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderCertRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderCnameRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderCnameRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A valid hostname. Must not match the record's name.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<
+        ZonesV1alpha1DnsRecordForProviderCnameRecordSettings,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderCnameRecordType>,
+}
+///`DnsRecordForProviderCnameRecordSettings`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderCnameRecordSettings {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<
+        ZonesV1alpha1DnsRecordForProviderCnameRecordSettingsSubtype1,
+    >,
+}
+///`DnsRecordForProviderCnameRecordSettingsSubtype1`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderCnameRecordSettingsSubtype1 {
+    ///If enabled, causes the CNAME record to be resolved externally and the resulting address records (e.g., A and AAAA) to be returned instead of the CNAME record itself. This setting is unavailable for proxied records, since they are always flattened.
+    #[serde(default)]
+    pub flatten_cname: bool,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderCnameRecordType {
+    #[serde(rename = "CNAME")]
+    Cname,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderCnameRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Cname => f.write_str("CNAME"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderCnameRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "CNAME" => Ok(Self::Cname),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderCnameRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderCnameRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderDnskeyRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderDnskeyRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted DNSKEY content. See 'data' to set DNSKEY properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderDnskeyRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderDnskeyRecordType>,
+}
+///Components of a DNSKEY record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderDnskeyRecordData {
+    ///Algorithm.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub algorithm: ::std::option::Option<f64>,
+    ///Flags.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub flags: ::std::option::Option<f64>,
+    ///Protocol.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub protocol: ::std::option::Option<f64>,
+    ///Public Key.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub public_key: ::std::option::Option<::std::string::String>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderDnskeyRecordType {
+    #[serde(rename = "DNSKEY")]
+    Dnskey,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderDnskeyRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Dnskey => f.write_str("DNSKEY"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderDnskeyRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "DNSKEY" => Ok(Self::Dnskey),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for ZonesV1alpha1DnsRecordForProviderDnskeyRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderDnskeyRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderDsRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderDsRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted DS content. See 'data' to set DS properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderDsRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderDsRecordType>,
+}
+///Components of a DS record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderDsRecordData {
+    ///Algorithm.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub algorithm: ::std::option::Option<f64>,
+    ///Digest.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub digest: ::std::option::Option<::std::string::String>,
+    ///Digest Type.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub digest_type: ::std::option::Option<f64>,
+    ///Key Tag.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub key_tag: ::std::option::Option<f64>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderDsRecordType {
+    #[serde(rename = "DS")]
+    Ds,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderDsRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Ds => f.write_str("DS"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderDsRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "DS" => Ok(Self::Ds),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderDsRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderDsRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderHttpsRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderHttpsRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted HTTPS content. See 'data' to set HTTPS properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderHttpsRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderHttpsRecordType>,
+}
+///Components of a HTTPS record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderHttpsRecordData {
+    ///Priority.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<f64>,
+    ///Target.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub target: ::std::option::Option<::std::string::String>,
+    ///Value.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderHttpsRecordType {
+    #[serde(rename = "HTTPS")]
+    Https,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderHttpsRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Https => f.write_str("HTTPS"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderHttpsRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "HTTPS" => Ok(Self::Https),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderHttpsRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderHttpsRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderLocRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderLocRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted LOC content. See 'data' to set LOC properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderLocRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderLocRecordType>,
+}
+///Components of a LOC record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderLocRecordData {
+    ///Altitude of location in meters.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub altitude: ::std::option::Option<f64>,
+    ///Degrees of latitude.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub lat_degrees: ::std::option::Option<f64>,
+    ///Latitude direction.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub lat_direction: ::std::option::Option<
+        ZonesV1alpha1DnsRecordForProviderLocRecordDataLatDirection,
+    >,
+    ///Minutes of latitude.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub lat_minutes: ::std::option::Option<f64>,
+    ///Seconds of latitude.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub lat_seconds: ::std::option::Option<f64>,
+    ///Degrees of longitude.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub long_degrees: ::std::option::Option<f64>,
+    ///Longitude direction.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub long_direction: ::std::option::Option<
+        ZonesV1alpha1DnsRecordForProviderLocRecordDataLongDirection,
+    >,
+    ///Minutes of longitude.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub long_minutes: ::std::option::Option<f64>,
+    ///Seconds of longitude.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub long_seconds: ::std::option::Option<f64>,
+    ///Horizontal precision of location.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precision_horz: ::std::option::Option<f64>,
+    ///Vertical precision of location.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precision_vert: ::std::option::Option<f64>,
+    ///Size of location in meters.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub size: ::std::option::Option<f64>,
+}
+///Latitude direction.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderLocRecordDataLatDirection {
+    N,
+    S,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderLocRecordDataLatDirection {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::N => f.write_str("N"),
+            Self::S => f.write_str("S"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderLocRecordDataLatDirection {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "N" => Ok(Self::N),
+            "S" => Ok(Self::S),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for ZonesV1alpha1DnsRecordForProviderLocRecordDataLatDirection {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderLocRecordDataLatDirection {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Longitude direction.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderLocRecordDataLongDirection {
+    E,
+    W,
+}
+impl ::std::fmt::Display
+for ZonesV1alpha1DnsRecordForProviderLocRecordDataLongDirection {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::E => f.write_str("E"),
+            Self::W => f.write_str("W"),
+        }
+    }
+}
+impl ::std::str::FromStr
+for ZonesV1alpha1DnsRecordForProviderLocRecordDataLongDirection {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "E" => Ok(Self::E),
+            "W" => Ok(Self::W),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for ZonesV1alpha1DnsRecordForProviderLocRecordDataLongDirection {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderLocRecordDataLongDirection {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderLocRecordType {
+    #[serde(rename = "LOC")]
+    Loc,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderLocRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Loc => f.write_str("LOC"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderLocRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "LOC" => Ok(Self::Loc),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderLocRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderLocRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderMxRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderMxRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A valid mail server hostname.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<DnsRecordsPriority>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderMxRecordType>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderMxRecordType {
+    #[serde(rename = "MX")]
+    Mx,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderMxRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Mx => f.write_str("MX"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderMxRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "MX" => Ok(Self::Mx),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderMxRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderMxRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderNaptrRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderNaptrRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted NAPTR content. See 'data' to set NAPTR properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderNaptrRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderNaptrRecordType>,
+}
+///Components of a NAPTR record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderNaptrRecordData {
+    ///Flags.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub flags: ::std::option::Option<::std::string::String>,
+    ///Order.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub order: ::std::option::Option<f64>,
+    ///Preference.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub preference: ::std::option::Option<f64>,
+    ///Regex.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub regex: ::std::option::Option<::std::string::String>,
+    ///Replacement.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub replacement: ::std::option::Option<::std::string::String>,
+    ///Service.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub service: ::std::option::Option<::std::string::String>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderNaptrRecordType {
+    #[serde(rename = "NAPTR")]
+    Naptr,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderNaptrRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Naptr => f.write_str("NAPTR"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderNaptrRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "NAPTR" => Ok(Self::Naptr),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderNaptrRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderNaptrRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderNsRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderNsRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A valid name server host name.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderNsRecordType>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderNsRecordType {
+    #[serde(rename = "NS")]
+    Ns,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderNsRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Ns => f.write_str("NS"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderNsRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "NS" => Ok(Self::Ns),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderNsRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderNsRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderOpenpgpkeyRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderOpenpgpkeyRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///A single Base64-encoded OpenPGP Transferable Public Key (RFC 4880 Section 11.1)
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<
+        ZonesV1alpha1DnsRecordForProviderOpenpgpkeyRecordType,
+    >,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderOpenpgpkeyRecordType {
+    #[serde(rename = "OPENPGPKEY")]
+    Openpgpkey,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderOpenpgpkeyRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Openpgpkey => f.write_str("OPENPGPKEY"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderOpenpgpkeyRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "OPENPGPKEY" => Ok(Self::Openpgpkey),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for ZonesV1alpha1DnsRecordForProviderOpenpgpkeyRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderOpenpgpkeyRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderPtrRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderPtrRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Domain name pointing to the address.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderPtrRecordType>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderPtrRecordType {
+    #[serde(rename = "PTR")]
+    Ptr,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderPtrRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Ptr => f.write_str("PTR"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderPtrRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "PTR" => Ok(Self::Ptr),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderPtrRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderPtrRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderSmimeaRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderSmimeaRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted SMIMEA content. See 'data' to set SMIMEA properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderSmimeaRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderSmimeaRecordType>,
+}
+///Components of a SMIMEA record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderSmimeaRecordData {
+    ///Certificate.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub certificate: ::std::option::Option<::std::string::String>,
+    ///Matching Type.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub matching_type: ::std::option::Option<f64>,
+    ///Selector.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub selector: ::std::option::Option<f64>,
+    ///Usage.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub usage: ::std::option::Option<f64>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderSmimeaRecordType {
+    #[serde(rename = "SMIMEA")]
+    Smimea,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderSmimeaRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Smimea => f.write_str("SMIMEA"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderSmimeaRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "SMIMEA" => Ok(Self::Smimea),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for ZonesV1alpha1DnsRecordForProviderSmimeaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderSmimeaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderSrvRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderSrvRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Priority, weight, port, and SRV target. See 'data' for setting the individual component values.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderSrvRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderSrvRecordType>,
+}
+///Components of a SRV record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderSrvRecordData {
+    ///The port of the service.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub port: ::std::option::Option<f64>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<DnsRecordsPriority>,
+    ///A valid hostname.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub target: ::std::option::Option<::std::string::String>,
+    ///The record weight.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub weight: ::std::option::Option<f64>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderSrvRecordType {
+    #[serde(rename = "SRV")]
+    Srv,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderSrvRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Srv => f.write_str("SRV"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderSrvRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "SRV" => Ok(Self::Srv),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderSrvRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderSrvRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderSshfpRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderSshfpRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted SSHFP content. See 'data' to set SSHFP properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderSshfpRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderSshfpRecordType>,
+}
+///Components of a SSHFP record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderSshfpRecordData {
+    ///Algorithm.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub algorithm: ::std::option::Option<f64>,
+    ///Fingerprint.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub fingerprint: ::std::option::Option<::std::string::String>,
+    ///Type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<f64>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderSshfpRecordType {
+    #[serde(rename = "SSHFP")]
+    Sshfp,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderSshfpRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Sshfp => f.write_str("SSHFP"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderSshfpRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "SSHFP" => Ok(Self::Sshfp),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderSshfpRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderSshfpRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderSvcbRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderSvcbRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted SVCB content. See 'data' to set SVCB properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderSvcbRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderSvcbRecordType>,
+}
+///Components of a SVCB record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderSvcbRecordData {
+    ///Priority.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<f64>,
+    ///Target.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub target: ::std::option::Option<::std::string::String>,
+    ///Value.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderSvcbRecordType {
+    #[serde(rename = "SVCB")]
+    Svcb,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderSvcbRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Svcb => f.write_str("SVCB"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderSvcbRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "SVCB" => Ok(Self::Svcb),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderSvcbRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderSvcbRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderTlsaRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderTlsaRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted TLSA content. See 'data' to set TLSA properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderTlsaRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderTlsaRecordType>,
+}
+///Components of a TLSA record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderTlsaRecordData {
+    ///Certificate.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub certificate: ::std::option::Option<::std::string::String>,
+    ///Matching Type.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub matching_type: ::std::option::Option<f64>,
+    ///Selector.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub selector: ::std::option::Option<f64>,
+    ///Usage.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub usage: ::std::option::Option<f64>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderTlsaRecordType {
+    #[serde(rename = "TLSA")]
+    Tlsa,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderTlsaRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Tlsa => f.write_str("TLSA"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderTlsaRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "TLSA" => Ok(Self::Tlsa),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderTlsaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderTlsaRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderTxtRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderTxtRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    /**Text content for the record. The content must consist of quoted "character strings" (RFC 1035), each with a length of up to 255 bytes. Strings exceeding this allowed maximum length are automatically split.
+
+Learn more at <https://www.cloudflare.com/learning/dns/dns-records/dns-txt-record/>.*/
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderTxtRecordType>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderTxtRecordType {
+    #[serde(rename = "TXT")]
+    Txt,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderTxtRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Txt => f.write_str("TXT"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderTxtRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "TXT" => Ok(Self::Txt),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderTxtRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderTxtRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`DnsRecordForProviderUriRecord`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderUriRecord {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub comment: ::std::option::Option<DnsRecordsComment>,
+    ///Formatted URI content. See 'data' to set URI properties.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub content: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub data: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderUriRecordData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<DnsRecordsName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<DnsRecordsPriority>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxied: ::std::option::Option<DnsRecordsProxied>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub settings: ::std::option::Option<DnsRecordsSettings>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<DnsRecordsTags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ttl: ::std::option::Option<DnsRecordsTtl>,
+    ///Record type.
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<ZonesV1alpha1DnsRecordForProviderUriRecordType>,
+}
+///Components of a URI record.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1DnsRecordForProviderUriRecordData {
+    ///The record content.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub target: ::std::option::Option<::std::string::String>,
+    ///The record weight.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub weight: ::std::option::Option<f64>,
+}
+///Record type.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum ZonesV1alpha1DnsRecordForProviderUriRecordType {
+    #[serde(rename = "URI")]
+    Uri,
+}
+impl ::std::fmt::Display for ZonesV1alpha1DnsRecordForProviderUriRecordType {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Uri => f.write_str("URI"),
+        }
+    }
+}
+impl ::std::str::FromStr for ZonesV1alpha1DnsRecordForProviderUriRecordType {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "URI" => Ok(Self::Uri),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for ZonesV1alpha1DnsRecordForProviderUriRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for ZonesV1alpha1DnsRecordForProviderUriRecordType {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`EmailRoutingRuleAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1EmailRoutingRuleAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub actions: ::std::option::Option<EmailRuleActions>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<EmailRuleEnabled>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<EmailRuleIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub matchers: ::std::option::Option<EmailRuleMatchers>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<EmailRuleName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<EmailRulePriority>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub source: ::std::option::Option<EmailRuleSource>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tag: ::std::option::Option<EmailRuleTag>,
+}
+///`EmailRoutingRuleForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1EmailRoutingRuleForProvider {
+    pub actions: EmailRuleActions,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<EmailRuleEnabled>,
+    pub matchers: EmailRuleMatchers,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<EmailRuleName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub owner_worker_tag: ::std::option::Option<EmailRuleOwnerWorkerTag>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<EmailRulePriority>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub source: ::std::option::Option<EmailRuleSource>,
+}
+///`HealthcheckAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1HealthcheckAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub address: ::std::option::Option<HealthchecksAddress>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub check_regions: ::std::option::Option<HealthchecksCheckRegions>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub consecutive_fails: ::std::option::Option<HealthchecksConsecutiveFails>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub consecutive_successes: ::std::option::Option<HealthchecksConsecutiveSuccesses>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<HealthchecksTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<HealthchecksDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub failure_reason: ::std::option::Option<HealthchecksFailureReason>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_config: ::std::option::Option<HealthchecksHttpConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<HealthchecksIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub interval: ::std::option::Option<HealthchecksInterval>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<HealthchecksTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<HealthchecksName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub retries: ::std::option::Option<HealthchecksRetries>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<HealthchecksStatus>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub suspended: ::std::option::Option<HealthchecksSuspended>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tcp_config: ::std::option::Option<HealthchecksTcpConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub timeout: ::std::option::Option<HealthchecksTimeout>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<HealthchecksType>,
+}
+///`HealthcheckForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1HealthcheckForProvider {
+    pub address: HealthchecksAddress,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub check_regions: ::std::option::Option<HealthchecksCheckRegions>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub consecutive_fails: ::std::option::Option<HealthchecksConsecutiveFails>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub consecutive_successes: ::std::option::Option<HealthchecksConsecutiveSuccesses>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<HealthchecksDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_config: ::std::option::Option<HealthchecksHttpConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub interval: ::std::option::Option<HealthchecksInterval>,
+    pub name: HealthchecksName,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub retries: ::std::option::Option<HealthchecksRetries>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub suspended: ::std::option::Option<HealthchecksSuspended>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tcp_config: ::std::option::Option<HealthchecksTcpConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub timeout: ::std::option::Option<HealthchecksTimeout>,
+    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
+    pub type_: ::std::option::Option<HealthchecksType>,
+}
+///`LogpushJobAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1LogpushJobAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub dataset: ::std::option::Option<LogpushDataset>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destination_conf: ::std::option::Option<LogpushDestinationConf>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<LogpushEnabled>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub error_message: ::std::option::Option<LogpushErrorMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub frequency: ::std::option::Option<LogpushFrequency>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<LogpushId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub kind: ::std::option::Option<LogpushKind>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_complete: ::std::option::Option<LogpushLastComplete>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_error: ::std::option::Option<LogpushLastError>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logpull_options: ::std::option::Option<LogpushLogpullOptions>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_upload_bytes: ::std::option::Option<LogpushMaxUploadBytes>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_upload_interval_seconds: ::std::option::Option<
+        LogpushMaxUploadIntervalSeconds,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_upload_records: ::std::option::Option<LogpushMaxUploadRecords>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<LogpushName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub output_options: ::std::option::Option<LogpushOutputOptions>,
+}
+///`LogpushJobForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1LogpushJobForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub dataset: ::std::option::Option<LogpushDataset>,
+    pub destination_conf: LogpushDestinationConf,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<LogpushEnabled>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub filter: ::std::option::Option<LogpushFilter>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub frequency: ::std::option::Option<LogpushFrequency>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub kind: ::std::option::Option<LogpushKind>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logpull_options: ::std::option::Option<LogpushLogpullOptions>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_upload_bytes: ::std::option::Option<LogpushMaxUploadBytes>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_upload_interval_seconds: ::std::option::Option<
+        LogpushMaxUploadIntervalSeconds,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub max_upload_records: ::std::option::Option<LogpushMaxUploadRecords>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<LogpushName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub output_options: ::std::option::Option<LogpushOutputOptions>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ownership_challenge: ::std::option::Option<LogpushOwnershipChallenge>,
+}
+///`PageRuleAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1PageRuleAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub actions: ::std::option::Option<ZonesActions>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<ZonesCreatedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<ZonesIdentifier2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<ZonesModifiedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<ZonesPriority>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<ZonesStatus>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub targets: ::std::option::Option<ZonesTargets>,
+}
+///`PageRuleForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1PageRuleForProvider {
+    pub actions: ZonesActions,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<ZonesPriority>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<ZonesStatus>,
+    pub targets: ZonesTargets,
+}
+///`SpectrumApplicationAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZonesV1alpha1SpectrumApplicationAtProvider {
+    Providerconfig(ZonesV1alpha1SpectrumApplicationAtProviderconfig),
+    ProviderspectrumConfigPaygoAppConfig(
+        ZonesV1alpha1SpectrumApplicationAtProviderspectrumConfigPaygoAppConfig,
+    ),
+}
+impl ::std::convert::From<ZonesV1alpha1SpectrumApplicationAtProviderconfig>
+for ZonesV1alpha1SpectrumApplicationAtProvider {
+    fn from(value: ZonesV1alpha1SpectrumApplicationAtProviderconfig) -> Self {
+        Self::Providerconfig(value)
+    }
+}
+impl ::std::convert::From<
+    ZonesV1alpha1SpectrumApplicationAtProviderspectrumConfigPaygoAppConfig,
+> for ZonesV1alpha1SpectrumApplicationAtProvider {
+    fn from(
+        value: ZonesV1alpha1SpectrumApplicationAtProviderspectrumConfigPaygoAppConfig,
+    ) -> Self {
+        Self::ProviderspectrumConfigPaygoAppConfig(value)
+    }
+}
+///`SpectrumApplicationAtProviderconfig`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1SpectrumApplicationAtProviderconfig {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub argo_smart_routing: ::std::option::Option<SpectrumConfigArgoSmartRouting>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<SpectrumConfigCreated>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub dns: ::std::option::Option<SpectrumConfigDns>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub edge_ips: ::std::option::Option<SpectrumConfigEdgeIps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<SpectrumConfigAppIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ip_firewall: ::std::option::Option<SpectrumConfigIpFirewall>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<SpectrumConfigModified>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin_direct: ::std::option::Option<SpectrumConfigOriginDirect>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin_dns: ::std::option::Option<SpectrumConfigOriginDns>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin_port: ::std::option::Option<SpectrumConfigOriginPort>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub protocol: ::std::option::Option<SpectrumConfigProtocol>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxy_protocol: ::std::option::Option<SpectrumConfigProxyProtocol>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tls: ::std::option::Option<SpectrumConfigTls>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub traffic_type: ::std::option::Option<SpectrumConfigTrafficType>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_network_id: ::std::option::Option<SpectrumConfigVirtualNetworkId>,
+}
+///`SpectrumApplicationAtProviderspectrumConfigPaygoAppConfig`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1SpectrumApplicationAtProviderspectrumConfigPaygoAppConfig {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<SpectrumConfigCreated>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub dns: ::std::option::Option<SpectrumConfigDns>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<SpectrumConfigAppIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<SpectrumConfigModified>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin_direct: ::std::option::Option<SpectrumConfigOriginDirect>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub protocol: ::std::option::Option<SpectrumConfigProtocol>,
+}
+///`SpectrumApplicationForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZonesV1alpha1SpectrumApplicationForProvider {
+    Providerconfig(ZonesV1alpha1SpectrumApplicationForProviderconfig),
+    ProviderspectrumConfigPaygoAppConfig(
+        ZonesV1alpha1SpectrumApplicationForProviderspectrumConfigPaygoAppConfig,
+    ),
+}
+impl ::std::convert::From<ZonesV1alpha1SpectrumApplicationForProviderconfig>
+for ZonesV1alpha1SpectrumApplicationForProvider {
+    fn from(value: ZonesV1alpha1SpectrumApplicationForProviderconfig) -> Self {
+        Self::Providerconfig(value)
+    }
+}
+impl ::std::convert::From<
+    ZonesV1alpha1SpectrumApplicationForProviderspectrumConfigPaygoAppConfig,
+> for ZonesV1alpha1SpectrumApplicationForProvider {
+    fn from(
+        value: ZonesV1alpha1SpectrumApplicationForProviderspectrumConfigPaygoAppConfig,
+    ) -> Self {
+        Self::ProviderspectrumConfigPaygoAppConfig(value)
+    }
+}
+///`SpectrumApplicationForProviderconfig`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1SpectrumApplicationForProviderconfig {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub argo_smart_routing: ::std::option::Option<SpectrumConfigArgoSmartRouting>,
+    pub dns: SpectrumConfigDns,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub edge_ips: ::std::option::Option<SpectrumConfigEdgeIps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub ip_firewall: ::std::option::Option<SpectrumConfigIpFirewall>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin_direct: ::std::option::Option<SpectrumConfigOriginDirect>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin_dns: ::std::option::Option<SpectrumConfigOriginDns>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin_port: ::std::option::Option<SpectrumConfigOriginPort>,
+    pub protocol: SpectrumConfigProtocol,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub proxy_protocol: ::std::option::Option<SpectrumConfigProxyProtocol>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tls: ::std::option::Option<SpectrumConfigTls>,
+    pub traffic_type: SpectrumConfigTrafficType,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub virtual_network_id: ::std::option::Option<SpectrumConfigVirtualNetworkId>,
+}
+///`SpectrumApplicationForProviderspectrumConfigPaygoAppConfig`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1SpectrumApplicationForProviderspectrumConfigPaygoAppConfig {
+    pub dns: SpectrumConfigDns,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub origin_direct: ::std::option::Option<SpectrumConfigOriginDirect>,
+    pub protocol: SpectrumConfigProtocol,
+}
+///`WaitingRoomAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1WaitingRoomAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub additional_routes: ::std::option::Option<WaitingroomAdditionalRoutes>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cookie_attributes: ::std::option::Option<WaitingroomCookieAttributes>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cookie_suffix: ::std::option::Option<WaitingroomCookieSuffix>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<WaitingroomTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_page_html: ::std::option::Option<WaitingroomCustomPageHtml>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_template_language: ::std::option::Option<
+        WaitingroomDefaultTemplateLanguage,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<WaitingroomDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub disable_session_renewal: ::std::option::Option<WaitingroomDisableSessionRenewal>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled_origin_commands: ::std::option::Option<WaitingroomEnabledOriginCommands>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub host: ::std::option::Option<WaitingroomHost>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<WaitingroomWaitingRoomId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub json_response_enabled: ::std::option::Option<WaitingroomJsonResponseEnabled>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<WaitingroomTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<WaitingroomName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub new_users_per_minute: ::std::option::Option<WaitingroomNewUsersPerMinute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub next_event_prequeue_start_time: ::std::option::Option<
+        WaitingroomNextEventPrequeueStartTime,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub next_event_start_time: ::std::option::Option<WaitingroomNextEventStartTime>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path: ::std::option::Option<WaitingroomPath>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub queue_all: ::std::option::Option<WaitingroomQueueAll>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub queueing_method: ::std::option::Option<WaitingroomQueueingMethod>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub queueing_status_code: ::std::option::Option<WaitingroomQueueingStatusCode>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<WaitingroomSessionDuration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub suspended: ::std::option::Option<WaitingroomSuspended>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub total_active_users: ::std::option::Option<WaitingroomTotalActiveUsers>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub turnstile_action: ::std::option::Option<WaitingroomTurnstileAction>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub turnstile_mode: ::std::option::Option<WaitingroomTurnstileMode>,
+}
+///`WaitingRoomForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1WaitingRoomForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub additional_routes: ::std::option::Option<WaitingroomAdditionalRoutes>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cookie_attributes: ::std::option::Option<WaitingroomCookieAttributes>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cookie_suffix: ::std::option::Option<WaitingroomCookieSuffix>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_page_html: ::std::option::Option<WaitingroomCustomPageHtml>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub default_template_language: ::std::option::Option<
+        WaitingroomDefaultTemplateLanguage,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<WaitingroomDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub disable_session_renewal: ::std::option::Option<WaitingroomDisableSessionRenewal>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled_origin_commands: ::std::option::Option<WaitingroomEnabledOriginCommands>,
+    pub host: WaitingroomHost,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub json_response_enabled: ::std::option::Option<WaitingroomJsonResponseEnabled>,
+    pub name: WaitingroomName,
+    pub new_users_per_minute: WaitingroomNewUsersPerMinute,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path: ::std::option::Option<WaitingroomPath>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub queue_all: ::std::option::Option<WaitingroomQueueAll>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub queueing_method: ::std::option::Option<WaitingroomQueueingMethod>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub queueing_status_code: ::std::option::Option<WaitingroomQueueingStatusCode>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<WaitingroomSessionDuration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub suspended: ::std::option::Option<WaitingroomSuspended>,
+    pub total_active_users: WaitingroomTotalActiveUsers,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub turnstile_action: ::std::option::Option<WaitingroomTurnstileAction>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub turnstile_mode: ::std::option::Option<WaitingroomTurnstileMode>,
 }
 /**An array of domains used for custom name servers. This is only
 available for Business and Enterprise plans.*/

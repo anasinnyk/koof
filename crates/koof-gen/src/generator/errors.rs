@@ -14,6 +14,13 @@ pub enum GeneratorError {
     #[error("invalid Rust identifier: {0}")]
     InvalidIdentifier(String),
 
+    #[error("API group {group} maps to module {module}, which is {conflict}")]
+    GroupModule {
+        group: String,
+        module: String,
+        conflict: String,
+    },
+
     #[error(transparent)]
     Syntax(#[from] syn::Error),
 

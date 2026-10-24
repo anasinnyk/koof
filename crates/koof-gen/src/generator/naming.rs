@@ -1,7 +1,32 @@
 use heck::{ToPascalCase, ToSnakeCase, ToUpperCamelCase};
-use proc_macro2::Ident;
+use proc_macro2::{Ident, TokenStream};
+use quote::quote;
 
-use crate::{generator::errors::GeneratorError, ir::OperationId};
+use crate::{
+    generator::errors::GeneratorError,
+    ir::{OperationId, ResourceName, group_module, resolved::Resource, synthesized_schema},
+};
+
+/// `crate::generated::<group>::<version>::<resource>`.
+pub fn module_path(
+    group: &str,
+    version: &str,
+    name: &ResourceName,
+) -> Result<TokenStream, GeneratorError> {
+    let group = field_ident(&group_module(group))?;
+    let version = field_ident(version)?;
+    let module = field_ident(&name.0)?;
+    Ok(quote!(crate::generated::#group::#version::#module))
+}
+
+/// `components.schemas` key of the synthesized `role` schema of `resource`.
+pub fn schema_name(resource: &Resource<'_>, role: &str) -> String {
+    synthesized_schema(
+        &format!("{}/{}", resource.group, resource.version),
+        resource.base_kind,
+        role,
+    )
+}
 
 pub fn kind_ident(value: &str) -> Result<Ident, GeneratorError> {
     parse_ident(value)

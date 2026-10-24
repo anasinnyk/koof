@@ -37,6 +37,19 @@ pub trait ManagedResource:
     fn management(&self) -> &ManagedResourceSpec;
 }
 
+/// The identity of a resource type, displayed as `<group>/<kind>`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct GroupKind {
+    pub group: &'static str,
+    pub kind: &'static str,
+}
+
+impl std::fmt::Display for GroupKind {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(formatter, "{}/{}", self.group, self.kind)
+    }
+}
+
 #[derive(Debug)]
 #[non_exhaustive]
 pub struct ResourceDescriptor {
@@ -76,6 +89,14 @@ impl ResourceDescriptor {
             create: None,
             update: None,
             delete: None,
+        }
+    }
+
+    #[must_use]
+    pub const fn group_kind(&self) -> GroupKind {
+        GroupKind {
+            group: self.group,
+            kind: self.kind,
         }
     }
 

@@ -1,4 +1,8 @@
-use crate::{external::http::HttpClient, metrics::Metrics, resource::ResourceDescriptor};
+use crate::{
+    external::http::HttpClient,
+    metrics::Metrics,
+    resource::{GroupKind, ResourceDescriptor},
+};
 use kube::runtime::events::Recorder;
 use std::{
     collections::{BTreeSet, HashMap},
@@ -122,23 +126,23 @@ impl Attempts {
 
 #[derive(Debug, Default)]
 pub struct SyncTracker {
-    synced: Mutex<BTreeSet<&'static str>>,
+    synced: Mutex<BTreeSet<GroupKind>>,
 }
 
 impl SyncTracker {
-    pub fn mark(&self, kind: &'static str) {
+    pub fn mark(&self, kind: GroupKind) {
         let newly = self
             .synced
             .lock()
             .unwrap_or_else(PoisonError::into_inner)
             .insert(kind);
         if newly {
-            tracing::info!(resource = kind, "initial sync complete");
+            tracing::info!(resource = %kind, "initial sync complete");
         }
     }
 
     #[must_use]
-    pub fn all(&self, kinds: &[&'static str]) -> bool {
+    pub fn all(&self, kinds: &[GroupKind]) -> bool {
         let synced = self.synced.lock().unwrap_or_else(PoisonError::into_inner);
         kinds.iter().all(|kind| synced.contains(kind))
     }
