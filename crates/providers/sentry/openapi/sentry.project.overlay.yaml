@@ -69,7 +69,7 @@ actions:
             name: external_id
         result:
           identifiers:
-            external_id: response.body.slug
+            external_id: response.body.id
 
   # The update is partial (only the fields sent change), but the document marks
   # digest and security-token settings required, which forProvider does not have.

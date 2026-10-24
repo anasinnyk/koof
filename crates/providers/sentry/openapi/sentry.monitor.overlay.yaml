@@ -55,7 +55,7 @@ actions:
             name: external_id
         result:
           identifiers:
-            external_id: response.body.slug
+            external_id: response.body.id
 
   - target: $.paths['/api/0/organizations/{organization_id_or_slug}/monitors/{monitor_id_or_slug}/'].put
     update:

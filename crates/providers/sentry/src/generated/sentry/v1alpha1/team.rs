@@ -119,7 +119,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
                     ],
                 ),
             koof::resource::RequestMapping::new("/spec/forProvider"),
-            "/slug",
+            "/id",
         ),
     )
     .with_update(
