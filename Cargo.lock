@@ -1540,6 +1540,7 @@ dependencies = [
  "config",
  "futures",
  "http",
+ "http-body-util",
  "humantime-serde",
  "insta",
  "jiff",

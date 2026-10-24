@@ -525,3 +525,7 @@ pub async fn run<R: ManagedResource>(
         }
     }
 }
+
+#[cfg(test)]
+#[cfg(feature = "fake")]
+mod tests;
