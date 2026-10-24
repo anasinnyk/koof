@@ -1,5 +1,5 @@
-use sentry_provider::generated::{PROVIDER, crds};
+use sentry_provider::generated::{PROVIDER, crds, docs};
 
 fn main() -> std::io::Result<()> {
-    koof::manifests::run(&PROVIDER, &crds())
+    koof::manifests::run(&PROVIDER, &crds(), &docs())
 }

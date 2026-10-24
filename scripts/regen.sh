@@ -4,7 +4,7 @@
 #
 # Usage: scripts/regen.sh [provider [output-dir]]
 #   no arguments      — every provider in place
-#   provider          — one provider in place
+#   provider          — one provider in place (code, manifests, README.md and docs/)
 #   provider output   — one provider into output-dir (used by check-generated.sh)
 set -euo pipefail
 
@@ -33,17 +33,25 @@ manifests() {
     "$output" "ghcr.io/anasinnyk/koof-$provider"
 }
 
+docs() {
+  local provider="$1" output="$2"
+  cargo run --quiet --manifest-path "$root/Cargo.toml" -p "$provider-provider" --bin "koof-$provider-manifests" -- \
+    --docs "$output"
+}
+
 if [[ $# -ge 2 ]]; then
   regen "$1" "$2"
 elif [[ $# -eq 1 ]]; then
   regen "$1" "$root/crates/providers/$1"
   manifests "$1" "$root/deploy/providers/$1"
+  docs "$1" "$root/crates/providers/$1"
 else
   for dir in "$root"/crates/providers/*/; do
     provider="$(basename "$dir")"
     [[ -f "$dir/openapi/sources" ]] || continue
     regen "$provider" "$dir"
     manifests "$provider" "$root/deploy/providers/$provider"
+    docs "$provider" "$dir"
   done
 fi
 

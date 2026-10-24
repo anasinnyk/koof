@@ -17,4 +17,8 @@ for dir in "$root"/crates/providers/*/; do
   cargo run --quiet --manifest-path "$root/Cargo.toml" -p "$provider-provider" --bin "koof-$provider-manifests" -- \
     "$tmp/$provider/deploy" "ghcr.io/anasinnyk/koof-$provider"
   diff -ru "$root/deploy/providers/$provider" "$tmp/$provider/deploy"
+  cargo run --quiet --manifest-path "$root/Cargo.toml" -p "$provider-provider" --bin "koof-$provider-manifests" -- \
+    --docs "$tmp/$provider"
+  diff -u "$dir/README.md" "$tmp/$provider/README.md"
+  diff -ru "$dir/docs" "$tmp/$provider/docs"
 done

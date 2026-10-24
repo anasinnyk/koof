@@ -144,3 +144,56 @@ pub fn crds() -> Vec<
         kube::CustomResourceExt > ::crd()
     ]
 }
+/// Documentation of every resource of this provider.
+#[must_use]
+pub fn docs() -> Vec<koof::docs::ResourceDoc> {
+    vec![
+        koof::docs::ResourceDoc::of:: <
+        zerotrust::v1alpha1::access_application::AccessApplication > (),
+        koof::docs::ResourceDoc::of:: < cloudflare::v1alpha1::account::Account > (),
+        koof::docs::ResourceDoc::of:: <
+        cloudflare::v1alpha1::cluster_account::ClusterAccount > (),
+        koof::docs::ResourceDoc::of:: < zones::v1alpha1::custom_hostname::CustomHostname
+        > (), koof::docs::ResourceDoc::of:: < storage::v1alpha1::d1_database::D1Database
+        > (), koof::docs::ResourceDoc::of:: < zones::v1alpha1::dns_record::DNSRecord >
+        (), koof::docs::ResourceDoc::of:: <
+        zones::v1alpha1::email_routing_rule::EmailRoutingRule > (),
+        koof::docs::ResourceDoc::of:: < zerotrust::v1alpha1::gateway_list::GatewayList >
+        (), koof::docs::ResourceDoc::of:: <
+        zerotrust::v1alpha1::gateway_rule::GatewayRule > (),
+        koof::docs::ResourceDoc::of:: < zones::v1alpha1::healthcheck::Healthcheck > (),
+        koof::docs::ResourceDoc::of:: < storage::v1alpha1::hyperdrive::Hyperdrive > (),
+        koof::docs::ResourceDoc::of:: < cloudflare::v1alpha1::ip_list::IPList > (),
+        koof::docs::ResourceDoc::of:: < storage::v1alpha1::kv_namespace::KVNamespace >
+        (), koof::docs::ResourceDoc::of:: <
+        loadbalancing::v1alpha1::lb_monitor::LoadBalancerMonitor > (),
+        koof::docs::ResourceDoc::of:: <
+        loadbalancing::v1alpha1::lb_pool::LoadBalancerPool > (),
+        koof::docs::ResourceDoc::of:: <
+        loadbalancing::v1alpha1::load_balancer::LoadBalancer > (),
+        koof::docs::ResourceDoc::of:: < zones::v1alpha1::logpush_job::LogpushJob > (),
+        koof::docs::ResourceDoc::of:: <
+        cloudflare::v1alpha1::notification_policy::NotificationPolicy > (),
+        koof::docs::ResourceDoc::of:: < zones::v1alpha1::page_rule::PageRule > (),
+        koof::docs::ResourceDoc::of:: < cloudflare::v1alpha1::pages_project::PagesProject
+        > (), koof::docs::ResourceDoc::of:: < storage::v1alpha1::queue::Queue > (),
+        koof::docs::ResourceDoc::of:: < storage::v1alpha1::r2_bucket::R2Bucket > (),
+        koof::docs::ResourceDoc::of:: <
+        zones::v1alpha1::spectrum_application::SpectrumApplication > (),
+        koof::docs::ResourceDoc::of:: < zerotrust::v1alpha1::tunnel::Tunnel > (),
+        koof::docs::ResourceDoc::of:: <
+        zerotrust::v1alpha1::tunnel_cidr_route::TunnelCidrRoute > (),
+        koof::docs::ResourceDoc::of:: <
+        zerotrust::v1alpha1::tunnel_configuration::TunnelConfiguration > (),
+        koof::docs::ResourceDoc::of:: <
+        zerotrust::v1alpha1::tunnel_hostname_route::TunnelHostnameRoute > (),
+        koof::docs::ResourceDoc::of:: <
+        cloudflare::v1alpha1::turnstile_widget::TurnstileWidget > (),
+        koof::docs::ResourceDoc::of:: <
+        storage::v1alpha1::vectorize_index::VectorizeIndex > (),
+        koof::docs::ResourceDoc::of:: < zones::v1alpha1::waiting_room::WaitingRoom > (),
+        koof::docs::ResourceDoc::of:: < workers::v1alpha1::worker_route::WorkerRoute >
+        (), koof::docs::ResourceDoc::of:: < cloudflare::v1alpha1::zone::Zone > (),
+        koof::docs::ResourceDoc::of:: < rulesets::v1alpha1::zone_ruleset::Ruleset > ()
+    ]
+}

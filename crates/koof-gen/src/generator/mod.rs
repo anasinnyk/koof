@@ -281,6 +281,12 @@ fn mod_file(
         pub fn crds() -> Vec<k8s_openapi::apiextensions_apiserver::pkg::apis::apiextensions::v1::CustomResourceDefinition> {
             vec![#(<#kinds as kube::CustomResourceExt>::crd()),*]
         }
+
+        /// Documentation of every resource of this provider.
+        #[must_use]
+        pub fn docs() -> Vec<koof::docs::ResourceDoc> {
+            vec![#(koof::docs::ResourceDoc::of::<#kinds>()),*]
+        }
     };
 
     Ok(GeneratedFile {
