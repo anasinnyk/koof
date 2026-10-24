@@ -66,8 +66,7 @@ pub struct AccountReference {
     pub name: String,
     #[serde(default)]
     pub kind: AccountReferenceKind,
-    /// `apiVersion` of the referenced object, required only when its kind
-    /// exists in more than one API group.
+    /// `apiVersion` of the referenced object; needed when its kind is in several groups.
     #[serde(rename = "apiVersion", default, skip_serializing_if = "Option::is_none")]
     pub api_version: Option<String>,
 }

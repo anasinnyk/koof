@@ -60,6 +60,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -3156,6 +3161,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -4424,6 +4434,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -4735,6 +4750,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -6811,6 +6831,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -7246,6 +7271,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -7503,6 +7533,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -7731,6 +7766,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -8134,6 +8174,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -10793,6 +10838,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -12355,6 +12405,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -13402,6 +13457,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -13717,6 +13777,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -14467,6 +14532,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -15994,6 +16064,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -16320,6 +16395,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
@@ -17435,6 +17515,11 @@
                         "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
                         "nullable": true,
                         "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
                           "kind": {
                             "default": "Account",
                             "enum": [
