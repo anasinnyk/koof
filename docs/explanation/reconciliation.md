@@ -94,6 +94,8 @@ sequenceDiagram
 If the controller crashes between 1 and 3, the next reconcile finds `pending`
 without an outcome. It refuses to create again and reports the error: either set
 `external-name` to the resource that was created, or remove `pending` to retry.
+Deleting the object does not skip this: with `deletionPolicy: Delete` the
+finalizer stays until the outcome is known, or the policy is changed to `Orphan`.
 For a minute after a successful create, a missing observation is treated as the
 API catching up, not as a reason to create again.
 
