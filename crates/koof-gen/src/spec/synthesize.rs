@@ -168,7 +168,12 @@ impl Resource<'_> {
             keep_required: false,
             writable_only: false,
         };
-        self.filtered(&root, "observe response", response, &fields, selection, out)
+        let before: BTreeSet<String> = out.keys().cloned().collect();
+        self.filtered(&root, "observe response", response, &fields, selection, out)?;
+        for (name, schema) in out.iter_mut().filter(|(name, _)| !before.contains(*name)) {
+            without_sensitive(self.schemas, schema, name, &mut BTreeSet::new())?;
+        }
+        Ok(())
     }
 
     fn filtered(
@@ -317,6 +322,119 @@ impl Resource<'_> {
             message: message.to_owned(),
         }
     }
+}
+
+/// Removes the properties marked `x-kube-field.sensitive` at any depth, inlining a
+/// `$ref` whose target has one, so that secrets the API returns never reach the
+/// status.
+fn without_sensitive(
+    schemas: &Map<String, Value>,
+    schema: &mut Value,
+    location: &str,
+    visiting: &mut BTreeSet<String>,
+) -> Result<(), SpecError> {
+    if let Some(name) = schema_ref_name(schema) {
+        if !has_sensitive(schemas, schema, location, &mut BTreeSet::new())?
+            || !visiting.insert(name.clone())
+        {
+            return Ok(());
+        }
+        *schema = resolve_ref(schemas, schema).clone();
+        without_sensitive(schemas, schema, location, visiting)?;
+        visiting.remove(&name);
+        return Ok(());
+    }
+    let Some(object) = schema.as_object_mut() else {
+        return Ok(());
+    };
+    if let Some(properties) = object.get_mut("properties").and_then(Value::as_object_mut) {
+        let mut sensitive = Vec::new();
+        for (name, property) in properties.iter() {
+            if is_sensitive(schemas, property, &format!("{location}.{name}"))? {
+                sensitive.push(name.clone());
+            }
+        }
+        for name in &sensitive {
+            properties.remove(name);
+        }
+        for (name, property) in properties.iter_mut() {
+            without_sensitive(schemas, property, &format!("{location}.{name}"), visiting)?;
+        }
+        if let Some(required) = object.get_mut("required").and_then(Value::as_array_mut) {
+            required.retain(|name| !sensitive.iter().any(|sensitive| name == sensitive));
+        }
+    }
+    for keyword in ["items", "additionalProperties"] {
+        if let Some(nested) = object.get_mut(keyword) {
+            without_sensitive(schemas, nested, location, visiting)?;
+        }
+    }
+    for keyword in ["allOf", "anyOf", "oneOf"] {
+        for variant in object
+            .get_mut(keyword)
+            .and_then(Value::as_array_mut)
+            .into_iter()
+            .flatten()
+        {
+            without_sensitive(schemas, variant, location, visiting)?;
+        }
+    }
+    Ok(())
+}
+
+fn has_sensitive(
+    schemas: &Map<String, Value>,
+    schema: &Value,
+    location: &str,
+    visiting: &mut BTreeSet<String>,
+) -> Result<bool, SpecError> {
+    if let Some(name) = schema_ref_name(schema) {
+        if !visiting.insert(name.clone()) {
+            return Ok(false);
+        }
+        return has_sensitive(schemas, resolve_ref(schemas, schema), location, visiting);
+    }
+    for (name, property) in schema
+        .get("properties")
+        .and_then(Value::as_object)
+        .into_iter()
+        .flatten()
+    {
+        let location = format!("{location}.{name}");
+        if is_sensitive(schemas, property, &location)?
+            || has_sensitive(schemas, property, &location, visiting)?
+        {
+            return Ok(true);
+        }
+    }
+    let nested = ["items", "additionalProperties"]
+        .into_iter()
+        .filter_map(|keyword| schema.get(keyword))
+        .chain(
+            ["allOf", "anyOf", "oneOf"]
+                .into_iter()
+                .filter_map(|keyword| schema.get(keyword).and_then(Value::as_array))
+                .flatten(),
+        );
+    for schema in nested {
+        if has_sensitive(schemas, schema, location, visiting)? {
+            return Ok(true);
+        }
+    }
+    Ok(false)
+}
+
+fn is_sensitive(
+    schemas: &Map<String, Value>,
+    property: &Value,
+    location: &str,
+) -> Result<bool, SpecError> {
+    for schema in [property, resolve_ref(schemas, property)] {
+        if FieldExtension::of(schema, location)?.sensitive {
+            return Ok(true);
+        }
+    }
+    Ok(false)
 }
 
 fn merge_scalars(schemas: &Map<String, Value>, definitions: &[Value]) -> Option<Value> {

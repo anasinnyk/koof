@@ -23,6 +23,9 @@ components:
         legacy_plan:
           type: string
           description: Deprecated; set by the provider.
+        api_key:
+          type: string
+          readOnly: true
     widget:
       type: object
       required: [name]

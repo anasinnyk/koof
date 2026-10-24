@@ -56,6 +56,5 @@ Validation:
 | `atProvider.dateCreated` | string |  |  |
 | `atProvider.events` | []string |  |  |
 | `atProvider.id` | string |  |  |
-| `atProvider.secret` | string |  |  |
 | `atProvider.status` | string |  |  |
 | `atProvider.url` | string |  |  |

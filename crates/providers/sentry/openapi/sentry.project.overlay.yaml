@@ -101,3 +101,8 @@ actions:
             name: external_id
           project_id_or_slug:
             type: external_name
+
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].get.responses['200'].content['application/json'].schema.properties.securityToken
+    update:
+      x-kube-field:
+        sensitive: true

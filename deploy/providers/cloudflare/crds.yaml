@@ -16562,11 +16562,6 @@
                         "nullable": true,
                         "type": "string"
                       },
-                      "secret": {
-                        "description": "Secret key for this widget.",
-                        "nullable": true,
-                        "type": "string"
-                      },
                       "sitekey": {
                         "description": "Widget item identifier tag.",
                         "nullable": true,

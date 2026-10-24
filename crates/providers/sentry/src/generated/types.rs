@@ -15747,11 +15747,6 @@ pub struct SentryV1alpha1ProjectAtProvider {
     )]
     pub secondary_grouping_expiry: ::std::option::Option<i64>,
     #[serde(
-        rename = "securityToken",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub security_token: ::std::option::Option<::std::string::String>,
-    #[serde(
         rename = "securityTokenHeader",
         skip_serializing_if = "::std::option::Option::is_none"
     )]
@@ -16286,8 +16281,6 @@ pub struct SentryV1alpha1ProjectKeyAtProvider {
         skip_serializing_if = "::std::option::Option::is_none"
     )]
     pub rate_limit: ::std::option::Option<SentryV1alpha1ProjectKeyAtProviderRateLimit>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub secret: ::std::option::Option<::std::string::String>,
     #[serde(rename = "useCase", skip_serializing_if = "::std::option::Option::is_none")]
     pub use_case: ::std::option::Option<::std::string::String>,
 }
@@ -16323,7 +16316,6 @@ pub struct SentryV1alpha1ProjectKeyAtProviderDsn {
     pub otlp_traces: ::std::string::String,
     pub playstation: ::std::string::String,
     pub public: ::std::string::String,
-    pub secret: ::std::string::String,
     pub security: ::std::string::String,
     pub unreal: ::std::string::String,
 }
@@ -16576,8 +16568,6 @@ pub struct SentryV1alpha1ServiceHookAtProvider {
     pub events: ::std::vec::Vec<::std::string::String>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<::std::string::String>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub secret: ::std::option::Option<::std::string::String>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub status: ::std::option::Option<::std::string::String>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]

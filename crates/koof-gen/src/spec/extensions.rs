@@ -140,6 +140,8 @@ pub struct FieldExtension {
     pub ignored: bool,
     #[serde(default = "enabled")]
     pub late_initialize: bool,
+    #[serde(default)]
+    pub sensitive: bool,
 }
 
 fn enabled() -> bool {
@@ -151,6 +153,7 @@ impl Default for FieldExtension {
         Self {
             ignored: false,
             late_initialize: true,
+            sensitive: false,
         }
     }
 }

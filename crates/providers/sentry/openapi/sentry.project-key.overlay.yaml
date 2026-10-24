@@ -98,3 +98,13 @@ actions:
             name: external_id
           key_id:
             type: external_name
+
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/'].get.responses['200'].content['application/json'].schema.properties.secret
+    update:
+      x-kube-field:
+        sensitive: true
+
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/keys/{key_id}/'].get.responses['200'].content['application/json'].schema.properties.dsn.properties.secret
+    update:
+      x-kube-field:
+        sensitive: true

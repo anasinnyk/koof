@@ -29,6 +29,11 @@ actions:
       x-kube-field:
         ignored: true
 
+  - target: $.components.schemas.account.properties.api_key
+    update:
+      x-kube-field:
+        sensitive: true
+
   - target: $.paths['/accounts/{account_id}'].get
     update:
       x-kube-operation:

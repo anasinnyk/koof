@@ -132,7 +132,14 @@ set `x-kube-field` on the property schema (with `explicit`, just do not list it)
   update:
     x-kube-field:
       lateInitialize: false      # never copied from the API into the spec
+- target: $.components.schemas.turnstile_secret
+  update:
+    x-kube-field:
+      sensitive: true            # a secret the API returns; never in atProvider
 ```
+
+Anyone who can read the object can read its status, so mark every secret the
+observe response contains as `sensitive`, nested ones included.
 
 ## Share a resource across namespaces
 
