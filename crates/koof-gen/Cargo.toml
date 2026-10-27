@@ -36,4 +36,4 @@ typify = { version = "0.8.0", default-features = false }
 [dev-dependencies]
 insta = "1.43"
 pretty_assertions = "1"
-rstest = "0.26"
+rstest = "0.28"
