@@ -246,6 +246,7 @@
       ],
       "resources": [
         "accessapplications",
+        "accesspolicies",
         "gatewaylists",
         "gatewayrules",
         "tunnels",
@@ -267,6 +268,7 @@
       ],
       "resources": [
         "accessapplications/status",
+        "accesspolicies/status",
         "gatewaylists/status",
         "gatewayrules/status",
         "tunnels/status",
@@ -286,6 +288,7 @@
       ],
       "resources": [
         "accessapplications/finalizers",
+        "accesspolicies/finalizers",
         "gatewaylists/finalizers",
         "gatewayrules/finalizers",
         "tunnels/finalizers",

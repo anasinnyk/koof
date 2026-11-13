@@ -32,6 +32,38 @@ impl koof::Operation for AccessApplicationUpdate {
     type Request = crate::generated::types::AccessAppRequest;
     type Response = crate::generated::types::AccessApplicationUpdateResponse;
 }
+pub struct AccessPolicyCreate;
+impl koof::Operation for AccessPolicyCreate {
+    const NAME: &'static str = "access_policy.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/accounts/{account_id}/access/policies";
+    type Request = crate::generated::types::AccessPolicyReq;
+    type Response = crate::generated::types::AccessSingleResponse10;
+}
+pub struct AccessPolicyDelete;
+impl koof::Operation for AccessPolicyDelete {
+    const NAME: &'static str = "access_policy.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/accounts/{account_id}/access/policies/{policy_id}";
+    type Request = ();
+    type Response = crate::generated::types::AccessIdResponse4;
+}
+pub struct AccessPolicyObserve;
+impl koof::Operation for AccessPolicyObserve {
+    const NAME: &'static str = "access_policy.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}/access/policies/{policy_id}";
+    type Request = ();
+    type Response = crate::generated::types::AccessSingleResponse10;
+}
+pub struct AccessPolicyUpdate;
+impl koof::Operation for AccessPolicyUpdate {
+    const NAME: &'static str = "access_policy.update";
+    const METHOD: reqwest::Method = reqwest::Method::PUT;
+    const PATH: &'static str = "/accounts/{account_id}/access/policies/{policy_id}";
+    type Request = crate::generated::types::AccessPolicyReq;
+    type Response = crate::generated::types::AccessSingleResponse10;
+}
 pub struct AccountCreate;
 impl koof::Operation for AccountCreate {
     const NAME: &'static str = "account.create";

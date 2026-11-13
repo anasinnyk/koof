@@ -2159,6 +2159,56 @@ impl ::std::convert::From<AccessApiResponseCommon> for AccessApiResponseSingle {
         Self(value)
     }
 }
+///Number of access applications currently using this policy.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct AccessAppCount(pub i64);
+impl ::std::ops::Deref for AccessAppCount {
+    type Target = i64;
+    fn deref(&self) -> &i64 {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessAppCount> for i64 {
+    fn from(value: AccessAppCount) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<i64> for AccessAppCount {
+    fn from(value: i64) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for AccessAppCount {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for AccessAppCount {
+    type Err = <i64 as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AccessAppCount {
+    type Error = <i64 as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for AccessAppCount {
+    type Error = <i64 as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
 ///`AccessAppId`
 #[derive(
     ::serde::Deserialize,
@@ -2358,64 +2408,6 @@ impl ::std::convert::TryFrom<String> for AccessAppLauncherVisible {
         value.parse()
     }
 }
-///A JSON that links a reusable policy to an application.
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessAppPolicyLink {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub account_id: ::std::option::Option<AccessIdentifier>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub id: ::std::option::Option<AccessUuid2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub precedence: ::std::option::Option<AccessPrecedence>,
-}
-///`AccessAppPolicyRequest`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessAppPolicyRequest {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub approval_groups: ::std::option::Option<AccessApprovalGroups>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub approval_required: ::std::option::Option<AccessApprovalRequired>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub connection_rules: ::std::option::Option<AccessConnectionRules>,
-    pub decision: AccessDecision,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub exclude: ::std::option::Option<AccessExclude2>,
-    pub include: AccessInclude2,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub isolation_required: ::std::option::Option<AccessIsolationRequired>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
-    pub name: AccessName9,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub precedence: ::std::option::Option<AccessPrecedence>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub purpose_justification_prompt: ::std::option::Option<
-        AccessPurposeJustificationPrompt,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub purpose_justification_required: ::std::option::Option<
-        AccessPurposeJustificationRequired,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub require: ::std::option::Option<AccessRequire2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration3>,
-}
 ///`AccessAppPolicyResponse`
 #[derive(
     ::serde::Deserialize,
@@ -2479,11 +2471,11 @@ pub struct AccessAppPolicyResponse {
     schemars::JsonSchema
 )]
 pub struct AccessAppReqEmbeddedPolicies {
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<AccessAppReqEmbeddedPoliciesPoliciesItem>,
 }
-///`AccessAppReqEmbeddedPoliciesPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -2492,54 +2484,12 @@ pub struct AccessAppReqEmbeddedPolicies {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum AccessAppReqEmbeddedPoliciesPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for AccessAppReqEmbeddedPoliciesPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2> for AccessAppReqEmbeddedPoliciesPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct AccessAppReqEmbeddedPoliciesPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///`AccessAppReqEmbeddedScimConfig`
 #[derive(
@@ -2585,13 +2535,11 @@ pub struct AccessAppRequest {
     #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
     pub subtype_8: ::std::option::Option<BookmarkApplication>,
     #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_9: ::std::option::Option<InfrastructureApplication>,
+    pub subtype_9: ::std::option::Option<BrowserRdpApplication>,
     #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_10: ::std::option::Option<BrowserRdpApplication>,
+    pub subtype_10: ::std::option::Option<McpServerApplication>,
     #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_11: ::std::option::Option<McpServerApplication>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_12: ::std::option::Option<McpServerPortalApplication>,
+    pub subtype_11: ::std::option::Option<McpServerPortalApplication>,
 }
 ///The policies that Access applies to the application.
 #[derive(
@@ -4343,6 +4291,37 @@ pub struct AccessIdResponse {
     ///Whether the API call was successful. Allowed values: true.
     pub success: bool,
 }
+///`AccessIdResponse4`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessIdResponse4 {
+    pub errors: AccessMessages,
+    pub messages: AccessMessages,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub result: ::std::option::Option<AccessIdResponse4Result>,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`AccessIdResponse4Result`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessIdResponse4Result {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid2>,
+}
 ///`AccessIdResponseResult`
 #[derive(
     ::serde::Deserialize,
@@ -4490,21 +4469,6 @@ impl ::std::convert::From<::std::vec::Vec<AccessRule>> for AccessInclude2 {
         Self(value)
     }
 }
-///`AccessInfraAppReqEmbeddedPolicies`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    Default,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessInfraAppReqEmbeddedPolicies {
-    ///The policies that Access applies to the application.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessInfraPolicyReq>,
-}
 ///The policies that Access applies to the application.
 #[derive(
     ::serde::Deserialize,
@@ -4598,28 +4562,6 @@ for AccessInfraMfaConfigAllowedAuthenticatorsItem {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
-}
-///`AccessInfraPolicyReq`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct AccessInfraPolicyReq {
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub connection_rules: ::std::option::Option<AccessConnectionRulesInfra>,
-    pub decision: AccessDecision,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub exclude: ::std::option::Option<AccessExclude2>,
-    pub include: AccessInclude2,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessInfraMfaConfig>,
-    pub name: AccessName9,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub require: ::std::option::Option<AccessRequire2>,
 }
 ///`AccessInfraPolicyResp`
 #[derive(
@@ -6629,6 +6571,61 @@ impl ::std::convert::From<::std::vec::Vec<AccessRule>> for AccessRequire2 {
         Self(value)
     }
 }
+///`AccessReusablePolicyResp`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessReusablePolicyResp {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub account_id: ::std::option::Option<AccessIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_count: ::std::option::Option<AccessAppCount>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub approval_groups: ::std::option::Option<AccessApprovalGroups>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub approval_required: ::std::option::Option<AccessApprovalRequired>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub connection_rules: ::std::option::Option<AccessConnectionRules>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub decision: ::std::option::Option<AccessDecision>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub exclude: ::std::option::Option<AccessExclude2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub include: ::std::option::Option<AccessInclude2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub isolation_required: ::std::option::Option<AccessIsolationRequired>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName9>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub purpose_justification_prompt: ::std::option::Option<
+        AccessPurposeJustificationPrompt,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub purpose_justification_required: ::std::option::Option<
+        AccessPurposeJustificationRequired,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub require: ::std::option::Option<AccessRequire2>,
+    ///Allowed values: true.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub reusable: ::std::option::Option<bool>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration3>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessTimestamp>,
+}
 ///`AccessRule`
 #[derive(
     ::serde::Deserialize,
@@ -7998,6 +7995,23 @@ for AccessSessionDuration3 {
     fn from(value: ::std::option::Option<::std::string::String>) -> Self {
         Self(value)
     }
+}
+///`AccessSingleResponse10`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessSingleResponse10 {
+    pub errors: AccessMessages,
+    pub messages: AccessMessages,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub result: ::std::option::Option<AccessReusablePolicyResp>,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
 }
 ///`AccessSingleResponse8`
 #[derive(
@@ -9475,7 +9489,7 @@ pub struct AppLauncherApplication {
     pub landing_page_design: ::std::option::Option<AccessLandingPageDesign>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<AppLauncherApplicationPoliciesItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -9487,7 +9501,7 @@ pub struct AppLauncherApplication {
     #[serde(rename = "type")]
     pub type_: AccessType,
 }
-///`AppLauncherApplicationPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -9496,53 +9510,12 @@ pub struct AppLauncherApplication {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum AppLauncherApplicationPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink> for AppLauncherApplicationPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2> for AppLauncherApplicationPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct AppLauncherApplicationPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///`BookmarkApplication`
 #[derive(
@@ -9564,7 +9537,7 @@ pub struct BookmarkApplication {
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<BookmarkApplicationPoliciesItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -9572,7 +9545,7 @@ pub struct BookmarkApplication {
     #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<AccessType>,
 }
-///`BookmarkApplicationPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -9581,53 +9554,12 @@ pub struct BookmarkApplication {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum BookmarkApplicationPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink> for BookmarkApplicationPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2> for BookmarkApplicationPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct BookmarkApplicationPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///`BrowserIsolationPermissionsApplication`
 #[derive(
@@ -9655,7 +9587,7 @@ pub struct BrowserIsolationPermissionsApplication {
     pub domain: ::std::option::Option<AccessDomain>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<BrowserIsolationPermissionsApplicationPoliciesItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -9663,7 +9595,7 @@ pub struct BrowserIsolationPermissionsApplication {
     #[serde(rename = "type")]
     pub type_: AccessType,
 }
-///`BrowserIsolationPermissionsApplicationPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -9672,55 +9604,12 @@ pub struct BrowserIsolationPermissionsApplication {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum BrowserIsolationPermissionsApplicationPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for BrowserIsolationPermissionsApplicationPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for BrowserIsolationPermissionsApplicationPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct BrowserIsolationPermissionsApplicationPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///`BrowserRdpApplication`
 #[derive(
@@ -9779,7 +9668,7 @@ pub struct BrowserRdpApplication {
     pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<BrowserRdpApplicationPoliciesItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -9808,7 +9697,7 @@ pub struct BrowserRdpApplication {
         AccessUseClientlessIsolationAppLauncherUrl,
     >,
 }
-///`BrowserRdpApplicationPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -9817,53 +9706,12 @@ pub struct BrowserRdpApplication {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum BrowserRdpApplicationPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink> for BrowserRdpApplicationPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2> for BrowserRdpApplicationPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct BrowserRdpApplicationPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///`BrowserSshApplication`
 #[derive(
@@ -9922,7 +9770,7 @@ pub struct BrowserSshApplication {
     pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<BrowserSshApplicationPoliciesItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -9950,7 +9798,7 @@ pub struct BrowserSshApplication {
         AccessUseClientlessIsolationAppLauncherUrl,
     >,
 }
-///`BrowserSshApplicationPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -9959,53 +9807,12 @@ pub struct BrowserSshApplication {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum BrowserSshApplicationPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink> for BrowserSshApplicationPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2> for BrowserSshApplicationPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct BrowserSshApplicationPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///`BrowserVncApplication`
 #[derive(
@@ -10064,7 +9871,7 @@ pub struct BrowserVncApplication {
     pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<BrowserVncApplicationPoliciesItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -10092,7 +9899,7 @@ pub struct BrowserVncApplication {
         AccessUseClientlessIsolationAppLauncherUrl,
     >,
 }
-///`BrowserVncApplicationPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -10101,53 +9908,12 @@ pub struct BrowserVncApplication {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum BrowserVncApplicationPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink> for BrowserVncApplicationPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2> for BrowserVncApplicationPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct BrowserVncApplicationPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///A cache tag value.
 #[derive(
@@ -12802,7 +12568,7 @@ pub struct DeviceEnrollmentPermissionsApplication {
     pub domain: ::std::option::Option<AccessDomain>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<DeviceEnrollmentPermissionsApplicationPoliciesItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -12810,7 +12576,7 @@ pub struct DeviceEnrollmentPermissionsApplication {
     #[serde(rename = "type")]
     pub type_: AccessType,
 }
-///`DeviceEnrollmentPermissionsApplicationPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -12819,55 +12585,12 @@ pub struct DeviceEnrollmentPermissionsApplication {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum DeviceEnrollmentPermissionsApplicationPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for DeviceEnrollmentPermissionsApplicationPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for DeviceEnrollmentPermissionsApplicationPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct DeviceEnrollmentPermissionsApplicationPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///`DnsRecordDeleteResponse`
 #[derive(
@@ -19075,7 +18798,7 @@ pub struct GatewayIdentityProxyEndpointApplication {
     pub domain: ::std::option::Option<GatewayIdentityProxyEndpointApplicationDomain>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<GatewayIdentityProxyEndpointApplicationPoliciesItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -19157,7 +18880,7 @@ impl<'de> ::serde::Deserialize<'de> for GatewayIdentityProxyEndpointApplicationD
             })
     }
 }
-///`GatewayIdentityProxyEndpointApplicationPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -19166,55 +18889,12 @@ impl<'de> ::serde::Deserialize<'de> for GatewayIdentityProxyEndpointApplicationD
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum GatewayIdentityProxyEndpointApplicationPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for GatewayIdentityProxyEndpointApplicationPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for GatewayIdentityProxyEndpointApplicationPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct GatewayIdentityProxyEndpointApplicationPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///`GatewayListCreateRequest`
 #[derive(
@@ -22626,15 +22306,22 @@ pub struct Include {
 )]
 pub struct InfrastructureApplication {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub aud: ::std::option::Option<AccessAud2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub mfa_config: ::std::option::Option<AccessInfraMfaConfig>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessInfraPolicyReq>,
+    pub policies: ::std::vec::Vec<AccessInfraPolicyResp>,
     pub target_criteria: ::std::vec::Vec<AccessTargetCriteriaInfraApp>,
     #[serde(rename = "type")]
     pub type_: AccessType,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
 }
 ///`IpListCreateRequest`
 #[derive(
@@ -31146,7 +30833,7 @@ pub struct McpServerApplication {
     pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<McpServerApplicationPoliciesItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -31160,7 +30847,7 @@ pub struct McpServerApplication {
     #[serde(rename = "type")]
     pub type_: AccessType,
 }
-///`McpServerApplicationPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -31169,53 +30856,12 @@ pub struct McpServerApplication {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum McpServerApplicationPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink> for McpServerApplicationPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2> for McpServerApplicationPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct McpServerApplicationPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///`McpServerPortalApplication`
 #[derive(
@@ -31259,7 +30905,7 @@ pub struct McpServerPortalApplication {
     pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<McpServerPortalApplicationPoliciesItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -31273,7 +30919,7 @@ pub struct McpServerPortalApplication {
     #[serde(rename = "type")]
     pub type_: AccessType,
 }
-///`McpServerPortalApplicationPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -31282,54 +30928,12 @@ pub struct McpServerPortalApplication {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum McpServerPortalApplicationPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for McpServerPortalApplicationPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2> for McpServerPortalApplicationPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct McpServerPortalApplicationPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///A media type to normalize against. Must be printable ASCII.
 #[derive(
@@ -45545,7 +45149,7 @@ pub struct SaaSApplication {
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<SaaSApplicationPoliciesItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45557,7 +45161,7 @@ pub struct SaaSApplication {
     #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<AccessType>,
 }
-///`SaaSApplicationPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -45566,53 +45170,12 @@ pub struct SaaSApplication {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum SaaSApplicationPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink> for SaaSApplicationPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2> for SaaSApplicationPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct SaaSApplicationPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///`SaaSApplicationSaasApp`
 #[derive(
@@ -45831,7 +45394,7 @@ pub struct SelfHostedApplication {
     pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<SelfHostedApplicationPoliciesItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -45859,7 +45422,7 @@ pub struct SelfHostedApplication {
         AccessUseClientlessIsolationAppLauncherUrl,
     >,
 }
-///`SelfHostedApplicationPoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -45868,53 +45431,12 @@ pub struct SelfHostedApplication {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum SelfHostedApplicationPoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink> for SelfHostedApplicationPoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2> for SelfHostedApplicationPoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct SelfHostedApplicationPoliciesItem {
+    ///ID of the reusable policy.
+    pub id: ::std::string::String,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
 ///`SetCacheTagsExpressionOperation`
 #[derive(
@@ -61605,7 +61127,6 @@ pub enum ZerotrustV1alpha1AccessApplicationForProvider {
     Variant9(ZerotrustV1alpha1AccessApplicationForProviderVariant9),
     Variant10(ZerotrustV1alpha1AccessApplicationForProviderVariant10),
     Variant11(ZerotrustV1alpha1AccessApplicationForProviderVariant11),
-    Variant12(ZerotrustV1alpha1AccessApplicationForProviderVariant12),
 }
 impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant0>
 for ZerotrustV1alpha1AccessApplicationForProvider {
@@ -61679,12 +61200,6 @@ for ZerotrustV1alpha1AccessApplicationForProvider {
         Self::Variant11(value)
     }
 }
-impl ::std::convert::From<ZerotrustV1alpha1AccessApplicationForProviderVariant12>
-for ZerotrustV1alpha1AccessApplicationForProvider {
-    fn from(value: ZerotrustV1alpha1AccessApplicationForProviderVariant12) -> Self {
-        Self::Variant12(value)
-    }
-}
 ///`AccessApplicationForProviderVariant0`
 #[derive(
     ::serde::Deserialize,
@@ -61742,7 +61257,7 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant0 {
     pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<
         ZerotrustV1alpha1AccessApplicationForProviderVariant0PoliciesItem,
@@ -61772,7 +61287,32 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant0 {
         AccessUseClientlessIsolationAppLauncherUrl,
     >,
 }
-///`AccessApplicationForProviderVariant0PoliciesItem`
+///A reusable policy linked to the application.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant0PoliciesItem {
+    ///ID of the reusable policy.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "policyRef",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub policy_ref: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant0PoliciesItemPolicyRef,
+    >,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
+}
+///A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -61781,55 +61321,8 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant0 {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant0PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant0PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant0PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant0PoliciesItemPolicyRef {
+    pub name: ::std::string::String,
 }
 ///`AccessApplicationForProviderVariant1`
 #[derive(
@@ -61854,7 +61347,7 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant1 {
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<
         ZerotrustV1alpha1AccessApplicationForProviderVariant1PoliciesItem,
@@ -61885,15 +61378,9 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant10 {
         AccessAllowAuthenticateViaWarp2,
     >,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -61906,121 +61393,33 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant10 {
     pub custom_pages: ::std::option::Option<AccessCustomPages2>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub destinations: ::std::option::Option<AccessDestinations>,
-    pub domain: AccessDomain,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub eager_redirect_cookie_setting: ::std::option::Option<
-        AccessEagerRedirectCookieSetting,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<
         ZerotrustV1alpha1AccessApplicationForProviderVariant10PoliciesItem,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub read_service_tokens_from_header: ::std::option::Option<
-        AccessReadServiceTokensFromHeader,
     >,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub scim_config: ::std::option::Option<AccessScimConfig>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub session_duration: ::std::option::Option<AccessSessionDuration2>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub tags: ::std::option::Option<AccessTags>,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub target_criteria: ::std::vec::Vec<AccessTargetCriteriaSelfHostedApp>,
-    #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<
-        ZerotrustV1alpha1AccessApplicationForProviderVariant10Type,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
-        AccessUseClientlessIsolationAppLauncherUrl,
-    >,
+    #[serde(rename = "type")]
+    pub type_: AccessType,
 }
-///`AccessApplicationForProviderVariant10PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant10PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant10PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant10PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant10Type`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -62030,11 +61429,32 @@ for ZerotrustV1alpha1AccessApplicationForProviderVariant10PoliciesItem {
     PartialEq,
     schemars::JsonSchema
 )]
-pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant10Type {
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_0: ::std::option::Option<AccessType>,
-    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
-    pub subtype_1: ::std::option::Option<AccessType>,
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant10PoliciesItem {
+    ///ID of the reusable policy.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "policyRef",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub policy_ref: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant10PoliciesItemPolicyRef,
+    >,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
+}
+///A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant10PoliciesItemPolicyRef {
+    pub name: ::std::string::String,
 }
 ///`AccessApplicationForProviderVariant11`
 #[derive(
@@ -62067,6 +61487,8 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant11 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub destinations: ::std::option::Option<AccessDestinations>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain: ::std::option::Option<AccessDomain>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
@@ -62076,7 +61498,7 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant11 {
     pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<
         ZerotrustV1alpha1AccessApplicationForProviderVariant11PoliciesItem,
@@ -62092,124 +61514,32 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant11 {
     #[serde(rename = "type")]
     pub type_: AccessType,
 }
-///`AccessApplicationForProviderVariant11PoliciesItem`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant11PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant11PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant11PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant12`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant12 {
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant11PoliciesItem {
+    ///ID of the reusable policy.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allow_authenticate_via_warp: ::std::option::Option<
-        AccessAllowAuthenticateViaWarp2,
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "policyRef",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub policy_ref: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant11PoliciesItemPolicyRef,
     >,
+    ///Order of evaluation; lower values are evaluated first.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_non_identity_deny_url: ::std::option::Option<
-        AccessCustomNonIdentityDenyUrl,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub destinations: ::std::option::Option<AccessDestinations>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub domain: ::std::option::Option<AccessDomain>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub logo_url: ::std::option::Option<AccessLogoUrl>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub name: ::std::option::Option<AccessName8>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<
-        ZerotrustV1alpha1AccessApplicationForProviderVariant12PoliciesItem,
-    >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub scim_config: ::std::option::Option<AccessScimConfig>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub tags: ::std::option::Option<AccessTags>,
-    #[serde(rename = "type")]
-    pub type_: AccessType,
+    pub precedence: ::std::option::Option<i64>,
 }
-///`AccessApplicationForProviderVariant12PoliciesItem`
+///A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -62218,57 +61548,35 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant12 {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant12PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant11PoliciesItemPolicyRef {
+    pub name: ::std::string::String,
 }
-impl ::std::convert::From<AccessAppPolicyLink>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant12PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
+///A reusable policy linked to the application.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant1PoliciesItem {
+    ///ID of the reusable policy.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "policyRef",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub policy_ref: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant1PoliciesItemPolicyRef,
+    >,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
 }
-impl ::std::convert::From<AccessUuid2>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant12PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant1PoliciesItem`
+///A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -62277,55 +61585,8 @@ for ZerotrustV1alpha1AccessApplicationForProviderVariant12PoliciesItem {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant1PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant1PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant1PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant1PoliciesItemPolicyRef {
+    pub name: ::std::string::String,
 }
 ///`AccessApplicationForProviderVariant1SaasApp`
 #[derive(
@@ -62410,7 +61671,7 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant2 {
     pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<
         ZerotrustV1alpha1AccessApplicationForProviderVariant2PoliciesItem,
@@ -62442,7 +61703,32 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant2 {
         AccessUseClientlessIsolationAppLauncherUrl,
     >,
 }
-///`AccessApplicationForProviderVariant2PoliciesItem`
+///A reusable policy linked to the application.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant2PoliciesItem {
+    ///ID of the reusable policy.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "policyRef",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub policy_ref: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant2PoliciesItemPolicyRef,
+    >,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
+}
+///A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -62451,55 +61737,8 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant2 {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant2PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant2PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant2PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant2PoliciesItemPolicyRef {
+    pub name: ::std::string::String,
 }
 ///`AccessApplicationForProviderVariant2Type`
 #[derive(
@@ -62574,7 +61813,7 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant3 {
     pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<
         ZerotrustV1alpha1AccessApplicationForProviderVariant3PoliciesItem,
@@ -62606,7 +61845,32 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant3 {
         AccessUseClientlessIsolationAppLauncherUrl,
     >,
 }
-///`AccessApplicationForProviderVariant3PoliciesItem`
+///A reusable policy linked to the application.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant3PoliciesItem {
+    ///ID of the reusable policy.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "policyRef",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub policy_ref: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant3PoliciesItemPolicyRef,
+    >,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
+}
+///A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -62615,55 +61879,8 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant3 {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant3PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant3PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant3PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant3PoliciesItemPolicyRef {
+    pub name: ::std::string::String,
 }
 ///`AccessApplicationForProviderVariant3Type`
 #[derive(
@@ -62718,7 +61935,7 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant4 {
     pub landing_page_design: ::std::option::Option<AccessLandingPageDesign>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<
         ZerotrustV1alpha1AccessApplicationForProviderVariant4PoliciesItem,
@@ -62734,7 +61951,32 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant4 {
         ZerotrustV1alpha1AccessApplicationForProviderVariant4Type,
     >,
 }
-///`AccessApplicationForProviderVariant4PoliciesItem`
+///A reusable policy linked to the application.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant4PoliciesItem {
+    ///ID of the reusable policy.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "policyRef",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub policy_ref: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant4PoliciesItemPolicyRef,
+    >,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
+}
+///A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -62743,55 +61985,8 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant4 {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant4PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant4PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant4PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant4PoliciesItemPolicyRef {
+    pub name: ::std::string::String,
 }
 ///`AccessApplicationForProviderVariant4Type`
 #[derive(
@@ -62836,7 +62031,7 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant5 {
     pub domain: ::std::option::Option<AccessDomain>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<
         ZerotrustV1alpha1AccessApplicationForProviderVariant5PoliciesItem,
@@ -62848,7 +62043,32 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant5 {
         ZerotrustV1alpha1AccessApplicationForProviderVariant5Type,
     >,
 }
-///`AccessApplicationForProviderVariant5PoliciesItem`
+///A reusable policy linked to the application.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant5PoliciesItem {
+    ///ID of the reusable policy.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "policyRef",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub policy_ref: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant5PoliciesItemPolicyRef,
+    >,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
+}
+///A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -62857,55 +62077,8 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant5 {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant5PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant5PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant5PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant5PoliciesItemPolicyRef {
+    pub name: ::std::string::String,
 }
 ///`AccessApplicationForProviderVariant5Type`
 #[derive(
@@ -62950,7 +62123,7 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant6 {
     pub domain: ::std::option::Option<AccessDomain>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<
         ZerotrustV1alpha1AccessApplicationForProviderVariant6PoliciesItem,
@@ -62962,7 +62135,32 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant6 {
         ZerotrustV1alpha1AccessApplicationForProviderVariant6Type,
     >,
 }
-///`AccessApplicationForProviderVariant6PoliciesItem`
+///A reusable policy linked to the application.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant6PoliciesItem {
+    ///ID of the reusable policy.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "policyRef",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub policy_ref: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant6PoliciesItemPolicyRef,
+    >,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
+}
+///A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -62971,55 +62169,8 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant6 {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant6PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant6PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant6PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant6PoliciesItemPolicyRef {
+    pub name: ::std::string::String,
 }
 ///`AccessApplicationForProviderVariant6Type`
 #[derive(
@@ -63066,7 +62217,7 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant7 {
     ///The name of the application.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<::std::string::String>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<
         ZerotrustV1alpha1AccessApplicationForProviderVariant7PoliciesItem,
@@ -63078,7 +62229,32 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant7 {
         ZerotrustV1alpha1AccessApplicationForProviderVariant7Type,
     >,
 }
-///`AccessApplicationForProviderVariant7PoliciesItem`
+///A reusable policy linked to the application.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant7PoliciesItem {
+    ///ID of the reusable policy.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "policyRef",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub policy_ref: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant7PoliciesItemPolicyRef,
+    >,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
+}
+///A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -63087,55 +62263,8 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant7 {
     PartialEq,
     schemars::JsonSchema
 )]
-#[serde(untagged)]
-pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant7PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant7PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant7PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant7PoliciesItemPolicyRef {
+    pub name: ::std::string::String,
 }
 ///`AccessApplicationForProviderVariant7Type`
 #[derive(
@@ -63173,7 +62302,7 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant8 {
     pub logo_url: ::std::option::Option<AccessLogoUrl>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application, in ascending order of precedence. Items can reference existing policies or create new policies exclusive to the application. Reusable and inline policies are mutually exclusive.
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub policies: ::std::vec::Vec<
         ZerotrustV1alpha1AccessApplicationForProviderVariant8PoliciesItem,
@@ -63183,66 +62312,7 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant8 {
     #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
     pub type_: ::std::option::Option<AccessType>,
 }
-///`AccessApplicationForProviderVariant8PoliciesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-#[serde(untagged)]
-pub enum ZerotrustV1alpha1AccessApplicationForProviderVariant8PoliciesItem {
-    Variant0(AccessAppPolicyLink),
-    Variant1(AccessUuid2),
-    Variant2 {
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_groups: ::std::option::Option<AccessApprovalGroups>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        approval_required: ::std::option::Option<AccessApprovalRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        connection_rules: ::std::option::Option<AccessConnectionRules>,
-        decision: AccessDecision,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        exclude: ::std::option::Option<AccessExclude2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        id: ::std::option::Option<AccessUuid2>,
-        include: AccessInclude2,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        isolation_required: ::std::option::Option<AccessIsolationRequired>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        mfa_config: ::std::option::Option<AccessMfaConfig>,
-        name: AccessName9,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        precedence: ::std::option::Option<AccessPrecedence>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_prompt: ::std::option::Option<
-            AccessPurposeJustificationPrompt,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        purpose_justification_required: ::std::option::Option<
-            AccessPurposeJustificationRequired,
-        >,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        require: ::std::option::Option<AccessRequire2>,
-        #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-        session_duration: ::std::option::Option<AccessSessionDuration3>,
-    },
-}
-impl ::std::convert::From<AccessAppPolicyLink>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant8PoliciesItem {
-    fn from(value: AccessAppPolicyLink) -> Self {
-        Self::Variant0(value)
-    }
-}
-impl ::std::convert::From<AccessUuid2>
-for ZerotrustV1alpha1AccessApplicationForProviderVariant8PoliciesItem {
-    fn from(value: AccessUuid2) -> Self {
-        Self::Variant1(value)
-    }
-}
-///`AccessApplicationForProviderVariant9`
+///A reusable policy linked to the application.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -63252,18 +62322,269 @@ for ZerotrustV1alpha1AccessApplicationForProviderVariant8PoliciesItem {
     PartialEq,
     schemars::JsonSchema
 )]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant8PoliciesItem {
+    ///ID of the reusable policy.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "policyRef",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub policy_ref: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant8PoliciesItemPolicyRef,
+    >,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
+}
+///A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant8PoliciesItemPolicyRef {
+    pub name: ::std::string::String,
+}
+///`AccessApplicationForProviderVariant9`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
 pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant9 {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub mfa_config: ::std::option::Option<AccessInfraMfaConfig>,
+    pub allow_authenticate_via_warp: ::std::option::Option<
+        AccessAllowAuthenticateViaWarp2,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allow_iframe: ::std::option::Option<AccessAllowIframe>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub allowed_idps: ::std::option::Option<AccessAllowedIdps>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_launcher_visible: ::std::option::Option<AccessAppLauncherVisible>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub auto_redirect_to_identity: ::std::option::Option<AccessAutoRedirectToIdentity2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub cors_headers: ::std::option::Option<AccessCorsHeaders>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_message: ::std::option::Option<AccessCustomDenyMessage>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_deny_url: ::std::option::Option<AccessCustomDenyUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_non_identity_deny_url: ::std::option::Option<
+        AccessCustomNonIdentityDenyUrl,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub custom_pages: ::std::option::Option<AccessCustomPages2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub destinations: ::std::option::Option<AccessDestinations>,
+    pub domain: AccessDomain,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub eager_redirect_cookie_setting: ::std::option::Option<
+        AccessEagerRedirectCookieSetting,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enable_binding_cookie: ::std::option::Option<AccessEnableBindingCookie>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub http_only_cookie_attribute: ::std::option::Option<AccessHttpOnlyCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub logo_url: ::std::option::Option<AccessLogoUrl>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<AccessName8>,
-    ///The policies that Access applies to the application.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub oauth_configuration: ::std::option::Option<AccessOauthConfiguration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub options_preflight_bypass: ::std::option::Option<AccessOptionsPreflightBypass>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub path_cookie_attribute: ::std::option::Option<AccessPathCookieAttribute>,
+    ///The reusable policies that Access applies to the application.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub policies: ::std::vec::Vec<AccessInfraPolicyReq>,
+    pub policies: ::std::vec::Vec<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant9PoliciesItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub read_service_tokens_from_header: ::std::option::Option<
+        AccessReadServiceTokensFromHeader,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub same_site_cookie_attribute: ::std::option::Option<AccessSameSiteCookieAttribute>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub scim_config: ::std::option::Option<AccessScimConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub self_hosted_domains: ::std::option::Option<AccessSelfHostedDomains>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub service_auth_401_redirect: ::std::option::Option<AccessServiceAuth401Redirect>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub skip_interstitial: ::std::option::Option<AccessSkipInterstitial>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tags: ::std::option::Option<AccessTags>,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub target_criteria: ::std::vec::Vec<AccessTargetCriteriaInfraApp>,
+    pub target_criteria: ::std::vec::Vec<AccessTargetCriteriaSelfHostedApp>,
     #[serde(rename = "type", skip_serializing_if = "::std::option::Option::is_none")]
-    pub type_: ::std::option::Option<AccessType>,
+    pub type_: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant9Type,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub use_clientless_isolation_app_launcher_url: ::std::option::Option<
+        AccessUseClientlessIsolationAppLauncherUrl,
+    >,
+}
+///A reusable policy linked to the application.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant9PoliciesItem {
+    ///ID of the reusable policy.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "policyRef",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub policy_ref: ::std::option::Option<
+        ZerotrustV1alpha1AccessApplicationForProviderVariant9PoliciesItemPolicyRef,
+    >,
+    ///Order of evaluation; lower values are evaluated first.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub precedence: ::std::option::Option<i64>,
+}
+///A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant9PoliciesItemPolicyRef {
+    pub name: ::std::string::String,
+}
+///`AccessApplicationForProviderVariant9Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant9Type {
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_0: ::std::option::Option<AccessType>,
+    #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
+    pub subtype_1: ::std::option::Option<AccessType>,
+}
+///`AccessPolicyAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessPolicyAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub account_id: ::std::option::Option<AccessIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub app_count: ::std::option::Option<AccessAppCount>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub approval_groups: ::std::option::Option<AccessApprovalGroups>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub approval_required: ::std::option::Option<AccessApprovalRequired>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub connection_rules: ::std::option::Option<AccessConnectionRules>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub decision: ::std::option::Option<AccessDecision>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub exclude: ::std::option::Option<AccessExclude2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub include: ::std::option::Option<AccessInclude2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub isolation_required: ::std::option::Option<AccessIsolationRequired>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName9>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub purpose_justification_prompt: ::std::option::Option<
+        AccessPurposeJustificationPrompt,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub purpose_justification_required: ::std::option::Option<
+        AccessPurposeJustificationRequired,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub require: ::std::option::Option<AccessRequire2>,
+    ///Allowed values: true.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub reusable: ::std::option::Option<bool>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration3>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessTimestamp>,
+}
+///`AccessPolicyForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessPolicyForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub approval_groups: ::std::option::Option<AccessApprovalGroups>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub approval_required: ::std::option::Option<AccessApprovalRequired>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub connection_rules: ::std::option::Option<AccessConnectionRules>,
+    pub decision: AccessDecision,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub exclude: ::std::option::Option<AccessExclude2>,
+    pub include: AccessInclude2,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub isolation_required: ::std::option::Option<AccessIsolationRequired>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mfa_config: ::std::option::Option<AccessMfaConfig>,
+    pub name: AccessName9,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub purpose_justification_prompt: ::std::option::Option<
+        AccessPurposeJustificationPrompt,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub purpose_justification_required: ::std::option::Option<
+        AccessPurposeJustificationRequired,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub require: ::std::option::Option<AccessRequire2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub session_duration: ::std::option::Option<AccessSessionDuration3>,
 }
 ///`GatewayListAtProvider`
 #[derive(

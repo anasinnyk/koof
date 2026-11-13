@@ -32,6 +32,13 @@ actions:
             from: spec.forProvider.accountRef
             target: account
 
+        itemReferences:
+          policy:
+            from: spec.forProvider.policies[].policyRef
+            target: access_policy
+            into: id
+            identifier: external_id
+
         credentials:
           securityScheme: api_token
           source:
@@ -95,3 +102,31 @@ actions:
             name: external_id
           app_id:
             type: external_name
+
+  # Infrastructure applications take only inline policies, which would leave
+  # policies untyped; they are not managed by this kind.
+  - target: $.components.schemas['access_app_request'].anyOf[?(@.title == 'Infrastructure application')]
+    remove: true
+
+  # Applications link reusable policies (AccessPolicy) by ID, in ascending order
+  # of precedence; inline policies are not managed. Cloudflare returns the full
+  # policies, so the list is matched by id.
+  - target: $.components.schemas['access_app_req_embedded_policies'].properties.policies.items
+    remove: true
+
+  - target: $.components.schemas['access_app_req_embedded_policies'].properties.policies
+    update:
+      description: The reusable policies that Access applies to the application.
+      items:
+        type: object
+        description: A reusable policy linked to the application.
+        required: [id]
+        properties:
+          id:
+            type: string
+            description: ID of the reusable policy.
+          precedence:
+            type: integer
+            description: Order of evaluation; lower values are evaluated first.
+      x-kube-field:
+        listMapKeys: [id]

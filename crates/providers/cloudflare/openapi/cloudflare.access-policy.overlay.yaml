@@ -1,0 +1,95 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare AccessPolicy
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # A reusable policy of the account; applications link it with policyRef.
+  - target: $.components.schemas['access_policy_req']
+    update:
+      x-kube-resource:
+        name: access_policy
+        apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+        kind: AccessPolicy
+
+        test:
+          forProvider:
+            name: koof e2e
+            decision: allow
+            include:
+              - everyone: {}
+          update:
+            name: koof e2e renamed
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          account:
+            from: spec.forProvider.accountRef
+            target: account
+
+        credentials:
+          securityScheme: api_token
+          source:
+            type: related
+            via: [account]
+
+        fields:
+          mode: all
+
+  - target: $.paths['/accounts/{account_id}/access/policies/{policy_id}'].get
+    update:
+      x-kube-operation:
+        resource: access_policy
+        lifecycle: observe
+        response:
+          path: result
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          policy_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/access/policies'].post
+    update:
+      x-kube-operation:
+        resource: access_policy
+        lifecycle: create
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/accounts/{account_id}/access/policies/{policy_id}'].put
+    update:
+      x-kube-operation:
+        resource: access_policy
+        lifecycle: update
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          policy_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/access/policies/{policy_id}'].delete
+    update:
+      x-kube-operation:
+        resource: access_policy
+        lifecycle: delete
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          policy_id:
+            type: external_name
