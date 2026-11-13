@@ -83,7 +83,10 @@ spec:
 | `forProvider.landing_page_design.message` | string |  | The message shown on the landing page. |
 | `forProvider.landing_page_design.title` | string |  | The title shown on the landing page. |
 | `forProvider.logo_url` | string |  | The image URL for the logo shown in the App Launcher dashboard. |
-| `forProvider.mfa_config` | object |  |  |
+| `forProvider.mfa_config` | object |  | Configures multi-factor authentication (MFA) settings. |
+| `forProvider.mfa_config.allowed_authenticators` | []string |  | Lists the MFA methods that users can authenticate with. |
+| `forProvider.mfa_config.mfa_disabled` | boolean |  | Indicates whether to disable MFA for this resource. This option is available at the application and policy level. |
+| `forProvider.mfa_config.session_duration` | string |  | Defines the duration of an MFA session. Must be in minutes (m) or hours (h). Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`. |
 | `forProvider.name` | string |  | The name of the application. |
 | `forProvider.oauth_configuration` | object |  | **Beta:** Optional configuration for managing an OAuth authorization flow controlled by Access. When set, Access will act as the OAuth authorization server for this application. Only compatible with OAuth clients that support [RFC 8707](https://datatracker.ietf.org/doc/html/rfc8707) (Resource Indicators for OAuth 2.0). This feature is currently in beta. |
 | `forProvider.oauth_configuration.dynamic_client_registration` | object |  | Settings for OAuth dynamic client registration. |
@@ -97,7 +100,11 @@ spec:
 | `forProvider.oauth_configuration.grant.session_duration` | string |  | The duration of the OAuth session. Must be in the format `300ms` or `2h45m`. Valid time units are ns, us (or µs), ms, s, m, h. |
 | `forProvider.options_preflight_bypass` | boolean |  | Allows options preflight requests to bypass Access authentication and go directly to the origin. Cannot turn on if cors_headers is set. |
 | `forProvider.path_cookie_attribute` | boolean |  | Enables cookie paths to scope an application's JWT to the application path. If disabled, the JWT will scope to the hostname by default |
-| `forProvider.policies` | []any |  |  |
+| `forProvider.policies` | []object |  | The reusable policies that Access applies to the application. |
+| `forProvider.policies[].id` | string |  | ID of the reusable policy. |
+| `forProvider.policies[].policyRef` | object |  | A reference to an object of kind `AccessPolicy` in the namespace of the resource holding the reference; sets `id`. |
+| `forProvider.policies[].policyRef.name` | string | yes |  |
+| `forProvider.policies[].precedence` | integer (int64) |  | Order of evaluation; lower values are evaluated first. |
 | `forProvider.read_service_tokens_from_header` | string |  | Allows matching Access Service Tokens passed HTTP in a single header with this name. This works as an alternative to the (CF-Access-Client-Id, CF-Access-Client-Secret) pair of headers. The header value will be interpreted as a json object similar to: { "cf-access-client-id": "88bf3b6d86161464f6509f7219099e57.access.example.com", "cf-access-client-secret": "bdd31cbc4dec990953e39163fbbb194c93313ca9f0a6e420346af9d326b1d2a5" } |
 | `forProvider.saas_app` | object |  |  |
 | `forProvider.saas_app.access_token_lifetime` | string |  | The lifetime of the OIDC Access Token after creation. Valid units are m,h. Must be greater than or equal to 1m and less than or equal to 24h. |
@@ -166,7 +173,10 @@ spec:
 | `forProvider.skip_app_launcher_login_page` | boolean |  | Determines when to skip the App Launcher landing page. |
 | `forProvider.skip_interstitial` | boolean |  | Enables automatic authentication through cloudflared. |
 | `forProvider.tags` | []string |  | The tags you want assigned to an application. Tags are used to filter applications in the App Launcher dashboard. |
-| `forProvider.target_criteria` | []any |  |  |
+| `forProvider.target_criteria` | []object |  |  |
+| `forProvider.target_criteria[].port` | integer (int64) | yes | The port that the targets use for the chosen communication protocol. A port cannot be assigned to multiple protocols. |
+| `forProvider.target_criteria[].protocol` | string | yes | The communication protocol your application secures. One of `RDP`. |
+| `forProvider.target_criteria[].target_attributes` | map[string][]string | yes | Contains a map of target attribute keys to target attribute values. |
 | `forProvider.type` | any |  |  |
 | `forProvider.use_clientless_isolation_app_launcher_url` | boolean |  | Determines if users can access this application via a clientless browser isolation URL. This allows users to access private domains without connecting to Gateway. The option requires Clientless Browser Isolation to be set up with policies that allow users of this application. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
@@ -175,6 +185,7 @@ Validation:
 
 - `forProvider`: accountRef cannot be removed once set
 - `forProvider.accountRef`: accountRef is immutable
+- `forProvider.policies[]`: set exactly one of id and policyRef
 
 ## Status
 

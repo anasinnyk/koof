@@ -19,6 +19,7 @@ pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo::new(
 #[must_use]
 pub fn controllers(app: koof::App) -> koof::App {
     app.controller::<zerotrust::v1alpha1::access_application::AccessApplication>()
+        .controller::<zerotrust::v1alpha1::access_policy::AccessPolicy>()
         .controller::<cloudflare::v1alpha1::account::Account>()
         .controller::<cloudflare::v1alpha1::cluster_account::ClusterAccount>()
         .controller::<zones::v1alpha1::custom_hostname::CustomHostname>()
@@ -57,6 +58,7 @@ pub fn controllers(app: koof::App) -> koof::App {
 pub fn fake() -> koof::fake::Fake {
     koof::fake::Fake::new()
         .resource::<zerotrust::v1alpha1::access_application::AccessApplication>()
+        .resource::<zerotrust::v1alpha1::access_policy::AccessPolicy>()
         .resource::<cloudflare::v1alpha1::account::Account>()
         .resource::<cloudflare::v1alpha1::cluster_account::ClusterAccount>()
         .resource::<zones::v1alpha1::custom_hostname::CustomHostname>()
@@ -97,22 +99,23 @@ pub fn crds() -> Vec<
 > {
     vec![
         < zerotrust::v1alpha1::access_application::AccessApplication as
-        kube::CustomResourceExt > ::crd(), < cloudflare::v1alpha1::account::Account as
         kube::CustomResourceExt > ::crd(), <
-        cloudflare::v1alpha1::cluster_account::ClusterAccount as kube::CustomResourceExt
-        > ::crd(), < zones::v1alpha1::custom_hostname::CustomHostname as
-        kube::CustomResourceExt > ::crd(), < storage::v1alpha1::d1_database::D1Database
-        as kube::CustomResourceExt > ::crd(), < zones::v1alpha1::dns_record::DNSRecord as
+        zerotrust::v1alpha1::access_policy::AccessPolicy as kube::CustomResourceExt >
+        ::crd(), < cloudflare::v1alpha1::account::Account as kube::CustomResourceExt >
+        ::crd(), < cloudflare::v1alpha1::cluster_account::ClusterAccount as
         kube::CustomResourceExt > ::crd(), <
-        zones::v1alpha1::email_routing_rule::EmailRoutingRule as kube::CustomResourceExt
-        > ::crd(), < zerotrust::v1alpha1::gateway_list::GatewayList as
+        zones::v1alpha1::custom_hostname::CustomHostname as kube::CustomResourceExt >
+        ::crd(), < storage::v1alpha1::d1_database::D1Database as kube::CustomResourceExt
+        > ::crd(), < zones::v1alpha1::dns_record::DNSRecord as kube::CustomResourceExt >
+        ::crd(), < zones::v1alpha1::email_routing_rule::EmailRoutingRule as
         kube::CustomResourceExt > ::crd(), <
-        zerotrust::v1alpha1::gateway_rule::GatewayRule as kube::CustomResourceExt >
-        ::crd(), < zones::v1alpha1::healthcheck::Healthcheck as kube::CustomResourceExt >
-        ::crd(), < storage::v1alpha1::hyperdrive::Hyperdrive as kube::CustomResourceExt >
-        ::crd(), < cloudflare::v1alpha1::ip_list::IPList as kube::CustomResourceExt >
-        ::crd(), < storage::v1alpha1::kv_namespace::KVNamespace as
-        kube::CustomResourceExt > ::crd(), <
+        zerotrust::v1alpha1::gateway_list::GatewayList as kube::CustomResourceExt >
+        ::crd(), < zerotrust::v1alpha1::gateway_rule::GatewayRule as
+        kube::CustomResourceExt > ::crd(), < zones::v1alpha1::healthcheck::Healthcheck as
+        kube::CustomResourceExt > ::crd(), < storage::v1alpha1::hyperdrive::Hyperdrive as
+        kube::CustomResourceExt > ::crd(), < cloudflare::v1alpha1::ip_list::IPList as
+        kube::CustomResourceExt > ::crd(), < storage::v1alpha1::kv_namespace::KVNamespace
+        as kube::CustomResourceExt > ::crd(), <
         loadbalancing::v1alpha1::lb_monitor::LoadBalancerMonitor as
         kube::CustomResourceExt > ::crd(), <
         loadbalancing::v1alpha1::lb_pool::LoadBalancerPool as kube::CustomResourceExt >
@@ -150,8 +153,9 @@ pub fn docs() -> Vec<koof::docs::ResourceDoc> {
     vec![
         koof::docs::ResourceDoc::of:: <
         zerotrust::v1alpha1::access_application::AccessApplication > (),
-        koof::docs::ResourceDoc::of:: < cloudflare::v1alpha1::account::Account > (),
-        koof::docs::ResourceDoc::of:: <
+        koof::docs::ResourceDoc::of:: < zerotrust::v1alpha1::access_policy::AccessPolicy
+        > (), koof::docs::ResourceDoc::of:: < cloudflare::v1alpha1::account::Account >
+        (), koof::docs::ResourceDoc::of:: <
         cloudflare::v1alpha1::cluster_account::ClusterAccount > (),
         koof::docs::ResourceDoc::of:: < zones::v1alpha1::custom_hostname::CustomHostname
         > (), koof::docs::ResourceDoc::of:: < storage::v1alpha1::d1_database::D1Database

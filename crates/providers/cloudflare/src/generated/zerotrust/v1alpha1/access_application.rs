@@ -8,6 +8,11 @@ fn for_provider_schema(schema: &mut schemars::Schema) {
         schema,
         &[
             koof::schema::Validation {
+                rule: "has(self.id) != has(self.policyRef)",
+                message: "set exactly one of id and policyRef",
+                field: "policies[]",
+            },
+            koof::schema::Validation {
                 rule: "self == oldSelf",
                 message: "accountRef is immutable",
                 field: "accountRef",
@@ -138,6 +143,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
             "use_clientless_isolation_app_launcher_url",
         ],
     )
+    .with_list_map_keys(&[("policies", &["id"])])
     .with_references(
         &[
             koof::resource::Reference::new(
@@ -147,6 +153,20 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
                     &crate::generated::cloudflare::v1alpha1::account::DESCRIPTOR,
                     &crate::generated::cloudflare::v1alpha1::cluster_account::DESCRIPTOR,
                 ],
+            ),
+        ],
+    )
+    .with_item_references(
+        &[
+            koof::resource::ItemReference::new(
+                "/spec/forProvider/policies",
+                koof::resource::Reference::new(
+                    "policy",
+                    "/policyRef",
+                    &[&crate::generated::zerotrust::v1alpha1::access_policy::DESCRIPTOR],
+                ),
+                "id",
+                "external_id",
             ),
         ],
     )
