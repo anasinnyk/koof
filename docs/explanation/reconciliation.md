@@ -102,8 +102,9 @@ API catching up, not as a reason to create again.
 ### Update
 
 koof compares `spec.forProvider` with `status.atProvider` field by field. Integers
-are compared exactly and floats with a relative tolerance. Fields unset in the spec,
-and fields the API does not return, are not compared. If anything differs, the `update` operation is
+are compared exactly and floats with a relative tolerance. Lists are compared by
+position, except those with `listMapKeys`, whose items are matched by key. Fields
+unset in the spec, and fields the API does not return, are not compared. If anything differs, the `update` operation is
 sent and the resource is observed again.
 
 Some APIs normalise values: a record name gets lower-cased, a list comes back

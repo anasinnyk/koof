@@ -26,6 +26,13 @@ pub fn generate_spec(
     let fields_type = types.path(&schema_name(resource, "ForProvider"))?;
 
     let validations = validation_tokens(resource);
+    let list_maps: Vec<TokenStream> = resource
+        .list_map_keys
+        .iter()
+        .map(|(field, keys)| quote!(koof::schema::ListMap { field: #field, keys: &[#(#keys),*] }))
+        .collect();
+    let list_maps = (!list_maps.is_empty())
+        .then(|| quote!(koof::schema::add_list_maps(schema, &[#(#list_maps),*]);));
     let print_columns = print_columns(resource);
     let namespaced = resource.namespaced.then(|| quote!(namespaced,));
     let mut fields = reference_fields(resource)?;
@@ -38,6 +45,7 @@ pub fn generate_spec(
         /// overlay's CEL validations.
         fn for_provider_schema(schema: &mut schemars::Schema) {
             koof::schema::flatten_unions(schema);
+            #list_maps
             koof::schema::add_validations(schema, &[#(#validations),*]);
         }
 

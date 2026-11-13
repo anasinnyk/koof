@@ -125,7 +125,8 @@ For APIs that soft-delete (the observe endpoint keeps answering `200`),
 that field is set.
 Request bodies default to `spec.forProvider`; `request.set` adds values such as
 identifiers of referenced resources. `x-kube-field` on a property sets `ignored`,
-`lateInitialize: false` or `sensitive` (kept out of `status.atProvider`).
+`lateInitialize: false`, `sensitive` (kept out of `status.atProvider`) or
+`listMapKeys` (list items matched by key, in any order).
 
 ## Provider crate
 

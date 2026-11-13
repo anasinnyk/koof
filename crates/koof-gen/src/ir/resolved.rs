@@ -28,6 +28,7 @@ pub struct Resource<'a> {
     pub validations: &'a [ValidationIr],
     pub immutable: &'a [String],
     pub late_initialize: &'a [String],
+    pub list_map_keys: &'a BTreeMap<String, Vec<String>>,
     pub test: Option<&'a TestIr>,
     pub observe: Operation<'a>,
     pub create: Option<Create<'a>>,

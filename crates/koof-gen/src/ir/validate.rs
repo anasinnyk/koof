@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use super::{
     ApiKeyLocationIr, CredentialSourceIr, FieldPath, OperationId, OperationIr, ProviderIr,
-    ResourceIr, ResourceName, SecuritySchemeIr, ValueExpr,
+    ResourceFields, ResourceIr, ResourceName, SecuritySchemeIr, ValueExpr,
     resolved::{
         Auth, Create, Credentials, Operation, Provider, Reference, Resource, cluster_kind,
         cluster_name,
@@ -15,8 +15,13 @@ pub struct ValidationError {
     pub message: String,
 }
 
-/// Checks `ir` and resolves it for code generation. `late_initialize` holds the
-/// late-initializable fields per resource (see [`crate::spec::CodegenSpec`]).
+static NO_FIELDS: ResourceFields = ResourceFields {
+    late_initialize: Vec::new(),
+    list_map_keys: BTreeMap::new(),
+};
+
+/// Checks `ir` and resolves it for code generation. `fields` holds the
+/// `x-kube-field` behaviour per resource (see [`crate::spec::CodegenSpec`]).
 ///
 /// # Errors
 ///
@@ -26,7 +31,7 @@ pub struct ValidationError {
 /// reference or credential fields outside `spec.forProvider`.
 pub fn validate<'a>(
     ir: &'a ProviderIr,
-    late_initialize: &'a BTreeMap<ResourceName, Vec<String>>,
+    fields: &'a BTreeMap<ResourceName, ResourceFields>,
 ) -> Result<Provider<'a>, Vec<ValidationError>> {
     let mut errors = Vec::new();
     let mut kinds = BTreeMap::new();
@@ -40,7 +45,7 @@ pub fn validate<'a>(
             resource,
             errors: &mut errors,
         };
-        let fields = late_initialize.get(name).map_or(&[][..], Vec::as_slice);
+        let fields = fields.get(name).unwrap_or(&NO_FIELDS);
         if let Some(namespaced) = checker.resolve(fields) {
             let cluster = resource
                 .cluster
@@ -96,7 +101,7 @@ struct Checker<'a, 'e> {
 }
 
 impl<'a> Checker<'a, '_> {
-    fn resolve(&mut self, late_initialize: &'a [String]) -> Option<Resource<'a>> {
+    fn resolve(&mut self, fields: &'a ResourceFields) -> Option<Resource<'a>> {
         let resource = self.resource;
         let errors_before = self.errors.len();
 
@@ -134,7 +139,8 @@ impl<'a> Checker<'a, '_> {
             credentials,
             validations: &resource.validations,
             immutable: &resource.immutable,
-            late_initialize,
+            late_initialize: &fields.late_initialize,
+            list_map_keys: &fields.list_map_keys,
             test: resource.test.as_ref(),
             observe: observe?,
             create,

@@ -103,8 +103,36 @@ fn nullable_becomes_a_null_type() {
 #[case::except_fields_marked_late_initialize_false("widget", &["color", "name", "size"])]
 fn late_initializes_writable_fields(#[case] resource: &str, #[case] fields: &[&str]) {
     assert_eq!(
-        codegen(&widgets()).late_initialize[&ResourceName(resource.to_owned())],
+        codegen(&widgets()).fields[&ResourceName(resource.to_owned())].late_initialize,
         fields
+    );
+}
+
+#[test]
+fn keyed_lists_are_collected_per_resource() {
+    let fields = codegen(&widgets_with(
+        "
+  - target: $.components.schemas.account.properties
+    update:
+      members:
+        type: array
+        items:
+          type: object
+          required: [email]
+          properties:
+            email:
+              type: string
+            role:
+              type: string
+        x-kube-field:
+          listMapKeys: [email]
+",
+    ))
+    .fields;
+
+    assert_eq!(
+        fields[&ResourceName("account".to_owned())].list_map_keys,
+        [("members".to_owned(), vec!["email".to_owned()])].into()
     );
 }
 

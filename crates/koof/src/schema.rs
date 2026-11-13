@@ -278,6 +278,32 @@ pub fn add_validations(schema: &mut schemars::Schema, validations: &[Validation]
     }
 }
 
+#[derive(Debug)]
+pub struct ListMap {
+    pub field: &'static str,
+    pub keys: &'static [&'static str],
+}
+
+pub fn add_list_maps(schema: &mut schemars::Schema, list_maps: &[ListMap]) {
+    for list_map in list_maps {
+        let Some(node) = schema
+            .as_object_mut()
+            .and_then(|root| node_mut(root, list_map.field))
+        else {
+            tracing::warn!(
+                field = list_map.field,
+                "list field not found in the schema; list type skipped"
+            );
+            continue;
+        };
+        node.insert("x-kubernetes-list-type".to_owned(), Value::from("map"));
+        node.insert(
+            "x-kubernetes-list-map-keys".to_owned(),
+            Value::from(list_map.keys.to_vec()),
+        );
+    }
+}
+
 fn node_mut<'a>(
     root: &'a mut Map<String, Value>,
     path: &str,
@@ -400,5 +426,30 @@ mod tests {
             field: "forProvider.name",
         }]);
         assert_eq!(schema, with_validations(&[]));
+    }
+
+    #[test]
+    fn keyed_lists_become_list_maps() {
+        let mut schema = schemars::Schema::try_from(json!({
+            "type": "object",
+            "properties": { "teamRoles": { "type": "array", "items": { "type": "object" } } },
+        }))
+        .expect("schema");
+        add_list_maps(
+            &mut schema,
+            &[ListMap {
+                field: "teamRoles",
+                keys: &["teamSlug"],
+            }],
+        );
+        assert_eq!(
+            schema.pointer("/properties/teamRoles"),
+            Some(&json!({
+                "type": "array",
+                "items": { "type": "object" },
+                "x-kubernetes-list-type": "map",
+                "x-kubernetes-list-map-keys": ["teamSlug"],
+            }))
+        );
     }
 }

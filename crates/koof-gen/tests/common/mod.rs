@@ -54,7 +54,7 @@ pub fn generated(document: &Value) -> Result<BTreeMap<String, String>, String> {
     let ir = extract(&prepared).map_err(|error| format!("{:#}", anyhow::Error::from(error)))?;
     let codegen = spec::for_codegen(&prepared)
         .map_err(|error| format!("{:#}", anyhow::Error::from(error)))?;
-    let provider = validate(&ir, &codegen.late_initialize).map_err(|errors| {
+    let provider = validate(&ir, &codegen.fields).map_err(|errors| {
         errors
             .iter()
             .map(|error| format!("{}: {}", error.location, error.message))

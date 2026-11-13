@@ -63,6 +63,7 @@ On a property schema.
 | `ignored` | `false` | With `fields.mode: all`, leave the property out of `forProvider` |
 | `lateInitialize` | `true` | Copy the observed value into an unset spec field |
 | `sensitive` | `false` | Never copy the property into `status.atProvider`, at any depth (secrets the API returns) |
+| `listMapKeys` | | Top-level list of objects: match items by these required keys, in any order, when comparing with the observation; the CRD gets `x-kubernetes-list-type: map` |
 
 ## Values
 

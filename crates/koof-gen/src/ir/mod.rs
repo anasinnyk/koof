@@ -31,6 +31,13 @@ pub struct HttpIr {
 #[serde(transparent)]
 pub struct ResourceName(pub String);
 
+/// Per-field behaviour of a resource's `forProvider`, read from `x-kube-field`.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct ResourceFields {
+    pub late_initialize: Vec<String>,
+    pub list_map_keys: BTreeMap<String, Vec<String>>,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
 pub struct OperationId(pub String);
 

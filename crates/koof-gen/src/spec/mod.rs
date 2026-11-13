@@ -9,7 +9,7 @@ pub use normalize::{drop_non_string_enums, normalize_nullable, relax_read_only_r
 pub use prune::prune;
 pub use synthesize::synthesize;
 
-use crate::ir::ResourceName;
+use crate::ir::{ResourceFields, ResourceName};
 use serde_json::{Map, Value};
 use std::collections::BTreeMap;
 
@@ -46,7 +46,7 @@ pub fn prepare(document: &Value) -> Result<Value, SpecError> {
 #[derive(Debug)]
 pub struct CodegenSpec {
     pub document: Value,
-    pub late_initialize: BTreeMap<ResourceName, Vec<String>>,
+    pub fields: BTreeMap<ResourceName, ResourceFields>,
 }
 
 /// Turns a [`prepare`]d document into the schema set for type generation:
@@ -61,14 +61,11 @@ pub fn for_codegen(prepared: &Value) -> Result<CodegenSpec, SpecError> {
     let mut document = prepared.clone();
     relax_read_only_required(&mut document);
     normalize_nullable(&mut document);
-    let late_initialize = synthesize(&mut document)?;
+    let fields = synthesize(&mut document)?;
     schemas_mut(&mut document)?
         .values_mut()
         .for_each(drop_non_string_enums);
-    Ok(CodegenSpec {
-        document,
-        late_initialize,
-    })
+    Ok(CodegenSpec { document, fields })
 }
 
 /// `components.schemas` of `document`, created when missing (a fully
