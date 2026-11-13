@@ -1,6 +1,6 @@
 use super::{
-    CredentialSourceIr, HttpIr, OperationId, OperationIr, ResourceName, TestIr, ValidationIr,
-    ValueExpr,
+    CredentialSourceIr, HttpIr, ListMapIr, OperationId, OperationIr, ResourceName, TestIr,
+    ValidationIr, ValueExpr,
 };
 use std::collections::BTreeMap;
 
@@ -24,11 +24,12 @@ pub struct Resource<'a> {
     pub has_cluster_variant: bool,
     pub identifiers: &'a BTreeMap<String, ValueExpr>,
     pub references: Vec<Reference<'a>>,
+    pub item_references: Vec<ItemReference<'a>>,
     pub credentials: Option<Credentials<'a>>,
     pub validations: &'a [ValidationIr],
     pub immutable: &'a [String],
     pub late_initialize: &'a [String],
-    pub list_map_keys: &'a BTreeMap<String, Vec<String>>,
+    pub list_map_keys: &'a BTreeMap<String, ListMapIr>,
     pub test: Option<&'a TestIr>,
     pub observe: Operation<'a>,
     pub create: Option<Create<'a>>,
@@ -58,6 +59,18 @@ pub struct Reference<'a> {
     pub target_group: &'a str,
     pub target_version: &'a str,
     pub targets: Vec<ResourceName>,
+}
+
+#[derive(Debug, Clone)]
+pub struct ItemReference<'a> {
+    pub name: &'a str,
+    pub list: &'a str,
+    pub field: &'a str,
+    pub into: &'a str,
+    pub identifier: &'a str,
+    pub target: &'a ResourceName,
+    pub target_group: &'a str,
+    pub target_version: &'a str,
 }
 
 #[derive(Debug, Clone)]

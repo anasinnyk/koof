@@ -164,31 +164,86 @@ pub async fn traverse(
                 from: reference.from,
             }
         })?;
-
-        let api_resource = (descriptor.api_resource)();
-        let (api, namespace): (Api<DynamicObject>, Option<String>) =
-            match (descriptor.namespaced, current.namespace.clone()) {
-                (false, _) => (Api::all_with(client.clone(), &api_resource), None),
-                (true, Some(namespace)) => (
-                    Api::namespaced_with(client.clone(), &namespace, &api_resource),
-                    Some(namespace),
-                ),
-                (true, None) => {
-                    return Err(ResolveValueError::ClusterScopedReference {
-                        kind: current.descriptor.kind,
-                        target: descriptor.kind,
-                    });
-                }
-            };
-
-        let object = api.get(&name).await?;
-        current = Node {
-            descriptor,
-            namespace,
-            value: serde_json::to_value(object)?,
-        };
+        current = fetch(client, &current, descriptor, &name).await?;
     }
     Ok(current)
+}
+
+async fn fetch(
+    client: &kube::Client,
+    from: &Node,
+    descriptor: &'static ResourceDescriptor,
+    name: &str,
+) -> Result<Node, ResolveValueError> {
+    let api_resource = (descriptor.api_resource)();
+    let (api, namespace): (Api<DynamicObject>, Option<String>) =
+        match (descriptor.namespaced, from.namespace.clone()) {
+            (false, _) => (Api::all_with(client.clone(), &api_resource), None),
+            (true, Some(namespace)) => (
+                Api::namespaced_with(client.clone(), &namespace, &api_resource),
+                Some(namespace),
+            ),
+            (true, None) => {
+                return Err(ResolveValueError::ClusterScopedReference {
+                    kind: from.descriptor.kind,
+                    target: descriptor.kind,
+                });
+            }
+        };
+    let object = api.get(name).await?;
+    Ok(Node {
+        descriptor,
+        namespace,
+        value: serde_json::to_value(object)?,
+    })
+}
+
+/// `node` with its item references resolved: each list item that references an
+/// object gets that object's identifier in its `into` field, in place of the
+/// reference.
+///
+/// # Errors
+///
+/// Returns [`ResolveValueError`] when a reference is malformed, the referenced
+/// object cannot be read, or it has no value for the identifier yet.
+pub async fn with_item_references(
+    client: &kube::Client,
+    node: &Node,
+) -> Result<Node, ResolveValueError> {
+    let mut resolved = node.clone();
+    for item_reference in node.descriptor.item_references {
+        let Some(Value::Array(items)) = node.value.pointer(item_reference.list) else {
+            continue;
+        };
+        for (index, item) in items.iter().enumerate() {
+            let Some((descriptor, name)) = target(item, &item_reference.reference)? else {
+                continue;
+            };
+            let referenced = fetch(client, node, descriptor, &name).await?;
+            let identifier = descriptor.identifier(item_reference.identifier).ok_or(
+                ResolveValueError::UnknownIdentifier {
+                    kind: descriptor.kind,
+                    name: item_reference.identifier,
+                },
+            )?;
+            let value = resolve_value(client, &referenced, identifier)
+                .await?
+                .ok_or_else(|| ResolveValueError::ReferenceNotReady {
+                    kind: descriptor.kind,
+                    via: format!("{}[{index}]", item_reference.reference.name),
+                    identifier: item_reference.identifier,
+                })?;
+            if let Some(item) = resolved
+                .value
+                .pointer_mut(&format!("{}/{index}", item_reference.list))
+                .and_then(Value::as_object_mut)
+            {
+                item.remove(item_reference.reference.from.trim_start_matches('/'));
+                item.insert(item_reference.into.to_owned(), Value::String(value));
+            }
+        }
+    }
+    Ok(resolved)
 }
 
 /// Credentials for `node`: its own Secret, or the Secret of the resource its
@@ -520,6 +575,44 @@ mod tests {
             assert_eq!(
                 credentials(node, objects).await.err(),
                 Some(error.to_owned())
+            );
+        }
+
+        async fn with_aliases(aliases: Value, objects: &[Value]) -> Result<Value, String> {
+            let mut node = Node::of(&record(None, www())).expect("node");
+            node.value["spec"]["forProvider"]["aliases"] = aliases;
+            with_item_references(&kubernetes(objects), &node)
+                .await
+                .map(|node| node.value["spec"]["forProvider"]["aliases"].clone())
+                .map_err(|error| error.to_string())
+        }
+
+        #[tokio::test]
+        async fn item_references_fill_their_items() {
+            assert_eq!(
+                with_aliases(
+                    json!([{ "zoneRef": { "name": "example" } }, { "zoneId": "zone-9" }]),
+                    &[zone()]
+                )
+                .await,
+                Ok(json!([{ "zoneId": "zone-1" }, { "zoneId": "zone-9" }]))
+            );
+        }
+
+        #[rstest]
+        #[case::referenced_object_without_the_identifier(
+            &[object("Zone", "example", None, json!({ "forProvider": {} }))],
+            "reference not ready: Zone referenced via alias[0] has no external_id yet"
+        )]
+        #[case::referenced_object_missing(&[], "Kubernetes API request failed")]
+        #[tokio::test]
+        async fn item_references_wait_for_their_objects(
+            #[case] objects: &[Value],
+            #[case] error: &str,
+        ) {
+            assert_eq!(
+                with_aliases(json!([{ "zoneRef": { "name": "example" } }]), objects).await,
+                Err(error.to_owned())
             );
         }
     }

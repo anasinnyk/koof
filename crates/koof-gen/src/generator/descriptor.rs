@@ -6,7 +6,7 @@ use crate::{
     },
     ir::{
         CredentialSourceIr, ValueExpr,
-        resolved::{Auth, Create, Credentials, Operation, Resource},
+        resolved::{Auth, Create, Credentials, ItemReference, Operation, Resource},
     },
 };
 use proc_macro2::TokenStream;
@@ -43,6 +43,34 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
         })
         .collect::<Result<Vec<_>, GeneratorError>>()?;
 
+    let item_references = resource
+        .item_references
+        .iter()
+        .map(|item_reference| {
+            let module = module_path(
+                item_reference.target_group,
+                item_reference.target_version,
+                item_reference.target,
+            )?;
+            let list = pointer(&format!("spec.forProvider.{}", item_reference.list));
+            let from = pointer(item_reference.field);
+            let ItemReference {
+                name,
+                into,
+                identifier,
+                ..
+            } = item_reference;
+            Ok(quote! {
+                koof::resource::ItemReference::new(
+                    #list,
+                    koof::resource::Reference::new(#name, #from, &[&#module::DESCRIPTOR]),
+                    #into,
+                    #identifier,
+                )
+            })
+        })
+        .collect::<Result<Vec<_>, GeneratorError>>()?;
+
     let credentials = resource.credentials.as_ref().map(|credentials| {
         let credentials = credentials_tokens(credentials);
         quote!(.with_credentials(#credentials))
@@ -51,12 +79,13 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
     let late_initialize = slice_setter("with_late_initialize", resource.late_initialize);
     let list_map_keys = slice_setter(
         "with_list_map_keys",
-        resource
-            .list_map_keys
-            .iter()
-            .map(|(field, keys)| quote!((#field, &[#(#keys),*]))),
+        resource.list_map_keys.iter().map(|(field, list_map)| {
+            let keys = &list_map.keys;
+            quote!((#field, &[#(#keys),*]))
+        }),
     );
     let references = slice_setter("with_references", references);
+    let item_references = slice_setter("with_item_references", item_references);
     let observe = observe_descriptor(resource.observe);
     let create = resource.create.map(|create| {
         let create = create_descriptor(create);
@@ -83,6 +112,7 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
                 #late_initialize
                 #list_map_keys
                 #references
+                #item_references
                 #credentials
                 #create
                 #update

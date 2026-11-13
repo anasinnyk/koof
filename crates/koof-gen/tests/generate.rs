@@ -1,6 +1,6 @@
 mod common;
 
-use common::{generated, widgets, widgets_with};
+use common::{PARTS, generated, widgets, widgets_with};
 
 #[test]
 fn generates_the_provider_crate() {
@@ -65,4 +65,14 @@ fn keyed_lists_reach_the_descriptor_and_the_crd_schema() {
 
     assert!(account.contains(r#".with_list_map_keys(&[("members", &["email"])])"#));
     assert!(account.contains("koof::schema::add_list_maps("));
+}
+
+#[test]
+fn item_references_reach_the_descriptor_and_the_crd_schema() {
+    let files = generated(&widgets_with(PARTS)).expect("generated");
+
+    insta::assert_snapshot!(
+        "widget_with_item_references",
+        &files["src/generated/shop/v1alpha1/widget.rs"]
+    );
 }

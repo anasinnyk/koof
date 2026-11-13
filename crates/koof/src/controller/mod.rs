@@ -12,7 +12,10 @@ pub use context::{Attempts, Backoff, ControllerContext, SyncTracker};
 
 use crate::{
     error::ReconcileError,
-    external,
+    external::{
+        self,
+        resolve::{Node, with_item_references},
+    },
     resource::{EXTERNAL_NAME, ManagedResource},
     retry::{self, RetryPolicy},
 };
@@ -131,7 +134,7 @@ async fn reconcile_inner<R: ManagedResource>(
 
     let observation = external::observe(context, resource).await?;
     let drifted_fields = if observation.exists && !deleting {
-        drift(resource, &observation)?
+        drift(&desired(context, resource).await?, &observation)
     } else {
         Vec::new()
     };
@@ -310,6 +313,13 @@ async fn release<R: ManagedResource>(
     Ok(Action::await_change())
 }
 
+async fn desired<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+) -> Result<Node, ReconcileError> {
+    Ok(with_item_references(&context.kube_client, &Node::of(resource)?).await?)
+}
+
 async fn update_external<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
@@ -330,7 +340,7 @@ async fn update_external<R: ManagedResource>(
     .await;
 
     let observation = external::observe(context, resource).await?;
-    let remaining = drift(resource, &observation)?;
+    let remaining = drift(&desired(context, resource).await?, &observation);
     context.attempts.drift_persisted(
         &object_key(resource),
         resource.meta().generation,

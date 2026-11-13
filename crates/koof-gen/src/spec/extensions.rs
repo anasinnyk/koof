@@ -1,7 +1,7 @@
 use super::SpecError;
 use crate::ir::{
-    CredentialsIr, FieldPath, ReferenceIr, RequestMappingIr, ResourceName, TestIr, ValidationIr,
-    ValueExpr,
+    CredentialsIr, FieldPath, ItemReferenceIr, ReferenceIr, RequestMappingIr, ResourceName, TestIr,
+    ValidationIr, ValueExpr,
 };
 use serde::{Deserialize, de::DeserializeOwned};
 use serde_json::Value;
@@ -55,6 +55,8 @@ pub struct ResourceExtension {
     pub identifiers: BTreeMap<String, ValueExpr>,
     #[serde(default)]
     pub references: BTreeMap<String, ReferenceIr>,
+    #[serde(default)]
+    pub item_references: BTreeMap<String, ItemReferenceIr>,
     pub credentials: Option<CredentialsIr>,
     #[serde(default)]
     pub validations: Vec<ValidationIr>,

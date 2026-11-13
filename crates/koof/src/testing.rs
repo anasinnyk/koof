@@ -4,8 +4,9 @@ use crate::{
     managed::ManagedResourceSpec,
     reference::SecretKeySelector,
     resource::{
-        AuthScheme, CreateDescriptor, CredentialSource, Credentials, ObserveDescriptor,
-        OperationDescriptor, Reference, RequestMapping, UpdateDescriptor, ValueExpr,
+        AuthScheme, CreateDescriptor, CredentialSource, Credentials, ItemReference,
+        ObserveDescriptor, OperationDescriptor, Reference, RequestMapping, UpdateDescriptor,
+        ValueExpr,
     },
     status::ManagedStatus,
 };
@@ -181,6 +182,12 @@ pub static RECORD: ResourceDescriptor = ResourceDescriptor::new(
     "zone",
     "/spec/forProvider/zoneRef",
     &[&ZONE],
+)])
+.with_item_references(&[ItemReference::new(
+    "/spec/forProvider/aliases",
+    Reference::new("alias", "/zoneRef", &[&ZONE]),
+    "zoneId",
+    "external_id",
 )])
 .with_credentials(Credentials::new(
     CredentialSource::Related {
