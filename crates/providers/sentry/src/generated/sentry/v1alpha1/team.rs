@@ -96,7 +96,12 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
                 ),
         ),
     )
-    .with_identifiers(&[("external_id", koof::resource::ValueExpr::ExternalName)])
+    .with_identifiers(
+        &[
+            ("external_id", koof::resource::ValueExpr::ExternalName),
+            ("slug", koof::resource::ValueExpr::Field("/status/atProvider/slug")),
+        ],
+    )
     .with_late_initialize(&["name", "slug"])
     .with_references(
         &[

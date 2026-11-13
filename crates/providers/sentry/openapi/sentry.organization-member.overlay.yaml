@@ -33,6 +33,13 @@ actions:
             from: spec.forProvider.organizationRef
             target: organization
 
+        itemReferences:
+          team:
+            from: spec.forProvider.teamRoles[].teamRef
+            target: team
+            into: teamSlug
+            identifier: slug
+
         credentials:
           securityScheme: auth_token
           source:

@@ -15414,6 +15414,7 @@ impl ::std::default::Default for SentryV1alpha1OrganizationMemberForProviderOrgR
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
@@ -15423,9 +15424,13 @@ pub struct SentryV1alpha1OrganizationMemberForProviderTeamRolesItem {
     pub role: ::std::option::Option<
         SentryV1alpha1OrganizationMemberForProviderTeamRolesItemRole,
     >,
+    #[serde(rename = "teamRef", skip_serializing_if = "::std::option::Option::is_none")]
+    pub team_ref: ::std::option::Option<
+        SentryV1alpha1OrganizationMemberForProviderTeamRolesItemTeamRef,
+    >,
     ///Slug of the team.
-    #[serde(rename = "teamSlug")]
-    pub team_slug: ::std::string::String,
+    #[serde(rename = "teamSlug", skip_serializing_if = "::std::option::Option::is_none")]
+    pub team_slug: ::std::option::Option<::std::string::String>,
 }
 ///Team role; unset keeps the role Sentry assigns.
 #[derive(
@@ -15486,6 +15491,18 @@ for SentryV1alpha1OrganizationMemberForProviderTeamRolesItemRole {
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
     }
+}
+///A reference to an object of kind `Team` in the namespace of the resource holding the reference; sets `teamSlug`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1OrganizationMemberForProviderTeamRolesItemTeamRef {
+    pub name: ::std::string::String,
 }
 ///`ProjectAtProvider`
 #[derive(

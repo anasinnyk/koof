@@ -22,6 +22,9 @@ actions:
         identifiers:
           external_id:
             type: external_name
+          slug:
+            type: field
+            path: status.atProvider.slug
 
         references:
           organization:
