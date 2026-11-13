@@ -11,7 +11,7 @@ use crate::{
     resource::{EXTERNAL_NAME, ManagedResource, ObserveDescriptor, OperationDescriptor},
 };
 use http::{Auth, HttpError, Operation};
-use resolve::{Node, resolve_credentials, resolve_value};
+use resolve::{Node, resolve_credentials, resolve_value, with_item_references};
 use serde_json::Value;
 
 pub struct Observation {
@@ -141,7 +141,7 @@ pub async fn create<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
 ) -> Result<String, ReconcileError> {
-    let node = Node::of(resource)?;
+    let node = with_item_references(&context.kube_client, &Node::of(resource)?).await?;
     let descriptor = node.descriptor;
     let create = descriptor
         .create
@@ -229,7 +229,7 @@ pub async fn update<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
 ) -> Result<(), ReconcileError> {
-    let node = Node::of(resource)?;
+    let node = with_item_references(&context.kube_client, &Node::of(resource)?).await?;
     let descriptor = node.descriptor;
     let update = descriptor
         .update

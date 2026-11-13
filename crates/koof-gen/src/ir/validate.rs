@@ -4,8 +4,8 @@ use super::{
     ApiKeyLocationIr, CredentialSourceIr, FieldPath, OperationId, OperationIr, ProviderIr,
     ResourceFields, ResourceIr, ResourceName, SecuritySchemeIr, ValueExpr,
     resolved::{
-        Auth, Create, Credentials, Operation, Provider, Reference, Resource, cluster_kind,
-        cluster_name,
+        Auth, Create, Credentials, ItemReference, Operation, Provider, Reference, Resource,
+        cluster_kind, cluster_name,
     },
 };
 
@@ -116,6 +116,7 @@ impl<'a> Checker<'a, '_> {
             );
         }
         let references = self.references();
+        let item_references = self.item_references();
         let credentials = self.credentials();
         let observe = self.operation("observe", Some(&resource.lifecycle.observe));
         let create = self.create();
@@ -136,6 +137,7 @@ impl<'a> Checker<'a, '_> {
             has_cluster_variant: resource.cluster,
             identifiers: &resource.identifiers,
             references,
+            item_references,
             credentials,
             validations: &resource.validations,
             immutable: &resource.immutable,
@@ -301,6 +303,61 @@ impl<'a> Checker<'a, '_> {
             auth: auth?,
             secret_field,
         })
+    }
+
+    fn item_references(&mut self) -> Vec<ItemReference<'a>> {
+        let mut item_references = Vec::new();
+        for (name, item_reference) in &self.resource.item_references {
+            let location = format!("item_references.{name}");
+            let Some((list, field)) = item_reference.list_and_field() else {
+                self.error(
+                    &location,
+                    format!(
+                        "from must be spec.forProvider.<list>[].<field>: {}",
+                        item_reference.from.0
+                    ),
+                );
+                continue;
+            };
+            let Some(target) = self.ir.resources.get(&item_reference.target) else {
+                self.error(
+                    &location,
+                    format!("unknown target resource {}", item_reference.target.0),
+                );
+                continue;
+            };
+            if self.resource.cluster || target.cluster {
+                self.error(
+                    &location,
+                    "item references between resources with a cluster variant are not supported"
+                        .to_owned(),
+                );
+                continue;
+            }
+            if !target.identifiers.contains_key(&item_reference.identifier) {
+                self.error(
+                    &location,
+                    format!(
+                        "{} has no identifier {}",
+                        item_reference.target.0, item_reference.identifier
+                    ),
+                );
+                continue;
+            }
+            let (target_group, target_version) =
+                target.api_version.split_once('/').unwrap_or_default();
+            item_references.push(ItemReference {
+                name,
+                list,
+                field,
+                into: &item_reference.into,
+                identifier: &item_reference.identifier,
+                target: &item_reference.target,
+                target_group,
+                target_version,
+            });
+        }
+        item_references
     }
 
     fn for_provider_field(&mut self, location: &str, path: &'a FieldPath) -> Option<&'a str> {

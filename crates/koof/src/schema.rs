@@ -310,10 +310,16 @@ fn node_mut<'a>(
 ) -> Option<&'a mut Map<String, Value>> {
     let mut current = root;
     for segment in path.split('.').filter(|segment| !segment.is_empty()) {
+        let (name, items) = segment
+            .strip_suffix("[]")
+            .map_or((segment, false), |name| (name, true));
         current = current
             .get_mut("properties")?
-            .get_mut(segment)?
+            .get_mut(name)?
             .as_object_mut()?;
+        if items {
+            current = current.get_mut("items")?.as_object_mut()?;
+        }
     }
     Some(current)
 }
@@ -415,6 +421,27 @@ mod tests {
         assert_eq!(
             schema.pointer("/properties/forProvider/x-kubernetes-validations"),
             Some(&json!([{ "rule": "self.ttl >= 30", "message": "ttl must be at least 30" }]))
+        );
+    }
+
+    #[test]
+    fn validations_of_list_items_are_attached_to_the_items() {
+        let mut schema = schemars::Schema::try_from(json!({
+            "type": "object",
+            "properties": { "teams": { "type": "array", "items": { "type": "object" } } },
+        }))
+        .expect("schema");
+        add_validations(
+            &mut schema,
+            &[Validation {
+                rule: "has(self.slug) != has(self.teamRef)",
+                message: "set exactly one of slug and teamRef",
+                field: "teams[]",
+            }],
+        );
+        assert_eq!(
+            schema.pointer("/properties/teams/items/x-kubernetes-validations/0/rule"),
+            Some(&json!("has(self.slug) != has(self.teamRef)"))
         );
     }
 

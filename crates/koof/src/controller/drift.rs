@@ -1,27 +1,22 @@
-use crate::{error::ReconcileError, external::Observation, resource::ManagedResource};
+use crate::external::{Observation, resolve::Node};
 use serde_json::Value;
 
-/// Desired fields of `resource` that differ from the observation; the desired
-/// state is the update request's source (`spec.forProvider` by default).
-///
-/// # Errors
-///
-/// Returns [`ReconcileError`] when the resource cannot be serialized.
-pub fn drift<R: ManagedResource>(
-    resource: &R,
-    observation: &Observation,
-) -> Result<Vec<String>, ReconcileError> {
+/// Desired fields of `node` (a resource with its item references resolved) that
+/// differ from the observation; the desired state is the update request's source
+/// (`spec.forProvider` by default).
+#[must_use]
+pub fn drift(node: &Node, observation: &Observation) -> Vec<String> {
     let Some(observed) = &observation.at_provider else {
-        return Ok(Vec::new());
+        return Vec::new();
     };
-    let from = R::descriptor()
+    let descriptor = node.descriptor;
+    let from = descriptor
         .update
         .as_ref()
         .map_or("/spec/forProvider", |update| update.request.from);
-    let value = serde_json::to_value(resource)?;
-    Ok(value.pointer(from).map_or_else(Vec::new, |desired| {
-        drifted(desired, observed, R::descriptor().list_map_keys)
-    }))
+    node.value.pointer(from).map_or_else(Vec::new, |desired| {
+        drifted(desired, observed, descriptor.list_map_keys)
+    })
 }
 
 /// Paths of the `desired` fields that differ from `observed`. Lists in

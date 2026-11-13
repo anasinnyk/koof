@@ -12,7 +12,8 @@ What every generated kind has in common.
 
 A reference is `{name}` in the same namespace. A reference that can point to a
 cluster-scoped kind also takes `kind`, and `apiVersion` when the kind exists in
-several groups.
+several groups. A list item can reference an object instead of naming its ID
+(`teamRoles[].teamRef` instead of `teamSlug`); it sets exactly one of the two.
 
 ## Status
 

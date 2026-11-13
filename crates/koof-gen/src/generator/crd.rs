@@ -29,7 +29,11 @@ pub fn generate_spec(
     let list_maps: Vec<TokenStream> = resource
         .list_map_keys
         .iter()
-        .map(|(field, keys)| quote!(koof::schema::ListMap { field: #field, keys: &[#(#keys),*] }))
+        .filter(|(_, list_map)| list_map.in_schema)
+        .map(|(field, list_map)| {
+            let keys = &list_map.keys;
+            quote!(koof::schema::ListMap { field: #field, keys: &[#(#keys),*] })
+        })
         .collect();
     let list_maps = (!list_maps.is_empty())
         .then(|| quote!(koof::schema::add_list_maps(schema, &[#(#list_maps),*]);));
@@ -140,6 +144,14 @@ fn validation_tokens(resource: &Resource<'_>) -> Vec<TokenStream> {
         .iter()
         .map(|rule| validation(&rule.rule, &rule.message, &rule.field))
         .collect();
+    for item_reference in &resource.item_references {
+        let (into, field) = (item_reference.into, item_reference.field);
+        tokens.push(validation(
+            &format!("has(self.{into}) != has(self.{field})"),
+            &format!("set exactly one of {into} and {field}"),
+            &format!("{}[]", item_reference.list),
+        ));
+    }
     for field in immutable_fields(resource) {
         let (parent, leaf) = field.rsplit_once('.').unwrap_or(("", field));
         tokens.push(validation(

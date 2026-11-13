@@ -38,7 +38,7 @@ fn error(actions: &str) -> Option<String> {
     update:
       apiVerison: shop.widgets.example.dev/v1
 ",
-    "invalid x-kube-resource at components.schemas.widget: unknown field `apiVerison`, expected one of `name`, `apiVersion`, `kind`, `cluster`, `fields`, `identifiers`, `references`, `credentials`, `validations`, `immutable`, `test`"
+    "invalid x-kube-resource at components.schemas.widget: unknown field `apiVerison`, expected one of `name`, `apiVersion`, `kind`, `cluster`, `fields`, `identifiers`, `references`, `itemReferences`, `credentials`, `validations`, `immutable`, `test`"
 )]
 #[case::soft_delete_only_on_observe(
     "
@@ -147,6 +147,32 @@ fn error(actions: &str) -> Option<String> {
         listMapKeys: [id]
 ",
     "resource account: listMapKeys of name: not a list"
+)]
+#[case::item_reference_path_names_a_list_item(
+    "
+  - target: $.components.schemas.widget['x-kube-resource']
+    update:
+      itemReferences:
+        part:
+          from: spec.forProvider.widgetRef
+          target: widget
+          into: name
+          identifier: external_id
+",
+    "resources.widget.item_references.part: from must be spec.forProvider.<list>[].<field>: spec.forProvider.widgetRef"
+)]
+#[case::item_reference_identifier_exists(
+    "
+  - target: $.components.schemas.widget['x-kube-resource']
+    update:
+      itemReferences:
+        part:
+          from: spec.forProvider.tags[].widgetRef
+          target: widget
+          into: name
+          identifier: slug
+",
+    "resource widget: itemReferences.part: the items of tags have no field name"
 )]
 fn rejects_overlay_mistakes(#[case] actions: &str, #[case] message: &str) {
     assert_eq!(error(actions), Some(message.to_owned()));

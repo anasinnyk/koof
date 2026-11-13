@@ -35,7 +35,15 @@ pub struct ResourceName(pub String);
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct ResourceFields {
     pub late_initialize: Vec<String>,
-    pub list_map_keys: BTreeMap<String, Vec<String>>,
+    pub list_map_keys: BTreeMap<String, ListMapIr>,
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct ListMapIr {
+    pub keys: Vec<String>,
+    /// Every key is required, so the CRD can declare the list a map; a key that an
+    /// item reference may fill instead is optional.
+    pub in_schema: bool,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -48,6 +56,7 @@ pub struct ResourceIr {
     pub cluster: bool,
     pub identifiers: BTreeMap<String, ValueExpr>,
     pub references: BTreeMap<String, ReferenceIr>,
+    pub item_references: BTreeMap<String, ItemReferenceIr>,
     pub credentials: Option<CredentialsIr>,
     pub lifecycle: LifecycleIr,
     pub validations: Vec<ValidationIr>,
@@ -78,6 +87,30 @@ pub struct ValidationIr {
 pub struct ReferenceIr {
     pub from: FieldPath,
     pub target: ResourceName,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ItemReferenceIr {
+    pub from: FieldPath,
+    pub target: ResourceName,
+    pub into: String,
+    pub identifier: String,
+}
+
+impl ItemReferenceIr {
+    /// The list and the reference field of `from`
+    /// (`spec.forProvider.<list>[].<field>`).
+    #[must_use]
+    pub fn list_and_field(&self) -> Option<(&str, &str)> {
+        let (list, field) = self
+            .from
+            .0
+            .strip_prefix("spec.forProvider.")?
+            .split_once("[].")?;
+        let plain = |name: &str| !name.is_empty() && !name.contains(['.', '[', ']']);
+        (plain(list) && plain(field)).then_some((list, field))
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]

@@ -62,6 +62,7 @@ pub struct ResourceDescriptor {
     /// `forProvider` lists compared by these item keys instead of by position.
     pub list_map_keys: &'static [(&'static str, &'static [&'static str])],
     pub references: &'static [Reference],
+    pub item_references: &'static [ItemReference],
     pub credentials: Option<Credentials>,
     pub observe: ObserveDescriptor,
     pub create: Option<CreateDescriptor>,
@@ -87,6 +88,7 @@ impl ResourceDescriptor {
             late_initialize: &[],
             list_map_keys: &[],
             references: &[],
+            item_references: &[],
             credentials: None,
             observe,
             create: None,
@@ -133,6 +135,14 @@ impl ResourceDescriptor {
     #[must_use]
     pub const fn with_references(self, references: &'static [Reference]) -> Self {
         Self { references, ..self }
+    }
+
+    #[must_use]
+    pub const fn with_item_references(self, item_references: &'static [ItemReference]) -> Self {
+        Self {
+            item_references,
+            ..self
+        }
     }
 
     #[must_use]
@@ -237,6 +247,35 @@ impl Reference {
             name,
             from,
             targets,
+        }
+    }
+}
+
+/// A reference in each item of the list at `list`; `reference.from` is relative to
+/// the item. Before the desired state is compared or sent, the reference is replaced
+/// by identifier `identifier` of the referenced object in the item's `into`.
+#[derive(Debug)]
+#[non_exhaustive]
+pub struct ItemReference {
+    pub list: &'static str,
+    pub reference: Reference,
+    pub into: &'static str,
+    pub identifier: &'static str,
+}
+
+impl ItemReference {
+    #[must_use]
+    pub const fn new(
+        list: &'static str,
+        reference: Reference,
+        into: &'static str,
+        identifier: &'static str,
+    ) -> Self {
+        Self {
+            list,
+            reference,
+            into,
+            identifier,
         }
     }
 }

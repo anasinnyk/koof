@@ -7,7 +7,9 @@ use super::{
     normalize::is_read_only,
     resolve_ref, schema_ref_name, schemas_mut, success_json_schema,
 };
-use crate::ir::{FieldPath, ResourceFields, ResourceName, synthesized_schema};
+use crate::ir::{
+    FieldPath, ItemReferenceIr, ListMapIr, ResourceFields, ResourceName, synthesized_schema,
+};
 use serde_json::{Map, Value, json};
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -36,6 +38,11 @@ pub fn synthesize(
 
     let mut synthesized = Map::new();
     let mut roots: BTreeMap<ResourceName, String> = BTreeMap::new();
+    let mut item_references = BTreeMap::new();
+    let kinds: BTreeMap<ResourceName, String> = kube_resources(&snapshot)
+        .filter_map(Result::ok)
+        .map(|kube_resource| (kube_resource.extension.name, kube_resource.extension.kind))
+        .collect();
     for kube_resource in kube_resources(&snapshot) {
         let kube_resource = kube_resource?;
         let extension = &kube_resource.extension;
@@ -58,6 +65,7 @@ pub fn synthesize(
             }
         }
         roots.insert(extension.name.clone(), resource.root("ForProvider"));
+        item_references.insert(extension.name.clone(), extension.item_references.clone());
     }
 
     let target = schemas_mut(document)?;
@@ -71,19 +79,105 @@ pub fn synthesize(
         target.insert(name, schema);
     }
 
+    for (name, root) in &roots {
+        for (reference, item_reference) in &item_references[name] {
+            add_item_reference(target, root, item_reference, &kinds).map_err(|message| {
+                SpecError::Resource {
+                    resource: name.0.clone(),
+                    message: format!("itemReferences.{reference}: {message}"),
+                }
+            })?;
+        }
+    }
+
     roots
         .into_iter()
         .map(|(name, root)| {
-            let fields = resource_fields(target, &root, &name)?;
+            let filled = item_references[&name]
+                .values()
+                .filter_map(|reference| {
+                    let (list, _) = reference.list_and_field()?;
+                    Some((list.to_owned(), reference.into.clone()))
+                })
+                .collect();
+            let fields = resource_fields(target, &root, &name, &filled)?;
             Ok((name, fields))
         })
         .collect()
+}
+
+/// Adds the reference field of `item_reference` to the items of its list in the
+/// `forProvider` schema `root` (in each union variant that has the list), and makes
+/// the field it fills optional.
+fn add_item_reference(
+    schemas: &mut Map<String, Value>,
+    root: &str,
+    item_reference: &ItemReferenceIr,
+    kinds: &BTreeMap<ResourceName, String>,
+) -> Result<(), String> {
+    let Some((list, field)) = item_reference.list_and_field() else {
+        return Ok(());
+    };
+    let kind = kinds
+        .get(&item_reference.target)
+        .ok_or_else(|| format!("unknown target resource {}", item_reference.target.0))?;
+    let snapshot = schemas.clone();
+    let objects: Vec<String> = match snapshot.get(root).and_then(|root| root.get("oneOf")) {
+        Some(Value::Array(variants)) => variants.iter().filter_map(schema_ref_name).collect(),
+        _ => vec![root.to_owned()],
+    };
+    let reference = json!({
+        "type": "object",
+        "description": format!(
+            "A reference to an object of kind `{kind}` in the namespace of the resource \
+             holding the reference; sets `{}`.",
+            item_reference.into
+        ),
+        "required": ["name"],
+        "properties": { "name": { "type": "string" } },
+    });
+    let mut found = false;
+    for object in objects {
+        let Some(property) = schemas
+            .get_mut(&object)
+            .and_then(|object| object.pointer_mut(&format!("/properties/{list}")))
+        else {
+            continue;
+        };
+        found = true;
+        *property = resolve_ref(&snapshot, property).clone();
+        let items = property
+            .get_mut("items")
+            .ok_or_else(|| format!("{list} is not a list"))?;
+        *items = resolve_ref(&snapshot, items).clone();
+        let items = items
+            .as_object_mut()
+            .filter(|items| {
+                items
+                    .get("properties")
+                    .and_then(Value::as_object)
+                    .is_some_and(|properties| properties.contains_key(&item_reference.into))
+            })
+            .ok_or_else(|| format!("the items of {list} have no field {}", item_reference.into))?;
+        if let Some(Value::Array(required)) = items.get_mut("required") {
+            required.retain(|name| name != item_reference.into.as_str());
+        }
+        if let Some(Value::Object(properties)) = items.get_mut("properties") {
+            properties.insert(field.to_owned(), reference.clone());
+        }
+    }
+    if found {
+        Ok(())
+    } else {
+        Err(format!("{list} is not a forProvider field"))
+    }
 }
 
 fn resource_fields(
     schemas: &Map<String, Value>,
     root_name: &str,
     resource: &ResourceName,
+    filled: &BTreeSet<(String, String)>,
 ) -> Result<ResourceFields, SpecError> {
     let Some(root) = schemas.get(root_name) else {
         return Ok(ResourceFields::default());
@@ -114,11 +208,16 @@ fn resource_fields(
             .map(|field| field.list_map_keys)
             .find(|keys| !keys.is_empty())
         {
-            check_list_map(schemas, property, &keys).map_err(|message| SpecError::Resource {
+            let in_schema = check_list_map(schemas, property, &keys, |key| {
+                filled.contains(&(name.clone(), key.to_owned()))
+            })
+            .map_err(|message| SpecError::Resource {
                 resource: resource.0.clone(),
                 message: format!("listMapKeys of {name}: {message}"),
             })?;
-            fields.list_map_keys.insert(name.clone(), keys);
+            fields
+                .list_map_keys
+                .insert(name.clone(), ListMapIr { keys, in_schema });
         }
     }
     fields.late_initialize.sort();
@@ -127,12 +226,15 @@ fn resource_fields(
 }
 
 /// Kubernetes accepts `x-kubernetes-list-type: map` only on a list of objects whose
-/// keys are required.
+/// keys are required. A key that an item reference fills may be optional; the list
+/// is then compared by key without declaring it a map. Returns whether every key is
+/// required.
 fn check_list_map(
     schemas: &Map<String, Value>,
     property: &Value,
     keys: &[String],
-) -> Result<(), String> {
+    filled: impl Fn(&str) -> bool,
+) -> Result<bool, String> {
     let property = resolve_ref(schemas, property);
     let is_array = match property.get("type") {
         Some(Value::String(type_)) => type_ == "array",
@@ -149,13 +251,13 @@ fn check_list_map(
         .and_then(Value::as_array)
         .map(Vec::as_slice)
         .unwrap_or_default();
-    match keys.iter().find(|key| {
-        items.pointer(&format!("/properties/{key}")).is_none()
-            || !required.iter().any(|name| name == key.as_str())
+    let is_required = |key: &String| required.iter().any(|name| name == key.as_str());
+    if let Some(key) = keys.iter().find(|key| {
+        items.pointer(&format!("/properties/{key}")).is_none() || !(is_required(key) || filled(key))
     }) {
-        Some(key) => Err(format!("{key} is not a required property of the items")),
-        None => Ok(()),
+        return Err(format!("{key} is not a required property of the items"));
     }
+    Ok(keys.iter().all(is_required))
 }
 
 /// How [`Resource::filtered`] selects the definitions of a field.

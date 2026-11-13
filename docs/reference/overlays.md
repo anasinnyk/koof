@@ -29,6 +29,7 @@ request body.
 | `cluster` | bool | Also generate the cluster-scoped `Cluster<Kind>` |
 | `identifiers` | map of [value](#values) | Named IDs other resources can read with `related_identifier` |
 | `references` | map of `{from, target}` | `from`: the `*Ref` field to add (`spec.forProvider.zoneRef`); `target`: a resource `name` |
+| `itemReferences` | map of `{from, target, into, identifier}` | A reference in each item of a list. `from`: `spec.forProvider.<list>[].<field>`, the field added to the items; `into`: the item field that receives identifier `identifier` of the target; each item sets exactly one of the two |
 | `credentials.securityScheme` | string | Key of `components.securitySchemes` (`apiKey` or `http` bearer) |
 | `credentials.source` | `{type: secret_key_selector, path}` or `{type: related, via}` | Where the secret comes from |
 | `fields.mode` | `all` or `explicit` | `explicit` exposes only the listed properties |
@@ -63,7 +64,7 @@ On a property schema.
 | `ignored` | `false` | With `fields.mode: all`, leave the property out of `forProvider` |
 | `lateInitialize` | `true` | Copy the observed value into an unset spec field |
 | `sensitive` | `false` | Never copy the property into `status.atProvider`, at any depth (secrets the API returns) |
-| `listMapKeys` | | Top-level list of objects: match items by these required keys, in any order, when comparing with the observation; the CRD gets `x-kubernetes-list-type: map` |
+| `listMapKeys` | | Top-level list of objects: match items by these keys, in any order, when comparing with the observation. Keys must be required (the CRD then gets `x-kubernetes-list-type: map`) or filled by an item reference |
 
 ## Values
 

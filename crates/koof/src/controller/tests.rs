@@ -291,6 +291,24 @@ async fn zone_deletion_waits_for_its_records() {
 }
 
 #[tokio::test]
+async fn zone_deletion_waits_for_records_that_reference_it_in_a_list() {
+    let mut deleting_zone = zone();
+    deleting_zone["metadata"]["finalizers"] = json!(["example.dev/finalizer"]);
+    deleting_zone["metadata"]["deletionTimestamp"] = json!("2026-01-01T00:00:00Z");
+    let record = www(json!({
+        "forProvider": { "aliases": [{ "zoneId": "zone-9" }, { "zoneRef": { "name": "example" } }] }
+    }));
+    let world = world_with(&[deleting_zone, record]).await;
+
+    world.reconcile_zone().await.expect("reconciled");
+
+    assert_eq!(
+        world.condition("Zone", "example", "Ready"),
+        Some(pair("False", "InUse"))
+    );
+}
+
+#[tokio::test]
 async fn an_interrupted_create_is_not_repeated() {
     let mut record = www(for_provider(&json!({ "name": "www.example.com" })));
     record["metadata"]["annotations"][RECORD.annotation(create_state::CREATE_PENDING)] =

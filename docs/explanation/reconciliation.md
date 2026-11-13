@@ -31,7 +31,9 @@ koof calls the `observe` operation and the result is one of two states:
 
 Path parameters, credentials and request bodies are resolved first. A reference
 to an object that is not `Ready` yet is not an error: the reconcile waits and tries
-again.
+again. References in list items (`itemReferences`) are resolved the same way: the
+identifier of each referenced object fills its item before the desired state is
+compared and sent. The spec itself is not changed.
 
 ## Decide
 
@@ -124,7 +126,8 @@ of the resource, and a later change to such a field is detected as drift.
 Every managed object carries a finalizer, so it stays in the cluster until the
 external resource is dealt with:
 
-- If other managed objects still reference it (a `Zone` with `DNSRecord`s), deletion
+- If other managed objects still reference it (a `Zone` with `DNSRecord`s, also
+  from list items), deletion
   waits. `Ready` is `False` with reason `InUse` and the message lists the
   dependents.
 - A kind without a `delete` operation, or with an orphan policy, is released at

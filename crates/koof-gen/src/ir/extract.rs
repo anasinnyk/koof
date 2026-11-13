@@ -108,6 +108,7 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
                 cluster: extension.cluster,
                 identifiers: extension.identifiers,
                 references: extension.references,
+                item_references: extension.item_references,
                 credentials: extension.credentials,
                 validations: extension.validations,
                 immutable: extension.immutable,

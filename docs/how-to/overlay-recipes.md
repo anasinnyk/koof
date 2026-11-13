@@ -153,6 +153,27 @@ items by key so that the order is not drift:
       listMapKeys: [teamSlug]    # each key must be a required property of the items
 ```
 
+## Reference objects from list items
+
+When a list names other resources by ID, let each item reference the object
+instead. The identifier of the referenced object fills the item's ID field before
+the request is sent:
+
+```yaml
+x-kube-resource:
+  itemReferences:
+    team:
+      from: spec.forProvider.teamRoles[].teamRef   # field added to every item
+      target: team
+      into: teamSlug                                # filled from the reference
+      identifier: slug                              # an identifier of the target
+```
+
+Each item sets exactly one of `teamSlug` and `teamRef`. A `listMapKeys` key may be
+the `into` field; the list is then compared by key, but not declared a map in the
+CRD (Kubernetes requires map keys to be set). Deleting a referenced object waits
+while items reference it.
+
 ## Share a resource across namespaces
 
 `cluster: true` on `x-kube-resource` also generates a cluster-scoped

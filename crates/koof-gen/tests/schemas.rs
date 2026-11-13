@@ -1,7 +1,10 @@
 mod common;
 
-use common::{codegen, widgets, widgets_with};
-use koof_gen::{ir::ResourceName, spec};
+use common::{PARTS, codegen, widgets, widgets_with};
+use koof_gen::{
+    ir::{ListMapIr, ResourceName},
+    spec,
+};
 use pretty_assertions::assert_eq;
 use rstest::rstest;
 use serde_json::{Value, json};
@@ -132,7 +135,47 @@ fn keyed_lists_are_collected_per_resource() {
 
     assert_eq!(
         fields[&ResourceName("account".to_owned())].list_map_keys,
-        [("members".to_owned(), vec!["email".to_owned()])].into()
+        [(
+            "members".to_owned(),
+            ListMapIr {
+                keys: vec!["email".to_owned()],
+                in_schema: true
+            }
+        )]
+        .into()
+    );
+}
+
+#[test]
+fn item_references_add_their_field_to_the_items() {
+    let codegen = codegen(&widgets_with(PARTS));
+
+    assert_eq!(
+        (
+            &codegen.document["components"]["schemas"]["shop_v1alpha1_WidgetForProvider"]["properties"]
+                ["parts"]["items"],
+            &codegen.fields[&ResourceName("widget".to_owned())].list_map_keys["parts"],
+        ),
+        (
+            &json!({
+                "type": "object",
+                "required": [],
+                "properties": {
+                    "widgetId": { "type": "string" },
+                    "count": { "type": "integer" },
+                    "widgetRef": {
+                        "type": "object",
+                        "description": "A reference to an object of kind `Widget` in the namespace of the resource holding the reference; sets `widgetId`.",
+                        "required": ["name"],
+                        "properties": { "name": { "type": "string" } },
+                    },
+                },
+            }),
+            &ListMapIr {
+                keys: vec!["widgetId".to_owned()],
+                in_schema: false
+            },
+        )
     );
 }
 

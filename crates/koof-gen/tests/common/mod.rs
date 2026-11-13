@@ -46,6 +46,35 @@ pub fn widgets_with(actions: &str) -> Value {
     document
 }
 
+/// Widget `parts`: a list whose items name another widget by `widgetId` or
+/// `widgetRef`.
+pub const PARTS: &str = "
+  - target: $.components.schemas.widget.properties
+    update:
+      parts:
+        type: array
+        items:
+          type: object
+          required: [widgetId]
+          properties:
+            widgetId:
+              type: string
+            count:
+              type: integer
+        x-kube-field:
+          listMapKeys: [widgetId]
+  - target: $.components.schemas.widget['x-kube-resource'].fields.forProvider
+    update: [parts]
+  - target: $.components.schemas.widget['x-kube-resource']
+    update:
+      itemReferences:
+        part:
+          from: spec.forProvider.parts[].widgetRef
+          target: widget
+          into: widgetId
+          identifier: external_id
+";
+
 /// Runs the generator like the CLI and returns the generated files by path, or
 /// the error with its causes.
 pub fn generated(document: &Value) -> Result<BTreeMap<String, String>, String> {
