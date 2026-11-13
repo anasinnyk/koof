@@ -7,21 +7,24 @@ use super::{
     normalize::is_read_only,
     resolve_ref, schema_ref_name, schemas_mut, success_json_schema,
 };
-use crate::ir::{FieldPath, ResourceName, synthesized_schema};
+use crate::ir::{FieldPath, ResourceFields, ResourceName, synthesized_schema};
 use serde_json::{Map, Value, json};
 use std::collections::{BTreeMap, BTreeSet};
 
 /// Adds the `ForProvider` and `AtProvider` schemas of every schema with
 /// `x-kube-resource` to `components.schemas`, keyed by [`synthesized_schema`];
 /// returns, per resource, the top-level `forProvider` fields that may be
-/// late-initialized.
+/// late-initialized and the lists compared by key.
 ///
 /// # Errors
 ///
 /// Returns [`SpecError`] when an `x-kube-*` extension is malformed, an explicitly
 /// selected field does not exist, the observe response path cannot be resolved, or a
-/// synthesized name collides with an existing schema.
-pub fn synthesize(document: &mut Value) -> Result<BTreeMap<ResourceName, Vec<String>>, SpecError> {
+/// synthesized name collides with an existing schema, or a `listMapKeys` field is
+/// not a list of objects that require the keys.
+pub fn synthesize(
+    document: &mut Value,
+) -> Result<BTreeMap<ResourceName, ResourceFields>, SpecError> {
     schemas_mut(document)?;
     let snapshot = document.clone();
     let schemas = snapshot
@@ -70,16 +73,20 @@ pub fn synthesize(document: &mut Value) -> Result<BTreeMap<ResourceName, Vec<Str
 
     roots
         .into_iter()
-        .map(|(name, root)| Ok((name, late_initialize_fields(target, &root)?)))
+        .map(|(name, root)| {
+            let fields = resource_fields(target, &root, &name)?;
+            Ok((name, fields))
+        })
         .collect()
 }
 
-fn late_initialize_fields(
+fn resource_fields(
     schemas: &Map<String, Value>,
     root_name: &str,
-) -> Result<Vec<String>, SpecError> {
+    resource: &ResourceName,
+) -> Result<ResourceFields, SpecError> {
     let Some(root) = schemas.get(root_name) else {
-        return Ok(Vec::new());
+        return Ok(ResourceFields::default());
     };
     let objects: Vec<&Value> = match root.get("oneOf").and_then(Value::as_array) {
         Some(variants) => variants
@@ -89,25 +96,66 @@ fn late_initialize_fields(
         None => vec![root],
     };
 
-    let mut fields = Vec::new();
+    let mut fields = ResourceFields::default();
     for (name, property) in objects
         .iter()
         .filter_map(|object| object.get("properties").and_then(Value::as_object))
         .flatten()
     {
-        let late_initialize = [property, resolve_ref(schemas, property)]
+        let extensions = [property, resolve_ref(schemas, property)]
             .into_iter()
             .map(|schema| FieldExtension::of(schema, &format!("{root_name}.{name}")))
-            .collect::<Result<Vec<_>, _>>()?
-            .iter()
-            .all(|field| field.late_initialize);
-        if late_initialize {
-            fields.push(name.clone());
+            .collect::<Result<Vec<_>, _>>()?;
+        if extensions.iter().all(|field| field.late_initialize) {
+            fields.late_initialize.push(name.clone());
+        }
+        if let Some(keys) = extensions
+            .into_iter()
+            .map(|field| field.list_map_keys)
+            .find(|keys| !keys.is_empty())
+        {
+            check_list_map(schemas, property, &keys).map_err(|message| SpecError::Resource {
+                resource: resource.0.clone(),
+                message: format!("listMapKeys of {name}: {message}"),
+            })?;
+            fields.list_map_keys.insert(name.clone(), keys);
         }
     }
-    fields.sort();
-    fields.dedup();
+    fields.late_initialize.sort();
+    fields.late_initialize.dedup();
     Ok(fields)
+}
+
+/// Kubernetes accepts `x-kubernetes-list-type: map` only on a list of objects whose
+/// keys are required.
+fn check_list_map(
+    schemas: &Map<String, Value>,
+    property: &Value,
+    keys: &[String],
+) -> Result<(), String> {
+    let property = resolve_ref(schemas, property);
+    let is_array = match property.get("type") {
+        Some(Value::String(type_)) => type_ == "array",
+        Some(Value::Array(types)) => types.iter().any(|type_| type_ == "array"),
+        _ => false,
+    };
+    let items = property
+        .get("items")
+        .filter(|_| is_array)
+        .map(|items| resolve_ref(schemas, items))
+        .ok_or("not a list")?;
+    let required = items
+        .get("required")
+        .and_then(Value::as_array)
+        .map(Vec::as_slice)
+        .unwrap_or_default();
+    match keys.iter().find(|key| {
+        items.pointer(&format!("/properties/{key}")).is_none()
+            || !required.iter().any(|name| name == key.as_str())
+    }) {
+        Some(key) => Err(format!("{key} is not a required property of the items")),
+        None => Ok(()),
+    }
 }
 
 /// How [`Resource::filtered`] selects the definitions of a field.

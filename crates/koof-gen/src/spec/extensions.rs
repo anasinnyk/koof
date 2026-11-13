@@ -142,6 +142,8 @@ pub struct FieldExtension {
     pub late_initialize: bool,
     #[serde(default)]
     pub sensitive: bool,
+    #[serde(default)]
+    pub list_map_keys: Vec<String>,
 }
 
 fn enabled() -> bool {
@@ -154,6 +156,7 @@ impl Default for FieldExtension {
             ignored: false,
             late_initialize: true,
             sensitive: false,
+            list_map_keys: Vec::new(),
         }
     }
 }

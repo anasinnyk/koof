@@ -46,7 +46,7 @@ pub fn run() -> Result<()> {
             .with_context(|| format!("cannot write {}", path.display()))?;
     }
 
-    let provider = match validate(&ir, &codegen.late_initialize) {
+    let provider = match validate(&ir, &codegen.fields) {
         Ok(provider) => provider,
         Err(errors) => bail!("invalid ProviderIr:\n{errors:#?}"),
     };

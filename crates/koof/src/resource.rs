@@ -59,6 +59,8 @@ pub struct ResourceDescriptor {
     pub namespaced: bool,
     pub identifiers: &'static [(&'static str, ValueExpr)],
     pub late_initialize: &'static [&'static str],
+    /// `forProvider` lists compared by these item keys instead of by position.
+    pub list_map_keys: &'static [(&'static str, &'static [&'static str])],
     pub references: &'static [Reference],
     pub credentials: Option<Credentials>,
     pub observe: ObserveDescriptor,
@@ -83,6 +85,7 @@ impl ResourceDescriptor {
             namespaced,
             identifiers: &[],
             late_initialize: &[],
+            list_map_keys: &[],
             references: &[],
             credentials: None,
             observe,
@@ -112,6 +115,17 @@ impl ResourceDescriptor {
     pub const fn with_late_initialize(self, late_initialize: &'static [&'static str]) -> Self {
         Self {
             late_initialize,
+            ..self
+        }
+    }
+
+    #[must_use]
+    pub const fn with_list_map_keys(
+        self,
+        list_map_keys: &'static [(&'static str, &'static [&'static str])],
+    ) -> Self {
+        Self {
+            list_map_keys,
             ..self
         }
     }

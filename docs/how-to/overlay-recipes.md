@@ -141,6 +141,18 @@ set `x-kube-field` on the property schema (with `explicit`, just do not list it)
 Anyone who can read the object can read its status, so mark every secret the
 observe response contains as `sensitive`, nested ones included.
 
+## A list the API returns in its own order
+
+When the API keeps a set of objects and returns them sorted its own way, match the
+items by key so that the order is not drift:
+
+```yaml
+- target: $.components.schemas.member.properties.teamRoles
+  update:
+    x-kube-field:
+      listMapKeys: [teamSlug]    # each key must be a required property of the items
+```
+
 ## Share a resource across namespaces
 
 `cluster: true` on `x-kube-resource` also generates a cluster-scoped

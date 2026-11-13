@@ -123,6 +123,31 @@ fn error(actions: &str) -> Option<String> {
 ",
     "resources.widget.references.account: path must start with spec.forProvider.: spec.accountRef"
 )]
+#[case::list_map_keys_are_required_item_properties(
+    "
+  - target: $.components.schemas.account.properties
+    update:
+      members:
+        type: array
+        items:
+          type: object
+          properties:
+            email:
+              type: string
+        x-kube-field:
+          listMapKeys: [email]
+",
+    "resource account: listMapKeys of members: email is not a required property of the items"
+)]
+#[case::list_map_keys_only_on_lists(
+    "
+  - target: $.components.schemas.account.properties.name
+    update:
+      x-kube-field:
+        listMapKeys: [id]
+",
+    "resource account: listMapKeys of name: not a list"
+)]
 fn rejects_overlay_mistakes(#[case] actions: &str, #[case] message: &str) {
     assert_eq!(error(actions), Some(message.to_owned()));
 }

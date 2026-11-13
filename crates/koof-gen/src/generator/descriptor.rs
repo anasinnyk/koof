@@ -49,6 +49,13 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
     });
     let identifiers = slice_setter("with_identifiers", identifiers);
     let late_initialize = slice_setter("with_late_initialize", resource.late_initialize);
+    let list_map_keys = slice_setter(
+        "with_list_map_keys",
+        resource
+            .list_map_keys
+            .iter()
+            .map(|(field, keys)| quote!((#field, &[#(#keys),*]))),
+    );
     let references = slice_setter("with_references", references);
     let observe = observe_descriptor(resource.observe);
     let create = resource.create.map(|create| {
@@ -74,6 +81,7 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
             koof::ResourceDescriptor::new(#kind, api_resource, #group, #namespaced, #observe)
                 #identifiers
                 #late_initialize
+                #list_map_keys
                 #references
                 #credentials
                 #create
