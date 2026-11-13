@@ -6234,7 +6234,7 @@ pub struct OrganizationMemberCreateRequest {
         skip_serializing_if = "::std::option::Option::is_none"
     )]
     pub team_roles: ::std::option::Option<
-        ::std::vec::Vec<::serde_json::Map<::std::string::String, ::serde_json::Value>>,
+        ::std::vec::Vec<OrganizationMemberCreateRequestTeamRolesItem>,
     >,
     ///Deprecated, use `teamRoles`. Slugs of teams to add the member to.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
@@ -6465,6 +6465,80 @@ for OrganizationMemberCreateRequestRole {
 impl ::std::default::Default for OrganizationMemberCreateRequestRole {
     fn default() -> Self {
         OrganizationMemberCreateRequestRole::Member
+    }
+}
+///A team the member is on.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct OrganizationMemberCreateRequestTeamRolesItem {
+    ///Team role; unset keeps the role Sentry assigns.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub role: ::std::option::Option<OrganizationMemberCreateRequestTeamRolesItemRole>,
+    ///Slug of the team.
+    #[serde(rename = "teamSlug")]
+    pub team_slug: ::std::string::String,
+}
+///Team role; unset keeps the role Sentry assigns.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum OrganizationMemberCreateRequestTeamRolesItemRole {
+    #[serde(rename = "contributor")]
+    Contributor,
+    #[serde(rename = "admin")]
+    Admin,
+}
+impl ::std::fmt::Display for OrganizationMemberCreateRequestTeamRolesItemRole {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Contributor => f.write_str("contributor"),
+            Self::Admin => f.write_str("admin"),
+        }
+    }
+}
+impl ::std::str::FromStr for OrganizationMemberCreateRequestTeamRolesItemRole {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "contributor" => Ok(Self::Contributor),
+            "admin" => Ok(Self::Admin),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for OrganizationMemberCreateRequestTeamRolesItemRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for OrganizationMemberCreateRequestTeamRolesItemRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
     }
 }
 ///`OrganizationMemberCreateResponse`
@@ -6862,7 +6936,7 @@ pub struct OrganizationMemberObserveResponseTeamRoleListItem {
     schemars::JsonSchema
 )]
 pub struct OrganizationMemberObserveResponseTeamRolesItem {
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub role: ::std::option::Option<::std::string::String>,
     #[serde(rename = "teamSlug")]
     pub team_slug: ::std::string::String,
@@ -7309,7 +7383,7 @@ pub struct OrganizationMemberUpdateResponseTeamRoleListItem {
     schemars::JsonSchema
 )]
 pub struct OrganizationMemberUpdateResponseTeamRolesItem {
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub role: ::std::option::Option<::std::string::String>,
     #[serde(rename = "teamSlug")]
     pub team_slug: ::std::string::String,
@@ -14984,7 +15058,7 @@ pub struct SentryV1alpha1OrganizationMemberAtProviderTeamRoleListItem {
     schemars::JsonSchema
 )]
 pub struct SentryV1alpha1OrganizationMemberAtProviderTeamRolesItem {
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub role: ::std::option::Option<::std::string::String>,
     #[serde(rename = "teamSlug")]
     pub team_slug: ::std::string::String,
@@ -15166,20 +15240,6 @@ pub struct SentryV1alpha1OrganizationMemberForProvider {
         default = "defaults::sentry_v1alpha1_organization_member_for_provider_org_role"
     )]
     pub org_role: SentryV1alpha1OrganizationMemberForProviderOrgRole,
-    ///Reissue the invite token, invalidating any previously sent invite link.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub regenerate: ::std::option::Option<bool>,
-    ///Whether or not to re-invite a user who has already been invited to the organization. Defaults to True.
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub reinvite: ::std::option::Option<bool>,
-    /**Deprecated, use `orgRole`. The organization-level role to assign.
-
-* `member` - Member
-* `admin` - Admin
-* `manager` - Manager
-* `owner` - Owner*/
-    #[serde(default = "defaults::sentry_v1alpha1_organization_member_for_provider_role")]
-    pub role: SentryV1alpha1OrganizationMemberForProviderRole,
     ///Whether or not to send an invite notification through email. Defaults to True.
     #[serde(rename = "sendInvite", default = "defaults::default_bool::<true>")]
     pub send_invite: bool,
@@ -15191,11 +15251,8 @@ pub struct SentryV1alpha1OrganizationMemberForProvider {
         skip_serializing_if = "::std::option::Option::is_none"
     )]
     pub team_roles: ::std::option::Option<
-        ::std::vec::Vec<::serde_json::Map<::std::string::String, ::serde_json::Value>>,
+        ::std::vec::Vec<SentryV1alpha1OrganizationMemberForProviderTeamRolesItem>,
     >,
-    ///Deprecated, use `teamRoles`. Slugs of teams to add the member to.
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub teams: ::std::vec::Vec<::serde_json::Value>,
 }
 ///The email address to send the invitation to.
 #[derive(
@@ -15351,12 +15408,26 @@ impl ::std::default::Default for SentryV1alpha1OrganizationMemberForProviderOrgR
         SentryV1alpha1OrganizationMemberForProviderOrgRole::Member
     }
 }
-/**Deprecated, use `orgRole`. The organization-level role to assign.
-
-* `member` - Member
-* `admin` - Admin
-* `manager` - Manager
-* `owner` - Owner*/
+///A team the member is on.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1OrganizationMemberForProviderTeamRolesItem {
+    ///Team role; unset keeps the role Sentry assigns.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub role: ::std::option::Option<
+        SentryV1alpha1OrganizationMemberForProviderTeamRolesItemRole,
+    >,
+    ///Slug of the team.
+    #[serde(rename = "teamSlug")]
+    pub team_slug: ::std::string::String,
+}
+///Team role; unset keeps the role Sentry assigns.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -15370,41 +15441,36 @@ impl ::std::default::Default for SentryV1alpha1OrganizationMemberForProviderOrgR
     PartialOrd,
     schemars::JsonSchema
 )]
-pub enum SentryV1alpha1OrganizationMemberForProviderRole {
-    #[serde(rename = "member")]
-    Member,
+pub enum SentryV1alpha1OrganizationMemberForProviderTeamRolesItemRole {
+    #[serde(rename = "contributor")]
+    Contributor,
     #[serde(rename = "admin")]
     Admin,
-    #[serde(rename = "manager")]
-    Manager,
-    #[serde(rename = "owner")]
-    Owner,
 }
-impl ::std::fmt::Display for SentryV1alpha1OrganizationMemberForProviderRole {
+impl ::std::fmt::Display
+for SentryV1alpha1OrganizationMemberForProviderTeamRolesItemRole {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match *self {
-            Self::Member => f.write_str("member"),
+            Self::Contributor => f.write_str("contributor"),
             Self::Admin => f.write_str("admin"),
-            Self::Manager => f.write_str("manager"),
-            Self::Owner => f.write_str("owner"),
         }
     }
 }
-impl ::std::str::FromStr for SentryV1alpha1OrganizationMemberForProviderRole {
+impl ::std::str::FromStr
+for SentryV1alpha1OrganizationMemberForProviderTeamRolesItemRole {
     type Err = self::error::ConversionError;
     fn from_str(
         value: &str,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         match value {
-            "member" => Ok(Self::Member),
+            "contributor" => Ok(Self::Contributor),
             "admin" => Ok(Self::Admin),
-            "manager" => Ok(Self::Manager),
-            "owner" => Ok(Self::Owner),
             _ => Err("invalid value".into()),
         }
     }
 }
-impl ::std::convert::TryFrom<&str> for SentryV1alpha1OrganizationMemberForProviderRole {
+impl ::std::convert::TryFrom<&str>
+for SentryV1alpha1OrganizationMemberForProviderTeamRolesItemRole {
     type Error = self::error::ConversionError;
     fn try_from(
         value: &str,
@@ -15413,17 +15479,12 @@ impl ::std::convert::TryFrom<&str> for SentryV1alpha1OrganizationMemberForProvid
     }
 }
 impl ::std::convert::TryFrom<::std::string::String>
-for SentryV1alpha1OrganizationMemberForProviderRole {
+for SentryV1alpha1OrganizationMemberForProviderTeamRolesItemRole {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
-    }
-}
-impl ::std::default::Default for SentryV1alpha1OrganizationMemberForProviderRole {
-    fn default() -> Self {
-        SentryV1alpha1OrganizationMemberForProviderRole::Member
     }
 }
 ///`ProjectAtProvider`
@@ -18561,9 +18622,6 @@ pub mod defaults {
     }
     pub(super) fn sentry_v1alpha1_organization_member_for_provider_org_role() -> super::SentryV1alpha1OrganizationMemberForProviderOrgRole {
         super::SentryV1alpha1OrganizationMemberForProviderOrgRole::Member
-    }
-    pub(super) fn sentry_v1alpha1_organization_member_for_provider_role() -> super::SentryV1alpha1OrganizationMemberForProviderRole {
-        super::SentryV1alpha1OrganizationMemberForProviderRole::Member
     }
     pub(super) fn sentry_v1alpha1_project_key_for_provider_use_case() -> super::SentryV1alpha1ProjectKeyForProviderUseCase {
         super::SentryV1alpha1ProjectKeyForProviderUseCase::User

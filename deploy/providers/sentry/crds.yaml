@@ -2358,27 +2358,6 @@
                           }
                         ]
                       },
-                      "regenerate": {
-                        "description": "Reissue the invite token, invalidating any previously sent invite link.",
-                        "nullable": true,
-                        "type": "boolean"
-                      },
-                      "reinvite": {
-                        "description": "Whether or not to re-invite a user who has already been invited to the organization. Defaults to True.",
-                        "nullable": true,
-                        "type": "boolean"
-                      },
-                      "role": {
-                        "default": "member",
-                        "description": "Deprecated, use `orgRole`. The organization-level role to assign.\n\n* `member` - Member\n* `admin` - Admin\n* `manager` - Manager\n* `owner` - Owner",
-                        "enum": [
-                          "member",
-                          "admin",
-                          "manager",
-                          "owner"
-                        ],
-                        "type": "string"
-                      },
                       "sendInvite": {
                         "default": true,
                         "description": "Whether or not to send an invite notification through email. Defaults to True.",
@@ -2387,20 +2366,33 @@
                       "teamRoles": {
                         "description": "The team and team-roles assigned to the member. Team roles can be either:\n        - `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members.\n        - `admin` - Has full management access to their team's membership and projects.",
                         "items": {
-                          "additionalProperties": {
-                            "x-kubernetes-preserve-unknown-fields": true
+                          "description": "A team the member is on.",
+                          "properties": {
+                            "role": {
+                              "description": "Team role; unset keeps the role Sentry assigns.",
+                              "enum": [
+                                "contributor",
+                                "admin"
+                              ],
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "teamSlug": {
+                              "description": "Slug of the team.",
+                              "type": "string"
+                            }
                           },
+                          "required": [
+                            "teamSlug"
+                          ],
                           "type": "object"
                         },
                         "nullable": true,
-                        "type": "array"
-                      },
-                      "teams": {
-                        "description": "Deprecated, use `teamRoles`. Slugs of teams to add the member to.",
-                        "items": {
-                          "x-kubernetes-preserve-unknown-fields": true
-                        },
-                        "type": "array"
+                        "type": "array",
+                        "x-kubernetes-list-map-keys": [
+                          "teamSlug"
+                        ],
+                        "x-kubernetes-list-type": "map"
                       }
                     },
                     "required": [
@@ -2408,6 +2400,10 @@
                     ],
                     "type": "object",
                     "x-kubernetes-validations": [
+                      {
+                        "message": "a member with the billing role cannot be on teams",
+                        "rule": "!has(self.orgRole) || self.orgRole != 'billing' || !has(self.teamRoles) || size(self.teamRoles) == 0"
+                      },
                       {
                         "message": "organizationRef cannot be removed once set",
                         "rule": "!has(oldSelf.organizationRef) || has(self.organizationRef)"

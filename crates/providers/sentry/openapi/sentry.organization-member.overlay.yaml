@@ -12,6 +12,18 @@ actions:
         apiVersion: sentry.kube.nas1k.dev/v1alpha1
         kind: OrganizationMember
 
+        test:
+          forProvider:
+            email: koof-e2e@example.com
+            orgRole: member
+            teamRoles:
+              - teamSlug: koof-e2e
+          update:
+            teamRoles:
+              - teamSlug: koof-e2e
+                role: admin
+              - teamSlug: koof-e2e-second
+
         identifiers:
           external_id:
             type: external_name
@@ -29,6 +41,69 @@ actions:
 
         fields:
           mode: all
+
+        validations:
+          - rule: "!has(self.orgRole) || self.orgRole != 'billing' || !has(self.teamRoles) || size(self.teamRoles) == 0"
+            message: "a member with the billing role cannot be on teams"
+
+  # Sentry replaces every team of the member with teamRoles on each update and
+  # returns them in its own order, so the list is matched by teamSlug.
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/'].post.requestBody.content['application/json'].schema.properties.teamRoles.items
+    remove: true
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/'].post.requestBody.content['application/json'].schema.properties.teamRoles
+    update:
+      items:
+        type: object
+        description: A team the member is on.
+        required: [teamSlug]
+        properties:
+          teamSlug:
+            type: string
+            description: Slug of the team.
+          role:
+            type: string
+            enum: [contributor, admin]
+            description: Team role; unset keeps the role Sentry assigns.
+      x-kube-field:
+        listMapKeys: [teamSlug]
+
+  # role is null when Sentry assigns the team role itself; it may also be left out.
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.properties.teamRoles.items.required
+    remove: true
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.properties.teamRoles.items
+    update:
+      required: [teamSlug]
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.properties.teamRoles.items.required
+    remove: true
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.properties.teamRoles.items
+    update:
+      required: [teamSlug]
+
+  # Deprecated spellings of orgRole and teamRoles; managing both would drift.
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/'].post.requestBody.content['application/json'].schema.properties.role
+    update:
+      x-kube-field:
+        ignored: true
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/'].post.requestBody.content['application/json'].schema.properties.teams
+    update:
+      x-kube-field:
+        ignored: true
+
+  # Resending an invite: Sentry rejects an update that combines it with other fields.
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/'].post.requestBody.content['application/json'].schema.properties.reinvite
+    update:
+      x-kube-field:
+        ignored: true
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/'].post.requestBody.content['application/json'].schema.properties.regenerate
+    update:
+      x-kube-field:
+        ignored: true
 
   - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get
     update:

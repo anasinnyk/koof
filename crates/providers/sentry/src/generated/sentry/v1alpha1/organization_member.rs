@@ -4,9 +4,23 @@
 /// overlay's CEL validations.
 fn for_provider_schema(schema: &mut schemars::Schema) {
     koof::schema::flatten_unions(schema);
+    koof::schema::add_list_maps(
+        schema,
+        &[
+            koof::schema::ListMap {
+                field: "teamRoles",
+                keys: &["teamSlug"],
+            },
+        ],
+    );
     koof::schema::add_validations(
         schema,
         &[
+            koof::schema::Validation {
+                rule: "!has(self.orgRole) || self.orgRole != 'billing' || !has(self.teamRoles) || size(self.teamRoles) == 0",
+                message: "a member with the billing role cannot be on teams",
+                field: "",
+            },
             koof::schema::Validation {
                 rule: "self == oldSelf",
                 message: "organizationRef is immutable",
@@ -97,18 +111,8 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
         ),
     )
     .with_identifiers(&[("external_id", koof::resource::ValueExpr::ExternalName)])
-    .with_late_initialize(
-        &[
-            "email",
-            "orgRole",
-            "regenerate",
-            "reinvite",
-            "role",
-            "sendInvite",
-            "teamRoles",
-            "teams",
-        ],
-    )
+    .with_late_initialize(&["email", "orgRole", "sendInvite", "teamRoles"])
+    .with_list_map_keys(&[("teamRoles", &["teamSlug"])])
     .with_references(
         &[
             koof::resource::Reference::new(

@@ -1,0 +1,98 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: organization-member
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: Organization
+          metadata:
+            annotations:
+              sentry.kube.nas1k.dev/external-name: ($namespace)
+            name: organization
+          spec:
+            forProvider:
+              authTokenSecretRef:
+                key: token
+                name: credentials
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: OrganizationMember
+          metadata:
+            name: organization-member
+          spec:
+            forProvider:
+              email: koof-e2e@example.com
+              orgRole: member
+              organizationRef:
+                name: organization
+              teamRoles:
+              - teamSlug: koof-e2e
+    - assert:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: Organization
+          metadata:
+            name: organization
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: OrganizationMember
+          metadata:
+            name: organization-member
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: OrganizationMember
+          metadata:
+            name: organization-member
+          spec:
+            forProvider:
+              teamRoles:
+              - role: admin
+                teamSlug: koof-e2e
+              - teamSlug: koof-e2e-second
+    - assert:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: OrganizationMember
+          metadata:
+            name: organization-member
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              teamRoles:
+              - role: admin
+                teamSlug: koof-e2e
+              - teamSlug: koof-e2e-second
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: OrganizationMember
+          name: organization-member

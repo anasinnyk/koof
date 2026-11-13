@@ -41,16 +41,15 @@ spec:
 | `forProvider.organizationRef.apiVersion` | string |  | `apiVersion` of the referenced object; needed when its kind is in several groups. |
 | `forProvider.organizationRef.kind` | string |  | One of `Organization`, `ClusterOrganization`. Default `Organization`. |
 | `forProvider.organizationRef.name` | string | yes |  |
-| `forProvider.regenerate` | boolean |  | Reissue the invite token, invalidating any previously sent invite link. |
-| `forProvider.reinvite` | boolean |  | Whether or not to re-invite a user who has already been invited to the organization. Defaults to True. |
-| `forProvider.role` | string |  | Deprecated, use `orgRole`. The organization-level role to assign. * `member` - Member * `admin` - Admin * `manager` - Manager * `owner` - Owner One of `member`, `admin`, `manager`, `owner`. Default `member`. |
 | `forProvider.sendInvite` | boolean |  | Whether or not to send an invite notification through email. Defaults to True. Default `true`. |
-| `forProvider.teamRoles` | []map[string]any |  | The team and team-roles assigned to the member. Team roles can be either: - `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members. - `admin` - Has full management access to their team's membership and projects. |
-| `forProvider.teams` | []any |  | Deprecated, use `teamRoles`. Slugs of teams to add the member to. |
+| `forProvider.teamRoles` | []object |  | The team and team-roles assigned to the member. Team roles can be either: - `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members. - `admin` - Has full management access to their team's membership and projects. |
+| `forProvider.teamRoles[].role` | string |  | Team role; unset keeps the role Sentry assigns. One of `contributor`, `admin`. |
+| `forProvider.teamRoles[].teamSlug` | string | yes | Slug of the team. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
 
 Validation:
 
+- `forProvider`: a member with the billing role cannot be on teams
 - `forProvider`: organizationRef cannot be removed once set
 - `forProvider.organizationRef`: organizationRef is immutable
 
