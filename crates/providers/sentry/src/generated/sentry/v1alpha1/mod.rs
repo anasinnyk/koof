@@ -79,6 +79,7 @@ pub use crate::generated::types::SentryV1alpha1OrganizationMemberForProviderEmai
 pub use crate::generated::types::SentryV1alpha1OrganizationMemberForProviderOrgRole as OrganizationMemberForProviderOrgRole;
 pub use crate::generated::types::SentryV1alpha1OrganizationMemberForProviderTeamRolesItem as OrganizationMemberForProviderTeamRolesItem;
 pub use crate::generated::types::SentryV1alpha1OrganizationMemberForProviderTeamRolesItemRole as OrganizationMemberForProviderTeamRolesItemRole;
+pub use crate::generated::types::SentryV1alpha1OrganizationMemberForProviderTeamRolesItemTeamRef as OrganizationMemberForProviderTeamRolesItemTeamRef;
 pub use crate::generated::types::SentryV1alpha1ProjectAtProvider as ProjectAtProvider;
 pub use crate::generated::types::SentryV1alpha1ProjectAtProviderAvatar as ProjectAtProviderAvatar;
 pub use crate::generated::types::SentryV1alpha1ProjectAtProviderDynamicSamplingBiasesItemValue as ProjectAtProviderDynamicSamplingBiasesItemValue;

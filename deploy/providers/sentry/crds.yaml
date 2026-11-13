@@ -2377,22 +2377,35 @@
                               "nullable": true,
                               "type": "string"
                             },
+                            "teamRef": {
+                              "description": "A reference to an object of kind `Team` in the namespace of the resource holding the reference; sets `teamSlug`.",
+                              "nullable": true,
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
                             "teamSlug": {
                               "description": "Slug of the team.",
+                              "nullable": true,
                               "type": "string"
                             }
                           },
-                          "required": [
-                            "teamSlug"
-                          ],
-                          "type": "object"
+                          "type": "object",
+                          "x-kubernetes-validations": [
+                            {
+                              "message": "set exactly one of teamSlug and teamRef",
+                              "rule": "has(self.teamSlug) != has(self.teamRef)"
+                            }
+                          ]
                         },
                         "nullable": true,
-                        "type": "array",
-                        "x-kubernetes-list-map-keys": [
-                          "teamSlug"
-                        ],
-                        "x-kubernetes-list-type": "map"
+                        "type": "array"
                       }
                     },
                     "required": [

@@ -4,15 +4,6 @@
 /// overlay's CEL validations.
 fn for_provider_schema(schema: &mut schemars::Schema) {
     koof::schema::flatten_unions(schema);
-    koof::schema::add_list_maps(
-        schema,
-        &[
-            koof::schema::ListMap {
-                field: "teamRoles",
-                keys: &["teamSlug"],
-            },
-        ],
-    );
     koof::schema::add_validations(
         schema,
         &[
@@ -20,6 +11,11 @@ fn for_provider_schema(schema: &mut schemars::Schema) {
                 rule: "!has(self.orgRole) || self.orgRole != 'billing' || !has(self.teamRoles) || size(self.teamRoles) == 0",
                 message: "a member with the billing role cannot be on teams",
                 field: "",
+            },
+            koof::schema::Validation {
+                rule: "has(self.teamSlug) != has(self.teamRef)",
+                message: "set exactly one of teamSlug and teamRef",
+                field: "teamRoles[]",
             },
             koof::schema::Validation {
                 rule: "self == oldSelf",
@@ -122,6 +118,20 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
                     &crate::generated::sentry::v1alpha1::organization::DESCRIPTOR,
                     &crate::generated::sentry::v1alpha1::cluster_organization::DESCRIPTOR,
                 ],
+            ),
+        ],
+    )
+    .with_item_references(
+        &[
+            koof::resource::ItemReference::new(
+                "/spec/forProvider/teamRoles",
+                koof::resource::Reference::new(
+                    "team",
+                    "/teamRef",
+                    &[&crate::generated::sentry::v1alpha1::team::DESCRIPTOR],
+                ),
+                "teamSlug",
+                "slug",
             ),
         ],
     )
