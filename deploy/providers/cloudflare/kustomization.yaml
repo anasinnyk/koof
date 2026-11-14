@@ -13,4 +13,4 @@ resources:
 images:
   - name: provider
     newName: ghcr.io/anasinnyk/koof-cloudflare
-    newTag: "0.1.0"
+    newTag: "0.2.0"

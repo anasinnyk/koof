@@ -381,7 +381,7 @@ checksum = "1c133bc6a41be0d194c306b5506d15e6feeea7b1d6604bd3f8310dfb2ca96486"
 
 [[package]]
 name = "cloudflare-provider"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1544,7 +1544,7 @@ dependencies = [
 
 [[package]]
 name = "koof"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "axum",
  "config",
@@ -1579,7 +1579,7 @@ dependencies = [
 
 [[package]]
 name = "koof-gen"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -2586,7 +2586,7 @@ checksum = "8a7852d02fc848982e0c167ef163aaff9cd91dc640ba85e263cb1ce46fae51cd"
 
 [[package]]
 name = "sentry-provider"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "chrono",
