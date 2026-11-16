@@ -163,12 +163,12 @@ record each action.
 
 | Situation | Next reconcile |
 |---|---|
-| in sync | 5 min |
+| in sync | `KOOF_RESYNC_INTERVAL` (5 min) |
 | missing and cannot be created | 30 s |
 | waiting for a reference, a dependent or a delete | 15 s |
 | after an action, to confirm it | 5 s |
-| transient error (`429`, `5xx`, network) | exponential backoff from 5 s to 5 min, or `Retry-After` |
-| permanent error (other `4xx`, invalid input) | 5 min |
+| transient error (`429`, `5xx`, network) | exponential backoff from 5 s to the resync interval, or `Retry-After` |
+| permanent error (other `4xx`, invalid input) | the resync interval |
 
 Periodic delays get ±10 % jitter, so objects created together do not all hit the API
 at the same moment. Any change to the object triggers a reconcile immediately.

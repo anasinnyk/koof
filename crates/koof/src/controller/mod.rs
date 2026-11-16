@@ -8,7 +8,7 @@ pub mod policy;
 pub mod status;
 mod usage;
 
-pub use context::{Attempts, Backoff, ControllerContext, SyncTracker};
+pub use context::{Attempts, Backoff, ControllerContext, DEFAULT_RESYNC, SyncTracker};
 
 use crate::{
     error::ReconcileError,
@@ -34,7 +34,6 @@ use status::{record_failure, set_conditions, update_status};
 use std::{sync::Arc, time::Duration};
 use tracing::Instrument as _;
 
-const RESYNC: Duration = Duration::from_mins(5);
 const MISSING: Duration = Duration::from_secs(30);
 const WAITING: Duration = Duration::from_secs(15);
 const CONFIRM: Duration = Duration::from_secs(5);
@@ -42,13 +41,15 @@ const SHUTDOWN_GRACE: Duration = Duration::from_secs(20);
 const DELETE_RETRY: Duration = Duration::from_mins(1);
 const ORPHANED: &str = "External resource kept (orphaned)";
 const NOT_DELETABLE: &str = "External resource kept: the API has no delete operation";
-const RECONCILE_RETRY: RetryPolicy = RetryPolicy {
-    base: Duration::from_secs(5),
-    max: RESYNC,
-    attempts: None,
-    waiting: Some(WAITING),
-    permanent: Some(RESYNC),
-};
+fn reconcile_retry(resync: Duration) -> RetryPolicy {
+    RetryPolicy {
+        base: Duration::from_secs(5).min(resync),
+        max: resync,
+        attempts: None,
+        waiting: Some(WAITING),
+        permanent: Some(resync),
+    }
+}
 
 /// Observes the external resource and records the result in the status. On failure
 /// records `Synced=False` and a warning event before returning the error.
@@ -207,7 +208,7 @@ async fn reconcile_inner<R: ManagedResource>(
     }
 
     Ok(Action::requeue(jitter(if observation.exists {
-        RESYNC
+        context.resync
     } else {
         MISSING
     })))
@@ -361,7 +362,7 @@ async fn update_external<R: ManagedResource>(
         .await;
     }
     update_status(context, resource, &observation).await?;
-    Ok(Action::requeue(jitter(RESYNC)))
+    Ok(Action::requeue(jitter(context.resync)))
 }
 
 fn jitter(duration: Duration) -> Duration {
@@ -441,9 +442,9 @@ pub fn error_policy<R: ManagedResource>(
 ) -> Action {
     let attempts = context.backoff.failed(&object_key(resource.as_ref()));
     let delay = jitter(
-        RECONCILE_RETRY
+        reconcile_retry(context.resync)
             .delay(retry::classify(error), attempts)
-            .unwrap_or(RESYNC),
+            .unwrap_or(context.resync),
     );
     tracing::debug!(attempts, ?delay, "requeue after failure");
     Action::requeue(delay)

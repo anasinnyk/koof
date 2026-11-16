@@ -178,6 +178,23 @@ async fn leader_releases_the_lease_on_shutdown() {
 }
 
 #[tokio::test]
+async fn zero_resync_interval_is_an_error() {
+    let config = Config {
+        resync_interval: Duration::ZERO,
+        ..config(provider().await)
+    };
+
+    let result = App::new(&PROVIDER)
+        .run_with(config, Cluster::default().client(), async {})
+        .await;
+
+    assert_eq!(
+        result.err().map(|error| error.to_string()),
+        Some("resync interval must be greater than zero".to_owned())
+    );
+}
+
+#[tokio::test]
 async fn metrics_address_in_use_is_an_error() {
     let taken = std::net::TcpListener::bind("127.0.0.1:0").expect("port");
     let config = Config {

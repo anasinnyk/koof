@@ -112,6 +112,9 @@ impl App {
         shutdown: impl Future<Output = ()> + Send + 'static,
     ) -> Result<(), AppError> {
         tracing::info!(provider = self.provider.name, ?config, "configuration");
+        if config.resync_interval.is_zero() {
+            return Err(AppError::ZeroResyncInterval);
+        }
         let http = config.http.client().map_err(AppError::HttpClient)?;
         let elector = if config.leader_election.enabled {
             Some(LeaderElector::new(
@@ -134,14 +137,17 @@ impl App {
             .iter()
             .map(|(descriptor, _)| *descriptor)
             .collect();
-        let context = Arc::new(ControllerContext::new(
-            kube_client.clone(),
-            HttpClient::new(http, config.base_url.clone()).with_metrics(metrics.clone()),
-            Recorder::new(kube_client, reporter),
-            metrics,
-            descriptors.clone(),
-            config.concurrency,
-        ));
+        let context = Arc::new(
+            ControllerContext::new(
+                kube_client.clone(),
+                HttpClient::new(http, config.base_url.clone()).with_metrics(metrics.clone()),
+                Recorder::new(kube_client, reporter),
+                metrics,
+                descriptors.clone(),
+                config.concurrency,
+            )
+            .with_resync(config.resync_interval),
+        );
 
         let kinds: Vec<GroupKind> = descriptors
             .iter()
@@ -258,6 +264,9 @@ pub enum AppError {
     #[cfg(feature = "env")]
     #[error("invalid configuration")]
     Config(#[from] config::ConfigError),
+
+    #[error("resync interval must be greater than zero")]
+    ZeroResyncInterval,
 
     #[error("cannot create the HTTP client")]
     HttpClient(#[source] reqwest::Error),

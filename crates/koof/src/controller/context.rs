@@ -20,6 +20,7 @@ pub struct ControllerContext {
     pub attempts: Attempts,
     pub descriptors: Vec<&'static ResourceDescriptor>,
     pub concurrency: u16,
+    pub resync: Duration,
 }
 
 impl ControllerContext {
@@ -42,9 +43,18 @@ impl ControllerContext {
             attempts: Attempts::default(),
             descriptors,
             concurrency,
+            resync: DEFAULT_RESYNC,
         }
     }
+
+    /// How often an object is reconciled again once in sync.
+    #[must_use]
+    pub fn with_resync(self, resync: Duration) -> Self {
+        Self { resync, ..self }
+    }
 }
+
+pub const DEFAULT_RESYNC: Duration = Duration::from_mins(5);
 
 #[derive(Debug, Default)]
 pub struct Backoff {

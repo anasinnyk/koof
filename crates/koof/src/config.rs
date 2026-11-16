@@ -56,6 +56,8 @@ pub struct Config {
     pub metrics_addr: String,
     pub pod_name: Option<String>,
     pub concurrency: u16,
+    #[serde(with = "humantime_serde")]
+    pub resync_interval: Duration,
     pub http: HttpConfig,
     pub leader_election: LeaderElectionConfig,
 }
@@ -72,6 +74,7 @@ impl Config {
             metrics_addr: "0.0.0.0:8080".to_owned(),
             pod_name: None,
             concurrency: 8,
+            resync_interval: crate::controller::DEFAULT_RESYNC,
             http: (provider.http)(http),
             leader_election: LeaderElectionConfig {
                 name: format!("koof-{}", provider.name),
@@ -134,6 +137,17 @@ mod tests {
                 renew_interval: Duration::from_secs(5),
             }
         );
+        Ok(())
+    }
+
+    #[test]
+    fn resync_interval_from_environment() -> Result<(), config::ConfigError> {
+        static PROVIDER: ProviderInfo = ProviderInfo::new("test", "http://127.0.0.1");
+        let variables = [("KOOF_RESYNC_INTERVAL".to_owned(), "90s".to_owned())]
+            .into_iter()
+            .collect();
+        let config = Config::load(&PROVIDER, environment().source(Some(variables)))?;
+        assert_eq!(config.resync_interval, Duration::from_secs(90));
         Ok(())
     }
 }
