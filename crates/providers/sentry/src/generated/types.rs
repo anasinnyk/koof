@@ -10603,6 +10603,411 @@ pub struct ProjectObserveResponseTeamsItem {
     pub name: ::std::string::String,
     pub slug: ::std::string::String,
 }
+///`ProjectTeamCreateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(deny_unknown_fields)]
+pub struct ProjectTeamCreateRequest {}
+///`ProjectTeamCreateResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ProjectTeamCreateResponse {
+    pub access: ::std::vec::Vec<::std::string::String>,
+    pub avatar: ProjectTeamCreateResponseAvatar,
+    pub color: ::std::string::String,
+    #[serde(rename = "dateCreated")]
+    pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub features: ::std::vec::Vec<::std::string::String>,
+    #[serde(
+        rename = "firstEvent",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub first_event: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(rename = "firstTransactionEvent")]
+    pub first_transaction_event: bool,
+    #[serde(rename = "hasAccess")]
+    pub has_access: bool,
+    #[serde(rename = "hasFeedbacks")]
+    pub has_feedbacks: bool,
+    #[serde(rename = "hasFlags")]
+    pub has_flags: bool,
+    #[serde(rename = "hasInsightsAgentMonitoring")]
+    pub has_insights_agent_monitoring: bool,
+    #[serde(rename = "hasInsightsAppStart")]
+    pub has_insights_app_start: bool,
+    #[serde(rename = "hasInsightsAssets")]
+    pub has_insights_assets: bool,
+    #[serde(rename = "hasInsightsCaches")]
+    pub has_insights_caches: bool,
+    #[serde(rename = "hasInsightsDb")]
+    pub has_insights_db: bool,
+    #[serde(rename = "hasInsightsHttp")]
+    pub has_insights_http: bool,
+    #[serde(rename = "hasInsightsMCP")]
+    pub has_insights_mcp: bool,
+    #[serde(rename = "hasInsightsQueues")]
+    pub has_insights_queues: bool,
+    #[serde(rename = "hasInsightsScreenLoad")]
+    pub has_insights_screen_load: bool,
+    #[serde(rename = "hasInsightsVitals")]
+    pub has_insights_vitals: bool,
+    #[serde(rename = "hasLogs")]
+    pub has_logs: bool,
+    #[serde(rename = "hasMinifiedStackTrace")]
+    pub has_minified_stack_trace: bool,
+    #[serde(rename = "hasMonitors")]
+    pub has_monitors: bool,
+    #[serde(rename = "hasNewFeedbacks")]
+    pub has_new_feedbacks: bool,
+    #[serde(rename = "hasProfiles")]
+    pub has_profiles: bool,
+    #[serde(rename = "hasReplays")]
+    pub has_replays: bool,
+    #[serde(rename = "hasSessions")]
+    pub has_sessions: bool,
+    #[serde(rename = "hasTraceMetrics")]
+    pub has_trace_metrics: bool,
+    pub id: ::std::string::String,
+    #[serde(rename = "isBookmarked")]
+    pub is_bookmarked: bool,
+    #[serde(rename = "isInternal")]
+    pub is_internal: bool,
+    #[serde(rename = "isMember")]
+    pub is_member: bool,
+    #[serde(rename = "isPublic")]
+    pub is_public: bool,
+    pub name: ::std::string::String,
+    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    pub platform: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "sessionStats",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub session_stats: ::std::option::Option<::serde_json::Value>,
+    pub slug: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub stats: ::std::option::Option<::serde_json::Value>,
+    pub status: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub team: ::std::option::Option<ProjectTeamCreateResponseTeam>,
+    pub teams: ::std::vec::Vec<ProjectTeamCreateResponseTeamsItem>,
+    #[serde(
+        rename = "transactionStats",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub transaction_stats: ::std::option::Option<::serde_json::Value>,
+}
+///`ProjectTeamCreateResponseAvatar`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ProjectTeamCreateResponseAvatar {
+    #[serde(
+        rename = "avatarType",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_type: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUrl",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_url: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUuid",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_uuid: ::std::option::Option<::std::string::String>,
+}
+///`ProjectTeamCreateResponseTeam`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ProjectTeamCreateResponseTeam {
+    pub id: ::std::string::String,
+    pub name: ::std::string::String,
+    pub slug: ::std::string::String,
+}
+///`ProjectTeamCreateResponseTeamsItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ProjectTeamCreateResponseTeamsItem {
+    pub id: ::std::string::String,
+    pub name: ::std::string::String,
+    pub slug: ::std::string::String,
+}
+///`ProjectTeamDeleteResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ProjectTeamDeleteResponse {
+    pub access: ::std::vec::Vec<::std::string::String>,
+    pub avatar: ProjectTeamDeleteResponseAvatar,
+    pub color: ::std::string::String,
+    #[serde(rename = "dateCreated")]
+    pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub features: ::std::vec::Vec<::std::string::String>,
+    #[serde(
+        rename = "firstEvent",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub first_event: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(rename = "firstTransactionEvent")]
+    pub first_transaction_event: bool,
+    #[serde(rename = "hasAccess")]
+    pub has_access: bool,
+    #[serde(rename = "hasFeedbacks")]
+    pub has_feedbacks: bool,
+    #[serde(rename = "hasFlags")]
+    pub has_flags: bool,
+    #[serde(rename = "hasInsightsAgentMonitoring")]
+    pub has_insights_agent_monitoring: bool,
+    #[serde(rename = "hasInsightsAppStart")]
+    pub has_insights_app_start: bool,
+    #[serde(rename = "hasInsightsAssets")]
+    pub has_insights_assets: bool,
+    #[serde(rename = "hasInsightsCaches")]
+    pub has_insights_caches: bool,
+    #[serde(rename = "hasInsightsDb")]
+    pub has_insights_db: bool,
+    #[serde(rename = "hasInsightsHttp")]
+    pub has_insights_http: bool,
+    #[serde(rename = "hasInsightsMCP")]
+    pub has_insights_mcp: bool,
+    #[serde(rename = "hasInsightsQueues")]
+    pub has_insights_queues: bool,
+    #[serde(rename = "hasInsightsScreenLoad")]
+    pub has_insights_screen_load: bool,
+    #[serde(rename = "hasInsightsVitals")]
+    pub has_insights_vitals: bool,
+    #[serde(rename = "hasLogs")]
+    pub has_logs: bool,
+    #[serde(rename = "hasMinifiedStackTrace")]
+    pub has_minified_stack_trace: bool,
+    #[serde(rename = "hasMonitors")]
+    pub has_monitors: bool,
+    #[serde(rename = "hasNewFeedbacks")]
+    pub has_new_feedbacks: bool,
+    #[serde(rename = "hasProfiles")]
+    pub has_profiles: bool,
+    #[serde(rename = "hasReplays")]
+    pub has_replays: bool,
+    #[serde(rename = "hasSessions")]
+    pub has_sessions: bool,
+    #[serde(rename = "hasTraceMetrics")]
+    pub has_trace_metrics: bool,
+    pub id: ::std::string::String,
+    #[serde(rename = "isBookmarked")]
+    pub is_bookmarked: bool,
+    #[serde(rename = "isInternal")]
+    pub is_internal: bool,
+    #[serde(rename = "isMember")]
+    pub is_member: bool,
+    #[serde(rename = "isPublic")]
+    pub is_public: bool,
+    pub name: ::std::string::String,
+    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    pub platform: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "sessionStats",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub session_stats: ::std::option::Option<::serde_json::Value>,
+    pub slug: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub stats: ::std::option::Option<::serde_json::Value>,
+    pub status: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub team: ::std::option::Option<ProjectTeamDeleteResponseTeam>,
+    pub teams: ::std::vec::Vec<ProjectTeamDeleteResponseTeamsItem>,
+    #[serde(
+        rename = "transactionStats",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub transaction_stats: ::std::option::Option<::serde_json::Value>,
+}
+///`ProjectTeamDeleteResponseAvatar`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ProjectTeamDeleteResponseAvatar {
+    #[serde(
+        rename = "avatarType",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_type: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUrl",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_url: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUuid",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_uuid: ::std::option::Option<::std::string::String>,
+}
+///`ProjectTeamDeleteResponseTeam`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ProjectTeamDeleteResponseTeam {
+    pub id: ::std::string::String,
+    pub name: ::std::string::String,
+    pub slug: ::std::string::String,
+}
+///`ProjectTeamDeleteResponseTeamsItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ProjectTeamDeleteResponseTeamsItem {
+    pub id: ::std::string::String,
+    pub name: ::std::string::String,
+    pub slug: ::std::string::String,
+}
+///`ProjectTeamObserveResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct ProjectTeamObserveResponse(
+    pub ::std::vec::Vec<ProjectTeamObserveResponseItem>,
+);
+impl ::std::ops::Deref for ProjectTeamObserveResponse {
+    type Target = ::std::vec::Vec<ProjectTeamObserveResponseItem>;
+    fn deref(&self) -> &::std::vec::Vec<ProjectTeamObserveResponseItem> {
+        &self.0
+    }
+}
+impl ::std::convert::From<ProjectTeamObserveResponse>
+for ::std::vec::Vec<ProjectTeamObserveResponseItem> {
+    fn from(value: ProjectTeamObserveResponse) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<ProjectTeamObserveResponseItem>>
+for ProjectTeamObserveResponse {
+    fn from(value: ::std::vec::Vec<ProjectTeamObserveResponseItem>) -> Self {
+        Self(value)
+    }
+}
+///`ProjectTeamObserveResponseItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ProjectTeamObserveResponseItem {
+    pub access: ::std::vec::Vec<::std::string::String>,
+    pub avatar: ProjectTeamObserveResponseItemAvatar,
+    #[serde(
+        rename = "dateCreated",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    pub flags: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(rename = "hasAccess")]
+    pub has_access: bool,
+    pub id: ::std::string::String,
+    #[serde(rename = "isMember")]
+    pub is_member: bool,
+    #[serde(rename = "isPending")]
+    pub is_pending: bool,
+    #[serde(rename = "memberCount")]
+    pub member_count: i64,
+    pub name: ::std::string::String,
+    pub slug: ::std::string::String,
+    #[serde(
+        rename = "teamRole",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub team_role: ::std::option::Option<::std::string::String>,
+}
+///`ProjectTeamObserveResponseItemAvatar`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ProjectTeamObserveResponseItemAvatar {
+    #[serde(
+        rename = "avatarType",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_type: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUrl",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_url: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUuid",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_uuid: ::std::option::Option<::std::string::String>,
+}
 ///`ProjectUpdateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -16626,6 +17031,93 @@ impl ::std::default::Default for SentryV1alpha1ProjectKeyForProviderUseCase {
         SentryV1alpha1ProjectKeyForProviderUseCase::User
     }
 }
+///`ProjectTeamAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1ProjectTeamAtProvider {
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub access: ::std::vec::Vec<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub avatar: ::std::option::Option<SentryV1alpha1ProjectTeamAtProviderAvatar>,
+    #[serde(
+        rename = "dateCreated",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
+    pub flags: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(
+        rename = "hasAccess",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub has_access: ::std::option::Option<bool>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "isMember", skip_serializing_if = "::std::option::Option::is_none")]
+    pub is_member: ::std::option::Option<bool>,
+    #[serde(
+        rename = "isPending",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub is_pending: ::std::option::Option<bool>,
+    #[serde(
+        rename = "memberCount",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub member_count: ::std::option::Option<i64>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub slug: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "teamRole", skip_serializing_if = "::std::option::Option::is_none")]
+    pub team_role: ::std::option::Option<::std::string::String>,
+}
+///`ProjectTeamAtProviderAvatar`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1ProjectTeamAtProviderAvatar {
+    #[serde(
+        rename = "avatarType",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_type: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUrl",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_url: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUuid",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_uuid: ::std::option::Option<::std::string::String>,
+}
+///`ProjectTeamForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(deny_unknown_fields)]
+pub struct SentryV1alpha1ProjectTeamForProvider {}
 ///`ServiceHookAtProvider`
 #[derive(
     ::serde::Deserialize,

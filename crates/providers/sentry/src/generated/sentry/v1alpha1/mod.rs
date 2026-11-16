@@ -5,6 +5,7 @@ pub mod cluster_organization;
 pub mod organization_member;
 pub mod project;
 pub mod project_key;
+pub mod project_team;
 pub mod service_hook;
 pub mod team;
 pub use crate::generated::types::SentryV1alpha1DashboardAtProvider as DashboardAtProvider;
@@ -104,6 +105,9 @@ pub use crate::generated::types::SentryV1alpha1ProjectKeyForProvider as ProjectK
 pub use crate::generated::types::SentryV1alpha1ProjectKeyForProviderName as ProjectKeyForProviderName;
 pub use crate::generated::types::SentryV1alpha1ProjectKeyForProviderRateLimit as ProjectKeyForProviderRateLimit;
 pub use crate::generated::types::SentryV1alpha1ProjectKeyForProviderUseCase as ProjectKeyForProviderUseCase;
+pub use crate::generated::types::SentryV1alpha1ProjectTeamAtProvider as ProjectTeamAtProvider;
+pub use crate::generated::types::SentryV1alpha1ProjectTeamAtProviderAvatar as ProjectTeamAtProviderAvatar;
+pub use crate::generated::types::SentryV1alpha1ProjectTeamForProvider as ProjectTeamForProvider;
 pub use crate::generated::types::SentryV1alpha1ServiceHookAtProvider as ServiceHookAtProvider;
 pub use crate::generated::types::SentryV1alpha1ServiceHookForProvider as ServiceHookForProvider;
 pub use crate::generated::types::SentryV1alpha1TeamAtProvider as TeamAtProvider;

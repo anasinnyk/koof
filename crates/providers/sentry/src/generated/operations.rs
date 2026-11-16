@@ -176,6 +176,30 @@ impl koof::Operation for ProjectKeyUpdate {
     type Request = crate::generated::types::ProjectKeyUpdateRequest;
     type Response = crate::generated::types::ProjectKeyUpdateResponse;
 }
+pub struct ProjectTeamCreate;
+impl koof::Operation for ProjectTeamCreate {
+    const NAME: &'static str = "project_team.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/";
+    type Request = crate::generated::types::ProjectTeamCreateRequest;
+    type Response = crate::generated::types::ProjectTeamCreateResponse;
+}
+pub struct ProjectTeamDelete;
+impl koof::Operation for ProjectTeamDelete {
+    const NAME: &'static str = "project_team.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/";
+    type Request = ();
+    type Response = crate::generated::types::ProjectTeamDeleteResponse;
+}
+pub struct ProjectTeamObserve;
+impl koof::Operation for ProjectTeamObserve {
+    const NAME: &'static str = "project_team.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/";
+    type Request = ();
+    type Response = crate::generated::types::ProjectTeamObserveResponse;
+}
 pub struct ServiceHookCreate;
 impl koof::Operation for ServiceHookCreate {
     const NAME: &'static str = "service_hook.create";

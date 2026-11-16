@@ -9,4 +9,5 @@ sentry.organization-member.overlay.yaml
 sentry.monitor.overlay.yaml
 sentry.dashboard.overlay.yaml
 sentry.service-hook.overlay.yaml
+sentry.project-team.overlay.yaml
 sentry.typify.overlay.yaml

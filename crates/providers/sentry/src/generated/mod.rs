@@ -19,6 +19,7 @@ pub fn controllers(app: koof::App) -> koof::App {
         .controller::<sentry::v1alpha1::organization_member::OrganizationMember>()
         .controller::<sentry::v1alpha1::project::Project>()
         .controller::<sentry::v1alpha1::project_key::ProjectKey>()
+        .controller::<sentry::v1alpha1::project_team::ProjectTeam>()
         .controller::<sentry::v1alpha1::service_hook::ServiceHook>()
         .controller::<sentry::v1alpha1::team::Team>()
 }
@@ -33,6 +34,7 @@ pub fn fake() -> koof::fake::Fake {
         .resource::<sentry::v1alpha1::organization_member::OrganizationMember>()
         .resource::<sentry::v1alpha1::project::Project>()
         .resource::<sentry::v1alpha1::project_key::ProjectKey>()
+        .resource::<sentry::v1alpha1::project_team::ProjectTeam>()
         .resource::<sentry::v1alpha1::service_hook::ServiceHook>()
         .resource::<sentry::v1alpha1::team::Team>()
 }
@@ -50,9 +52,10 @@ pub fn crds() -> Vec<
         sentry::v1alpha1::organization_member::OrganizationMember as
         kube::CustomResourceExt > ::crd(), < sentry::v1alpha1::project::Project as
         kube::CustomResourceExt > ::crd(), < sentry::v1alpha1::project_key::ProjectKey as
-        kube::CustomResourceExt > ::crd(), < sentry::v1alpha1::service_hook::ServiceHook
-        as kube::CustomResourceExt > ::crd(), < sentry::v1alpha1::team::Team as
-        kube::CustomResourceExt > ::crd()
+        kube::CustomResourceExt > ::crd(), < sentry::v1alpha1::project_team::ProjectTeam
+        as kube::CustomResourceExt > ::crd(), <
+        sentry::v1alpha1::service_hook::ServiceHook as kube::CustomResourceExt > ::crd(),
+        < sentry::v1alpha1::team::Team as kube::CustomResourceExt > ::crd()
     ]
 }
 /// Documentation of every resource of this provider.
@@ -68,6 +71,7 @@ pub fn docs() -> Vec<koof::docs::ResourceDoc> {
         sentry::v1alpha1::organization_member::OrganizationMember > (),
         koof::docs::ResourceDoc::of:: < sentry::v1alpha1::project::Project > (),
         koof::docs::ResourceDoc::of:: < sentry::v1alpha1::project_key::ProjectKey > (),
+        koof::docs::ResourceDoc::of:: < sentry::v1alpha1::project_team::ProjectTeam > (),
         koof::docs::ResourceDoc::of:: < sentry::v1alpha1::service_hook::ServiceHook > (),
         koof::docs::ResourceDoc::of:: < sentry::v1alpha1::team::Team > ()
     ]

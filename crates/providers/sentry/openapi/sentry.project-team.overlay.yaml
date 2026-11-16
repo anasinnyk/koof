@@ -1,0 +1,104 @@
+overlay: 1.1.0
+info:
+  title: Sentry ProjectTeam
+  version: 0.0.1
+extends: ./sentry.json
+actions:
+  # Adding a team takes no body; the resource is only the project and the team.
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/'].post
+    update:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+              additionalProperties: false
+              x-kube-resource:
+                name: project_team
+                apiVersion: sentry.kube.nas1k.dev/v1alpha1
+                kind: ProjectTeam
+
+                test: {}
+
+                identifiers:
+                  external_id:
+                    type: external_name
+
+                references:
+                  project:
+                    from: spec.forProvider.projectRef
+                    target: project
+                  team:
+                    from: spec.forProvider.teamRef
+                    target: team
+
+                credentials:
+                  securityScheme: auth_token
+                  source:
+                    type: related
+                    via: [project, organization]
+
+                fields:
+                  mode: all
+      x-kube-operation:
+        resource: project_team
+        lifecycle: create
+        pathParameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [project, organization]
+            name: external_id
+          project_id_or_slug:
+            type: related_identifier
+            via: [project]
+            name: external_id
+          team_id_or_slug:
+            type: related_identifier
+            via: [team]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.id
+
+  # There is no endpoint for one team of a project: the team is found in the list.
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/'].get
+    update:
+      x-kube-operation:
+        resource: project_team
+        lifecycle: observe
+        response:
+          match:
+            field: id
+            value:
+              type: related_identifier
+              via: [team]
+              name: external_id
+        pathParameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [project, organization]
+            name: external_id
+          project_id_or_slug:
+            type: related_identifier
+            via: [project]
+            name: external_id
+
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/teams/{team_id_or_slug}/'].delete
+    update:
+      x-kube-operation:
+        resource: project_team
+        lifecycle: delete
+        pathParameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [project, organization]
+            name: external_id
+          project_id_or_slug:
+            type: related_identifier
+            via: [project]
+            name: external_id
+          team_id_or_slug:
+            type: related_identifier
+            via: [team]
+            name: external_id

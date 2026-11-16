@@ -1,0 +1,112 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: project-team
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: Organization
+          metadata:
+            annotations:
+              sentry.kube.nas1k.dev/external-name: ($namespace)
+            name: organization
+          spec:
+            forProvider:
+              authTokenSecretRef:
+                key: token
+                name: credentials
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: Team
+          metadata:
+            name: team
+          spec:
+            forProvider:
+              name: koof e2e
+              organizationRef:
+                name: organization
+              slug: koof-e2e
+    - apply:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: Project
+          metadata:
+            name: project
+          spec:
+            forProvider:
+              name: koof e2e
+              organizationRef:
+                name: organization
+              slug: koof-e2e
+              teamRef:
+                name: team
+    - apply:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: ProjectTeam
+          metadata:
+            name: project-team
+          spec:
+            forProvider:
+              projectRef:
+                name: project
+              teamRef:
+                name: team
+    - assert:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: Organization
+          metadata:
+            name: organization
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: Team
+          metadata:
+            name: team
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: Project
+          metadata:
+            name: project
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: ProjectTeam
+          metadata:
+            name: project-team
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: sentry.kube.nas1k.dev/v1alpha1
+          kind: ProjectTeam
+          name: project-team
