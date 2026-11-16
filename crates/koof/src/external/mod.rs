@@ -81,8 +81,8 @@ fn unsupported(kind: &'static str, lifecycle: &'static str) -> ReconcileError {
 }
 
 /// Reads the external resource through `R::Observe`; `exists: false` when its
-/// path parameters are not set yet, the API answers `404` or the resource is marked
-/// deleted (`deleted_when`).
+/// path parameters are not set yet, the API answers `404`, no item of a list
+/// response matches (`matching`) or the resource is marked deleted (`deleted_when`).
 ///
 /// # Errors
 ///
@@ -100,18 +100,57 @@ pub async fn observe<R: ManagedResource>(
             at_provider: None,
         });
     };
+    let matching = match &observe.matching {
+        Some(matching) => {
+            let Some(value) = resolve_value(&context.kube_client, &node, &matching.value).await?
+            else {
+                tracing::debug!("value to match the observed item by is not set");
+                return Ok(Observation {
+                    exists: false,
+                    at_provider: None,
+                });
+            };
+            Some((matching.field, value))
+        }
+        None => None,
+    };
     let response = context
         .provider_client
         .send_json::<R::Observe>(&call.auth, &call.parameters(), None)
         .await?;
 
-    Ok(observation(response.as_ref(), observe))
+    let matching = matching
+        .as_ref()
+        .map(|(field, value)| (*field, value.as_str()));
+    Ok(observation(response.as_ref(), observe, matching))
 }
 
-fn observation(response: Option<&Value>, observe: &ObserveDescriptor) -> Observation {
-    let at_provider = response
-        .and_then(|response| resolve::non_null(response, observe.operation.response_path))
-        .cloned();
+fn matched_item<'a>(list: &'a Value, field: &str, value: &str) -> Option<&'a Value> {
+    list.as_array()?
+        .iter()
+        .find(|item| match item.pointer(field) {
+            Some(Value::String(text)) => text == value,
+            Some(Value::Number(number)) => number.to_string() == value,
+            _ => false,
+        })
+}
+
+fn observation(
+    response: Option<&Value>,
+    observe: &ObserveDescriptor,
+    matching: Option<(&str, &str)>,
+) -> Observation {
+    let found =
+        response.and_then(|response| resolve::non_null(response, observe.operation.response_path));
+    let at_provider = match matching {
+        Some((field, value)) => found.and_then(|list| matched_item(list, field, value)),
+        None => found,
+    }
+    .cloned();
+    let exists = match matching {
+        Some(_) => at_provider.is_some(),
+        None => response.is_some(),
+    };
     let deleted = observe.deleted_when.is_some_and(|path| {
         at_provider
             .as_ref()
@@ -124,7 +163,7 @@ fn observation(response: Option<&Value>, observe: &ObserveDescriptor) -> Observa
         };
     }
     Observation {
-        exists: response.is_some(),
+        exists,
         at_provider,
     }
 }
@@ -269,4 +308,46 @@ pub async fn delete<R: ManagedResource>(
         .provider_client
         .send_discarding::<R::Delete>(&call.auth, &call.parameters(), None)
         .await?)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::resource::{ResponseMatch, ValueExpr};
+    use pretty_assertions::assert_eq;
+    use serde_json::json;
+
+    fn teams() -> Value {
+        json!({ "result": [{ "id": "1", "slug": "a" }, { "id": 2, "slug": "b" }] })
+    }
+
+    fn observe() -> ObserveDescriptor {
+        ObserveDescriptor::new(OperationDescriptor::new().with_response_path("/result"))
+            .with_match(ResponseMatch::new("/id", ValueExpr::Literal("")))
+    }
+
+    #[test]
+    fn matched_item_of_a_list_is_the_resource() {
+        let observation = observation(Some(&teams()), &observe(), Some(("/id", "2")));
+
+        assert_eq!(
+            (observation.exists, observation.at_provider),
+            (true, Some(json!({ "id": 2, "slug": "b" })))
+        );
+    }
+
+    #[test]
+    fn resource_is_missing_when_no_item_matches() {
+        let observation = observation(Some(&teams()), &observe(), Some(("/id", "3")));
+
+        assert_eq!((observation.exists, observation.at_provider), (false, None));
+    }
+
+    #[test]
+    fn resource_is_missing_when_the_response_is_not_a_list() {
+        let response = json!({ "result": { "id": "1" } });
+        let observation = observation(Some(&response), &observe(), Some(("/id", "1")));
+
+        assert_eq!((observation.exists, observation.at_provider), (false, None));
+    }
 }

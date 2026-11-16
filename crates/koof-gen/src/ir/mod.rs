@@ -146,8 +146,18 @@ pub struct OperationIr {
     pub response: Option<SchemaName>,
     pub response_path: Option<String>,
     pub deleted_when: Option<String>,
+    pub response_match: Option<ResponseMatchIr>,
     pub request_mapping: Option<RequestMappingIr>,
     pub result_identifiers: BTreeMap<String, String>,
+}
+
+/// The observed resource is the item of the list response whose `field` equals
+/// `value`; the resource does not exist when no item matches.
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ResponseMatchIr {
+    pub field: String,
+    pub value: ValueExpr,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]

@@ -353,6 +353,7 @@ impl Default for OperationDescriptor {
 pub struct ObserveDescriptor {
     pub operation: OperationDescriptor,
     pub deleted_when: Option<&'static str>,
+    pub matching: Option<ResponseMatch>,
 }
 
 impl ObserveDescriptor {
@@ -361,6 +362,15 @@ impl ObserveDescriptor {
         Self {
             operation,
             deleted_when: None,
+            matching: None,
+        }
+    }
+
+    #[must_use]
+    pub const fn with_match(self, matching: ResponseMatch) -> Self {
+        Self {
+            matching: Some(matching),
+            ..self
         }
     }
 
@@ -370,6 +380,22 @@ impl ObserveDescriptor {
             deleted_when: Some(deleted_when),
             ..self
         }
+    }
+}
+
+/// The observed resource is the item of the list response whose `field` (a JSON
+/// pointer into the item) equals `value`.
+#[derive(Debug)]
+#[non_exhaustive]
+pub struct ResponseMatch {
+    pub field: &'static str,
+    pub value: ValueExpr,
+}
+
+impl ResponseMatch {
+    #[must_use]
+    pub const fn new(field: &'static str, value: ValueExpr) -> Self {
+        Self { field, value }
     }
 }
 

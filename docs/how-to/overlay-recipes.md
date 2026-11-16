@@ -103,6 +103,25 @@ response:
   deletedWhen: deleted_at
 ```
 
+## Observe through a list
+
+When the API has no endpoint for one resource, only a list (a team's access to a
+project: `GET /projects/{org}/{project}/teams/`), observe the list and pick the
+item:
+
+```yaml
+lifecycle: observe
+response:
+  match:
+    field: id
+    value:
+      type: related_identifier
+      via: [team]
+      name: external_id
+```
+
+Missing when no item matches. Only the first page of a paginated list is read.
+
 ## Immutable fields and validation
 
 ```yaml

@@ -221,7 +221,12 @@ fn observe_descriptor(operation: Operation<'_>) -> TokenStream {
         let path = pointer(path);
         quote!(.with_deleted_when(#path))
     });
-    quote!(koof::resource::ObserveDescriptor::new(#descriptor) #deleted_when)
+    let matching = operation.ir.response_match.as_ref().map(|matching| {
+        let field = pointer(&matching.field);
+        let value = value_expr(&matching.value);
+        quote!(.with_match(koof::resource::ResponseMatch::new(#field, #value)))
+    });
+    quote!(koof::resource::ObserveDescriptor::new(#descriptor) #deleted_when #matching)
 }
 
 fn operation_descriptor(operation: Operation<'_>) -> TokenStream {

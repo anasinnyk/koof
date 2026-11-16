@@ -19,7 +19,7 @@ pub async fn build<T: serde::de::DeserializeOwned>(
     mapping: &RequestMapping,
 ) -> Result<T, ReconcileError> {
     let mut body = match node.value.pointer(mapping.from) {
-        Some(Value::Object(object)) => Value::Object(object.clone()),
+        Some(Value::Object(object)) => Value::Object(without_references(node, mapping, object)),
         None | Some(Value::Null) => Value::Object(Map::new()),
         Some(_) => {
             return Err(ResolveValueError::NonScalar {
@@ -41,6 +41,24 @@ pub async fn build<T: serde::de::DeserializeOwned>(
         from: mapping.from,
         source,
     })
+}
+
+fn without_references(
+    node: &Node,
+    mapping: &RequestMapping,
+    object: &Map<String, Value>,
+) -> Map<String, Value> {
+    let references: Vec<&str> = node
+        .descriptor
+        .references
+        .iter()
+        .filter_map(|reference| reference.from.strip_prefix(mapping.from)?.strip_prefix('/'))
+        .collect();
+    object
+        .iter()
+        .filter(|(field, _)| !references.contains(&field.as_str()))
+        .map(|(field, value)| (field.clone(), value.clone()))
+        .collect()
 }
 
 #[cfg(test)]
@@ -89,6 +107,32 @@ mod tests {
                 name: Some("www.example.com".to_owned()),
                 ttl: Some(300),
                 zone: None
+            })
+        );
+    }
+
+    #[derive(Debug, PartialEq, serde::Deserialize)]
+    #[serde(deny_unknown_fields)]
+    struct Closed {
+        name: Option<String>,
+        ttl: Option<u32>,
+    }
+
+    #[tokio::test]
+    async fn leaves_references_out_of_the_body() {
+        let node = Node::of(&record(Some("record-1"), www())).expect("node");
+        let body: Result<Closed, _> = build(
+            &kubernetes(&[zone()]),
+            &node,
+            &RequestMapping::new("/spec/forProvider"),
+        )
+        .await;
+
+        assert_eq!(
+            body.map_err(|error| error.to_string()),
+            Ok(Closed {
+                name: Some("www.example.com".to_owned()),
+                ttl: Some(300)
             })
         );
     }

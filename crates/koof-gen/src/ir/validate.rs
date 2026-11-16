@@ -436,6 +436,15 @@ impl<'a> Checker<'a, '_> {
                 self.errors,
             );
         }
+        if let Some(matching) = &operation.response_match {
+            validate_expression(
+                self.ir,
+                self.name,
+                &matching.value,
+                &format!("operations.{}.response.match.value", id.0),
+                self.errors,
+            );
+        }
         Some(Operation { id, ir: operation })
     }
 }

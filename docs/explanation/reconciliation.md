@@ -26,8 +26,8 @@ koof calls the `observe` operation and the result is one of two states:
 - **exists**: the API answered with the resource. It is copied into
   `status.atProvider`, after unwrapping `response.path`.
 - **missing**: the API answered `404`, a path parameter is not known yet (no
-  external name before the first create), or the `response.deletedWhen` field is
-  set (soft-deleted).
+  external name before the first create), no item of a list response matches
+  `response.match`, or the `response.deletedWhen` field is set (soft-deleted).
 
 Path parameters, credentials and request bodies are resolved first. A reference
 to an object that is not `Ready` yet is not an error: the reconcile waits and tries

@@ -1,6 +1,6 @@
 use super::{
     ApiKeyLocationIr, HttpIr, HttpMethod, LifecycleIr, OperationId, OperationIr, ProviderIr,
-    ResourceIr, ResourceName, SchemaName, SecuritySchemeIr, SecuritySchemeName,
+    ResourceIr, ResourceName, ResponseMatchIr, SchemaName, SecuritySchemeIr, SecuritySchemeName,
 };
 use crate::spec::{
     self, SpecError,
@@ -76,7 +76,7 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
                 extension.lifecycle.name()
             )));
         }
-        let (response_path, deleted_when) = response_fields(&extension)?;
+        let (response_path, deleted_when, response_match) = response_fields(&extension)?;
 
         operations.insert(
             id,
@@ -89,6 +89,7 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
                     .map(SchemaName),
                 response_path,
                 deleted_when,
+                response_match,
                 request_mapping: extension.request,
                 result_identifiers: extension.result.unwrap_or_default().identifiers,
             },
@@ -239,19 +240,42 @@ fn extract_security_schemes(
     Ok(result)
 }
 
-fn response_fields(
-    extension: &OperationExtension,
-) -> Result<(Option<String>, Option<String>), ExtractError> {
+type ResponseFields = (Option<String>, Option<String>, Option<ResponseMatchIr>);
+
+fn response_fields(extension: &OperationExtension) -> Result<ResponseFields, ExtractError> {
     let Some(response) = &extension.response else {
-        return Ok((None, None));
+        return Ok((None, None, None));
     };
-    if response.deleted_when.is_some() && extension.lifecycle != LifecycleAction::Observe {
+    if extension.lifecycle != LifecycleAction::Observe {
+        let only_observe = |field: &str| {
+            ir_error(format!(
+                "resource {}: response.{field} is only allowed on the observe operation",
+                extension.resource.0
+            ))
+        };
+        if response.deleted_when.is_some() {
+            return Err(only_observe("deleted_when"));
+        }
+        if response.matching.is_some() {
+            return Err(only_observe("match"));
+        }
+    }
+    if response
+        .matching
+        .as_ref()
+        .is_some_and(|matching| matching.field.is_empty())
+    {
         return Err(ir_error(format!(
-            "resource {}: response.deleted_when is only allowed on the observe operation",
+            "resource {}: response.match.field cannot be empty",
             extension.resource.0
         )));
     }
-    Ok((Some(response.path.clone()), response.deleted_when.clone()))
+    let path = (!response.path.is_empty()).then(|| response.path.clone());
+    Ok((
+        path,
+        response.deleted_when.clone(),
+        response.matching.clone(),
+    ))
 }
 
 fn parse_method(method: &str) -> Result<HttpMethod, ExtractError> {

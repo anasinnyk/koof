@@ -53,6 +53,7 @@ On an operation (`$.paths['…'].get`).
 | `request.set` | map of dotted body path to [value](#values) | Extra body fields |
 | `response.path` | string | Where the resource is in the response (`result`) |
 | `response.deletedWhen` | string | Observe only: the resource is gone once this field is set |
+| `response.match` | `{field, value}` | Observe only: the response is a list and the resource is the item whose `field` equals the value expression `value`; missing when no item matches |
 | `result.identifiers` | map | Create: where an identifier is in the response (`response.body.result.id`) |
 
 ## `x-kube-field`

@@ -305,7 +305,16 @@ impl Resource<'_> {
             keep_required,
             writable_only: self.extension.fields.mode == FieldSelectionMode::All,
         };
-        self.filtered(&root, schema_name, schema, &fields, selection, out)
+        self.filtered(&root, schema_name, schema, &fields, selection, out)?;
+        if let Some(Value::Object(object)) = out.get_mut(&root)
+            && object
+                .get("properties")
+                .and_then(Value::as_object)
+                .is_some_and(Map::is_empty)
+        {
+            object.insert("additionalProperties".to_owned(), Value::Bool(false));
+        }
+        Ok(())
     }
 
     fn at_provider(&self, response: &Value, out: &mut Map<String, Value>) -> Result<(), SpecError> {
@@ -710,6 +719,18 @@ fn observe_responses(
                     1 => definitions.remove(0),
                     _ => json!({ "allOf": definitions }),
                 };
+            }
+            if response.matching.is_some() {
+                schema = resolve_ref(schemas, &schema)
+                    .get("items")
+                    .cloned()
+                    .ok_or_else(|| SpecError::Resource {
+                        resource: extension.resource.0.clone(),
+                        message: format!(
+                            "observe response at {} is not a list, so it cannot be matched",
+                            kube_operation.location()
+                        ),
+                    })?;
             }
         }
         responses.insert(extension.resource.clone(), schema);

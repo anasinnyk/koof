@@ -177,6 +177,14 @@ fn immutable_fields<'a>(resource: &'a Resource<'_>) -> BTreeSet<&'a str> {
         .ir
         .path_parameters
         .values()
+        .chain(
+            resource
+                .observe
+                .ir
+                .response_match
+                .as_ref()
+                .map(|matching| &matching.value),
+        )
         .flat_map(first_hops)
         .collect();
     resource

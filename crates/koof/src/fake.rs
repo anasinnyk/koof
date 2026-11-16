@@ -42,6 +42,7 @@ struct Shape {
     creatable: bool,
     key: Vec<String>,
     response_path: &'static str,
+    matching: Option<(String, &'static str)>,
     create_path: &'static str,
     id_field: &'static str,
     numeric_id: bool,
@@ -140,12 +141,25 @@ impl Fake {
                     let mut key: Vec<String> = observe
                         .path_parameters
                         .iter()
-                        .map(|(_, expression)| expression_key(expression))
+                        .map(|(_, expression)| expression)
+                        .chain(
+                            descriptor
+                                .observe
+                                .matching
+                                .as_ref()
+                                .map(|matching| &matching.value),
+                        )
+                        .map(expression_key)
                         .collect();
                     key.sort_unstable();
                     key
                 },
                 response_path: observe.response_path,
+                matching: descriptor
+                    .observe
+                    .matching
+                    .as_ref()
+                    .map(|matching| (expression_key(&matching.value), matching.field)),
                 create_path,
                 id_field,
                 numeric_id: is_integer(&schemars::schema_for!(R::AtProvider), id_field),
@@ -465,6 +479,18 @@ impl Route {
         }
     }
 
+    fn parameter(
+        &self,
+        expression: &str,
+        parameters: &BTreeMap<&'static str, String>,
+    ) -> Option<String> {
+        self.parameters
+            .iter()
+            .find(|(candidate, _)| candidate == expression)
+            .and_then(|(_, name)| parameters.get(name))
+            .cloned()
+    }
+
     fn key(
         &self,
         shape: &Shape,
@@ -476,13 +502,7 @@ impl Route {
             .iter()
             .map(|expression| match id {
                 Some(id) if expression == EXTERNAL_NAME => id.to_owned(),
-                _ => self
-                    .parameters
-                    .iter()
-                    .find(|(candidate, _)| candidate == expression)
-                    .and_then(|(_, name)| parameters.get(name))
-                    .cloned()
-                    .unwrap_or_default(),
+                _ => self.parameter(expression, parameters).unwrap_or_default(),
             })
             .collect()
     }
@@ -609,6 +629,12 @@ impl Store {
                     _ => Value::String(id.clone()),
                 };
                 insert(&mut object, shape.id_field, id_value);
+                if let Some((expression, field)) = &shape.matching
+                    && let Some(value) = route.parameter(expression, parameters)
+                    && let Ok(pointer) = jsonptr::Pointer::parse(field)
+                {
+                    pointer.assign(&mut object, Value::String(value)).ok();
+                }
                 shape.complete(&mut object);
                 let key = (route.kind, route.key(shape, parameters, Some(&id)));
                 if objects.contains_key(&key) {
@@ -616,6 +642,20 @@ impl Store {
                 }
                 objects.insert(key, object.clone());
                 wrap(shape.create_path, object)
+            }
+            Lifecycle::Observe if shape.matching.is_some() => {
+                let items = objects
+                    .iter()
+                    .filter(|((kind, stored), _)| {
+                        *kind == route.kind
+                            && stored
+                                .iter()
+                                .zip(&key.1)
+                                .all(|(stored, wanted)| wanted.is_empty() || stored == wanted)
+                    })
+                    .map(|(_, object)| object.clone())
+                    .collect();
+                wrap(shape.response_path, Value::Array(items))
             }
             Lifecycle::Observe => match objects.get(&key) {
                 Some(object) => wrap(shape.response_path, object.clone()),

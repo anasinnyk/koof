@@ -125,7 +125,9 @@ referenced object fills the item field `into` before comparing and sending.
 `lifecycle` is one of `observe` (required), `create`, `update` and `delete`.
 For APIs that soft-delete (the observe endpoint keeps answering `200`),
 `response.deletedWhen: deleted_at` on `observe` treats the resource as gone once
-that field is set.
+that field is set. When the API only lists the resource, `response.match`
+(`field`, value expression `value`) on `observe` picks the matching item of the
+list; no match means the resource does not exist.
 Request bodies default to `spec.forProvider`; `request.set` adds values such as
 identifiers of referenced resources. `x-kube-field` on a property sets `ignored`,
 `lateInitialize: false`, `sensitive` (kept out of `status.atProvider`) or

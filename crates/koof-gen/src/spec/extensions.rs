@@ -1,7 +1,7 @@
 use super::SpecError;
 use crate::ir::{
-    CredentialsIr, FieldPath, ItemReferenceIr, ReferenceIr, RequestMappingIr, ResourceName, TestIr,
-    ValidationIr, ValueExpr,
+    CredentialsIr, FieldPath, ItemReferenceIr, ReferenceIr, RequestMappingIr, ResourceName,
+    ResponseMatchIr, TestIr, ValidationIr, ValueExpr,
 };
 use serde::{Deserialize, de::DeserializeOwned};
 use serde_json::Value;
@@ -123,9 +123,12 @@ impl LifecycleAction {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ResponseExtension {
+    #[serde(default)]
     pub path: String,
     #[serde(default)]
     pub deleted_when: Option<String>,
+    #[serde(default, rename = "match")]
+    pub matching: Option<ResponseMatchIr>,
 }
 
 #[derive(Debug, Default, Deserialize)]
