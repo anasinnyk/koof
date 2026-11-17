@@ -71,11 +71,6 @@ pub use crate::generated::types::SentryV1alpha1OrganizationMemberAtProviderOrgRo
 pub use crate::generated::types::SentryV1alpha1OrganizationMemberAtProviderTeamRoleListItem as OrganizationMemberAtProviderTeamRoleListItem;
 pub use crate::generated::types::SentryV1alpha1OrganizationMemberAtProviderTeamRolesItem as OrganizationMemberAtProviderTeamRolesItem;
 pub use crate::generated::types::SentryV1alpha1OrganizationMemberAtProviderUser as OrganizationMemberAtProviderUser;
-pub use crate::generated::types::SentryV1alpha1OrganizationMemberAtProviderUserAvatar as OrganizationMemberAtProviderUserAvatar;
-pub use crate::generated::types::SentryV1alpha1OrganizationMemberAtProviderUserEmailsItem as OrganizationMemberAtProviderUserEmailsItem;
-pub use crate::generated::types::SentryV1alpha1OrganizationMemberAtProviderUserIdentitiesItem as OrganizationMemberAtProviderUserIdentitiesItem;
-pub use crate::generated::types::SentryV1alpha1OrganizationMemberAtProviderUserIdentitiesItemOrganization as OrganizationMemberAtProviderUserIdentitiesItemOrganization;
-pub use crate::generated::types::SentryV1alpha1OrganizationMemberAtProviderUserIdentitiesItemProvider as OrganizationMemberAtProviderUserIdentitiesItemProvider;
 pub use crate::generated::types::SentryV1alpha1OrganizationMemberForProvider as OrganizationMemberForProvider;
 pub use crate::generated::types::SentryV1alpha1OrganizationMemberForProviderEmail as OrganizationMemberForProviderEmail;
 pub use crate::generated::types::SentryV1alpha1OrganizationMemberForProviderOrgRole as OrganizationMemberForProviderOrgRole;
@@ -109,10 +104,5 @@ pub use crate::generated::types::SentryV1alpha1TeamMembershipAtProvider as TeamM
 pub use crate::generated::types::SentryV1alpha1TeamMembershipAtProviderExternalUsersItem as TeamMembershipAtProviderExternalUsersItem;
 pub use crate::generated::types::SentryV1alpha1TeamMembershipAtProviderFlags as TeamMembershipAtProviderFlags;
 pub use crate::generated::types::SentryV1alpha1TeamMembershipAtProviderUser as TeamMembershipAtProviderUser;
-pub use crate::generated::types::SentryV1alpha1TeamMembershipAtProviderUserAvatar as TeamMembershipAtProviderUserAvatar;
-pub use crate::generated::types::SentryV1alpha1TeamMembershipAtProviderUserEmailsItem as TeamMembershipAtProviderUserEmailsItem;
-pub use crate::generated::types::SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItem as TeamMembershipAtProviderUserIdentitiesItem;
-pub use crate::generated::types::SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItemOrganization as TeamMembershipAtProviderUserIdentitiesItemOrganization;
-pub use crate::generated::types::SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItemProvider as TeamMembershipAtProviderUserIdentitiesItemProvider;
 pub use crate::generated::types::SentryV1alpha1TeamMembershipForProvider as TeamMembershipForProvider;
 pub use crate::generated::types::SentryV1alpha1TeamMembershipForProviderTeamRole as TeamMembershipForProviderTeamRole;

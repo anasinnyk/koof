@@ -96,7 +96,7 @@ actions:
     update:
       required: [teamSlug]
 
-  # A member who has not accepted the invite yet has no user, and a user may have no avatar.
+  # A member who has not accepted the invite yet has no user; Sentry may return only part of a user.
   - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.required
     remove: true
 
@@ -104,12 +104,24 @@ actions:
     update:
       required: [dateCreated, email, expired, flags, id, inviteStatus, invite_link, inviterName, isOnlyOwner, name, orgRole, orgRoleList, pending, teamRoleList, teamRoles, teams]
 
-  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.properties.user.required
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.properties.user
     remove: true
 
-  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.properties.user
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.properties
     update:
-      required: [dateJoined, email, emails, experiments, has2fa, hasPasswordAuth, id, isActive, isManaged, isStaff, isSuperuser, isSuspended, lastActive, lastLogin, name, username]
+      user:
+        type: object
+        nullable: true
+        description: The Sentry user; unset until the invite is accepted.
+        properties:
+          id:
+            type: string
+          email:
+            type: string
+          name:
+            type: string
+          username:
+            type: string
 
   - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.required
     remove: true
@@ -118,12 +130,24 @@ actions:
     update:
       required: [dateCreated, email, expired, flags, id, inviteStatus, invite_link, inviterName, isOnlyOwner, name, orgRole, orgRoleList, pending, teamRoleList, teamRoles, teams]
 
-  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.properties.user.required
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.properties.user
     remove: true
 
-  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.properties.user
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.properties
     update:
-      required: [dateJoined, email, emails, experiments, has2fa, hasPasswordAuth, id, isActive, isManaged, isStaff, isSuperuser, isSuspended, lastActive, lastLogin, name, username]
+      user:
+        type: object
+        nullable: true
+        description: The Sentry user; unset until the invite is accepted.
+        properties:
+          id:
+            type: string
+          email:
+            type: string
+          name:
+            type: string
+          username:
+            type: string
 
   # Deprecated spellings of orgRole and teamRoles; managing both would drift.
   - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/'].post.requestBody.content['application/json'].schema.properties.role

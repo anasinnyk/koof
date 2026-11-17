@@ -115,41 +115,8 @@ Validation:
 | `atProvider.teamRoles[].role` | string |  |  |
 | `atProvider.teamRoles[].teamSlug` | string | yes |  |
 | `atProvider.teams` | []string |  |  |
-| `atProvider.user` | object |  |  |
-| `atProvider.user.authenticators` | []any |  |  |
-| `atProvider.user.avatar` | object |  |  |
-| `atProvider.user.avatar.avatarType` | string |  |  |
-| `atProvider.user.avatar.avatarUrl` | string |  |  |
-| `atProvider.user.avatar.avatarUuid` | string |  |  |
-| `atProvider.user.avatarUrl` | string |  |  |
-| `atProvider.user.canReset2fa` | boolean |  |  |
-| `atProvider.user.dateJoined` | string (date-time) | yes |  |
-| `atProvider.user.email` | string | yes |  |
-| `atProvider.user.emails` | []object | yes |  |
-| `atProvider.user.emails[].email` | string | yes |  |
-| `atProvider.user.emails[].id` | string | yes |  |
-| `atProvider.user.emails[].is_verified` | boolean | yes |  |
-| `atProvider.user.experiments` | map[string]any | yes |  |
-| `atProvider.user.has2fa` | boolean | yes |  |
-| `atProvider.user.hasPasswordAuth` | boolean | yes |  |
-| `atProvider.user.id` | string | yes |  |
-| `atProvider.user.identities` | []object |  |  |
-| `atProvider.user.identities[].dateSynced` | string (date-time) | yes |  |
-| `atProvider.user.identities[].dateVerified` | string (date-time) | yes |  |
-| `atProvider.user.identities[].id` | string | yes |  |
-| `atProvider.user.identities[].name` | string | yes |  |
-| `atProvider.user.identities[].organization` | object | yes |  |
-| `atProvider.user.identities[].organization.name` | string | yes |  |
-| `atProvider.user.identities[].organization.slug` | string | yes |  |
-| `atProvider.user.identities[].provider` | object | yes |  |
-| `atProvider.user.identities[].provider.id` | string | yes |  |
-| `atProvider.user.identities[].provider.name` | string | yes |  |
-| `atProvider.user.isActive` | boolean | yes |  |
-| `atProvider.user.isManaged` | boolean | yes |  |
-| `atProvider.user.isStaff` | boolean | yes |  |
-| `atProvider.user.isSuperuser` | boolean | yes |  |
-| `atProvider.user.isSuspended` | boolean | yes |  |
-| `atProvider.user.lastActive` | string (date-time) |  |  |
-| `atProvider.user.lastLogin` | string (date-time) |  |  |
-| `atProvider.user.name` | string | yes |  |
-| `atProvider.user.username` | string | yes |  |
+| `atProvider.user` | object |  | The Sentry user; unset until the invite is accepted. |
+| `atProvider.user.email` | string |  |  |
+| `atProvider.user.id` | string |  |  |
+| `atProvider.user.name` | string |  |  |
+| `atProvider.user.username` | string |  |  |

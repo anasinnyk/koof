@@ -2711,198 +2711,26 @@
                         "type": "array"
                       },
                       "user": {
-                        "description": "`OrganizationMemberAtProviderUser`",
+                        "description": "The Sentry user; unset until the invite is accepted.",
                         "nullable": true,
                         "properties": {
-                          "authenticators": {
-                            "items": {
-                              "x-kubernetes-preserve-unknown-fields": true
-                            },
-                            "type": "array"
-                          },
-                          "avatar": {
-                            "description": "`OrganizationMemberAtProviderUserAvatar`",
-                            "nullable": true,
-                            "properties": {
-                              "avatarType": {
-                                "nullable": true,
-                                "type": "string"
-                              },
-                              "avatarUrl": {
-                                "nullable": true,
-                                "type": "string"
-                              },
-                              "avatarUuid": {
-                                "nullable": true,
-                                "type": "string"
-                              }
-                            },
-                            "type": "object"
-                          },
-                          "avatarUrl": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "canReset2fa": {
-                            "nullable": true,
-                            "type": "boolean"
-                          },
-                          "dateJoined": {
-                            "format": "date-time",
-                            "type": "string"
-                          },
                           "email": {
+                            "nullable": true,
                             "type": "string"
-                          },
-                          "emails": {
-                            "items": {
-                              "description": "`OrganizationMemberAtProviderUserEmailsItem`",
-                              "properties": {
-                                "email": {
-                                  "type": "string"
-                                },
-                                "id": {
-                                  "type": "string"
-                                },
-                                "is_verified": {
-                                  "type": "boolean"
-                                }
-                              },
-                              "required": [
-                                "email",
-                                "id",
-                                "is_verified"
-                              ],
-                              "type": "object"
-                            },
-                            "type": "array"
-                          },
-                          "experiments": {
-                            "additionalProperties": {
-                              "x-kubernetes-preserve-unknown-fields": true
-                            },
-                            "type": "object"
-                          },
-                          "has2fa": {
-                            "type": "boolean"
-                          },
-                          "hasPasswordAuth": {
-                            "type": "boolean"
                           },
                           "id": {
-                            "type": "string"
-                          },
-                          "identities": {
-                            "items": {
-                              "description": "`OrganizationMemberAtProviderUserIdentitiesItem`",
-                              "properties": {
-                                "dateSynced": {
-                                  "format": "date-time",
-                                  "type": "string"
-                                },
-                                "dateVerified": {
-                                  "format": "date-time",
-                                  "type": "string"
-                                },
-                                "id": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "organization": {
-                                  "description": "`OrganizationMemberAtProviderUserIdentitiesItemOrganization`",
-                                  "properties": {
-                                    "name": {
-                                      "type": "string"
-                                    },
-                                    "slug": {
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "name",
-                                    "slug"
-                                  ],
-                                  "type": "object"
-                                },
-                                "provider": {
-                                  "description": "`OrganizationMemberAtProviderUserIdentitiesItemProvider`",
-                                  "properties": {
-                                    "id": {
-                                      "type": "string"
-                                    },
-                                    "name": {
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "id",
-                                    "name"
-                                  ],
-                                  "type": "object"
-                                }
-                              },
-                              "required": [
-                                "dateSynced",
-                                "dateVerified",
-                                "id",
-                                "name",
-                                "organization",
-                                "provider"
-                              ],
-                              "type": "object"
-                            },
-                            "type": "array"
-                          },
-                          "isActive": {
-                            "type": "boolean"
-                          },
-                          "isManaged": {
-                            "type": "boolean"
-                          },
-                          "isStaff": {
-                            "type": "boolean"
-                          },
-                          "isSuperuser": {
-                            "type": "boolean"
-                          },
-                          "isSuspended": {
-                            "type": "boolean"
-                          },
-                          "lastActive": {
-                            "format": "date-time",
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "lastLogin": {
-                            "format": "date-time",
                             "nullable": true,
                             "type": "string"
                           },
                           "name": {
+                            "nullable": true,
                             "type": "string"
                           },
                           "username": {
+                            "nullable": true,
                             "type": "string"
                           }
                         },
-                        "required": [
-                          "dateJoined",
-                          "email",
-                          "emails",
-                          "experiments",
-                          "has2fa",
-                          "hasPasswordAuth",
-                          "id",
-                          "isActive",
-                          "isManaged",
-                          "isStaff",
-                          "isSuperuser",
-                          "isSuspended",
-                          "name",
-                          "username"
-                        ],
                         "type": "object"
                       }
                     },
@@ -4680,198 +4508,26 @@
                         "type": "string"
                       },
                       "user": {
-                        "description": "`TeamMembershipAtProviderUser`",
+                        "description": "The Sentry user; unset until the invite is accepted.",
                         "nullable": true,
                         "properties": {
-                          "authenticators": {
-                            "items": {
-                              "x-kubernetes-preserve-unknown-fields": true
-                            },
-                            "type": "array"
-                          },
-                          "avatar": {
-                            "description": "`TeamMembershipAtProviderUserAvatar`",
-                            "nullable": true,
-                            "properties": {
-                              "avatarType": {
-                                "nullable": true,
-                                "type": "string"
-                              },
-                              "avatarUrl": {
-                                "nullable": true,
-                                "type": "string"
-                              },
-                              "avatarUuid": {
-                                "nullable": true,
-                                "type": "string"
-                              }
-                            },
-                            "type": "object"
-                          },
-                          "avatarUrl": {
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "canReset2fa": {
-                            "nullable": true,
-                            "type": "boolean"
-                          },
-                          "dateJoined": {
-                            "format": "date-time",
-                            "type": "string"
-                          },
                           "email": {
+                            "nullable": true,
                             "type": "string"
-                          },
-                          "emails": {
-                            "items": {
-                              "description": "`TeamMembershipAtProviderUserEmailsItem`",
-                              "properties": {
-                                "email": {
-                                  "type": "string"
-                                },
-                                "id": {
-                                  "type": "string"
-                                },
-                                "is_verified": {
-                                  "type": "boolean"
-                                }
-                              },
-                              "required": [
-                                "email",
-                                "id",
-                                "is_verified"
-                              ],
-                              "type": "object"
-                            },
-                            "type": "array"
-                          },
-                          "experiments": {
-                            "additionalProperties": {
-                              "x-kubernetes-preserve-unknown-fields": true
-                            },
-                            "type": "object"
-                          },
-                          "has2fa": {
-                            "type": "boolean"
-                          },
-                          "hasPasswordAuth": {
-                            "type": "boolean"
                           },
                           "id": {
-                            "type": "string"
-                          },
-                          "identities": {
-                            "items": {
-                              "description": "`TeamMembershipAtProviderUserIdentitiesItem`",
-                              "properties": {
-                                "dateSynced": {
-                                  "format": "date-time",
-                                  "type": "string"
-                                },
-                                "dateVerified": {
-                                  "format": "date-time",
-                                  "type": "string"
-                                },
-                                "id": {
-                                  "type": "string"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "organization": {
-                                  "description": "`TeamMembershipAtProviderUserIdentitiesItemOrganization`",
-                                  "properties": {
-                                    "name": {
-                                      "type": "string"
-                                    },
-                                    "slug": {
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "name",
-                                    "slug"
-                                  ],
-                                  "type": "object"
-                                },
-                                "provider": {
-                                  "description": "`TeamMembershipAtProviderUserIdentitiesItemProvider`",
-                                  "properties": {
-                                    "id": {
-                                      "type": "string"
-                                    },
-                                    "name": {
-                                      "type": "string"
-                                    }
-                                  },
-                                  "required": [
-                                    "id",
-                                    "name"
-                                  ],
-                                  "type": "object"
-                                }
-                              },
-                              "required": [
-                                "dateSynced",
-                                "dateVerified",
-                                "id",
-                                "name",
-                                "organization",
-                                "provider"
-                              ],
-                              "type": "object"
-                            },
-                            "type": "array"
-                          },
-                          "isActive": {
-                            "type": "boolean"
-                          },
-                          "isManaged": {
-                            "type": "boolean"
-                          },
-                          "isStaff": {
-                            "type": "boolean"
-                          },
-                          "isSuperuser": {
-                            "type": "boolean"
-                          },
-                          "isSuspended": {
-                            "type": "boolean"
-                          },
-                          "lastActive": {
-                            "format": "date-time",
-                            "nullable": true,
-                            "type": "string"
-                          },
-                          "lastLogin": {
-                            "format": "date-time",
                             "nullable": true,
                             "type": "string"
                           },
                           "name": {
+                            "nullable": true,
                             "type": "string"
                           },
                           "username": {
+                            "nullable": true,
                             "type": "string"
                           }
                         },
-                        "required": [
-                          "dateJoined",
-                          "email",
-                          "emails",
-                          "experiments",
-                          "has2fa",
-                          "hasPasswordAuth",
-                          "id",
-                          "isActive",
-                          "isManaged",
-                          "isStaff",
-                          "isSuperuser",
-                          "isSuspended",
-                          "name",
-                          "username"
-                        ],
                         "type": "object"
                       }
                     },

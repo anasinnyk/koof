@@ -6819,6 +6819,7 @@ pub struct OrganizationMemberObserveResponse {
     #[serde(rename = "teamRoles")]
     pub team_roles: ::std::vec::Vec<OrganizationMemberObserveResponseTeamRolesItem>,
     pub teams: ::std::vec::Vec<::std::string::String>,
+    ///The Sentry user; unset until the invite is accepted.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub user: ::std::option::Option<OrganizationMemberObserveResponseUser>,
 }
@@ -6939,65 +6940,7 @@ pub struct OrganizationMemberObserveResponseTeamRolesItem {
     #[serde(rename = "teamSlug")]
     pub team_slug: ::std::string::String,
 }
-///`OrganizationMemberObserveResponseUser`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct OrganizationMemberObserveResponseUser {
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub authenticators: ::std::vec::Vec<::serde_json::Value>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub avatar: ::std::option::Option<OrganizationMemberObserveResponseUserAvatar>,
-    #[serde(
-        rename = "avatarUrl",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_url: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "canReset2fa",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub can_reset2fa: ::std::option::Option<bool>,
-    #[serde(rename = "dateJoined")]
-    pub date_joined: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub email: ::std::string::String,
-    pub emails: ::std::vec::Vec<OrganizationMemberObserveResponseUserEmailsItem>,
-    pub experiments: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-    pub has2fa: bool,
-    #[serde(rename = "hasPasswordAuth")]
-    pub has_password_auth: bool,
-    pub id: ::std::string::String,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub identities: ::std::vec::Vec<OrganizationMemberObserveResponseUserIdentitiesItem>,
-    #[serde(rename = "isActive")]
-    pub is_active: bool,
-    #[serde(rename = "isManaged")]
-    pub is_managed: bool,
-    #[serde(rename = "isStaff")]
-    pub is_staff: bool,
-    #[serde(rename = "isSuperuser")]
-    pub is_superuser: bool,
-    #[serde(rename = "isSuspended")]
-    pub is_suspended: bool,
-    #[serde(
-        rename = "lastActive",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
-    pub last_active: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(
-        rename = "lastLogin",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
-    pub last_login: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    pub name: ::std::string::String,
-    pub username: ::std::string::String,
-}
-///`OrganizationMemberObserveResponseUserAvatar`
+///The Sentry user; unset until the invite is accepted.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -7007,81 +6950,15 @@ pub struct OrganizationMemberObserveResponseUser {
     PartialEq,
     schemars::JsonSchema
 )]
-pub struct OrganizationMemberObserveResponseUserAvatar {
-    #[serde(
-        rename = "avatarType",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_type: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "avatarUrl",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_url: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "avatarUuid",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_uuid: ::std::option::Option<::std::string::String>,
-}
-///`OrganizationMemberObserveResponseUserEmailsItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct OrganizationMemberObserveResponseUserEmailsItem {
-    pub email: ::std::string::String,
-    pub id: ::std::string::String,
-    pub is_verified: bool,
-}
-///`OrganizationMemberObserveResponseUserIdentitiesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct OrganizationMemberObserveResponseUserIdentitiesItem {
-    #[serde(rename = "dateSynced")]
-    pub date_synced: ::chrono::DateTime<::chrono::offset::Utc>,
-    #[serde(rename = "dateVerified")]
-    pub date_verified: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub id: ::std::string::String,
-    pub name: ::std::string::String,
-    pub organization: OrganizationMemberObserveResponseUserIdentitiesItemOrganization,
-    pub provider: OrganizationMemberObserveResponseUserIdentitiesItemProvider,
-}
-///`OrganizationMemberObserveResponseUserIdentitiesItemOrganization`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct OrganizationMemberObserveResponseUserIdentitiesItemOrganization {
-    pub name: ::std::string::String,
-    pub slug: ::std::string::String,
-}
-///`OrganizationMemberObserveResponseUserIdentitiesItemProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct OrganizationMemberObserveResponseUserIdentitiesItemProvider {
-    pub id: ::std::string::String,
-    pub name: ::std::string::String,
+pub struct OrganizationMemberObserveResponseUser {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub email: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub username: ::std::option::Option<::std::string::String>,
 }
 ///`OrganizationMemberUpdateRequest`
 #[derive(
@@ -7269,6 +7146,7 @@ pub struct OrganizationMemberUpdateResponse {
     #[serde(rename = "teamRoles")]
     pub team_roles: ::std::vec::Vec<OrganizationMemberUpdateResponseTeamRolesItem>,
     pub teams: ::std::vec::Vec<::std::string::String>,
+    ///The Sentry user; unset until the invite is accepted.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub user: ::std::option::Option<OrganizationMemberUpdateResponseUser>,
 }
@@ -7389,65 +7267,7 @@ pub struct OrganizationMemberUpdateResponseTeamRolesItem {
     #[serde(rename = "teamSlug")]
     pub team_slug: ::std::string::String,
 }
-///`OrganizationMemberUpdateResponseUser`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct OrganizationMemberUpdateResponseUser {
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub authenticators: ::std::vec::Vec<::serde_json::Value>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub avatar: ::std::option::Option<OrganizationMemberUpdateResponseUserAvatar>,
-    #[serde(
-        rename = "avatarUrl",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_url: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "canReset2fa",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub can_reset2fa: ::std::option::Option<bool>,
-    #[serde(rename = "dateJoined")]
-    pub date_joined: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub email: ::std::string::String,
-    pub emails: ::std::vec::Vec<OrganizationMemberUpdateResponseUserEmailsItem>,
-    pub experiments: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-    pub has2fa: bool,
-    #[serde(rename = "hasPasswordAuth")]
-    pub has_password_auth: bool,
-    pub id: ::std::string::String,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub identities: ::std::vec::Vec<OrganizationMemberUpdateResponseUserIdentitiesItem>,
-    #[serde(rename = "isActive")]
-    pub is_active: bool,
-    #[serde(rename = "isManaged")]
-    pub is_managed: bool,
-    #[serde(rename = "isStaff")]
-    pub is_staff: bool,
-    #[serde(rename = "isSuperuser")]
-    pub is_superuser: bool,
-    #[serde(rename = "isSuspended")]
-    pub is_suspended: bool,
-    #[serde(
-        rename = "lastActive",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
-    pub last_active: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(
-        rename = "lastLogin",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
-    pub last_login: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    pub name: ::std::string::String,
-    pub username: ::std::string::String,
-}
-///`OrganizationMemberUpdateResponseUserAvatar`
+///The Sentry user; unset until the invite is accepted.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -7457,81 +7277,15 @@ pub struct OrganizationMemberUpdateResponseUser {
     PartialEq,
     schemars::JsonSchema
 )]
-pub struct OrganizationMemberUpdateResponseUserAvatar {
-    #[serde(
-        rename = "avatarType",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_type: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "avatarUrl",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_url: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "avatarUuid",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_uuid: ::std::option::Option<::std::string::String>,
-}
-///`OrganizationMemberUpdateResponseUserEmailsItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct OrganizationMemberUpdateResponseUserEmailsItem {
-    pub email: ::std::string::String,
-    pub id: ::std::string::String,
-    pub is_verified: bool,
-}
-///`OrganizationMemberUpdateResponseUserIdentitiesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct OrganizationMemberUpdateResponseUserIdentitiesItem {
-    #[serde(rename = "dateSynced")]
-    pub date_synced: ::chrono::DateTime<::chrono::offset::Utc>,
-    #[serde(rename = "dateVerified")]
-    pub date_verified: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub id: ::std::string::String,
-    pub name: ::std::string::String,
-    pub organization: OrganizationMemberUpdateResponseUserIdentitiesItemOrganization,
-    pub provider: OrganizationMemberUpdateResponseUserIdentitiesItemProvider,
-}
-///`OrganizationMemberUpdateResponseUserIdentitiesItemOrganization`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct OrganizationMemberUpdateResponseUserIdentitiesItemOrganization {
-    pub name: ::std::string::String,
-    pub slug: ::std::string::String,
-}
-///`OrganizationMemberUpdateResponseUserIdentitiesItemProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct OrganizationMemberUpdateResponseUserIdentitiesItemProvider {
-    pub id: ::std::string::String,
-    pub name: ::std::string::String,
+pub struct OrganizationMemberUpdateResponseUser {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub email: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub username: ::std::option::Option<::std::string::String>,
 }
 ///`OrganizationObserveResponse`
 #[derive(
@@ -14539,6 +14293,7 @@ pub struct SentryV1alpha1OrganizationMemberAtProvider {
     >,
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub teams: ::std::vec::Vec<::std::string::String>,
+    ///The Sentry user; unset until the invite is accepted.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub user: ::std::option::Option<SentryV1alpha1OrganizationMemberAtProviderUser>,
 }
@@ -14659,71 +14414,7 @@ pub struct SentryV1alpha1OrganizationMemberAtProviderTeamRolesItem {
     #[serde(rename = "teamSlug")]
     pub team_slug: ::std::string::String,
 }
-///`OrganizationMemberAtProviderUser`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SentryV1alpha1OrganizationMemberAtProviderUser {
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub authenticators: ::std::vec::Vec<::serde_json::Value>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub avatar: ::std::option::Option<
-        SentryV1alpha1OrganizationMemberAtProviderUserAvatar,
-    >,
-    #[serde(
-        rename = "avatarUrl",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_url: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "canReset2fa",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub can_reset2fa: ::std::option::Option<bool>,
-    #[serde(rename = "dateJoined")]
-    pub date_joined: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub email: ::std::string::String,
-    pub emails: ::std::vec::Vec<
-        SentryV1alpha1OrganizationMemberAtProviderUserEmailsItem,
-    >,
-    pub experiments: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-    pub has2fa: bool,
-    #[serde(rename = "hasPasswordAuth")]
-    pub has_password_auth: bool,
-    pub id: ::std::string::String,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub identities: ::std::vec::Vec<
-        SentryV1alpha1OrganizationMemberAtProviderUserIdentitiesItem,
-    >,
-    #[serde(rename = "isActive")]
-    pub is_active: bool,
-    #[serde(rename = "isManaged")]
-    pub is_managed: bool,
-    #[serde(rename = "isStaff")]
-    pub is_staff: bool,
-    #[serde(rename = "isSuperuser")]
-    pub is_superuser: bool,
-    #[serde(rename = "isSuspended")]
-    pub is_suspended: bool,
-    #[serde(
-        rename = "lastActive",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
-    pub last_active: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(
-        rename = "lastLogin",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
-    pub last_login: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    pub name: ::std::string::String,
-    pub username: ::std::string::String,
-}
-///`OrganizationMemberAtProviderUserAvatar`
+///The Sentry user; unset until the invite is accepted.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -14733,81 +14424,15 @@ pub struct SentryV1alpha1OrganizationMemberAtProviderUser {
     PartialEq,
     schemars::JsonSchema
 )]
-pub struct SentryV1alpha1OrganizationMemberAtProviderUserAvatar {
-    #[serde(
-        rename = "avatarType",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_type: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "avatarUrl",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_url: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "avatarUuid",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_uuid: ::std::option::Option<::std::string::String>,
-}
-///`OrganizationMemberAtProviderUserEmailsItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SentryV1alpha1OrganizationMemberAtProviderUserEmailsItem {
-    pub email: ::std::string::String,
-    pub id: ::std::string::String,
-    pub is_verified: bool,
-}
-///`OrganizationMemberAtProviderUserIdentitiesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SentryV1alpha1OrganizationMemberAtProviderUserIdentitiesItem {
-    #[serde(rename = "dateSynced")]
-    pub date_synced: ::chrono::DateTime<::chrono::offset::Utc>,
-    #[serde(rename = "dateVerified")]
-    pub date_verified: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub id: ::std::string::String,
-    pub name: ::std::string::String,
-    pub organization: SentryV1alpha1OrganizationMemberAtProviderUserIdentitiesItemOrganization,
-    pub provider: SentryV1alpha1OrganizationMemberAtProviderUserIdentitiesItemProvider,
-}
-///`OrganizationMemberAtProviderUserIdentitiesItemOrganization`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SentryV1alpha1OrganizationMemberAtProviderUserIdentitiesItemOrganization {
-    pub name: ::std::string::String,
-    pub slug: ::std::string::String,
-}
-///`OrganizationMemberAtProviderUserIdentitiesItemProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SentryV1alpha1OrganizationMemberAtProviderUserIdentitiesItemProvider {
-    pub id: ::std::string::String,
-    pub name: ::std::string::String,
+pub struct SentryV1alpha1OrganizationMemberAtProviderUser {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub email: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub username: ::std::option::Option<::std::string::String>,
 }
 ///`OrganizationMemberForProvider`
 #[derive(
@@ -16004,6 +15629,7 @@ pub struct SentryV1alpha1TeamMembershipAtProvider {
     pub team_role: ::std::option::Option<::std::string::String>,
     #[serde(rename = "teamSlug", skip_serializing_if = "::std::option::Option::is_none")]
     pub team_slug: ::std::option::Option<::std::string::String>,
+    ///The Sentry user; unset until the invite is accepted.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub user: ::std::option::Option<SentryV1alpha1TeamMembershipAtProviderUser>,
 }
@@ -16056,67 +15682,7 @@ pub struct SentryV1alpha1TeamMembershipAtProviderFlags {
     #[serde(rename = "sso:linked")]
     pub sso_linked: bool,
 }
-///`TeamMembershipAtProviderUser`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SentryV1alpha1TeamMembershipAtProviderUser {
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub authenticators: ::std::vec::Vec<::serde_json::Value>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub avatar: ::std::option::Option<SentryV1alpha1TeamMembershipAtProviderUserAvatar>,
-    #[serde(
-        rename = "avatarUrl",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_url: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "canReset2fa",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub can_reset2fa: ::std::option::Option<bool>,
-    #[serde(rename = "dateJoined")]
-    pub date_joined: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub email: ::std::string::String,
-    pub emails: ::std::vec::Vec<SentryV1alpha1TeamMembershipAtProviderUserEmailsItem>,
-    pub experiments: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-    pub has2fa: bool,
-    #[serde(rename = "hasPasswordAuth")]
-    pub has_password_auth: bool,
-    pub id: ::std::string::String,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub identities: ::std::vec::Vec<
-        SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItem,
-    >,
-    #[serde(rename = "isActive")]
-    pub is_active: bool,
-    #[serde(rename = "isManaged")]
-    pub is_managed: bool,
-    #[serde(rename = "isStaff")]
-    pub is_staff: bool,
-    #[serde(rename = "isSuperuser")]
-    pub is_superuser: bool,
-    #[serde(rename = "isSuspended")]
-    pub is_suspended: bool,
-    #[serde(
-        rename = "lastActive",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
-    pub last_active: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(
-        rename = "lastLogin",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
-    pub last_login: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    pub name: ::std::string::String,
-    pub username: ::std::string::String,
-}
-///`TeamMembershipAtProviderUserAvatar`
+///The Sentry user; unset until the invite is accepted.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -16126,81 +15692,15 @@ pub struct SentryV1alpha1TeamMembershipAtProviderUser {
     PartialEq,
     schemars::JsonSchema
 )]
-pub struct SentryV1alpha1TeamMembershipAtProviderUserAvatar {
-    #[serde(
-        rename = "avatarType",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_type: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "avatarUrl",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_url: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "avatarUuid",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_uuid: ::std::option::Option<::std::string::String>,
-}
-///`TeamMembershipAtProviderUserEmailsItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SentryV1alpha1TeamMembershipAtProviderUserEmailsItem {
-    pub email: ::std::string::String,
-    pub id: ::std::string::String,
-    pub is_verified: bool,
-}
-///`TeamMembershipAtProviderUserIdentitiesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItem {
-    #[serde(rename = "dateSynced")]
-    pub date_synced: ::chrono::DateTime<::chrono::offset::Utc>,
-    #[serde(rename = "dateVerified")]
-    pub date_verified: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub id: ::std::string::String,
-    pub name: ::std::string::String,
-    pub organization: SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItemOrganization,
-    pub provider: SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItemProvider,
-}
-///`TeamMembershipAtProviderUserIdentitiesItemOrganization`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItemOrganization {
-    pub name: ::std::string::String,
-    pub slug: ::std::string::String,
-}
-///`TeamMembershipAtProviderUserIdentitiesItemProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItemProvider {
-    pub id: ::std::string::String,
-    pub name: ::std::string::String,
+pub struct SentryV1alpha1TeamMembershipAtProviderUser {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub email: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub username: ::std::option::Option<::std::string::String>,
 }
 ///`TeamMembershipForProvider`
 #[derive(
@@ -17135,6 +16635,7 @@ pub struct TeamMembershipObserveResponseItem {
     pub team_role: ::std::option::Option<::std::string::String>,
     #[serde(rename = "teamSlug")]
     pub team_slug: ::std::string::String,
+    ///The Sentry user; unset until the invite is accepted.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub user: ::std::option::Option<TeamMembershipObserveResponseItemUser>,
 }
@@ -17187,65 +16688,7 @@ pub struct TeamMembershipObserveResponseItemFlags {
     #[serde(rename = "sso:linked")]
     pub sso_linked: bool,
 }
-///`TeamMembershipObserveResponseItemUser`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TeamMembershipObserveResponseItemUser {
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub authenticators: ::std::vec::Vec<::serde_json::Value>,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub avatar: ::std::option::Option<TeamMembershipObserveResponseItemUserAvatar>,
-    #[serde(
-        rename = "avatarUrl",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_url: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "canReset2fa",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub can_reset2fa: ::std::option::Option<bool>,
-    #[serde(rename = "dateJoined")]
-    pub date_joined: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub email: ::std::string::String,
-    pub emails: ::std::vec::Vec<TeamMembershipObserveResponseItemUserEmailsItem>,
-    pub experiments: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-    pub has2fa: bool,
-    #[serde(rename = "hasPasswordAuth")]
-    pub has_password_auth: bool,
-    pub id: ::std::string::String,
-    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
-    pub identities: ::std::vec::Vec<TeamMembershipObserveResponseItemUserIdentitiesItem>,
-    #[serde(rename = "isActive")]
-    pub is_active: bool,
-    #[serde(rename = "isManaged")]
-    pub is_managed: bool,
-    #[serde(rename = "isStaff")]
-    pub is_staff: bool,
-    #[serde(rename = "isSuperuser")]
-    pub is_superuser: bool,
-    #[serde(rename = "isSuspended")]
-    pub is_suspended: bool,
-    #[serde(
-        rename = "lastActive",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
-    pub last_active: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(
-        rename = "lastLogin",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
-    pub last_login: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    pub name: ::std::string::String,
-    pub username: ::std::string::String,
-}
-///`TeamMembershipObserveResponseItemUserAvatar`
+///The Sentry user; unset until the invite is accepted.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -17255,81 +16698,15 @@ pub struct TeamMembershipObserveResponseItemUser {
     PartialEq,
     schemars::JsonSchema
 )]
-pub struct TeamMembershipObserveResponseItemUserAvatar {
-    #[serde(
-        rename = "avatarType",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_type: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "avatarUrl",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_url: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "avatarUuid",
-        skip_serializing_if = "::std::option::Option::is_none"
-    )]
-    pub avatar_uuid: ::std::option::Option<::std::string::String>,
-}
-///`TeamMembershipObserveResponseItemUserEmailsItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TeamMembershipObserveResponseItemUserEmailsItem {
-    pub email: ::std::string::String,
-    pub id: ::std::string::String,
-    pub is_verified: bool,
-}
-///`TeamMembershipObserveResponseItemUserIdentitiesItem`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TeamMembershipObserveResponseItemUserIdentitiesItem {
-    #[serde(rename = "dateSynced")]
-    pub date_synced: ::chrono::DateTime<::chrono::offset::Utc>,
-    #[serde(rename = "dateVerified")]
-    pub date_verified: ::chrono::DateTime<::chrono::offset::Utc>,
-    pub id: ::std::string::String,
-    pub name: ::std::string::String,
-    pub organization: TeamMembershipObserveResponseItemUserIdentitiesItemOrganization,
-    pub provider: TeamMembershipObserveResponseItemUserIdentitiesItemProvider,
-}
-///`TeamMembershipObserveResponseItemUserIdentitiesItemOrganization`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TeamMembershipObserveResponseItemUserIdentitiesItemOrganization {
-    pub name: ::std::string::String,
-    pub slug: ::std::string::String,
-}
-///`TeamMembershipObserveResponseItemUserIdentitiesItemProvider`
-#[derive(
-    ::serde::Deserialize,
-    ::serde::Serialize,
-    Clone,
-    Debug,
-    PartialEq,
-    schemars::JsonSchema
-)]
-pub struct TeamMembershipObserveResponseItemUserIdentitiesItemProvider {
-    pub id: ::std::string::String,
-    pub name: ::std::string::String,
+pub struct TeamMembershipObserveResponseItemUser {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub email: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub username: ::std::option::Option<::std::string::String>,
 }
 ///`TeamMembershipUpdateRequest`
 #[derive(
