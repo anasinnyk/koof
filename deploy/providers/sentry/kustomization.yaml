@@ -13,4 +13,4 @@ resources:
 images:
   - name: provider
     newName: ghcr.io/anasinnyk/koof-sentry
-    newTag: "0.4.0"
+    newTag: "0.5.0"
