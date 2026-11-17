@@ -60,128 +60,14 @@ Validation:
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `atProvider.access` | []string |  |  |
-| `atProvider.allowedDomains` | []string |  |  |
-| `atProvider.autofixAutomationTuning` | string |  |  |
-| `atProvider.avatar` | object |  |  |
-| `atProvider.avatar.avatarType` | string |  |  |
-| `atProvider.avatar.avatarUrl` | string |  |  |
-| `atProvider.avatar.avatarUuid` | string |  |  |
-| `atProvider.builtinSymbolSources` | []string |  |  |
-| `atProvider.color` | string |  |  |
-| `atProvider.dataScrubber` | boolean |  |  |
-| `atProvider.dataScrubberDefaults` | boolean |  |  |
 | `atProvider.dateCreated` | string (date-time) |  |  |
-| `atProvider.debugFilesRole` | string |  |  |
-| `atProvider.defaultEnvironment` | string |  |  |
-| `atProvider.derivedGroupingEnhancements` | string |  |  |
-| `atProvider.digestsMaxDelay` | integer (int64) |  |  |
-| `atProvider.digestsMinDelay` | integer (int64) |  |  |
-| `atProvider.dynamicSamplingBiases` | []map[string]any |  |  |
-| `atProvider.enableAutoReleaseCreation` | boolean |  |  |
-| `atProvider.features` | []string |  |  |
-| `atProvider.fingerprintingRules` | string |  |  |
 | `atProvider.firstEvent` | string (date-time) |  |  |
-| `atProvider.firstTransactionEvent` | boolean |  |  |
-| `atProvider.groupingConfig` | string |  |  |
-| `atProvider.groupingEnhancements` | string |  |  |
-| `atProvider.hasAccess` | boolean |  |  |
-| `atProvider.hasFeedbacks` | boolean |  |  |
-| `atProvider.hasFlags` | boolean |  |  |
-| `atProvider.hasInsightsAgentMonitoring` | boolean |  |  |
-| `atProvider.hasInsightsAppStart` | boolean |  |  |
-| `atProvider.hasInsightsAssets` | boolean |  |  |
-| `atProvider.hasInsightsCaches` | boolean |  |  |
-| `atProvider.hasInsightsDb` | boolean |  |  |
-| `atProvider.hasInsightsHttp` | boolean |  |  |
-| `atProvider.hasInsightsMCP` | boolean |  |  |
-| `atProvider.hasInsightsQueues` | boolean |  |  |
-| `atProvider.hasInsightsScreenLoad` | boolean |  |  |
-| `atProvider.hasInsightsVitals` | boolean |  |  |
-| `atProvider.hasLogs` | boolean |  |  |
-| `atProvider.hasMinifiedStackTrace` | boolean |  |  |
-| `atProvider.hasMonitors` | boolean |  |  |
-| `atProvider.hasNewFeedbacks` | boolean |  |  |
-| `atProvider.hasProfiles` | boolean |  |  |
-| `atProvider.hasReplays` | boolean |  |  |
-| `atProvider.hasSessions` | boolean |  |  |
-| `atProvider.hasTraceMetrics` | boolean |  |  |
-| `atProvider.highlightContext` | map[string]any |  |  |
-| `atProvider.highlightPreset` | object |  |  |
-| `atProvider.highlightPreset.context` | map[string][]string | yes |  |
-| `atProvider.highlightPreset.tags` | []string | yes |  |
-| `atProvider.highlightTags` | []string |  |  |
 | `atProvider.id` | string |  |  |
-| `atProvider.isBookmarked` | boolean |  |  |
-| `atProvider.isDynamicallySampled` | boolean |  |  |
-| `atProvider.isInternal` | boolean |  |  |
-| `atProvider.isMember` | boolean |  |  |
-| `atProvider.isPublic` | boolean |  |  |
-| `atProvider.latestRelease` | object |  |  |
-| `atProvider.latestRelease.version` | string | yes |  |
 | `atProvider.name` | string |  |  |
-| `atProvider.options` | map[string]any |  |  |
-| `atProvider.organization` | object |  |  |
-| `atProvider.organization.access` | []string |  |  |
-| `atProvider.organization.allowMemberInvite` | boolean | yes |  |
-| `atProvider.organization.allowMemberProjectCreation` | boolean | yes |  |
-| `atProvider.organization.allowSuperuserAccess` | boolean | yes |  |
-| `atProvider.organization.avatar` | object | yes |  |
-| `atProvider.organization.avatar.avatarType` | string |  |  |
-| `atProvider.organization.avatar.avatarUrl` | string |  |  |
-| `atProvider.organization.avatar.avatarUuid` | string |  |  |
-| `atProvider.organization.dateCreated` | string (date-time) | yes |  |
-| `atProvider.organization.extraOptions` | map[string]map[string]any |  |  |
-| `atProvider.organization.features` | []string |  |  |
-| `atProvider.organization.hasAuthProvider` | boolean | yes |  |
-| `atProvider.organization.id` | string | yes |  |
-| `atProvider.organization.isEarlyAdopter` | boolean | yes |  |
-| `atProvider.organization.links` | object | yes |  |
-| `atProvider.organization.links.organizationUrl` | string | yes |  |
-| `atProvider.organization.links.regionUrl` | string | yes |  |
-| `atProvider.organization.name` | string | yes |  |
-| `atProvider.organization.onboardingTasks` | []object |  |  |
-| `atProvider.organization.onboardingTasks[].completionSeen` | string (date-time) |  |  |
-| `atProvider.organization.onboardingTasks[].data` | any | yes |  |
-| `atProvider.organization.onboardingTasks[].dateCompleted` | string (date-time) | yes |  |
-| `atProvider.organization.onboardingTasks[].status` | string | yes |  |
-| `atProvider.organization.onboardingTasks[].task` | string |  |  |
-| `atProvider.organization.require2FA` | boolean | yes |  |
-| `atProvider.organization.slug` | string | yes |  |
-| `atProvider.organization.status` | object | yes |  |
-| `atProvider.organization.status.id` | string | yes |  |
-| `atProvider.organization.status.name` | string | yes |  |
 | `atProvider.platform` | string |  |  |
-| `atProvider.platforms` | []string |  |  |
-| `atProvider.processingIssues` | integer (int64) |  |  |
-| `atProvider.relayPiiConfig` | string |  |  |
-| `atProvider.resolveAge` | integer (int64) |  |  |
-| `atProvider.safeFields` | []string |  |  |
-| `atProvider.scmSourceContextEnabled` | boolean |  |  |
-| `atProvider.scrapeJavaScript` | boolean |  |  |
-| `atProvider.scrubIPAddresses` | boolean |  |  |
-| `atProvider.secondaryGroupingConfig` | string |  |  |
-| `atProvider.secondaryGroupingExpiry` | integer (int64) |  |  |
-| `atProvider.securityTokenHeader` | string |  |  |
-| `atProvider.seerNightshiftTweaks` | any |  |  |
-| `atProvider.seerScannerAutomation` | boolean |  |  |
-| `atProvider.sensitiveFields` | []string |  |  |
-| `atProvider.sessionStats` | any |  |  |
 | `atProvider.slug` | string |  |  |
-| `atProvider.stats` | any |  |  |
 | `atProvider.status` | string |  |  |
-| `atProvider.storeCrashReports` | integer (int64) |  |  |
-| `atProvider.subjectPrefix` | string |  |  |
-| `atProvider.subjectTemplate` | string |  |  |
-| `atProvider.symbolSources` | string |  |  |
-| `atProvider.team` | object |  |  |
-| `atProvider.team.id` | string | yes |  |
-| `atProvider.team.name` | string | yes |  |
-| `atProvider.team.slug` | string | yes |  |
 | `atProvider.teams` | []object |  |  |
 | `atProvider.teams[].id` | string | yes |  |
 | `atProvider.teams[].name` | string | yes |  |
 | `atProvider.teams[].slug` | string | yes |  |
-| `atProvider.tempestFetchScreenshots` | boolean |  |  |
-| `atProvider.transactionStats` | any |  |  |
-| `atProvider.verifySSL` | boolean |  |  |

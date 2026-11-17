@@ -92,6 +92,22 @@ actions:
             via: [team]
             name: external_id
 
+  # A member who has not accepted the invite yet has no user, and a user may have no avatar.
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/members/'].get.responses['200'].content['application/json'].schema.items.required
+    remove: true
+
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/members/'].get.responses['200'].content['application/json'].schema.items
+    update:
+      required: [dateCreated, email, expired, flags, id, inviteStatus, inviterName, name, orgRole, pending, teamRole, teamSlug]
+
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/members/'].get.responses['200'].content['application/json'].schema.items.properties.user.required
+    remove: true
+
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/members/'].get.responses['200'].content['application/json'].schema.items.properties.user
+    update:
+      nullable: true
+      required: [dateJoined, email, emails, experiments, has2fa, hasPasswordAuth, id, isActive, isManaged, isStaff, isSuperuser, isSuspended, lastActive, lastLogin, name, username]
+
   # Unset means unmanaged, not the default role.
   - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/'].put.requestBody.content['application/json'].schema.properties.teamRole
     remove: true

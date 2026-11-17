@@ -40,6 +40,60 @@ actions:
         fields:
           mode: all
 
+  # The team as the API returns it also carries the organization, its projects and
+  # fields that depend on the token's user; status keeps the team itself.
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/'].get.responses['200'].content['application/json'].schema.properties
+    remove: true
+
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/'].get.responses['200'].content['application/json'].schema.required
+    remove: true
+
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/'].get.responses['200'].content['application/json'].schema
+    update:
+      required: [id, slug, name]
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        dateCreated:
+          type: string
+          format: date-time
+          nullable: true
+        memberCount:
+          type: integer
+        flags:
+          type: object
+          additionalProperties: {}
+
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/'].put.responses['200'].content['application/json'].schema.properties
+    remove: true
+
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/'].put.responses['200'].content['application/json'].schema.required
+    remove: true
+
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/'].put.responses['200'].content['application/json'].schema
+    update:
+      required: [id, slug, name]
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        dateCreated:
+          type: string
+          format: date-time
+          nullable: true
+        memberCount:
+          type: integer
+        flags:
+          type: object
+          additionalProperties: {}
+
   - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/'].get
     update:
       x-kube-operation:

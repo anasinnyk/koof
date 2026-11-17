@@ -121,7 +121,7 @@ Validation:
 | `atProvider.user.avatar.avatarType` | string |  |  |
 | `atProvider.user.avatar.avatarUrl` | string |  |  |
 | `atProvider.user.avatar.avatarUuid` | string |  |  |
-| `atProvider.user.avatarUrl` | string | yes |  |
+| `atProvider.user.avatarUrl` | string |  |  |
 | `atProvider.user.canReset2fa` | boolean |  |  |
 | `atProvider.user.dateJoined` | string (date-time) | yes |  |
 | `atProvider.user.email` | string | yes |  |

@@ -102,7 +102,87 @@ actions:
           project_id_or_slug:
             type: external_name
 
-  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].get.responses['200'].content['application/json'].schema.properties.securityToken
+  # The project as the API returns it has over 80 fields: settings, stats, the
+  # organization and fields that depend on the token's user. Status keeps the
+  # project itself and the fields of forProvider.
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].get.responses['200'].content['application/json'].schema.properties
+    remove: true
+
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].get.responses['200'].content['application/json'].schema.required
+    remove: true
+
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].get.responses['200'].content['application/json'].schema
     update:
-      x-kube-field:
-        sensitive: true
+      required: [id, slug, name]
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        platform:
+          type: string
+          nullable: true
+        status:
+          type: string
+        dateCreated:
+          type: string
+          format: date-time
+        firstEvent:
+          type: string
+          format: date-time
+          nullable: true
+        teams:
+          type: array
+          items:
+            type: object
+            required: [id, slug, name]
+            properties:
+              id:
+                type: string
+              slug:
+                type: string
+              name:
+                type: string
+
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].put.responses['200'].content['application/json'].schema.properties
+    remove: true
+
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].put.responses['200'].content['application/json'].schema.required
+    remove: true
+
+  - target: $.paths['/api/0/projects/{organization_id_or_slug}/{project_id_or_slug}/'].put.responses['200'].content['application/json'].schema
+    update:
+      required: [id, slug, name]
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        platform:
+          type: string
+          nullable: true
+        status:
+          type: string
+        dateCreated:
+          type: string
+          format: date-time
+        firstEvent:
+          type: string
+          format: date-time
+          nullable: true
+        teams:
+          type: array
+          items:
+            type: object
+            required: [id, slug, name]
+            properties:
+              id:
+                type: string
+              slug:
+                type: string
+              name:
+                type: string

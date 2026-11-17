@@ -96,6 +96,35 @@ actions:
     update:
       required: [teamSlug]
 
+  # A member who has not accepted the invite yet has no user, and a user may have no avatar.
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.required
+    remove: true
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema
+    update:
+      required: [dateCreated, email, expired, flags, id, inviteStatus, invite_link, inviterName, isOnlyOwner, name, orgRole, orgRoleList, pending, teamRoleList, teamRoles, teams]
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.properties.user.required
+    remove: true
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.properties.user
+    update:
+      required: [dateJoined, email, emails, experiments, has2fa, hasPasswordAuth, id, isActive, isManaged, isStaff, isSuperuser, isSuspended, lastActive, lastLogin, name, username]
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.required
+    remove: true
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema
+    update:
+      required: [dateCreated, email, expired, flags, id, inviteStatus, invite_link, inviterName, isOnlyOwner, name, orgRole, orgRoleList, pending, teamRoleList, teamRoles, teams]
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.properties.user.required
+    remove: true
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].put.responses['200'].content['application/json'].schema.properties.user
+    update:
+      required: [dateJoined, email, emails, experiments, has2fa, hasPasswordAuth, id, isActive, isManaged, isStaff, isSuperuser, isSuspended, lastActive, lastLogin, name, username]
+
   # Deprecated spellings of orgRole and teamRoles; managing both would drift.
   - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/'].post.requestBody.content['application/json'].schema.properties.role
     update:
