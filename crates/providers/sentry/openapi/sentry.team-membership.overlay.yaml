@@ -1,0 +1,142 @@
+overlay: 1.1.0
+info:
+  title: Sentry TeamMembership
+  version: 0.0.1
+extends: ./sentry.json
+actions:
+  # Adding a member to a team takes no body; the team role is set with the update.
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/'].post
+    update:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                teamRole:
+                  type: string
+                  enum: [contributor, admin]
+                  description: Team role; unset keeps the role Sentry assigns.
+              x-kube-resource:
+                name: team_membership
+                apiVersion: sentry.kube.nas1k.dev/v1alpha1
+                kind: TeamMembership
+
+                test:
+                  forProvider:
+                    teamRole: contributor
+                  update:
+                    teamRole: admin
+
+                identifiers:
+                  external_id:
+                    type: external_name
+
+                references:
+                  member:
+                    from: spec.forProvider.memberRef
+                    target: organization_member
+                  team:
+                    from: spec.forProvider.teamRef
+                    target: team
+
+                credentials:
+                  securityScheme: auth_token
+                  source:
+                    type: related
+                    via: [team, organization]
+
+                fields:
+                  mode: all
+      x-kube-operation:
+        resource: team_membership
+        lifecycle: create
+        pathParameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [team, organization]
+            name: external_id
+          member_id:
+            type: related_identifier
+            via: [member]
+            name: external_id
+          team_id_or_slug:
+            type: related_identifier
+            via: [team]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.id
+
+  # There is no endpoint for one member of a team: the member is found in the list.
+  - target: $.paths['/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/members/'].get
+    update:
+      x-kube-operation:
+        resource: team_membership
+        lifecycle: observe
+        response:
+          match:
+            field: id
+            value:
+              type: related_identifier
+              via: [member]
+              name: external_id
+        pathParameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [team, organization]
+            name: external_id
+          team_id_or_slug:
+            type: related_identifier
+            via: [team]
+            name: external_id
+
+  # Unset means unmanaged, not the default role.
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/'].put.requestBody.content['application/json'].schema.properties.teamRole
+    remove: true
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/'].put.requestBody.content['application/json'].schema.properties
+    update:
+      teamRole:
+        type: string
+        enum: [contributor, admin]
+        description: Team role; unset keeps the role Sentry assigns.
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/'].put
+    update:
+      x-kube-operation:
+        resource: team_membership
+        lifecycle: update
+        pathParameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [team, organization]
+            name: external_id
+          member_id:
+            type: related_identifier
+            via: [member]
+            name: external_id
+          team_id_or_slug:
+            type: related_identifier
+            via: [team]
+            name: external_id
+
+  - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/'].delete
+    update:
+      x-kube-operation:
+        resource: team_membership
+        lifecycle: delete
+        pathParameters:
+          organization_id_or_slug:
+            type: related_identifier
+            via: [team, organization]
+            name: external_id
+          member_id:
+            type: related_identifier
+            via: [member]
+            name: external_id
+          team_id_or_slug:
+            type: related_identifier
+            via: [team]
+            name: external_id

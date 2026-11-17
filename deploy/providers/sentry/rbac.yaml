@@ -20,7 +20,8 @@
         "projectkeys",
         "projectteams",
         "servicehooks",
-        "teams"
+        "teams",
+        "teammemberships"
       ],
       "verbs": [
         "get",
@@ -44,7 +45,8 @@
         "projectkeys/status",
         "projectteams/status",
         "servicehooks/status",
-        "teams/status"
+        "teams/status",
+        "teammemberships/status"
       ],
       "verbs": [
         "get",
@@ -66,7 +68,8 @@
         "projectkeys/finalizers",
         "projectteams/finalizers",
         "servicehooks/finalizers",
-        "teams/finalizers"
+        "teams/finalizers",
+        "teammemberships/finalizers"
       ],
       "verbs": [
         "update"

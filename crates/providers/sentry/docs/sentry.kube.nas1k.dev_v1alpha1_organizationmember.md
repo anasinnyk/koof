@@ -42,7 +42,7 @@ spec:
 | `forProvider.organizationRef.kind` | string |  | One of `Organization`, `ClusterOrganization`. Default `Organization`. |
 | `forProvider.organizationRef.name` | string | yes |  |
 | `forProvider.sendInvite` | boolean |  | Whether or not to send an invite notification through email. Defaults to True. Default `true`. |
-| `forProvider.teamRoles` | []object |  | The team and team-roles assigned to the member. Team roles can be either: - `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members. - `admin` - Has full management access to their team's membership and projects. |
+| `forProvider.teamRoles` | []object |  | Teams of the member with their roles (`contributor` or `admin`). Each update replaces every team of the member; unset leaves the teams unmanaged, so they can be managed with TeamMembership instead. Do not combine both for one member. |
 | `forProvider.teamRoles[].role` | string |  | Team role; unset keeps the role Sentry assigns. One of `contributor`, `admin`. |
 | `forProvider.teamRoles[].teamRef` | object |  | A reference to an object of kind `Team` in the namespace of the resource holding the reference; sets `teamSlug`. |
 | `forProvider.teamRoles[].teamRef.name` | string | yes |  |

@@ -6226,9 +6226,7 @@ pub struct OrganizationMemberCreateRequest {
     ///Whether or not to send an invite notification through email. Defaults to True.
     #[serde(rename = "sendInvite", default = "defaults::default_bool::<true>")]
     pub send_invite: bool,
-    /**The team and team-roles assigned to the member. Team roles can be either:
-        - `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members.
-        - `admin` - Has full management access to their team's membership and projects.*/
+    ///Teams of the member with their roles (`contributor` or `admin`). Each update replaces every team of the member; unset leaves the teams unmanaged, so they can be managed with TeamMembership instead. Do not combine both for one member.
     #[serde(
         rename = "teamRoles",
         skip_serializing_if = "::std::option::Option::is_none"
@@ -15648,9 +15646,7 @@ pub struct SentryV1alpha1OrganizationMemberForProvider {
     ///Whether or not to send an invite notification through email. Defaults to True.
     #[serde(rename = "sendInvite", default = "defaults::default_bool::<true>")]
     pub send_invite: bool,
-    /**The team and team-roles assigned to the member. Team roles can be either:
-        - `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members.
-        - `admin` - Has full management access to their team's membership and projects.*/
+    ///Teams of the member with their roles (`contributor` or `admin`). Each update replaces every team of the member; unset leaves the teams unmanaged, so they can be managed with TeamMembership instead. Do not combine both for one member.
     #[serde(
         rename = "teamRoles",
         skip_serializing_if = "::std::option::Option::is_none"
@@ -17674,6 +17670,331 @@ impl<'de> ::serde::Deserialize<'de> for SentryV1alpha1TeamForProviderSlug {
             })
     }
 }
+///`TeamMembershipAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1TeamMembershipAtProvider {
+    #[serde(
+        rename = "dateCreated",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub email: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expired: ::std::option::Option<bool>,
+    #[serde(
+        rename = "externalUsers",
+        default,
+        skip_serializing_if = "::std::vec::Vec::is_empty"
+    )]
+    pub external_users: ::std::vec::Vec<
+        SentryV1alpha1TeamMembershipAtProviderExternalUsersItem,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub flags: ::std::option::Option<SentryV1alpha1TeamMembershipAtProviderFlags>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "inviteStatus",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub invite_status: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "inviterName",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub inviter_name: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "orgRole", skip_serializing_if = "::std::option::Option::is_none")]
+    pub org_role: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub pending: ::std::option::Option<bool>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub role: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "roleName", skip_serializing_if = "::std::option::Option::is_none")]
+    pub role_name: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "teamRole", skip_serializing_if = "::std::option::Option::is_none")]
+    pub team_role: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "teamSlug", skip_serializing_if = "::std::option::Option::is_none")]
+    pub team_slug: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub user: ::std::option::Option<SentryV1alpha1TeamMembershipAtProviderUser>,
+}
+///`TeamMembershipAtProviderExternalUsersItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1TeamMembershipAtProviderExternalUsersItem {
+    #[serde(
+        rename = "externalId",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub external_id: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "externalName")]
+    pub external_name: ::std::string::String,
+    pub id: ::std::string::String,
+    #[serde(rename = "integrationId")]
+    pub integration_id: ::std::string::String,
+    pub provider: ::std::string::String,
+    #[serde(rename = "teamId", skip_serializing_if = "::std::option::Option::is_none")]
+    pub team_id: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "userId", skip_serializing_if = "::std::option::Option::is_none")]
+    pub user_id: ::std::option::Option<::std::string::String>,
+}
+///`TeamMembershipAtProviderFlags`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1TeamMembershipAtProviderFlags {
+    #[serde(rename = "idp:provisioned")]
+    pub idp_provisioned: bool,
+    #[serde(rename = "idp:role-restricted")]
+    pub idp_role_restricted: bool,
+    #[serde(rename = "member-limit:restricted")]
+    pub member_limit_restricted: bool,
+    #[serde(rename = "partnership:restricted")]
+    pub partnership_restricted: bool,
+    #[serde(rename = "sso:invalid")]
+    pub sso_invalid: bool,
+    #[serde(rename = "sso:linked")]
+    pub sso_linked: bool,
+}
+///`TeamMembershipAtProviderUser`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1TeamMembershipAtProviderUser {
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub authenticators: ::std::vec::Vec<::serde_json::Value>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub avatar: ::std::option::Option<SentryV1alpha1TeamMembershipAtProviderUserAvatar>,
+    #[serde(rename = "avatarUrl")]
+    pub avatar_url: ::std::string::String,
+    #[serde(
+        rename = "canReset2fa",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub can_reset2fa: ::std::option::Option<bool>,
+    #[serde(rename = "dateJoined")]
+    pub date_joined: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub email: ::std::string::String,
+    pub emails: ::std::vec::Vec<SentryV1alpha1TeamMembershipAtProviderUserEmailsItem>,
+    pub experiments: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    pub has2fa: bool,
+    #[serde(rename = "hasPasswordAuth")]
+    pub has_password_auth: bool,
+    pub id: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub identities: ::std::vec::Vec<
+        SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItem,
+    >,
+    #[serde(rename = "isActive")]
+    pub is_active: bool,
+    #[serde(rename = "isManaged")]
+    pub is_managed: bool,
+    #[serde(rename = "isStaff")]
+    pub is_staff: bool,
+    #[serde(rename = "isSuperuser")]
+    pub is_superuser: bool,
+    #[serde(rename = "isSuspended")]
+    pub is_suspended: bool,
+    #[serde(
+        rename = "lastActive",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub last_active: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(
+        rename = "lastLogin",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub last_login: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    pub name: ::std::string::String,
+    pub username: ::std::string::String,
+}
+///`TeamMembershipAtProviderUserAvatar`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1TeamMembershipAtProviderUserAvatar {
+    #[serde(
+        rename = "avatarType",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_type: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUrl",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_url: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUuid",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_uuid: ::std::option::Option<::std::string::String>,
+}
+///`TeamMembershipAtProviderUserEmailsItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1TeamMembershipAtProviderUserEmailsItem {
+    pub email: ::std::string::String,
+    pub id: ::std::string::String,
+    pub is_verified: bool,
+}
+///`TeamMembershipAtProviderUserIdentitiesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItem {
+    #[serde(rename = "dateSynced")]
+    pub date_synced: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(rename = "dateVerified")]
+    pub date_verified: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub id: ::std::string::String,
+    pub name: ::std::string::String,
+    pub organization: SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItemOrganization,
+    pub provider: SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItemProvider,
+}
+///`TeamMembershipAtProviderUserIdentitiesItemOrganization`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItemOrganization {
+    pub name: ::std::string::String,
+    pub slug: ::std::string::String,
+}
+///`TeamMembershipAtProviderUserIdentitiesItemProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1TeamMembershipAtProviderUserIdentitiesItemProvider {
+    pub id: ::std::string::String,
+    pub name: ::std::string::String,
+}
+///`TeamMembershipForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SentryV1alpha1TeamMembershipForProvider {
+    ///Team role; unset keeps the role Sentry assigns.
+    #[serde(rename = "teamRole", skip_serializing_if = "::std::option::Option::is_none")]
+    pub team_role: ::std::option::Option<
+        SentryV1alpha1TeamMembershipForProviderTeamRole,
+    >,
+}
+///Team role; unset keeps the role Sentry assigns.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum SentryV1alpha1TeamMembershipForProviderTeamRole {
+    #[serde(rename = "contributor")]
+    Contributor,
+    #[serde(rename = "admin")]
+    Admin,
+}
+impl ::std::fmt::Display for SentryV1alpha1TeamMembershipForProviderTeamRole {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Contributor => f.write_str("contributor"),
+            Self::Admin => f.write_str("admin"),
+        }
+    }
+}
+impl ::std::str::FromStr for SentryV1alpha1TeamMembershipForProviderTeamRole {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "contributor" => Ok(Self::Contributor),
+            "admin" => Ok(Self::Admin),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for SentryV1alpha1TeamMembershipForProviderTeamRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for SentryV1alpha1TeamMembershipForProviderTeamRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
 ///`ServiceHookCreateRequest`
 #[derive(
     ::serde::Deserialize,
@@ -18258,6 +18579,616 @@ pub struct TeamCreateResponseProjectsItemAvatar {
         skip_serializing_if = "::std::option::Option::is_none"
     )]
     pub avatar_uuid: ::std::option::Option<::std::string::String>,
+}
+///`TeamMembershipCreateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(deny_unknown_fields)]
+pub struct TeamMembershipCreateRequest {
+    ///Team role; unset keeps the role Sentry assigns.
+    #[serde(rename = "teamRole", skip_serializing_if = "::std::option::Option::is_none")]
+    pub team_role: ::std::option::Option<TeamMembershipCreateRequestTeamRole>,
+}
+///Team role; unset keeps the role Sentry assigns.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum TeamMembershipCreateRequestTeamRole {
+    #[serde(rename = "contributor")]
+    Contributor,
+    #[serde(rename = "admin")]
+    Admin,
+}
+impl ::std::fmt::Display for TeamMembershipCreateRequestTeamRole {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Contributor => f.write_str("contributor"),
+            Self::Admin => f.write_str("admin"),
+        }
+    }
+}
+impl ::std::str::FromStr for TeamMembershipCreateRequestTeamRole {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "contributor" => Ok(Self::Contributor),
+            "admin" => Ok(Self::Admin),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for TeamMembershipCreateRequestTeamRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for TeamMembershipCreateRequestTeamRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`TeamMembershipCreateResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipCreateResponse {
+    pub access: ::std::vec::Vec<::std::string::String>,
+    pub avatar: TeamMembershipCreateResponseAvatar,
+    #[serde(
+        rename = "dateCreated",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    pub flags: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(rename = "hasAccess")]
+    pub has_access: bool,
+    pub id: ::std::string::String,
+    #[serde(rename = "isMember")]
+    pub is_member: bool,
+    #[serde(rename = "isPending")]
+    pub is_pending: bool,
+    #[serde(rename = "memberCount")]
+    pub member_count: i64,
+    pub name: ::std::string::String,
+    pub slug: ::std::string::String,
+    #[serde(
+        rename = "teamRole",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub team_role: ::std::option::Option<::std::string::String>,
+}
+///`TeamMembershipCreateResponseAvatar`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipCreateResponseAvatar {
+    #[serde(
+        rename = "avatarType",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_type: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUrl",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_url: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUuid",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_uuid: ::std::option::Option<::std::string::String>,
+}
+///`TeamMembershipDeleteResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipDeleteResponse {
+    pub access: ::std::vec::Vec<::std::string::String>,
+    pub avatar: TeamMembershipDeleteResponseAvatar,
+    #[serde(
+        rename = "dateCreated",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    pub flags: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    #[serde(rename = "hasAccess")]
+    pub has_access: bool,
+    pub id: ::std::string::String,
+    #[serde(rename = "isMember")]
+    pub is_member: bool,
+    #[serde(rename = "isPending")]
+    pub is_pending: bool,
+    #[serde(rename = "memberCount")]
+    pub member_count: i64,
+    pub name: ::std::string::String,
+    pub slug: ::std::string::String,
+    #[serde(
+        rename = "teamRole",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub team_role: ::std::option::Option<::std::string::String>,
+}
+///`TeamMembershipDeleteResponseAvatar`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipDeleteResponseAvatar {
+    #[serde(
+        rename = "avatarType",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_type: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUrl",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_url: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUuid",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_uuid: ::std::option::Option<::std::string::String>,
+}
+///`TeamMembershipObserveResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TeamMembershipObserveResponse(
+    pub ::std::vec::Vec<TeamMembershipObserveResponseItem>,
+);
+impl ::std::ops::Deref for TeamMembershipObserveResponse {
+    type Target = ::std::vec::Vec<TeamMembershipObserveResponseItem>;
+    fn deref(&self) -> &::std::vec::Vec<TeamMembershipObserveResponseItem> {
+        &self.0
+    }
+}
+impl ::std::convert::From<TeamMembershipObserveResponse>
+for ::std::vec::Vec<TeamMembershipObserveResponseItem> {
+    fn from(value: TeamMembershipObserveResponse) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<TeamMembershipObserveResponseItem>>
+for TeamMembershipObserveResponse {
+    fn from(value: ::std::vec::Vec<TeamMembershipObserveResponseItem>) -> Self {
+        Self(value)
+    }
+}
+///`TeamMembershipObserveResponseItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipObserveResponseItem {
+    #[serde(rename = "dateCreated")]
+    pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub email: ::std::string::String,
+    pub expired: bool,
+    #[serde(
+        rename = "externalUsers",
+        default,
+        skip_serializing_if = "::std::vec::Vec::is_empty"
+    )]
+    pub external_users: ::std::vec::Vec<
+        TeamMembershipObserveResponseItemExternalUsersItem,
+    >,
+    pub flags: TeamMembershipObserveResponseItemFlags,
+    pub id: ::std::string::String,
+    #[serde(rename = "inviteStatus")]
+    pub invite_status: ::std::string::String,
+    #[serde(
+        rename = "inviterName",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub inviter_name: ::std::option::Option<::std::string::String>,
+    pub name: ::std::string::String,
+    #[serde(rename = "orgRole")]
+    pub org_role: ::std::string::String,
+    pub pending: bool,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub role: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "roleName", skip_serializing_if = "::std::option::Option::is_none")]
+    pub role_name: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "teamRole",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub team_role: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "teamSlug")]
+    pub team_slug: ::std::string::String,
+    pub user: TeamMembershipObserveResponseItemUser,
+}
+///`TeamMembershipObserveResponseItemExternalUsersItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipObserveResponseItemExternalUsersItem {
+    #[serde(
+        rename = "externalId",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub external_id: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "externalName")]
+    pub external_name: ::std::string::String,
+    pub id: ::std::string::String,
+    #[serde(rename = "integrationId")]
+    pub integration_id: ::std::string::String,
+    pub provider: ::std::string::String,
+    #[serde(rename = "teamId", skip_serializing_if = "::std::option::Option::is_none")]
+    pub team_id: ::std::option::Option<::std::string::String>,
+    #[serde(rename = "userId", skip_serializing_if = "::std::option::Option::is_none")]
+    pub user_id: ::std::option::Option<::std::string::String>,
+}
+///`TeamMembershipObserveResponseItemFlags`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipObserveResponseItemFlags {
+    #[serde(rename = "idp:provisioned")]
+    pub idp_provisioned: bool,
+    #[serde(rename = "idp:role-restricted")]
+    pub idp_role_restricted: bool,
+    #[serde(rename = "member-limit:restricted")]
+    pub member_limit_restricted: bool,
+    #[serde(rename = "partnership:restricted")]
+    pub partnership_restricted: bool,
+    #[serde(rename = "sso:invalid")]
+    pub sso_invalid: bool,
+    #[serde(rename = "sso:linked")]
+    pub sso_linked: bool,
+}
+///`TeamMembershipObserveResponseItemUser`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipObserveResponseItemUser {
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub authenticators: ::std::vec::Vec<::serde_json::Value>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub avatar: ::std::option::Option<TeamMembershipObserveResponseItemUserAvatar>,
+    #[serde(rename = "avatarUrl")]
+    pub avatar_url: ::std::string::String,
+    #[serde(
+        rename = "canReset2fa",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub can_reset2fa: ::std::option::Option<bool>,
+    #[serde(rename = "dateJoined")]
+    pub date_joined: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub email: ::std::string::String,
+    pub emails: ::std::vec::Vec<TeamMembershipObserveResponseItemUserEmailsItem>,
+    pub experiments: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    pub has2fa: bool,
+    #[serde(rename = "hasPasswordAuth")]
+    pub has_password_auth: bool,
+    pub id: ::std::string::String,
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub identities: ::std::vec::Vec<TeamMembershipObserveResponseItemUserIdentitiesItem>,
+    #[serde(rename = "isActive")]
+    pub is_active: bool,
+    #[serde(rename = "isManaged")]
+    pub is_managed: bool,
+    #[serde(rename = "isStaff")]
+    pub is_staff: bool,
+    #[serde(rename = "isSuperuser")]
+    pub is_superuser: bool,
+    #[serde(rename = "isSuspended")]
+    pub is_suspended: bool,
+    #[serde(
+        rename = "lastActive",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub last_active: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(
+        rename = "lastLogin",
+        deserialize_with = "::std::option::Option::deserialize"
+    )]
+    pub last_login: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    pub name: ::std::string::String,
+    pub username: ::std::string::String,
+}
+///`TeamMembershipObserveResponseItemUserAvatar`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipObserveResponseItemUserAvatar {
+    #[serde(
+        rename = "avatarType",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_type: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUrl",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_url: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "avatarUuid",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub avatar_uuid: ::std::option::Option<::std::string::String>,
+}
+///`TeamMembershipObserveResponseItemUserEmailsItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipObserveResponseItemUserEmailsItem {
+    pub email: ::std::string::String,
+    pub id: ::std::string::String,
+    pub is_verified: bool,
+}
+///`TeamMembershipObserveResponseItemUserIdentitiesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipObserveResponseItemUserIdentitiesItem {
+    #[serde(rename = "dateSynced")]
+    pub date_synced: ::chrono::DateTime<::chrono::offset::Utc>,
+    #[serde(rename = "dateVerified")]
+    pub date_verified: ::chrono::DateTime<::chrono::offset::Utc>,
+    pub id: ::std::string::String,
+    pub name: ::std::string::String,
+    pub organization: TeamMembershipObserveResponseItemUserIdentitiesItemOrganization,
+    pub provider: TeamMembershipObserveResponseItemUserIdentitiesItemProvider,
+}
+///`TeamMembershipObserveResponseItemUserIdentitiesItemOrganization`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipObserveResponseItemUserIdentitiesItemOrganization {
+    pub name: ::std::string::String,
+    pub slug: ::std::string::String,
+}
+///`TeamMembershipObserveResponseItemUserIdentitiesItemProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipObserveResponseItemUserIdentitiesItemProvider {
+    pub id: ::std::string::String,
+    pub name: ::std::string::String,
+}
+///`TeamMembershipUpdateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipUpdateRequest {
+    ///Team role; unset keeps the role Sentry assigns.
+    #[serde(rename = "teamRole", skip_serializing_if = "::std::option::Option::is_none")]
+    pub team_role: ::std::option::Option<TeamMembershipUpdateRequestTeamRole>,
+}
+///Team role; unset keeps the role Sentry assigns.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum TeamMembershipUpdateRequestTeamRole {
+    #[serde(rename = "contributor")]
+    Contributor,
+    #[serde(rename = "admin")]
+    Admin,
+}
+impl ::std::fmt::Display for TeamMembershipUpdateRequestTeamRole {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Contributor => f.write_str("contributor"),
+            Self::Admin => f.write_str("admin"),
+        }
+    }
+}
+impl ::std::str::FromStr for TeamMembershipUpdateRequestTeamRole {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "contributor" => Ok(Self::Contributor),
+            "admin" => Ok(Self::Admin),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for TeamMembershipUpdateRequestTeamRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for TeamMembershipUpdateRequestTeamRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`TeamMembershipUpdateResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TeamMembershipUpdateResponse {
+    #[serde(rename = "isActive")]
+    pub is_active: bool,
+    #[serde(rename = "teamRole")]
+    pub team_role: TeamMembershipUpdateResponseTeamRole,
+}
+///`TeamMembershipUpdateResponseTeamRole`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum TeamMembershipUpdateResponseTeamRole {
+    #[serde(rename = "contributor")]
+    Contributor,
+    #[serde(rename = "admin")]
+    Admin,
+}
+impl ::std::fmt::Display for TeamMembershipUpdateResponseTeamRole {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Contributor => f.write_str("contributor"),
+            Self::Admin => f.write_str("admin"),
+        }
+    }
+}
+impl ::std::str::FromStr for TeamMembershipUpdateResponseTeamRole {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "contributor" => Ok(Self::Contributor),
+            "admin" => Ok(Self::Admin),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for TeamMembershipUpdateResponseTeamRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for TeamMembershipUpdateResponseTeamRole {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
 }
 ///`TeamObserveResponse`
 #[derive(

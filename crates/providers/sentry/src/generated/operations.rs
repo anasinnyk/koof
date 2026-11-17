@@ -264,3 +264,35 @@ impl koof::Operation for TeamUpdate {
     type Request = crate::generated::types::TeamUpdateRequest;
     type Response = crate::generated::types::TeamUpdateResponse;
 }
+pub struct TeamMembershipCreate;
+impl koof::Operation for TeamMembershipCreate {
+    const NAME: &'static str = "team_membership.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/";
+    type Request = crate::generated::types::TeamMembershipCreateRequest;
+    type Response = crate::generated::types::TeamMembershipCreateResponse;
+}
+pub struct TeamMembershipDelete;
+impl koof::Operation for TeamMembershipDelete {
+    const NAME: &'static str = "team_membership.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/";
+    type Request = ();
+    type Response = crate::generated::types::TeamMembershipDeleteResponse;
+}
+pub struct TeamMembershipObserve;
+impl koof::Operation for TeamMembershipObserve {
+    const NAME: &'static str = "team_membership.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/api/0/teams/{organization_id_or_slug}/{team_id_or_slug}/members/";
+    type Request = ();
+    type Response = crate::generated::types::TeamMembershipObserveResponse;
+}
+pub struct TeamMembershipUpdate;
+impl koof::Operation for TeamMembershipUpdate {
+    const NAME: &'static str = "team_membership.update";
+    const METHOD: reqwest::Method = reqwest::Method::PUT;
+    const PATH: &'static str = "/api/0/organizations/{organization_id_or_slug}/members/{member_id}/teams/{team_id_or_slug}/";
+    type Request = crate::generated::types::TeamMembershipUpdateRequest;
+    type Response = crate::generated::types::TeamMembershipUpdateResponse;
+}

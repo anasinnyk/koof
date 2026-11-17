@@ -2364,7 +2364,7 @@
                         "type": "boolean"
                       },
                       "teamRoles": {
-                        "description": "The team and team-roles assigned to the member. Team roles can be either:\n        - `contributor` - Can view and act on issues. Depending on organization settings, they can also add team members.\n        - `admin` - Has full management access to their team's membership and projects.",
+                        "description": "Teams of the member with their roles (`contributor` or `admin`). Each update replaces every team of the member; unset leaves the teams unmanaged, so they can be managed with TeamMembership instead. Do not combine both for one member.",
                         "items": {
                           "description": "A team the member is on.",
                           "properties": {
@@ -5368,6 +5368,548 @@
               "spec"
             ],
             "title": "Team",
+            "type": "object"
+          }
+        },
+        "served": true,
+        "storage": true,
+        "subresources": {
+          "status": {}
+        }
+      }
+    ]
+  }
+}
+---
+{
+  "apiVersion": "apiextensions.k8s.io/v1",
+  "kind": "CustomResourceDefinition",
+  "metadata": {
+    "name": "teammemberships.sentry.kube.nas1k.dev"
+  },
+  "spec": {
+    "group": "sentry.kube.nas1k.dev",
+    "names": {
+      "kind": "TeamMembership",
+      "plural": "teammemberships",
+      "singular": "teammembership"
+    },
+    "scope": "Namespaced",
+    "versions": [
+      {
+        "additionalPrinterColumns": [
+          {
+            "jsonPath": ".status.conditions[?(@.type==\"Ready\")].status",
+            "name": "Ready",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".status.conditions[?(@.type==\"Synced\")].status",
+            "name": "Synced",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".metadata.annotations.sentry\\.kube\\.nas1k\\.dev/external-name",
+            "name": "External-Name",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".metadata.creationTimestamp",
+            "name": "Age",
+            "type": "date"
+          }
+        ],
+        "name": "v1alpha1",
+        "schema": {
+          "openAPIV3Schema": {
+            "description": "Auto-generated derived type for TeamMembershipSpec via `CustomResource`",
+            "properties": {
+              "spec": {
+                "properties": {
+                  "deletionPolicy": {
+                    "default": "Delete",
+                    "description": "`Orphan` keeps the external resource when the managed resource is deleted.\nWithout `Delete` in `managementPolicies` the resource is always orphaned.",
+                    "enum": [
+                      "Delete",
+                      "Orphan"
+                    ],
+                    "type": "string"
+                  },
+                  "forProvider": {
+                    "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
+                    "properties": {
+                      "memberRef": {
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
+                        "nullable": true,
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ],
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "memberRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
+                      },
+                      "teamRef": {
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
+                        "nullable": true,
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ],
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "teamRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
+                      },
+                      "teamRole": {
+                        "description": "Team role; unset keeps the role Sentry assigns.",
+                        "enum": [
+                          "contributor",
+                          "admin"
+                        ],
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    },
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "memberRef cannot be removed once set",
+                        "rule": "!has(oldSelf.memberRef) || has(self.memberRef)"
+                      },
+                      {
+                        "message": "teamRef cannot be removed once set",
+                        "rule": "!has(oldSelf.teamRef) || has(self.teamRef)"
+                      }
+                    ]
+                  },
+                  "managementPolicies": {
+                    "default": [
+                      "*"
+                    ],
+                    "description": "Actions the controller may take. `[\"*\"]` (default) allows all; `[\"Observe\"]`\nonly reads (import without management). `Observe` is always required.",
+                    "items": {
+                      "description": "An action the controller may take on the external resource\n(Crossplane `managementPolicies`).",
+                      "enum": [
+                        "Observe",
+                        "Create",
+                        "Update",
+                        "Delete",
+                        "LateInitialize",
+                        "*"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "forProvider"
+                ],
+                "type": "object"
+              },
+              "status": {
+                "description": "`status` of a managed resource; `A` is the generated `atProvider` type.",
+                "nullable": true,
+                "properties": {
+                  "atProvider": {
+                    "description": "`TeamMembershipAtProvider`",
+                    "nullable": true,
+                    "properties": {
+                      "dateCreated": {
+                        "format": "date-time",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "email": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "expired": {
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "externalUsers": {
+                        "items": {
+                          "description": "`TeamMembershipAtProviderExternalUsersItem`",
+                          "properties": {
+                            "externalId": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "externalName": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "string"
+                            },
+                            "integrationId": {
+                              "type": "string"
+                            },
+                            "provider": {
+                              "type": "string"
+                            },
+                            "teamId": {
+                              "nullable": true,
+                              "type": "string"
+                            },
+                            "userId": {
+                              "nullable": true,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "externalName",
+                            "id",
+                            "integrationId",
+                            "provider"
+                          ],
+                          "type": "object"
+                        },
+                        "type": "array"
+                      },
+                      "flags": {
+                        "description": "`TeamMembershipAtProviderFlags`",
+                        "nullable": true,
+                        "properties": {
+                          "idp:provisioned": {
+                            "type": "boolean"
+                          },
+                          "idp:role-restricted": {
+                            "type": "boolean"
+                          },
+                          "member-limit:restricted": {
+                            "type": "boolean"
+                          },
+                          "partnership:restricted": {
+                            "type": "boolean"
+                          },
+                          "sso:invalid": {
+                            "type": "boolean"
+                          },
+                          "sso:linked": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "idp:provisioned",
+                          "idp:role-restricted",
+                          "member-limit:restricted",
+                          "partnership:restricted",
+                          "sso:invalid",
+                          "sso:linked"
+                        ],
+                        "type": "object"
+                      },
+                      "id": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "inviteStatus": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "inviterName": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "name": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "orgRole": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "pending": {
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "role": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "roleName": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "teamRole": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "teamSlug": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "user": {
+                        "description": "`TeamMembershipAtProviderUser`",
+                        "nullable": true,
+                        "properties": {
+                          "authenticators": {
+                            "items": {
+                              "x-kubernetes-preserve-unknown-fields": true
+                            },
+                            "type": "array"
+                          },
+                          "avatar": {
+                            "description": "`TeamMembershipAtProviderUserAvatar`",
+                            "nullable": true,
+                            "properties": {
+                              "avatarType": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "avatarUrl": {
+                                "nullable": true,
+                                "type": "string"
+                              },
+                              "avatarUuid": {
+                                "nullable": true,
+                                "type": "string"
+                              }
+                            },
+                            "type": "object"
+                          },
+                          "avatarUrl": {
+                            "type": "string"
+                          },
+                          "canReset2fa": {
+                            "nullable": true,
+                            "type": "boolean"
+                          },
+                          "dateJoined": {
+                            "format": "date-time",
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "emails": {
+                            "items": {
+                              "description": "`TeamMembershipAtProviderUserEmailsItem`",
+                              "properties": {
+                                "email": {
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "type": "string"
+                                },
+                                "is_verified": {
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "id",
+                                "is_verified"
+                              ],
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "experiments": {
+                            "additionalProperties": {
+                              "x-kubernetes-preserve-unknown-fields": true
+                            },
+                            "type": "object"
+                          },
+                          "has2fa": {
+                            "type": "boolean"
+                          },
+                          "hasPasswordAuth": {
+                            "type": "boolean"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "identities": {
+                            "items": {
+                              "description": "`TeamMembershipAtProviderUserIdentitiesItem`",
+                              "properties": {
+                                "dateSynced": {
+                                  "format": "date-time",
+                                  "type": "string"
+                                },
+                                "dateVerified": {
+                                  "format": "date-time",
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "organization": {
+                                  "description": "`TeamMembershipAtProviderUserIdentitiesItemOrganization`",
+                                  "properties": {
+                                    "name": {
+                                      "type": "string"
+                                    },
+                                    "slug": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "name",
+                                    "slug"
+                                  ],
+                                  "type": "object"
+                                },
+                                "provider": {
+                                  "description": "`TeamMembershipAtProviderUserIdentitiesItemProvider`",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "name": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "name"
+                                  ],
+                                  "type": "object"
+                                }
+                              },
+                              "required": [
+                                "dateSynced",
+                                "dateVerified",
+                                "id",
+                                "name",
+                                "organization",
+                                "provider"
+                              ],
+                              "type": "object"
+                            },
+                            "type": "array"
+                          },
+                          "isActive": {
+                            "type": "boolean"
+                          },
+                          "isManaged": {
+                            "type": "boolean"
+                          },
+                          "isStaff": {
+                            "type": "boolean"
+                          },
+                          "isSuperuser": {
+                            "type": "boolean"
+                          },
+                          "isSuspended": {
+                            "type": "boolean"
+                          },
+                          "lastActive": {
+                            "format": "date-time",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "lastLogin": {
+                            "format": "date-time",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "username": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "avatarUrl",
+                          "dateJoined",
+                          "email",
+                          "emails",
+                          "experiments",
+                          "has2fa",
+                          "hasPasswordAuth",
+                          "id",
+                          "isActive",
+                          "isManaged",
+                          "isStaff",
+                          "isSuperuser",
+                          "isSuspended",
+                          "name",
+                          "username"
+                        ],
+                        "type": "object"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "conditions": {
+                    "default": [],
+                    "items": {
+                      "description": "Condition contains details for one aspect of the current state of this API Resource.",
+                      "properties": {
+                        "lastTransitionTime": {
+                          "description": "lastTransitionTime is the last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "message": {
+                          "description": "message is a human readable message indicating details about the transition. This may be an empty string.",
+                          "type": "string"
+                        },
+                        "observedGeneration": {
+                          "description": "observedGeneration represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "reason": {
+                          "description": "reason contains a programmatic identifier indicating the reason for the condition's last transition. Producers of specific condition types may define expected values and meanings for this field, and whether the values are considered a guaranteed API. The value should be a CamelCase string. This field may not be empty.",
+                          "type": "string"
+                        },
+                        "status": {
+                          "description": "status of the condition, one of True, False, Unknown.",
+                          "type": "string"
+                        },
+                        "type": {
+                          "description": "type of condition in CamelCase or in foo.example.com/CamelCase.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "lastTransitionTime",
+                        "message",
+                        "reason",
+                        "status",
+                        "type"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "observedGeneration": {
+                    "format": "int64",
+                    "nullable": true,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "required": [
+              "spec"
+            ],
+            "title": "TeamMembership",
             "type": "object"
           }
         },

@@ -107,7 +107,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
         ),
     )
     .with_identifiers(&[("external_id", koof::resource::ValueExpr::ExternalName)])
-    .with_late_initialize(&["email", "orgRole", "sendInvite", "teamRoles"])
+    .with_late_initialize(&["email", "orgRole", "sendInvite"])
     .with_list_map_keys(&[("teamRoles", &["teamSlug"])])
     .with_references(
         &[

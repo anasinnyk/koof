@@ -60,6 +60,10 @@ actions:
 
   - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/'].post.requestBody.content['application/json'].schema.properties.teamRoles
     update:
+      description: >-
+        Teams of the member with their roles (`contributor` or `admin`). Each update
+        replaces every team of the member; unset leaves the teams unmanaged, so they
+        can be managed with TeamMembership instead. Do not combine both for one member.
       items:
         type: object
         description: A team the member is on.
@@ -74,6 +78,8 @@ actions:
             description: Team role; unset keeps the role Sentry assigns.
       x-kube-field:
         listMapKeys: [teamSlug]
+        # Teams added with TeamMembership must not be copied into the spec.
+        lateInitialize: false
 
   # role is null when Sentry assigns the team role itself; it may also be left out.
   - target: $.paths['/api/0/organizations/{organization_id_or_slug}/members/{member_id}/'].get.responses['200'].content['application/json'].schema.properties.teamRoles.items.required

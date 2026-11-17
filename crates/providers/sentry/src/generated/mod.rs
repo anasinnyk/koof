@@ -22,6 +22,7 @@ pub fn controllers(app: koof::App) -> koof::App {
         .controller::<sentry::v1alpha1::project_team::ProjectTeam>()
         .controller::<sentry::v1alpha1::service_hook::ServiceHook>()
         .controller::<sentry::v1alpha1::team::Team>()
+        .controller::<sentry::v1alpha1::team_membership::TeamMembership>()
 }
 #[cfg(feature = "fake")]
 #[must_use]
@@ -37,6 +38,7 @@ pub fn fake() -> koof::fake::Fake {
         .resource::<sentry::v1alpha1::project_team::ProjectTeam>()
         .resource::<sentry::v1alpha1::service_hook::ServiceHook>()
         .resource::<sentry::v1alpha1::team::Team>()
+        .resource::<sentry::v1alpha1::team_membership::TeamMembership>()
 }
 /// `CustomResourceDefinition`s of every resource of this provider.
 #[must_use]
@@ -55,7 +57,9 @@ pub fn crds() -> Vec<
         kube::CustomResourceExt > ::crd(), < sentry::v1alpha1::project_team::ProjectTeam
         as kube::CustomResourceExt > ::crd(), <
         sentry::v1alpha1::service_hook::ServiceHook as kube::CustomResourceExt > ::crd(),
-        < sentry::v1alpha1::team::Team as kube::CustomResourceExt > ::crd()
+        < sentry::v1alpha1::team::Team as kube::CustomResourceExt > ::crd(), <
+        sentry::v1alpha1::team_membership::TeamMembership as kube::CustomResourceExt >
+        ::crd()
     ]
 }
 /// Documentation of every resource of this provider.
@@ -73,6 +77,8 @@ pub fn docs() -> Vec<koof::docs::ResourceDoc> {
         koof::docs::ResourceDoc::of:: < sentry::v1alpha1::project_key::ProjectKey > (),
         koof::docs::ResourceDoc::of:: < sentry::v1alpha1::project_team::ProjectTeam > (),
         koof::docs::ResourceDoc::of:: < sentry::v1alpha1::service_hook::ServiceHook > (),
-        koof::docs::ResourceDoc::of:: < sentry::v1alpha1::team::Team > ()
+        koof::docs::ResourceDoc::of:: < sentry::v1alpha1::team::Team > (),
+        koof::docs::ResourceDoc::of:: < sentry::v1alpha1::team_membership::TeamMembership
+        > ()
     ]
 }
