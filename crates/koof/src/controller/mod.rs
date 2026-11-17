@@ -2,13 +2,16 @@ pub mod conditions;
 mod context;
 pub mod create_state;
 pub mod drift;
+pub mod external_name;
 pub mod finalizer;
 pub mod late_init;
 pub mod policy;
 pub mod status;
 mod usage;
 
-pub use context::{Attempts, Backoff, ControllerContext, DEFAULT_RESYNC, SyncTracker};
+pub use context::{
+    Attempts, Backoff, ControllerContext, DEFAULT_FIELD_MANAGER, DEFAULT_RESYNC, SyncTracker,
+};
 
 use crate::{
     error::ReconcileError,
@@ -134,22 +137,19 @@ async fn reconcile_inner<R: ManagedResource>(
     }
 
     let observation = external::observe(context, resource).await?;
-    let drifted_fields = if observation.exists && !deleting {
-        drift(&desired(context, resource).await?, &observation)
+    let owned;
+    let resource = if observation.exists
+        && !deleting
+        && let Some(updated) = own_external_name(context, resource).await?
+    {
+        owned = updated;
+        &owned
     } else {
-        Vec::new()
+        resource
     };
     let key = object_key(resource);
-    let known_drift = !drifted_fields.is_empty()
-        && context
-            .attempts
-            .known_drift(&key, resource.meta().generation, &drifted_fields);
-    if known_drift {
-        tracing::debug!(
-            ?drifted_fields,
-            "drift persisted after the last update; not updating again"
-        );
-    }
+    let (drifted_fields, known_drift) =
+        drifted(context, resource, &observation, deleting, &key).await?;
     let decision = policy::decide(
         State {
             exists: observation.exists,
@@ -212,6 +212,48 @@ async fn reconcile_inner<R: ManagedResource>(
     } else {
         MISSING
     })))
+}
+
+async fn drifted<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+    observation: &external::Observation,
+    deleting: bool,
+    key: &str,
+) -> Result<(Vec<String>, bool), ReconcileError> {
+    if !observation.exists || deleting {
+        return Ok((Vec::new(), false));
+    }
+    let fields = drift(&desired(context, resource).await?, observation);
+    let known = !fields.is_empty()
+        && context
+            .attempts
+            .known_drift(key, resource.meta().generation, &fields);
+    if known {
+        tracing::debug!(
+            drifted_fields = ?fields,
+            "drift persisted after the last update; not updating again"
+        );
+    }
+    Ok((fields, known))
+}
+
+async fn own_external_name<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+) -> Result<Option<R>, ReconcileError> {
+    let updated =
+        external_name::own(&context.kube_client, resource, &context.field_manager).await?;
+    if updated.is_some() {
+        tracing::info!(
+            field_manager = context.field_manager,
+            "took co-ownership of the external name"
+        );
+        context
+            .metrics
+            .action(R::descriptor().group_kind(), "external_name_owned");
+    }
+    Ok(updated)
 }
 
 async fn late_initialize<R: ManagedResource>(

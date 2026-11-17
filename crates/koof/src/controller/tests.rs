@@ -152,6 +152,56 @@ async fn creates_a_missing_record_and_reports_it_ready() {
     );
 }
 
+fn koof_owns_the_external_name(object: &Value) -> bool {
+    let key = format!("f:{}", RECORD.annotation(EXTERNAL_NAME));
+    object["metadata"]["managedFields"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .any(|entry| {
+            entry["manager"] == DEFAULT_FIELD_MANAGER
+                && entry["operation"] == "Apply"
+                && entry["fieldsV1"]["f:metadata"]["f:annotations"]
+                    .get(&key)
+                    .is_some()
+        })
+}
+
+#[tokio::test]
+async fn records_the_external_name_of_a_created_record_by_server_side_apply() {
+    let world = world(www(for_provider(
+        &json!({ "name": "www.example.com", "ttl": 300 }),
+    )))
+    .await;
+
+    world.reconcile_record_times(3).await;
+
+    assert!(koof_owns_the_external_name(
+        &world.record().expect("record")
+    ));
+    assert_eq!(world.cluster.applies(), 1);
+}
+
+#[tokio::test]
+async fn takes_ownership_of_an_imported_external_name_once() {
+    let world = world(www(for_provider(
+        &json!({ "name": "www.example.com", "ttl": 300 }),
+    )))
+    .await;
+    world.reconcile_record().await.expect("reconciled");
+    let mut imported = world.record().expect("record");
+    imported["metadata"]["managedFields"] = json!([]);
+    world.cluster.put(imported);
+
+    world.reconcile_record_times(3).await;
+
+    assert!(koof_owns_the_external_name(
+        &world.record().expect("record")
+    ));
+    assert_eq!(world.ready(), Some(pair("True", "Available")));
+    assert_eq!(world.cluster.applies(), 2);
+}
+
 #[tokio::test]
 async fn adds_its_finalizer_before_touching_the_provider() {
     let world = world(www(for_provider(

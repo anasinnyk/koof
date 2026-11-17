@@ -29,7 +29,7 @@ Prefixed with the kind's API group, e.g. `zones.cloudflare.kube.nas1k.dev/`.
 
 | Annotation | |
 |---|---|
-| `external-name` | ID of the external resource; set after a create, or by you to import |
+| `external-name` | ID of the external resource; set after a create, or by you to import. Co-owned by the field manager `koof-<provider>` once the resource is observed |
 | `external-create-pending` | A create was sent at this time |
 | `external-create-succeeded` | The create succeeded at this time |
 | `external-create-failed` | The create failed at this time |
@@ -50,7 +50,7 @@ and `kind`:
 |---|---|
 | `koof_reconcile_total` | Reconciles by result |
 | `koof_reconcile_duration_seconds` | Reconcile duration |
-| `koof_actions_total` | Creates, updates, deletes, orphans |
+| `koof_actions_total` | Creates, updates, deletes, orphans; `action="external_name_owned"` when koof takes co-ownership of an external name |
 | `koof_drift_detected_total` | Reconciles that found drift |
 | `koof_late_initialized_total` | Late initializations |
 | `koof_external_requests_total` | Provider API requests by operation and status class |

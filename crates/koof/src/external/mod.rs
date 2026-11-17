@@ -6,6 +6,7 @@ use crate::{
     controller::{
         ControllerContext,
         create_state::{self, CREATE_FAILED, CREATE_PENDING, CREATE_SUCCEEDED},
+        external_name,
     },
     error::{ReconcileError, ResolveValueError},
     resource::{EXTERNAL_NAME, ManagedResource, ObserveDescriptor, OperationDescriptor},
@@ -230,20 +231,28 @@ pub async fn create<R: ManagedResource>(
         })?;
 
     tracing::info!(%external_name, "recording the external name of the created resource");
-    create_state::record(
-        &context.kube_client,
-        &resource,
-        &[
-            (EXTERNAL_NAME, Some(external_name.clone())),
-            (CREATE_SUCCEEDED, Some(create_state::now())),
-        ],
-    )
-    .await
-    .map_err(|source| ReconcileError::CreateNotRecorded {
-        external_name: external_name.clone(),
-        annotation: descriptor.annotation(EXTERNAL_NAME),
-        source: Box::new(source),
-    })?;
+    let recorded = async {
+        external_name::record(
+            &context.kube_client,
+            &resource,
+            &context.field_manager,
+            &external_name,
+        )
+        .await?;
+        create_state::record(
+            &context.kube_client,
+            &resource,
+            &[(CREATE_SUCCEEDED, Some(create_state::now()))],
+        )
+        .await
+    };
+    recorded
+        .await
+        .map_err(|source| ReconcileError::CreateNotRecorded {
+            external_name: external_name.clone(),
+            annotation: descriptor.annotation(EXTERNAL_NAME),
+            source: Box::new(source),
+        })?;
     Ok(external_name)
 }
 

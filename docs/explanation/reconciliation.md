@@ -29,6 +29,24 @@ koof calls the `observe` operation and the result is one of two states:
   external name before the first create), no item of a list response matches
   `response.match`, or the `response.deletedWhen` field is set (soft-deleted).
 
+Once the resource exists, koof co-owns the `external-name` annotation through
+[server-side apply](https://kubernetes.io/docs/reference/using-api/server-side-apply/)
+with the field manager `koof-<provider>`. An apply that names only the object and
+that one annotation, without forcing, sends nothing else and takes no field from
+another manager. When the object's `managedFields` already show that ownership,
+nothing is sent. The external name of a resource that koof created is written the
+same way.
+
+This matters for imports from GitOps. A manifest applied server-side with the
+annotation (Flux, a flux-operator `ResourceSet`, `kubectl apply --server-side`)
+is the only owner of it at first. Without a second owner, removing the annotation
+from the source would remove it from the object, and koof would try to create the
+resource again. Once the import is `Ready`, the annotation can be dropped from the
+source: it stays on the object. To change it, apply the new value with
+`--force-conflicts` (Flux forces by default). koof does not reclaim the old value; on
+its next observe it co-owns the new one. To remove it for good, use
+`kubectl annotate <object> <group>/external-name-`.
+
 Path parameters, credentials and request bodies are resolved first. A reference
 to an object that is not `Ready` yet is not an error: the reconcile waits and tries
 again. References in list items (`itemReferences`) are resolved the same way: the
@@ -72,8 +90,9 @@ group):
 1. `external-create-pending` is set to the current time, guarded by
    `resourceVersion`.
 2. The `create` request is sent.
-3. On success, the new ID from `result.identifiers` goes to `external-name` and
-   `external-create-succeeded` is set. On a failure that proves nothing was
+3. On success, the new ID from `result.identifiers` goes to `external-name`
+   (server-side apply, see [Observe](#observe)) and `external-create-succeeded` is
+   set. On a failure that proves nothing was
    created (a `4xx`, or no connection at all), `external-create-failed` is set.
 
 ```mermaid
@@ -85,7 +104,7 @@ sequenceDiagram
     C->>A: create
     alt created
         A-->>C: 2xx with the new ID
-        C->>K: set external-name and external-create-succeeded
+        C->>K: apply external-name, set external-create-succeeded
     else nothing was created
         A-->>C: 4xx, or no connection
         C->>K: set external-create-failed

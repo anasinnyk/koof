@@ -50,6 +50,40 @@ pub async fn patch_guarded<R: ManagedResource>(
     patch(client, resource, &changes).await
 }
 
+/// Server-side applies one annotation as `manager`, without forcing: the body
+/// names only the object and the annotation, so no other field changes owner.
+///
+/// # Errors
+///
+/// Returns [`ReconcileError`] when the apply fails (a conflict when another
+/// manager owns a different value) or the result does not decode as `R`.
+pub async fn apply_annotation<R: ManagedResource>(
+    client: &kube::Client,
+    resource: &R,
+    manager: &str,
+    key: &str,
+    value: &str,
+) -> Result<R, ReconcileError> {
+    let api_resource = (R::descriptor().api_resource)();
+    let name = kube::ResourceExt::name_any(resource);
+    let mut metadata = serde_json::json!({
+        "name": name,
+        "annotations": { key: value },
+    });
+    if let Some(namespace) = kube::ResourceExt::namespace(resource) {
+        metadata["namespace"] = Value::String(namespace);
+    }
+    let body = serde_json::json!({
+        "apiVersion": api_resource.api_version,
+        "kind": api_resource.kind,
+        "metadata": metadata,
+    });
+    let object = api(client, resource)
+        .patch(&name, &PatchParams::apply(manager), &Patch::Apply(&body))
+        .await?;
+    Ok(serde_json::from_value(serde_json::to_value(object)?)?)
+}
+
 /// Patches the status subresource.
 ///
 /// # Errors

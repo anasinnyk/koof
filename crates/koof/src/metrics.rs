@@ -118,7 +118,7 @@ impl Metrics {
         );
         registry.register(
             "actions",
-            "External create / update / delete / orphan actions",
+            "External create / update / delete / orphan actions and external name ownership",
             actions.clone(),
         );
         registry.register(

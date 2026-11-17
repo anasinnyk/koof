@@ -127,8 +127,9 @@ impl App {
             None
         };
         let leading = Arc::new(AtomicBool::new(elector.is_none()));
+        let field_manager = format!("koof-{}", self.provider.name);
         let reporter = Reporter {
-            controller: format!("koof-{}", self.provider.name),
+            controller: field_manager.clone(),
             instance: config.pod_name.clone(),
         };
         let metrics = Arc::new(Metrics::new());
@@ -146,7 +147,8 @@ impl App {
                 descriptors.clone(),
                 config.concurrency,
             )
-            .with_resync(config.resync_interval),
+            .with_resync(config.resync_interval)
+            .with_field_manager(field_manager),
         );
 
         let kinds: Vec<GroupKind> = descriptors

@@ -21,6 +21,7 @@ pub struct ControllerContext {
     pub descriptors: Vec<&'static ResourceDescriptor>,
     pub concurrency: u16,
     pub resync: Duration,
+    pub field_manager: String,
 }
 
 impl ControllerContext {
@@ -44,6 +45,7 @@ impl ControllerContext {
             descriptors,
             concurrency,
             resync: DEFAULT_RESYNC,
+            field_manager: DEFAULT_FIELD_MANAGER.to_owned(),
         }
     }
 
@@ -52,9 +54,19 @@ impl ControllerContext {
     pub fn with_resync(self, resync: Duration) -> Self {
         Self { resync, ..self }
     }
+
+    /// Server-side apply field manager that co-owns the external name annotation.
+    #[must_use]
+    pub fn with_field_manager(self, field_manager: impl Into<String>) -> Self {
+        Self {
+            field_manager: field_manager.into(),
+            ..self
+        }
+    }
 }
 
 pub const DEFAULT_RESYNC: Duration = Duration::from_mins(5);
+pub const DEFAULT_FIELD_MANAGER: &str = "koof";
 
 #[derive(Debug, Default)]
 pub struct Backoff {

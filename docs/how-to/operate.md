@@ -23,6 +23,11 @@ spec:
 The annotation prefix is the API group of the kind. Once `Ready` is `True`, widen
 `managementPolicies` (for example to `["*"]`) to let koof manage it.
 
+Once the object is `Ready`, koof co-owns the annotation (server-side apply, field
+manager `koof-<provider>`). The ID can then be dropped from a manifest applied
+server-side (Flux, `ResourceSet`, `kubectl apply --server-side`): the annotation
+stays on the object. See [external name ownership](../explanation/reconciliation.md#observe).
+
 ## Keep the external resource when deleting the object
 
 ```yaml

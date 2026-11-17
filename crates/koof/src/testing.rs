@@ -348,10 +348,13 @@ pub fn kubernetes(objects: &[Value]) -> kube::Client {
 /// An in-memory Kubernetes API: get, list (per namespace or across namespaces),
 /// create, merge-patch and JSON-patch of objects and their status, with
 /// `resourceVersion` conflicts and deletion once the last finalizer is gone.
+/// A server-side apply merges its annotations and records them in `managedFields`
+/// for its field manager.
 #[derive(Clone, Default)]
 pub struct Cluster {
     objects: Arc<Mutex<BTreeMap<String, Value>>>,
     version: Arc<AtomicU64>,
+    applies: Arc<AtomicU64>,
 }
 
 #[cfg_attr(not(feature = "fake"), allow(dead_code))]
@@ -387,8 +390,15 @@ impl Cluster {
                 {
                     std::future::pending::<()>().await;
                 }
-                let (status, body) =
-                    cluster.handle(&parts.method, parts.uri.path(), &content_type, &body);
+                let (status, body) = if content_type.contains("apply-patch") {
+                    cluster.apply(
+                        parts.uri.path(),
+                        parts.uri.query().unwrap_or_default(),
+                        &body,
+                    )
+                } else {
+                    cluster.handle(&parts.method, parts.uri.path(), &content_type, &body)
+                };
                 let mut response =
                     http::Response::new(Body::from(serde_json::to_vec(&body).unwrap_or_default()));
                 *response.status_mut() = http::StatusCode::from_u16(status).unwrap_or_default();
@@ -428,6 +438,53 @@ impl Cluster {
         } else {
             objects.remove(&path);
         }
+    }
+
+    /// Number of server-side apply requests served.
+    pub fn applies(&self) -> u64 {
+        self.applies.load(Ordering::Relaxed)
+    }
+
+    fn apply(&self, path: &str, query: &str, body: &[u8]) -> (u16, Value) {
+        self.applies.fetch_add(1, Ordering::Relaxed);
+        let Some(manager) = query
+            .split('&')
+            .find_map(|pair| pair.strip_prefix("fieldManager="))
+        else {
+            return status(422, "Invalid");
+        };
+        let changes: Value = serde_json::from_slice(body).unwrap_or(Value::Null);
+        let annotations = changes["metadata"]["annotations"].clone();
+        let owned: serde_json::Map<String, Value> = annotations
+            .as_object()
+            .into_iter()
+            .flatten()
+            .map(|(key, _)| (format!("f:{key}"), json!({})))
+            .collect();
+        let entry = json!({
+            "manager": manager,
+            "operation": "Apply",
+            "fieldsType": "FieldsV1",
+            "fieldsV1": { "f:metadata": { "f:annotations": owned } },
+        });
+        let mut objects = self.lock();
+        let Some(object) = objects.get_mut(path) else {
+            return status(404, "NotFound");
+        };
+        json_patch::merge(
+            &mut object["metadata"],
+            &json!({ "annotations": annotations }),
+        );
+        let mut entries: Vec<Value> = object["metadata"]["managedFields"]
+            .as_array()
+            .cloned()
+            .unwrap_or_default();
+        entries
+            .retain(|existing| existing["manager"] != manager || existing["operation"] != "Apply");
+        entries.push(entry);
+        object["metadata"]["managedFields"] = Value::Array(entries);
+        object["metadata"]["resourceVersion"] = json!(self.next_version());
+        (200, object.clone())
     }
 
     /// `(reason, note)` of every published event, oldest first.
