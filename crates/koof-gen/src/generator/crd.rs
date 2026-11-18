@@ -43,6 +43,21 @@ pub fn generate_spec(
     if let Some(credentials) = credential_field(resource)? {
         fields.push(credentials);
     }
+    let connection_secret = (!resource.connection_secret.is_empty()).then(|| {
+        let reference = if resource.namespaced {
+            quote!(koof::reference::SecretReference)
+        } else {
+            quote!(koof::reference::ClusterSecretReference)
+        };
+        quote! {
+            #[serde(
+                rename = "writeConnectionSecretToRef",
+                default,
+                skip_serializing_if = "Option::is_none"
+            )]
+            pub write_connection_secret_to_ref: Option<#reference>,
+        }
+    });
 
     Ok(quote! {
         /// CRD schema of `spec.forProvider`: unions flattened for kube, then the
@@ -91,6 +106,8 @@ pub fn generate_spec(
         pub struct #spec_ident {
             #[serde(rename = "forProvider")]
             pub for_provider: #for_provider_ident,
+
+            #connection_secret
 
             #[serde(flatten)]
             pub management:
@@ -145,12 +162,39 @@ fn validation_tokens(resource: &Resource<'_>) -> Vec<TokenStream> {
         .map(|rule| validation(&rule.rule, &rule.message, &rule.field))
         .collect();
     for item_reference in &resource.item_references {
-        let (into, field) = (item_reference.into, item_reference.field);
-        tokens.push(validation(
-            &format!("has(self.{into}) != has(self.{field})"),
-            &format!("set exactly one of {into} and {field}"),
-            &format!("{}[]", item_reference.list),
-        ));
+        let into = item_reference.into.split('.').next().unwrap_or_default();
+        let field = item_reference.field;
+        let list = format!("{}[]", item_reference.list);
+        if item_reference.union {
+            tokens.push(validation(
+                &format!("!(has(self.{into}) && has(self.{field}))"),
+                &format!("set at most one of {into} and {field}"),
+                &list,
+            ));
+        } else {
+            tokens.push(validation(
+                &format!("has(self.{into}) != has(self.{field})"),
+                &format!("set exactly one of {into} and {field}"),
+                &list,
+            ));
+        }
+    }
+    for secret_value in resource.secret_values {
+        let field = &secret_value.field;
+        let objects = secret_value.objects.join(".");
+        if secret_value.required {
+            tokens.push(validation(
+                &format!("has(self.{field}) != has(self.{field}From)"),
+                &format!("set exactly one of {field} and {field}From"),
+                &objects,
+            ));
+        } else {
+            tokens.push(validation(
+                &format!("!(has(self.{field}) && has(self.{field}From))"),
+                &format!("set at most one of {field} and {field}From"),
+                &objects,
+            ));
+        }
     }
     for field in immutable_fields(resource) {
         let (parent, leaf) = field.rsplit_once('.').unwrap_or(("", field));

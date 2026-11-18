@@ -9,6 +9,18 @@ What every generated kind has in common.
 | `forProvider` | | Desired state, sent to the provider API |
 | `managementPolicies` | `["*"]` | Allowed actions: `Observe` (required), `Create`, `Update`, `Delete`, `LateInitialize`, or `*` |
 | `deletionPolicy` | `Delete` | `Orphan` keeps the external resource when the object is deleted |
+| `writeConnectionSecretToRef` | | Kinds with connection details: `{name}` (`{name, namespace}` for a cluster-scoped kind) of a Secret the controller creates, owned by the object, and keeps up to date |
+
+A field that can come from a Secret has a sibling `<field>From.secretKeyRef:
+{name, key}` naming a key of a Secret in the same namespace; the value is read
+before every create and update, and is not compared with the provider's (which is
+usually empty or masked), so changing the Secret takes effect with the next update.
+
+The connection Secret receives the keys listed on the kind's page, from the
+create response and every observation. A key the API returns only on create (a
+client secret) is kept by later observations, and is unknown for an imported
+resource. The controller refuses to write to a Secret that another object owns.
+With such kinds the controller may create and patch Secrets.
 
 A reference is `{name}` in the same namespace. A reference that can point to a
 cluster-scoped kind also takes `kind`, and `apiVersion` when the kind exists in

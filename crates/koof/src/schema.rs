@@ -310,6 +310,14 @@ fn node_mut<'a>(
 ) -> Option<&'a mut Map<String, Value>> {
     let mut current = root;
     for segment in path.split('.').filter(|segment| !segment.is_empty()) {
+        if segment == "*" {
+            current = match current.get("additionalProperties") {
+                Some(Value::Object(_)) => current.get_mut("additionalProperties"),
+                _ => current.get_mut("items"),
+            }?
+            .as_object_mut()?;
+            continue;
+        }
         let (name, items) = segment
             .strip_suffix("[]")
             .map_or((segment, false), |name| (name, true));
@@ -442,6 +450,33 @@ mod tests {
         assert_eq!(
             schema.pointer("/properties/teams/items/x-kubernetes-validations/0/rule"),
             Some(&json!("has(self.slug) != has(self.teamRef)"))
+        );
+    }
+
+    #[test]
+    fn validations_of_map_values_and_list_items_are_attached_by_wildcard() {
+        let mut schema = schemars::Schema::try_from(json!({
+            "type": "object",
+            "properties": {
+                "env": { "type": "object", "additionalProperties": { "type": "object" } },
+                "rules": { "type": "array", "items": { "type": "object" } },
+            },
+        }))
+        .expect("schema");
+        let validation = |field| Validation {
+            rule: "!(has(self.value) && has(self.valueFrom))",
+            message: "set at most one of value and valueFrom",
+            field,
+        };
+        add_validations(&mut schema, &[validation("env.*"), validation("rules.*")]);
+        let schema = schema.to_value();
+        assert_eq!(
+            [
+                "/properties/env/additionalProperties/x-kubernetes-validations/0/rule",
+                "/properties/rules/items/x-kubernetes-validations/0/rule",
+            ]
+            .map(|pointer| schema.pointer(pointer).is_some()),
+            [true, true]
         );
     }
 

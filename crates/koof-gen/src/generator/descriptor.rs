@@ -22,55 +22,8 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
         quote!((#identifier, #expression))
     });
 
-    let references = resource
-        .references
-        .iter()
-        .map(|reference| {
-            let reference_name = reference.name;
-            let from = pointer(reference.from);
-            let targets = reference
-                .targets
-                .iter()
-                .map(|target| {
-                    let module =
-                        module_path(reference.target_group, reference.target_version, target)?;
-                    Ok(quote!(&#module::DESCRIPTOR))
-                })
-                .collect::<Result<Vec<_>, GeneratorError>>()?;
-            Ok(quote! {
-                koof::resource::Reference::new(#reference_name, #from, &[#(#targets),*])
-            })
-        })
-        .collect::<Result<Vec<_>, GeneratorError>>()?;
-
-    let item_references = resource
-        .item_references
-        .iter()
-        .map(|item_reference| {
-            let module = module_path(
-                item_reference.target_group,
-                item_reference.target_version,
-                item_reference.target,
-            )?;
-            let list = pointer(&format!("spec.forProvider.{}", item_reference.list));
-            let from = pointer(item_reference.field);
-            let ItemReference {
-                name,
-                into,
-                identifier,
-                ..
-            } = item_reference;
-            Ok(quote! {
-                koof::resource::ItemReference::new(
-                    #list,
-                    koof::resource::Reference::new(#name, #from, &[&#module::DESCRIPTOR]),
-                    #into,
-                    #identifier,
-                )
-            })
-        })
-        .collect::<Result<Vec<_>, GeneratorError>>()?;
-
+    let references = reference_tokens(resource)?;
+    let item_references = item_reference_tokens(resource)?;
     let credentials = resource.credentials.as_ref().map(|credentials| {
         let credentials = credentials_tokens(credentials);
         quote!(.with_credentials(#credentials))
@@ -84,6 +37,7 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
             quote!((#field, &[#(#keys),*]))
         }),
     );
+    let (secret_values, connection_secret) = secret_tokens(resource);
     let references = slice_setter("with_references", references);
     let item_references = slice_setter("with_item_references", item_references);
     let observe = observe_descriptor(resource.observe);
@@ -113,11 +67,88 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
                 #list_map_keys
                 #references
                 #item_references
+                #secret_values
+                #connection_secret
                 #credentials
                 #create
                 #update
                 #delete;
     })
+}
+
+fn reference_tokens(resource: &Resource<'_>) -> Result<Vec<TokenStream>, GeneratorError> {
+    resource
+        .references
+        .iter()
+        .map(|reference| {
+            let reference_name = reference.name;
+            let from = pointer(reference.from);
+            let targets = reference
+                .targets
+                .iter()
+                .map(|target| {
+                    let module =
+                        module_path(reference.target_group, reference.target_version, target)?;
+                    Ok(quote!(&#module::DESCRIPTOR))
+                })
+                .collect::<Result<Vec<_>, GeneratorError>>()?;
+            Ok(quote! {
+                koof::resource::Reference::new(#reference_name, #from, &[#(#targets),*])
+            })
+        })
+        .collect()
+}
+
+fn item_reference_tokens(resource: &Resource<'_>) -> Result<Vec<TokenStream>, GeneratorError> {
+    resource
+        .item_references
+        .iter()
+        .map(|item_reference| {
+            let module = module_path(
+                item_reference.target_group,
+                item_reference.target_version,
+                item_reference.target,
+            )?;
+            let list = pointer(&format!("spec.forProvider.{}", item_reference.list));
+            let from = pointer(item_reference.field);
+            let into = pointer(item_reference.into);
+            let ItemReference {
+                name, identifier, ..
+            } = item_reference;
+            Ok(quote! {
+                koof::resource::ItemReference::new(
+                    #list,
+                    koof::resource::Reference::new(#name, #from, &[&#module::DESCRIPTOR]),
+                    #into,
+                    #identifier,
+                )
+            })
+        })
+        .collect()
+}
+
+fn secret_tokens(resource: &Resource<'_>) -> (Option<TokenStream>, Option<TokenStream>) {
+    let secret_values = slice_setter(
+        "with_secret_values",
+        resource.secret_values.iter().map(|secret_value| {
+            let objects = jsonptr::PointerBuf::from_tokens(
+                std::iter::once("spec")
+                    .chain(std::iter::once("forProvider"))
+                    .chain(secret_value.objects.iter().map(String::as_str)),
+            )
+            .to_string();
+            let field = &secret_value.field;
+            quote!(koof::resource::SecretValue::new(#objects, #field))
+        }),
+    );
+    let connection_secret = slice_setter(
+        "with_connection_secret",
+        resource.connection_secret.iter().map(|(key, path)| {
+            let path = pointer(path);
+            quote!((#key, #path))
+        }),
+    );
+    (secret_values, connection_secret)
 }
 
 fn slice_setter<T: ToTokens>(

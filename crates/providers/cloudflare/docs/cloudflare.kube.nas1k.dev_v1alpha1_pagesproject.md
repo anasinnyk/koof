@@ -32,7 +32,6 @@ spec:
         build_image_major_version: 0
         compatibility_date: <compatibility_date>
         compatibility_flags: []
-        env_vars: {}
         fail_open: false
         usage_model: "standard"
       production:
@@ -40,7 +39,6 @@ spec:
         build_image_major_version: 0
         compatibility_date: <compatibility_date>
         compatibility_flags: []
-        env_vars: {}
         fail_open: false
         usage_model: "standard"
     name: <name>
@@ -75,7 +73,7 @@ spec:
 | `forProvider.deployment_configs.preview.compatibility_flags` | []string | yes | Compatibility flags used for Pages Functions. |
 | `forProvider.deployment_configs.preview.d1_databases` | map[string]object |  | D1 databases used for Pages Functions. |
 | `forProvider.deployment_configs.preview.durable_object_namespaces` | map[string]object |  | Durable Object namespaces used for Pages Functions. |
-| `forProvider.deployment_configs.preview.env_vars` | map[string]object | yes | Environment variables used for builds and Pages Functions. |
+| `forProvider.deployment_configs.preview.env_vars` | map[string]object |  | Environment variables used for builds and Pages Functions. |
 | `forProvider.deployment_configs.preview.fail_open` | boolean | yes | Whether to fail open when the deployment config cannot be applied. |
 | `forProvider.deployment_configs.preview.hyperdrive_bindings` | map[string]object |  | Hyperdrive bindings used for Pages Functions. |
 | `forProvider.deployment_configs.preview.kv_namespaces` | map[string]object |  | KV namespaces used for Pages Functions. |
@@ -100,7 +98,7 @@ spec:
 | `forProvider.deployment_configs.production.compatibility_flags` | []string | yes | Compatibility flags used for Pages Functions. |
 | `forProvider.deployment_configs.production.d1_databases` | map[string]object |  | D1 databases used for Pages Functions. |
 | `forProvider.deployment_configs.production.durable_object_namespaces` | map[string]object |  | Durable Object namespaces used for Pages Functions. |
-| `forProvider.deployment_configs.production.env_vars` | map[string]object | yes | Environment variables used for builds and Pages Functions. |
+| `forProvider.deployment_configs.production.env_vars` | map[string]object |  | Environment variables used for builds and Pages Functions. |
 | `forProvider.deployment_configs.production.fail_open` | boolean | yes | Whether to fail open when the deployment config cannot be applied. |
 | `forProvider.deployment_configs.production.hyperdrive_bindings` | map[string]object |  | Hyperdrive bindings used for Pages Functions. |
 | `forProvider.deployment_configs.production.kv_namespaces` | map[string]object |  | KV namespaces used for Pages Functions. |

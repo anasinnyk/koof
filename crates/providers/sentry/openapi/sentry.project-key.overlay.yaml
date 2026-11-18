@@ -27,6 +27,20 @@ actions:
             type: related
             via: [project, organization]
 
+        # The DSNs of the key, for the applications that report to the project.
+        connectionSecret:
+          dsn: dsn.public
+          dsn_secret: dsn.secret
+          dsn_csp: dsn.csp
+          dsn_security: dsn.security
+          dsn_minidump: dsn.minidump
+          dsn_unreal: dsn.unreal
+          dsn_crons: dsn.crons
+          dsn_otlp_traces: dsn.otlp_traces
+          dsn_otlp_logs: dsn.otlp_logs
+          public_key: public
+          secret_key: secret
+
         fields:
           mode: all
 

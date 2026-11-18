@@ -8,7 +8,8 @@ use super::{
     resolve_ref, schema_ref_name, schemas_mut, success_json_schema,
 };
 use crate::ir::{
-    FieldPath, ItemReferenceIr, ListMapIr, ResourceFields, ResourceName, synthesized_schema,
+    FieldPath, ItemReferenceIr, ListMapIr, ResourceFields, ResourceName, SecretValueIr,
+    synthesized_schema,
 };
 use serde_json::{Map, Value, json};
 use std::collections::{BTreeMap, BTreeSet};
@@ -79,44 +80,205 @@ pub fn synthesize(
         target.insert(name, schema);
     }
 
+    let mut union_items: BTreeMap<&ResourceName, BTreeSet<String>> = BTreeMap::new();
     for (name, root) in &roots {
         for (reference, item_reference) in &item_references[name] {
-            add_item_reference(target, root, item_reference, &kinds).map_err(|message| {
-                SpecError::Resource {
-                    resource: name.0.clone(),
-                    message: format!("itemReferences.{reference}: {message}"),
-                }
-            })?;
+            let union =
+                add_item_reference(target, root, item_reference, &kinds).map_err(|message| {
+                    SpecError::Resource {
+                        resource: name.0.clone(),
+                        message: format!("itemReferences.{reference}: {message}"),
+                    }
+                })?;
+            if let Some(list) = union {
+                union_items.entry(name).or_default().insert(list);
+            }
         }
     }
 
     roots
-        .into_iter()
+        .iter()
         .map(|(name, root)| {
-            let filled = item_references[&name]
+            let filled = item_references[name]
                 .values()
                 .filter_map(|reference| {
                     let (list, _) = reference.list_and_field()?;
-                    Some((list.to_owned(), reference.into.clone()))
+                    Some((list.to_owned(), reference.into_field().to_owned()))
                 })
                 .collect();
-            let fields = resource_fields(target, &root, &name, &filled)?;
-            Ok((name, fields))
+            let mut fields = resource_fields(target, root, name, &filled)?;
+            fields.secret_values = add_secret_values(target, root)?;
+            fields.union_items = union_items.remove(name).unwrap_or_default();
+            Ok((name.clone(), fields))
         })
         .collect()
 }
 
+/// Adds `<field>From.secretKeyRef` next to each property marked
+/// `x-kube-field.secretKeyRef` in the `forProvider` schema `root`, inlining the
+/// `$ref`s on the way, and makes the property optional. Returns where they are.
+fn add_secret_values(
+    schemas: &mut Map<String, Value>,
+    root: &str,
+) -> Result<Vec<SecretValueIr>, SpecError> {
+    let snapshot = schemas.clone();
+    let objects: Vec<String> = match snapshot.get(root).and_then(|root| root.get("oneOf")) {
+        Some(Value::Array(variants)) => variants.iter().filter_map(schema_ref_name).collect(),
+        _ => vec![root.to_owned()],
+    };
+    let mut found = Vec::new();
+    for object in objects {
+        if let Some(schema) = schemas.get_mut(&object) {
+            let mut walk = SecretWalk {
+                schemas: &snapshot,
+                path: Vec::new(),
+                visiting: BTreeSet::new(),
+                found: &mut found,
+            };
+            walk.visit(schema, &object)?;
+        }
+    }
+    found.sort();
+    found.dedup();
+    Ok(found)
+}
+
+struct SecretWalk<'a> {
+    schemas: &'a Map<String, Value>,
+    path: Vec<String>,
+    visiting: BTreeSet<String>,
+    found: &'a mut Vec<SecretValueIr>,
+}
+
+impl SecretWalk<'_> {
+    fn visit(&mut self, schema: &mut Value, location: &str) -> Result<(), SpecError> {
+        if let Some(name) = schema_ref_name(schema) {
+            if !has_marked(
+                self.schemas,
+                schema,
+                location,
+                &mut BTreeSet::new(),
+                secret_key_ref,
+            )? || !self.visiting.insert(name.clone())
+            {
+                return Ok(());
+            }
+            *schema = resolve_ref(self.schemas, schema).clone();
+            self.visit(schema, location)?;
+            self.visiting.remove(&name);
+            return Ok(());
+        }
+        let Some(object) = schema.as_object_mut() else {
+            return Ok(());
+        };
+        self.add_sources(object, location)?;
+        if let Some(properties) = object.get_mut("properties").and_then(Value::as_object_mut) {
+            for (name, property) in properties.iter_mut() {
+                self.path.push(name.clone());
+                self.visit(property, &format!("{location}.{name}"))?;
+                self.path.pop();
+            }
+        }
+        for keyword in ["items", "additionalProperties"] {
+            if let Some(nested) = object.get_mut(keyword) {
+                self.path.push("*".to_owned());
+                self.visit(nested, location)?;
+                self.path.pop();
+            }
+        }
+        for keyword in ["allOf", "anyOf", "oneOf"] {
+            for variant in object
+                .get_mut(keyword)
+                .and_then(Value::as_array_mut)
+                .into_iter()
+                .flatten()
+            {
+                self.visit(variant, location)?;
+            }
+        }
+        Ok(())
+    }
+
+    fn add_sources(
+        &mut self,
+        object: &mut Map<String, Value>,
+        location: &str,
+    ) -> Result<(), SpecError> {
+        let Some(properties) = object.get("properties").and_then(Value::as_object) else {
+            return Ok(());
+        };
+        let mut marked = Vec::new();
+        for (name, property) in properties {
+            if is_marked(
+                self.schemas,
+                property,
+                &format!("{location}.{name}"),
+                secret_key_ref,
+            )? {
+                marked.push(name.clone());
+            }
+        }
+        for field in marked {
+            let required = match object.get_mut("required").and_then(Value::as_array_mut) {
+                Some(required) => {
+                    let before = required.len();
+                    required.retain(|name| name != field.as_str());
+                    required.len() < before
+                }
+                None => false,
+            };
+            if let Some(Value::Object(properties)) = object.get_mut("properties") {
+                properties.insert(format!("{field}From"), secret_source(&field));
+            }
+            self.found.push(SecretValueIr {
+                objects: self.path.clone(),
+                field,
+                required,
+            });
+        }
+        Ok(())
+    }
+}
+
+fn secret_source(field: &str) -> Value {
+    json!({
+        "type": "object",
+        "description": format!("Reads `{field}` from a Secret instead."),
+        "required": ["secretKeyRef"],
+        "properties": {
+            "secretKeyRef": {
+                "type": "object",
+                "description": "A key of a Secret in the namespace of the resource.",
+                "required": ["name", "key"],
+                "properties": {
+                    "name": { "type": "string" },
+                    "key": { "type": "string" },
+                },
+            },
+        },
+    })
+}
+
+fn secret_key_ref(field: &FieldExtension) -> bool {
+    field.secret_key_ref
+}
+
+fn sensitive(field: &FieldExtension) -> bool {
+    field.sensitive
+}
+
 /// Adds the reference field of `item_reference` to the items of its list in the
-/// `forProvider` schema `root` (in each union variant that has the list), and makes
-/// the field it fills optional.
+/// `forProvider` schema `root` (in each union variant that has the list): when the
+/// items are a union, as one more variant; otherwise next to the field it fills,
+/// which becomes optional. Returns the list when its items are a union.
 fn add_item_reference(
     schemas: &mut Map<String, Value>,
     root: &str,
     item_reference: &ItemReferenceIr,
     kinds: &BTreeMap<ResourceName, String>,
-) -> Result<(), String> {
+) -> Result<Option<String>, String> {
     let Some((list, field)) = item_reference.list_and_field() else {
-        return Ok(());
+        return Ok(None);
     };
     let kind = kinds
         .get(&item_reference.target)
@@ -126,6 +288,7 @@ fn add_item_reference(
         Some(Value::Array(variants)) => variants.iter().filter_map(schema_ref_name).collect(),
         _ => vec![root.to_owned()],
     };
+    let into = item_reference.into_field();
     let reference = json!({
         "type": "object",
         "description": format!(
@@ -137,6 +300,7 @@ fn add_item_reference(
         "properties": { "name": { "type": "string" } },
     });
     let mut found = false;
+    let mut union = false;
     for object in objects {
         let Some(property) = schemas
             .get_mut(&object)
@@ -152,25 +316,46 @@ fn add_item_reference(
         *items = resolve_ref(&snapshot, items).clone();
         let items = items
             .as_object_mut()
-            .filter(|items| {
-                items
-                    .get("properties")
-                    .and_then(Value::as_object)
-                    .is_some_and(|properties| properties.contains_key(&item_reference.into))
-            })
-            .ok_or_else(|| format!("the items of {list} have no field {}", item_reference.into))?;
+            .ok_or_else(|| format!("the items of {list} are not objects"))?;
+        if let Some(Value::Array(variants)) = items.get_mut("oneOf") {
+            let has_into = variants.iter().any(|variant| {
+                resolve_ref(&snapshot, variant)
+                    .pointer(&format!("/properties/{into}"))
+                    .is_some()
+            });
+            if !has_into {
+                return Err(format!(
+                    "no variant of the items of {list} has field {into}"
+                ));
+            }
+            let mut properties = Map::new();
+            properties.insert(field.to_owned(), reference.clone());
+            variants.push(json!({
+                "type": "object",
+                "required": [field],
+                "properties": properties,
+            }));
+            union = true;
+            continue;
+        }
+        if !items
+            .get("properties")
+            .and_then(Value::as_object)
+            .is_some_and(|properties| properties.contains_key(into))
+        {
+            return Err(format!("the items of {list} have no field {into}"));
+        }
         if let Some(Value::Array(required)) = items.get_mut("required") {
-            required.retain(|name| name != item_reference.into.as_str());
+            required.retain(|name| name != into);
         }
         if let Some(Value::Object(properties)) = items.get_mut("properties") {
             properties.insert(field.to_owned(), reference.clone());
         }
     }
-    if found {
-        Ok(())
-    } else {
-        Err(format!("{list} is not a forProvider field"))
+    if !found {
+        return Err(format!("{list} is not a forProvider field"));
     }
+    Ok(union.then(|| list.to_owned()))
 }
 
 fn resource_fields(
@@ -493,7 +678,7 @@ fn without_sensitive(
     visiting: &mut BTreeSet<String>,
 ) -> Result<(), SpecError> {
     if let Some(name) = schema_ref_name(schema) {
-        if !has_sensitive(schemas, schema, location, &mut BTreeSet::new())?
+        if !has_marked(schemas, schema, location, &mut BTreeSet::new(), sensitive)?
             || !visiting.insert(name.clone())
         {
             return Ok(());
@@ -507,20 +692,20 @@ fn without_sensitive(
         return Ok(());
     };
     if let Some(properties) = object.get_mut("properties").and_then(Value::as_object_mut) {
-        let mut sensitive = Vec::new();
+        let mut marked = Vec::new();
         for (name, property) in properties.iter() {
-            if is_sensitive(schemas, property, &format!("{location}.{name}"))? {
-                sensitive.push(name.clone());
+            if is_marked(schemas, property, &format!("{location}.{name}"), sensitive)? {
+                marked.push(name.clone());
             }
         }
-        for name in &sensitive {
+        for name in &marked {
             properties.remove(name);
         }
         for (name, property) in properties.iter_mut() {
             without_sensitive(schemas, property, &format!("{location}.{name}"), visiting)?;
         }
         if let Some(required) = object.get_mut("required").and_then(Value::as_array_mut) {
-            required.retain(|name| !sensitive.iter().any(|sensitive| name == sensitive));
+            required.retain(|name| !marked.iter().any(|marked| name == marked));
         }
     }
     for keyword in ["items", "additionalProperties"] {
@@ -541,17 +726,24 @@ fn without_sensitive(
     Ok(())
 }
 
-fn has_sensitive(
+fn has_marked(
     schemas: &Map<String, Value>,
     schema: &Value,
     location: &str,
     visiting: &mut BTreeSet<String>,
+    flag: fn(&FieldExtension) -> bool,
 ) -> Result<bool, SpecError> {
     if let Some(name) = schema_ref_name(schema) {
         if !visiting.insert(name.clone()) {
             return Ok(false);
         }
-        return has_sensitive(schemas, resolve_ref(schemas, schema), location, visiting);
+        return has_marked(
+            schemas,
+            resolve_ref(schemas, schema),
+            location,
+            visiting,
+            flag,
+        );
     }
     for (name, property) in schema
         .get("properties")
@@ -560,8 +752,8 @@ fn has_sensitive(
         .flatten()
     {
         let location = format!("{location}.{name}");
-        if is_sensitive(schemas, property, &location)?
-            || has_sensitive(schemas, property, &location, visiting)?
+        if is_marked(schemas, property, &location, flag)?
+            || has_marked(schemas, property, &location, visiting, flag)?
         {
             return Ok(true);
         }
@@ -576,20 +768,21 @@ fn has_sensitive(
                 .flatten(),
         );
     for schema in nested {
-        if has_sensitive(schemas, schema, location, visiting)? {
+        if has_marked(schemas, schema, location, visiting, flag)? {
             return Ok(true);
         }
     }
     Ok(false)
 }
 
-fn is_sensitive(
+fn is_marked(
     schemas: &Map<String, Value>,
     property: &Value,
     location: &str,
+    flag: fn(&FieldExtension) -> bool,
 ) -> Result<bool, SpecError> {
     for schema in [property, resolve_ref(schemas, property)] {
-        if FieldExtension::of(schema, location)?.sensitive {
+        if flag(&FieldExtension::of(schema, location)?) {
             return Ok(true);
         }
     }

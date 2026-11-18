@@ -1,6 +1,6 @@
 use super::{
-    CredentialSourceIr, HttpIr, ListMapIr, OperationId, OperationIr, ResourceName, TestIr,
-    ValidationIr, ValueExpr,
+    CredentialSourceIr, HttpIr, ListMapIr, OperationId, OperationIr, ResourceName, SecretValueIr,
+    TestIr, ValidationIr, ValueExpr,
 };
 use std::collections::BTreeMap;
 
@@ -26,6 +26,9 @@ pub struct Resource<'a> {
     pub references: Vec<Reference<'a>>,
     pub item_references: Vec<ItemReference<'a>>,
     pub credentials: Option<Credentials<'a>>,
+    /// Secret keys and the dotted paths of their values in the external resource.
+    pub connection_secret: &'a BTreeMap<String, String>,
+    pub secret_values: &'a [SecretValueIr],
     pub validations: &'a [ValidationIr],
     pub immutable: &'a [String],
     pub late_initialize: &'a [String],
@@ -66,7 +69,11 @@ pub struct ItemReference<'a> {
     pub name: &'a str,
     pub list: &'a str,
     pub field: &'a str,
+    /// Dotted path in the item.
     pub into: &'a str,
+    /// Whether the items are a union: the reference is then one more variant
+    /// instead of an alternative to `into`.
+    pub union: bool,
     pub identifier: &'a str,
     pub target: &'a ResourceName,
     pub target_group: &'a str,

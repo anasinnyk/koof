@@ -12,12 +12,19 @@ use crate::{
     resource::{EXTERNAL_NAME, ManagedResource, ObserveDescriptor, OperationDescriptor},
 };
 use http::{Auth, HttpError, Operation};
-use resolve::{Node, resolve_credentials, resolve_value, with_item_references};
+use resolve::{Node, resolve_credentials, resolve_value, with_item_references, with_secret_values};
 use serde_json::Value;
 
 pub struct Observation {
     pub exists: bool,
     pub at_provider: Option<Value>,
+}
+
+/// A created external resource: its external name and, when the response holds it,
+/// the resource as the API returned it.
+pub struct Created {
+    pub external_name: String,
+    pub resource: Option<Value>,
 }
 
 struct Call {
@@ -170,7 +177,7 @@ fn observation(
 }
 
 /// Creates the external resource through `R::Create` and records its external name
-/// (bracketed by the bookkeeping of [`create_state`]). Returns the external name.
+/// (bracketed by the bookkeeping of [`create_state`]).
 ///
 /// # Errors
 ///
@@ -180,8 +187,8 @@ fn observation(
 pub async fn create<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
-) -> Result<String, ReconcileError> {
-    let node = with_item_references(&context.kube_client, &Node::of(resource)?).await?;
+) -> Result<Created, ReconcileError> {
+    let node = desired_request(context, resource).await?;
     let descriptor = node.descriptor;
     let create = descriptor
         .create
@@ -253,7 +260,22 @@ pub async fn create<R: ManagedResource>(
             annotation: descriptor.annotation(EXTERNAL_NAME),
             source: Box::new(source),
         })?;
-    Ok(external_name)
+    let resource = response
+        .as_ref()
+        .and_then(|body| resolve::non_null(body, create.operation.response_path))
+        .cloned();
+    Ok(Created {
+        external_name,
+        resource,
+    })
+}
+
+async fn desired_request<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+) -> Result<Node, ReconcileError> {
+    let node = with_item_references(&context.kube_client, &Node::of(resource)?).await?;
+    Ok(with_secret_values(&context.kube_client, &node).await?)
 }
 
 fn not_created(error: &HttpError) -> bool {
@@ -277,7 +299,7 @@ pub async fn update<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
 ) -> Result<(), ReconcileError> {
-    let node = with_item_references(&context.kube_client, &Node::of(resource)?).await?;
+    let node = desired_request(context, resource).await?;
     let descriptor = node.descriptor;
     let update = descriptor
         .update

@@ -1,0 +1,107 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare AccessServiceToken
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # Cloudflare returns client_secret only when the token is created (or rotated),
+  # so it reaches the connection Secret only for tokens this kind creates. An
+  # adopted token keeps its secret unknown: rotate it
+  # (POST .../service_tokens/{id}/rotate) and store the new one yourself, or
+  # create a new token.
+  - target: $.paths['/accounts/{account_id}/access/service_tokens'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: access_service_token
+        apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+        kind: AccessServiceToken
+
+        test:
+          forProvider:
+            name: koof e2e
+            duration: 8760h
+          update:
+            name: koof e2e renamed
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          account:
+            from: spec.forProvider.accountRef
+            target: account
+
+        credentials:
+          securityScheme: api_token
+          source:
+            type: related
+            via: [account]
+
+        connectionSecret:
+          client_id: client_id
+          client_secret: client_secret
+
+        # client_secret_version rotates the secret, whose new value only the
+        # rotation response holds; it is not managed.
+        fields:
+          mode: explicit
+          forProvider: [name, duration]
+          atProvider: [id, name, client_id, duration, expires_at, last_seen_at, created_at, updated_at]
+
+  - target: $.paths['/accounts/{account_id}/access/service_tokens/{service_token_id}'].get
+    update:
+      x-kube-operation:
+        resource: access_service_token
+        lifecycle: observe
+        response:
+          path: result
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          service_token_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/access/service_tokens'].post
+    update:
+      x-kube-operation:
+        resource: access_service_token
+        lifecycle: create
+        response:
+          path: result
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/accounts/{account_id}/access/service_tokens/{service_token_id}'].put
+    update:
+      x-kube-operation:
+        resource: access_service_token
+        lifecycle: update
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          service_token_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/access/service_tokens/{service_token_id}'].delete
+    update:
+      x-kube-operation:
+        resource: access_service_token
+        lifecycle: delete
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          service_token_id:
+            type: external_name

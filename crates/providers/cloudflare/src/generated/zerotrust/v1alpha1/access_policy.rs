@@ -8,6 +8,36 @@ fn for_provider_schema(schema: &mut schemars::Schema) {
         schema,
         &[
             koof::schema::Validation {
+                rule: "!(has(self.group) && has(self.groupRef))",
+                message: "set at most one of group and groupRef",
+                field: "exclude[]",
+            },
+            koof::schema::Validation {
+                rule: "!(has(self.service_token) && has(self.serviceTokenRef))",
+                message: "set at most one of service_token and serviceTokenRef",
+                field: "exclude[]",
+            },
+            koof::schema::Validation {
+                rule: "!(has(self.group) && has(self.groupRef))",
+                message: "set at most one of group and groupRef",
+                field: "include[]",
+            },
+            koof::schema::Validation {
+                rule: "!(has(self.service_token) && has(self.serviceTokenRef))",
+                message: "set at most one of service_token and serviceTokenRef",
+                field: "include[]",
+            },
+            koof::schema::Validation {
+                rule: "!(has(self.group) && has(self.groupRef))",
+                message: "set at most one of group and groupRef",
+                field: "require[]",
+            },
+            koof::schema::Validation {
+                rule: "!(has(self.service_token) && has(self.serviceTokenRef))",
+                message: "set at most one of service_token and serviceTokenRef",
+                field: "require[]",
+            },
+            koof::schema::Validation {
                 rule: "self == oldSelf",
                 message: "accountRef is immutable",
                 field: "accountRef",
@@ -120,6 +150,76 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
                     &crate::generated::cloudflare::v1alpha1::account::DESCRIPTOR,
                     &crate::generated::cloudflare::v1alpha1::cluster_account::DESCRIPTOR,
                 ],
+            ),
+        ],
+    )
+    .with_item_references(
+        &[
+            koof::resource::ItemReference::new(
+                "/spec/forProvider/exclude",
+                koof::resource::Reference::new(
+                    "exclude_group",
+                    "/groupRef",
+                    &[&crate::generated::zerotrust::v1alpha1::access_group::DESCRIPTOR],
+                ),
+                "/group/id",
+                "external_id",
+            ),
+            koof::resource::ItemReference::new(
+                "/spec/forProvider/exclude",
+                koof::resource::Reference::new(
+                    "exclude_service_token",
+                    "/serviceTokenRef",
+                    &[
+                        &crate::generated::zerotrust::v1alpha1::access_service_token::DESCRIPTOR,
+                    ],
+                ),
+                "/service_token/token_id",
+                "external_id",
+            ),
+            koof::resource::ItemReference::new(
+                "/spec/forProvider/include",
+                koof::resource::Reference::new(
+                    "include_group",
+                    "/groupRef",
+                    &[&crate::generated::zerotrust::v1alpha1::access_group::DESCRIPTOR],
+                ),
+                "/group/id",
+                "external_id",
+            ),
+            koof::resource::ItemReference::new(
+                "/spec/forProvider/include",
+                koof::resource::Reference::new(
+                    "include_service_token",
+                    "/serviceTokenRef",
+                    &[
+                        &crate::generated::zerotrust::v1alpha1::access_service_token::DESCRIPTOR,
+                    ],
+                ),
+                "/service_token/token_id",
+                "external_id",
+            ),
+            koof::resource::ItemReference::new(
+                "/spec/forProvider/require",
+                koof::resource::Reference::new(
+                    "require_group",
+                    "/groupRef",
+                    &[&crate::generated::zerotrust::v1alpha1::access_group::DESCRIPTOR],
+                ),
+                "/group/id",
+                "external_id",
+            ),
+            koof::resource::ItemReference::new(
+                "/spec/forProvider/require",
+                koof::resource::Reference::new(
+                    "require_service_token",
+                    "/serviceTokenRef",
+                    &[
+                        &crate::generated::zerotrust::v1alpha1::access_service_token::DESCRIPTOR,
+                    ],
+                ),
+                "/service_token/token_id",
+                "external_id",
             ),
         ],
     )

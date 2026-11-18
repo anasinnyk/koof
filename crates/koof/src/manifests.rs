@@ -32,7 +32,12 @@ pub fn cluster_role(crds: &[CustomResourceDefinition]) -> ClusterRole {
         rules.push(rule(group, with("/status"), &["get", "patch", "update"]));
         rules.push(rule(group, with("/finalizers"), &["update"]));
     }
-    rules.push(rule("", vec!["secrets".to_owned()], &["get"]));
+    let secrets: &[&str] = if crds.iter().any(writes_connection_secrets) {
+        &["get", "create", "patch"]
+    } else {
+        &["get"]
+    };
+    rules.push(rule("", vec!["secrets".to_owned()], secrets));
     rules.push(rule(
         "events.k8s.io",
         vec!["events".to_owned()],
@@ -46,6 +51,17 @@ pub fn cluster_role(crds: &[CustomResourceDefinition]) -> ClusterRole {
         rules: Some(rules),
         ..ClusterRole::default()
     }
+}
+
+fn writes_connection_secrets(crd: &CustomResourceDefinition) -> bool {
+    crd.spec.versions.iter().any(|version| {
+        version
+            .schema
+            .as_ref()
+            .and_then(|schema| schema.open_api_v3_schema.as_ref())
+            .and_then(|schema| schema.properties.as_ref()?.get("spec")?.properties.as_ref())
+            .is_some_and(|spec| spec.contains_key("writeConnectionSecretToRef"))
+    })
 }
 
 #[must_use]
@@ -183,6 +199,30 @@ mod tests {
     #[test]
     fn cluster_role_grants_the_controller_its_kinds_secrets_and_events() {
         insta::assert_json_snapshot!(cluster_role(&crds()));
+    }
+
+    #[test]
+    fn controller_only_reads_secrets_unless_a_kind_writes_connection_secrets() {
+        let verbs = |crds: &[CustomResourceDefinition]| {
+            cluster_role(crds)
+                .rules
+                .into_iter()
+                .flatten()
+                .find(|rule| rule.resources == Some(vec!["secrets".to_owned()]))
+                .map(|rule| rule.verbs)
+        };
+
+        assert_eq!(
+            (verbs(&[Account::crd()]), verbs(&crds())),
+            (
+                Some(vec!["get".to_owned()]),
+                Some(vec![
+                    "get".to_owned(),
+                    "create".to_owned(),
+                    "patch".to_owned()
+                ])
+            )
+        );
     }
 
     #[test]

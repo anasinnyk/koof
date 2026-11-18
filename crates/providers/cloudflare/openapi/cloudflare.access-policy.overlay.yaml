@@ -30,6 +30,39 @@ actions:
             from: spec.forProvider.accountRef
             target: account
 
+        # A rule can match an AccessGroup or AccessServiceToken by reference.
+        itemReferences:
+          include_group:
+            from: spec.forProvider.include[].groupRef
+            target: access_group
+            into: group.id
+            identifier: external_id
+          require_group:
+            from: spec.forProvider.require[].groupRef
+            target: access_group
+            into: group.id
+            identifier: external_id
+          exclude_group:
+            from: spec.forProvider.exclude[].groupRef
+            target: access_group
+            into: group.id
+            identifier: external_id
+          include_service_token:
+            from: spec.forProvider.include[].serviceTokenRef
+            target: access_service_token
+            into: service_token.token_id
+            identifier: external_id
+          require_service_token:
+            from: spec.forProvider.require[].serviceTokenRef
+            target: access_service_token
+            into: service_token.token_id
+            identifier: external_id
+          exclude_service_token:
+            from: spec.forProvider.exclude[].serviceTokenRef
+            target: access_service_token
+            into: service_token.token_id
+            identifier: external_id
+
         credentials:
           securityScheme: api_token
           source:

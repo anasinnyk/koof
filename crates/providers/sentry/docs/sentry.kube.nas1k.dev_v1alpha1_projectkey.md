@@ -15,6 +15,8 @@ References: `projectRef` → Project.
 
 Credentials: via project → organization.
 
+Connection details (`writeConnectionSecretToRef`): `dsn`, `dsn_crons`, `dsn_csp`, `dsn_minidump`, `dsn_otlp_logs`, `dsn_otlp_traces`, `dsn_secret`, `dsn_security`, `dsn_unreal`, `public_key`, `secret_key`.
+
 ## Example
 
 ```yaml
@@ -42,6 +44,8 @@ spec:
 | `forProvider.rateLimit.window` | integer (int64) |  |  |
 | `forProvider.useCase` | string |  | * `user` * `profiling` * `tempest` * `demo` One of `user`, `profiling`, `tempest`, `demo`. Default `user`. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
+| `writeConnectionSecretToRef` | object |  | The Secret, in the namespace of the resource, that the controller writes the connection details to. |
+| `writeConnectionSecretToRef.name` | string | yes |  |
 
 Validation:
 

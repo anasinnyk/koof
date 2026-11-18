@@ -18,6 +18,8 @@ pub fn classify(error: &ReconcileError) -> Failure {
         ReconcileError::Kubernetes(error) => kubernetes(error),
         ReconcileError::ResolveValue(error) => resolve_value(error),
         ReconcileError::Credentials(error) => credentials(error),
+        ReconcileError::ConnectionSecret { source, .. } => kubernetes(source.as_ref()),
+        ReconcileError::ConnectionSecretAfterCreate { source, .. } => classify(source),
         ReconcileError::Serialization(_)
         | ReconcileError::Policy(_)
         | ReconcileError::Unsupported { .. }
@@ -26,7 +28,8 @@ pub fn classify(error: &ReconcileError) -> Failure {
         | ReconcileError::InvalidRequest { .. }
         | ReconcileError::CreatePending { .. }
         | ReconcileError::CreateNoIdentifier { .. }
-        | ReconcileError::CreateNotRecorded { .. } => Failure::Permanent,
+        | ReconcileError::CreateNotRecorded { .. }
+        | ReconcileError::ConnectionSecretNotOwned { .. } => Failure::Permanent,
     }
 }
 
@@ -60,7 +63,9 @@ fn resolve_value(error: &ResolveValueError) -> Failure {
         | ResolveValueError::ReferenceKind { .. }
         | ResolveValueError::AmbiguousReference { .. }
         | ResolveValueError::ClusterScopedReference { .. }
-        | ResolveValueError::NonScalar { .. } => Failure::Permanent,
+        | ResolveValueError::NonScalar { .. }
+        | ResolveValueError::ItemPointer { .. }
+        | ResolveValueError::ItemAssign { .. } => Failure::Permanent,
     }
 }
 
@@ -72,6 +77,7 @@ fn credentials(error: &CredentialError) -> Failure {
         | CredentialError::NotSecret { .. }
         | CredentialError::FieldNotSet { .. }
         | CredentialError::SecretKeyMissing { .. }
+        | CredentialError::ClusterScopedSecretValue { .. }
         | CredentialError::InvalidSecretUtf8 { .. } => Failure::Permanent,
     }
 }

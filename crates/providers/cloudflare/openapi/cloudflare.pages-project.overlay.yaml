@@ -145,3 +145,15 @@ actions:
         result:
           identifiers:
             external_id: response.body.result.name
+
+  # Environment variables take their value from a Secret with
+  # valueFrom.secretKeyRef; Cloudflare returns secret_text values empty.
+  - target: $.components.schemas.pages_plain_text_env_var.properties.value
+    update:
+      x-kube-field:
+        secretKeyRef: true
+
+  - target: $.components.schemas.pages_secret_text_env_var.properties.value
+    update:
+      x-kube-field:
+        secretKeyRef: true

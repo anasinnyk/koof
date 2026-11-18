@@ -179,6 +179,18 @@ fn page(resource: &ResourceDoc) -> String {
         let _ = write!(out, "\nReferences: {}.\n", references.join(", "));
     }
     let _ = write!(out, "\nCredentials: {}.\n", credentials(descriptor));
+    if !descriptor.connection_secret.is_empty() {
+        let keys: Vec<String> = descriptor
+            .connection_secret
+            .iter()
+            .map(|(key, _)| format!("`{key}`"))
+            .collect();
+        let _ = write!(
+            out,
+            "\nConnection details (`writeConnectionSecretToRef`): {}.\n",
+            keys.join(", ")
+        );
+    }
 
     let _ = write!(out, "\n## Example\n\n```yaml\n{}```\n", example(resource));
 

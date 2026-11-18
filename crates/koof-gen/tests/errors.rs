@@ -38,7 +38,7 @@ fn error(actions: &str) -> Option<String> {
     update:
       apiVerison: shop.widgets.example.dev/v1
 ",
-    "invalid x-kube-resource at components.schemas.widget: unknown field `apiVerison`, expected one of `name`, `apiVersion`, `kind`, `cluster`, `fields`, `identifiers`, `references`, `itemReferences`, `credentials`, `validations`, `immutable`, `test`"
+    "invalid x-kube-resource at components.schemas.widget: unknown field `apiVerison`, expected one of `name`, `apiVersion`, `kind`, `cluster`, `fields`, `identifiers`, `references`, `itemReferences`, `credentials`, `connectionSecret`, `validations`, `immutable`, `test`"
 )]
 #[case::soft_delete_only_on_observe(
     "
@@ -173,6 +173,27 @@ fn error(actions: &str) -> Option<String> {
           identifier: slug
 ",
     "resource widget: itemReferences.part: the items of tags have no field name"
+)]
+#[case::connection_secret_keys_are_secret_keys(
+    "
+  - target: $.components.schemas.widget['x-kube-resource']
+    update:
+      connectionSecret:
+        client/id: id
+",
+    "resources.widget.connection_secret.client/id: a Secret key consists of alphanumerics, '-', '_' and '.'"
+)]
+#[case::secret_values_only_in_namespaced_resources(
+    "
+  - target: $.components.schemas.account['x-kube-resource']
+    update:
+      cluster: true
+  - target: $.components.schemas.account.properties.name
+    update:
+      x-kube-field:
+        secretKeyRef: true
+",
+    "resources.account.cluster: a resource with a cluster variant cannot read forProvider fields from Secrets"
 )]
 fn rejects_overlay_mistakes(#[case] actions: &str, #[case] message: &str) {
     assert_eq!(error(actions), Some(message.to_owned()));

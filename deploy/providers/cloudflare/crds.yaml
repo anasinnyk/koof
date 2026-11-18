@@ -1911,14 +1911,14 @@
   "apiVersion": "apiextensions.k8s.io/v1",
   "kind": "CustomResourceDefinition",
   "metadata": {
-    "name": "accesspolicies.zerotrust.cloudflare.kube.nas1k.dev"
+    "name": "accessgroups.zerotrust.cloudflare.kube.nas1k.dev"
   },
   "spec": {
     "group": "zerotrust.cloudflare.kube.nas1k.dev",
     "names": {
-      "kind": "AccessPolicy",
-      "plural": "accesspolicies",
-      "singular": "accesspolicy"
+      "kind": "AccessGroup",
+      "plural": "accessgroups",
+      "singular": "accessgroup"
     },
     "scope": "Namespaced",
     "versions": [
@@ -1948,7 +1948,7 @@
         "name": "v1alpha1",
         "schema": {
           "openAPIV3Schema": {
-            "description": "Auto-generated derived type for AccessPolicySpec via `CustomResource`",
+            "description": "Auto-generated derived type for AccessGroupSpec via `CustomResource`",
             "properties": {
               "spec": {
                 "properties": {
@@ -1996,94 +1996,1372 @@
                           }
                         ]
                       },
-                      "approval_groups": {
-                        "description": "Administrators who can approve a temporary authentication request.",
+                      "exclude": {
+                        "description": "Rules evaluated with a NOT logical operator. To match a policy, a user cannot meet any of the Exclude rules.",
                         "items": {
-                          "description": "A group of email addresses that can approve a temporary authentication request.",
+                          "description": "`AccessGroupForProviderExcludeItem`",
                           "properties": {
-                            "approvals_needed": {
-                              "description": "The number of approvals needed to obtain access.",
-                              "format": "double",
-                              "type": "number"
-                            },
-                            "email_addresses": {
-                              "description": "A list of emails that can approve the access request.",
-                              "items": {
-                                "type": "string"
+                            "any_valid_service_token": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
                               },
-                              "type": "array"
+                              "description": "An empty object which matches on all service tokens.",
+                              "type": "object"
                             },
-                            "email_list_uuid": {
-                              "description": "The UUID of an re-usable email list.",
-                              "nullable": true,
-                              "type": "string"
+                            "auth_context": {
+                              "description": "`AccessAuthContextRuleAuthContext`",
+                              "properties": {
+                                "ac_id": {
+                                  "description": "The ACID of an Authentication context.",
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "description": "The ID of an Authentication context.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Azure identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "ac_id",
+                                "id",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "auth_method": {
+                              "description": "`AccessAuthenticationMethodRuleAuthMethod`",
+                              "properties": {
+                                "auth_method": {
+                                  "description": "The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176#section-2.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "auth_method"
+                              ],
+                              "type": "object"
+                            },
+                            "azureAD": {
+                              "description": "`AccessAzureGroupRuleAzureAd`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of an Azure group.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Azure identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "certificate": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "type": "object"
+                            },
+                            "cloudflare_account_member": {
+                              "description": "`AccessCloudflareAccountMemberRuleCloudflareAccountMember`",
+                              "properties": {
+                                "account_id": {
+                                  "description": "Identifier.",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "common_name": {
+                              "description": "`AccessCommonNameRuleCommonName`",
+                              "properties": {
+                                "common_name": {
+                                  "description": "The common name to match.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "common_name"
+                              ],
+                              "type": "object"
+                            },
+                            "device_posture": {
+                              "description": "`AccessDevicePostureRuleDevicePosture`",
+                              "properties": {
+                                "account_id": {
+                                  "description": "The ID of the account that owns the device posture integration.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "integration_uid": {
+                                  "description": "The ID of a device posture integration.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "integration_uid"
+                              ],
+                              "type": "object"
+                            },
+                            "email": {
+                              "description": "`AccessEmailRuleEmail`",
+                              "properties": {
+                                "email": {
+                                  "description": "The email of the user.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email"
+                              ],
+                              "type": "object"
+                            },
+                            "email_domain": {
+                              "description": "`AccessDomainRuleEmailDomain`",
+                              "properties": {
+                                "domain": {
+                                  "description": "The email domain to match.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "domain"
+                              ],
+                              "type": "object"
+                            },
+                            "email_list": {
+                              "description": "`AccessEmailListRuleEmailList`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created email list.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "everyone": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "description": "An empty object which matches on all users.",
+                              "type": "object"
+                            },
+                            "external_evaluation": {
+                              "description": "`AccessExternalEvaluationRuleExternalEvaluation`",
+                              "properties": {
+                                "evaluate_url": {
+                                  "description": "The API endpoint containing your business logic.",
+                                  "type": "string"
+                                },
+                                "keys_url": {
+                                  "description": "The API endpoint containing the key that Access uses to verify that the response came from your API.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "evaluate_url",
+                                "keys_url"
+                              ],
+                              "type": "object"
+                            },
+                            "geo": {
+                              "description": "`AccessCountryRuleGeo`",
+                              "properties": {
+                                "country_code": {
+                                  "description": "The country code that should be matched.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "country_code"
+                              ],
+                              "type": "object"
+                            },
+                            "github-organization": {
+                              "description": "`AccessGithubOrganizationRuleGithubOrganization`",
+                              "properties": {
+                                "identity_provider_id": {
+                                  "description": "The ID of your Github identity provider.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the organization.",
+                                  "type": "string"
+                                },
+                                "team": {
+                                  "description": "The name of the team",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "identity_provider_id",
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "group": {
+                              "description": "`AccessAccessGroupRuleGroup`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created Access group.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "groupRef": {
+                              "description": "A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`.",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "gsuite": {
+                              "description": "`AccessGsuiteGroupRuleGsuite`",
+                              "properties": {
+                                "email": {
+                                  "description": "The email of the Google Workspace group.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Google Workspace identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "ip": {
+                              "description": "`AccessIpRuleIp`",
+                              "properties": {
+                                "ip": {
+                                  "description": "An IPv4 or IPv6 CIDR block.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "ip"
+                              ],
+                              "type": "object"
+                            },
+                            "ip_list": {
+                              "description": "`AccessIpListRuleIpList`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created IP list.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "linked_app_token": {
+                              "description": "`AccessLinkedAppTokenRuleLinkedAppToken`",
+                              "properties": {
+                                "app_uid": {
+                                  "description": "The ID of an Access OIDC SaaS application",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "app_uid"
+                              ],
+                              "type": "object"
+                            },
+                            "login_method": {
+                              "description": "`AccessLoginMethodRuleLoginMethod`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of an identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "oidc": {
+                              "description": "`AccessOidcClaimRuleOidc`",
+                              "properties": {
+                                "claim_name": {
+                                  "description": "The name of the OIDC claim.",
+                                  "type": "string"
+                                },
+                                "claim_value": {
+                                  "description": "The OIDC claim value to look for.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your OIDC identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "claim_name",
+                                "claim_value",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "okta": {
+                              "description": "`AccessOktaGroupRuleOkta`",
+                              "properties": {
+                                "identity_provider_id": {
+                                  "description": "The ID of your Okta identity provider.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the Okta group.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "identity_provider_id",
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "saml": {
+                              "description": "`AccessSamlGroupRuleSaml`",
+                              "properties": {
+                                "attribute_name": {
+                                  "description": "The name of the SAML attribute.",
+                                  "type": "string"
+                                },
+                                "attribute_value": {
+                                  "description": "The SAML attribute value to look for.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your SAML identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "attribute_name",
+                                "attribute_value",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "serviceTokenRef": {
+                              "description": "A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`.",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "service_token": {
+                              "description": "`AccessServiceTokenRuleServiceToken`",
+                              "properties": {
+                                "token_id": {
+                                  "description": "The ID of a Service Token.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "token_id"
+                              ],
+                              "type": "object"
+                            },
+                            "user_risk_score": {
+                              "description": "`AccessUserRiskScoreRuleUserRiskScore`",
+                              "properties": {
+                                "user_risk_score": {
+                                  "description": "A list of risk score levels to match. Values can be low, medium, high, or unscored.",
+                                  "items": {
+                                    "description": "`AccessUserRiskScoreRuleUserRiskScoreUserRiskScoreItem`",
+                                    "enum": [
+                                      "low",
+                                      "medium",
+                                      "high",
+                                      "unscored"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "type": "array"
+                                }
+                              },
+                              "required": [
+                                "user_risk_score"
+                              ],
+                              "type": "object"
                             }
                           },
-                          "required": [
-                            "approvals_needed"
-                          ],
-                          "type": "object"
+                          "type": "object",
+                          "x-kubernetes-validations": [
+                            {
+                              "message": "set at most one of group and groupRef",
+                              "rule": "!(has(self.group) && has(self.groupRef))"
+                            },
+                            {
+                              "message": "set at most one of service_token and serviceTokenRef",
+                              "rule": "!(has(self.service_token) && has(self.serviceTokenRef))"
+                            }
+                          ]
                         },
-                        "nullable": true,
                         "type": "array"
                       },
-                      "approval_required": {
-                        "description": "Requires the user to request access from an administrator at the start of each session.",
-                        "nullable": true,
-                        "type": "boolean"
-                      },
-                      "connection_rules": {
-                        "description": "The rules that define how users may connect to targets secured by your application.",
-                        "nullable": true,
-                        "properties": {
-                          "rdp": {
-                            "description": "The RDP-specific rules that define clipboard behavior for RDP connections.",
-                            "nullable": true,
-                            "properties": {
-                              "allowed_clipboard_local_to_remote_formats": {
-                                "description": "Clipboard formats allowed when copying from local machine to remote RDP session.",
-                                "items": {
-                                  "description": "Clipboard format for RDP connections.",
-                                  "enum": [
-                                    "text",
-                                    "file"
-                                  ],
-                                  "type": "string"
-                                },
-                                "nullable": true,
-                                "type": "array"
+                      "include": {
+                        "description": "Rules evaluated with an OR logical operator. A user needs to meet only one of the Include rules.",
+                        "items": {
+                          "description": "`AccessGroupForProviderIncludeItem`",
+                          "properties": {
+                            "any_valid_service_token": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
                               },
-                              "allowed_clipboard_remote_to_local_formats": {
-                                "description": "Clipboard formats allowed when copying from remote RDP session to local machine.",
-                                "items": {
-                                  "description": "Clipboard format for RDP connections.",
-                                  "enum": [
-                                    "text",
-                                    "file"
-                                  ],
+                              "description": "An empty object which matches on all service tokens.",
+                              "type": "object"
+                            },
+                            "auth_context": {
+                              "description": "`AccessAuthContextRuleAuthContext`",
+                              "properties": {
+                                "ac_id": {
+                                  "description": "The ACID of an Authentication context.",
                                   "type": "string"
                                 },
-                                "nullable": true,
-                                "type": "array"
-                              }
+                                "id": {
+                                  "description": "The ID of an Authentication context.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Azure identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "ac_id",
+                                "id",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
                             },
-                            "type": "object"
-                          }
+                            "auth_method": {
+                              "description": "`AccessAuthenticationMethodRuleAuthMethod`",
+                              "properties": {
+                                "auth_method": {
+                                  "description": "The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176#section-2.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "auth_method"
+                              ],
+                              "type": "object"
+                            },
+                            "azureAD": {
+                              "description": "`AccessAzureGroupRuleAzureAd`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of an Azure group.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Azure identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "certificate": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "type": "object"
+                            },
+                            "cloudflare_account_member": {
+                              "description": "`AccessCloudflareAccountMemberRuleCloudflareAccountMember`",
+                              "properties": {
+                                "account_id": {
+                                  "description": "Identifier.",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "common_name": {
+                              "description": "`AccessCommonNameRuleCommonName`",
+                              "properties": {
+                                "common_name": {
+                                  "description": "The common name to match.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "common_name"
+                              ],
+                              "type": "object"
+                            },
+                            "device_posture": {
+                              "description": "`AccessDevicePostureRuleDevicePosture`",
+                              "properties": {
+                                "account_id": {
+                                  "description": "The ID of the account that owns the device posture integration.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "integration_uid": {
+                                  "description": "The ID of a device posture integration.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "integration_uid"
+                              ],
+                              "type": "object"
+                            },
+                            "email": {
+                              "description": "`AccessEmailRuleEmail`",
+                              "properties": {
+                                "email": {
+                                  "description": "The email of the user.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email"
+                              ],
+                              "type": "object"
+                            },
+                            "email_domain": {
+                              "description": "`AccessDomainRuleEmailDomain`",
+                              "properties": {
+                                "domain": {
+                                  "description": "The email domain to match.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "domain"
+                              ],
+                              "type": "object"
+                            },
+                            "email_list": {
+                              "description": "`AccessEmailListRuleEmailList`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created email list.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "everyone": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "description": "An empty object which matches on all users.",
+                              "type": "object"
+                            },
+                            "external_evaluation": {
+                              "description": "`AccessExternalEvaluationRuleExternalEvaluation`",
+                              "properties": {
+                                "evaluate_url": {
+                                  "description": "The API endpoint containing your business logic.",
+                                  "type": "string"
+                                },
+                                "keys_url": {
+                                  "description": "The API endpoint containing the key that Access uses to verify that the response came from your API.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "evaluate_url",
+                                "keys_url"
+                              ],
+                              "type": "object"
+                            },
+                            "geo": {
+                              "description": "`AccessCountryRuleGeo`",
+                              "properties": {
+                                "country_code": {
+                                  "description": "The country code that should be matched.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "country_code"
+                              ],
+                              "type": "object"
+                            },
+                            "github-organization": {
+                              "description": "`AccessGithubOrganizationRuleGithubOrganization`",
+                              "properties": {
+                                "identity_provider_id": {
+                                  "description": "The ID of your Github identity provider.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the organization.",
+                                  "type": "string"
+                                },
+                                "team": {
+                                  "description": "The name of the team",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "identity_provider_id",
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "group": {
+                              "description": "`AccessAccessGroupRuleGroup`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created Access group.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "groupRef": {
+                              "description": "A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`.",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "gsuite": {
+                              "description": "`AccessGsuiteGroupRuleGsuite`",
+                              "properties": {
+                                "email": {
+                                  "description": "The email of the Google Workspace group.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Google Workspace identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "ip": {
+                              "description": "`AccessIpRuleIp`",
+                              "properties": {
+                                "ip": {
+                                  "description": "An IPv4 or IPv6 CIDR block.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "ip"
+                              ],
+                              "type": "object"
+                            },
+                            "ip_list": {
+                              "description": "`AccessIpListRuleIpList`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created IP list.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "linked_app_token": {
+                              "description": "`AccessLinkedAppTokenRuleLinkedAppToken`",
+                              "properties": {
+                                "app_uid": {
+                                  "description": "The ID of an Access OIDC SaaS application",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "app_uid"
+                              ],
+                              "type": "object"
+                            },
+                            "login_method": {
+                              "description": "`AccessLoginMethodRuleLoginMethod`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of an identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "oidc": {
+                              "description": "`AccessOidcClaimRuleOidc`",
+                              "properties": {
+                                "claim_name": {
+                                  "description": "The name of the OIDC claim.",
+                                  "type": "string"
+                                },
+                                "claim_value": {
+                                  "description": "The OIDC claim value to look for.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your OIDC identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "claim_name",
+                                "claim_value",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "okta": {
+                              "description": "`AccessOktaGroupRuleOkta`",
+                              "properties": {
+                                "identity_provider_id": {
+                                  "description": "The ID of your Okta identity provider.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the Okta group.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "identity_provider_id",
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "saml": {
+                              "description": "`AccessSamlGroupRuleSaml`",
+                              "properties": {
+                                "attribute_name": {
+                                  "description": "The name of the SAML attribute.",
+                                  "type": "string"
+                                },
+                                "attribute_value": {
+                                  "description": "The SAML attribute value to look for.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your SAML identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "attribute_name",
+                                "attribute_value",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "serviceTokenRef": {
+                              "description": "A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`.",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "service_token": {
+                              "description": "`AccessServiceTokenRuleServiceToken`",
+                              "properties": {
+                                "token_id": {
+                                  "description": "The ID of a Service Token.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "token_id"
+                              ],
+                              "type": "object"
+                            },
+                            "user_risk_score": {
+                              "description": "`AccessUserRiskScoreRuleUserRiskScore`",
+                              "properties": {
+                                "user_risk_score": {
+                                  "description": "A list of risk score levels to match. Values can be low, medium, high, or unscored.",
+                                  "items": {
+                                    "description": "`AccessUserRiskScoreRuleUserRiskScoreUserRiskScoreItem`",
+                                    "enum": [
+                                      "low",
+                                      "medium",
+                                      "high",
+                                      "unscored"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "type": "array"
+                                }
+                              },
+                              "required": [
+                                "user_risk_score"
+                              ],
+                              "type": "object"
+                            }
+                          },
+                          "type": "object",
+                          "x-kubernetes-validations": [
+                            {
+                              "message": "set at most one of group and groupRef",
+                              "rule": "!(has(self.group) && has(self.groupRef))"
+                            },
+                            {
+                              "message": "set at most one of service_token and serviceTokenRef",
+                              "rule": "!(has(self.service_token) && has(self.serviceTokenRef))"
+                            }
+                          ]
                         },
-                        "type": "object"
+                        "type": "array"
                       },
-                      "decision": {
-                        "description": "The action Access will take if a user matches this policy. Infrastructure application policies can only use the Allow action.",
-                        "enum": [
-                          "allow",
-                          "deny",
-                          "non_identity",
-                          "bypass"
-                        ],
+                      "name": {
+                        "description": "The name of the Access group.",
+                        "type": "string"
+                      },
+                      "require": {
+                        "description": "Rules evaluated with an AND logical operator. To match a policy, a user must meet all of the Require rules.",
+                        "items": {
+                          "description": "`AccessGroupForProviderRequireItem`",
+                          "properties": {
+                            "any_valid_service_token": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "description": "An empty object which matches on all service tokens.",
+                              "type": "object"
+                            },
+                            "auth_context": {
+                              "description": "`AccessAuthContextRuleAuthContext`",
+                              "properties": {
+                                "ac_id": {
+                                  "description": "The ACID of an Authentication context.",
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "description": "The ID of an Authentication context.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Azure identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "ac_id",
+                                "id",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "auth_method": {
+                              "description": "`AccessAuthenticationMethodRuleAuthMethod`",
+                              "properties": {
+                                "auth_method": {
+                                  "description": "The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176#section-2.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "auth_method"
+                              ],
+                              "type": "object"
+                            },
+                            "azureAD": {
+                              "description": "`AccessAzureGroupRuleAzureAd`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of an Azure group.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Azure identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "certificate": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "type": "object"
+                            },
+                            "cloudflare_account_member": {
+                              "description": "`AccessCloudflareAccountMemberRuleCloudflareAccountMember`",
+                              "properties": {
+                                "account_id": {
+                                  "description": "Identifier.",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "common_name": {
+                              "description": "`AccessCommonNameRuleCommonName`",
+                              "properties": {
+                                "common_name": {
+                                  "description": "The common name to match.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "common_name"
+                              ],
+                              "type": "object"
+                            },
+                            "device_posture": {
+                              "description": "`AccessDevicePostureRuleDevicePosture`",
+                              "properties": {
+                                "account_id": {
+                                  "description": "The ID of the account that owns the device posture integration.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "integration_uid": {
+                                  "description": "The ID of a device posture integration.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "integration_uid"
+                              ],
+                              "type": "object"
+                            },
+                            "email": {
+                              "description": "`AccessEmailRuleEmail`",
+                              "properties": {
+                                "email": {
+                                  "description": "The email of the user.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email"
+                              ],
+                              "type": "object"
+                            },
+                            "email_domain": {
+                              "description": "`AccessDomainRuleEmailDomain`",
+                              "properties": {
+                                "domain": {
+                                  "description": "The email domain to match.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "domain"
+                              ],
+                              "type": "object"
+                            },
+                            "email_list": {
+                              "description": "`AccessEmailListRuleEmailList`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created email list.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "everyone": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "description": "An empty object which matches on all users.",
+                              "type": "object"
+                            },
+                            "external_evaluation": {
+                              "description": "`AccessExternalEvaluationRuleExternalEvaluation`",
+                              "properties": {
+                                "evaluate_url": {
+                                  "description": "The API endpoint containing your business logic.",
+                                  "type": "string"
+                                },
+                                "keys_url": {
+                                  "description": "The API endpoint containing the key that Access uses to verify that the response came from your API.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "evaluate_url",
+                                "keys_url"
+                              ],
+                              "type": "object"
+                            },
+                            "geo": {
+                              "description": "`AccessCountryRuleGeo`",
+                              "properties": {
+                                "country_code": {
+                                  "description": "The country code that should be matched.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "country_code"
+                              ],
+                              "type": "object"
+                            },
+                            "github-organization": {
+                              "description": "`AccessGithubOrganizationRuleGithubOrganization`",
+                              "properties": {
+                                "identity_provider_id": {
+                                  "description": "The ID of your Github identity provider.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the organization.",
+                                  "type": "string"
+                                },
+                                "team": {
+                                  "description": "The name of the team",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "identity_provider_id",
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "group": {
+                              "description": "`AccessAccessGroupRuleGroup`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created Access group.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "groupRef": {
+                              "description": "A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`.",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "gsuite": {
+                              "description": "`AccessGsuiteGroupRuleGsuite`",
+                              "properties": {
+                                "email": {
+                                  "description": "The email of the Google Workspace group.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Google Workspace identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "ip": {
+                              "description": "`AccessIpRuleIp`",
+                              "properties": {
+                                "ip": {
+                                  "description": "An IPv4 or IPv6 CIDR block.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "ip"
+                              ],
+                              "type": "object"
+                            },
+                            "ip_list": {
+                              "description": "`AccessIpListRuleIpList`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created IP list.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "linked_app_token": {
+                              "description": "`AccessLinkedAppTokenRuleLinkedAppToken`",
+                              "properties": {
+                                "app_uid": {
+                                  "description": "The ID of an Access OIDC SaaS application",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "app_uid"
+                              ],
+                              "type": "object"
+                            },
+                            "login_method": {
+                              "description": "`AccessLoginMethodRuleLoginMethod`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of an identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "oidc": {
+                              "description": "`AccessOidcClaimRuleOidc`",
+                              "properties": {
+                                "claim_name": {
+                                  "description": "The name of the OIDC claim.",
+                                  "type": "string"
+                                },
+                                "claim_value": {
+                                  "description": "The OIDC claim value to look for.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your OIDC identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "claim_name",
+                                "claim_value",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "okta": {
+                              "description": "`AccessOktaGroupRuleOkta`",
+                              "properties": {
+                                "identity_provider_id": {
+                                  "description": "The ID of your Okta identity provider.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the Okta group.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "identity_provider_id",
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "saml": {
+                              "description": "`AccessSamlGroupRuleSaml`",
+                              "properties": {
+                                "attribute_name": {
+                                  "description": "The name of the SAML attribute.",
+                                  "type": "string"
+                                },
+                                "attribute_value": {
+                                  "description": "The SAML attribute value to look for.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your SAML identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "attribute_name",
+                                "attribute_value",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "serviceTokenRef": {
+                              "description": "A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`.",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "service_token": {
+                              "description": "`AccessServiceTokenRuleServiceToken`",
+                              "properties": {
+                                "token_id": {
+                                  "description": "The ID of a Service Token.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "token_id"
+                              ],
+                              "type": "object"
+                            },
+                            "user_risk_score": {
+                              "description": "`AccessUserRiskScoreRuleUserRiskScore`",
+                              "properties": {
+                                "user_risk_score": {
+                                  "description": "A list of risk score levels to match. Values can be low, medium, high, or unscored.",
+                                  "items": {
+                                    "description": "`AccessUserRiskScoreRuleUserRiskScoreUserRiskScoreItem`",
+                                    "enum": [
+                                      "low",
+                                      "medium",
+                                      "high",
+                                      "unscored"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "type": "array"
+                                }
+                              },
+                              "required": [
+                                "user_risk_score"
+                              ],
+                              "type": "object"
+                            }
+                          },
+                          "type": "object",
+                          "x-kubernetes-validations": [
+                            {
+                              "message": "set at most one of group and groupRef",
+                              "rule": "!(has(self.group) && has(self.groupRef))"
+                            },
+                            {
+                              "message": "set at most one of service_token and serviceTokenRef",
+                              "rule": "!(has(self.service_token) && has(self.serviceTokenRef))"
+                            }
+                          ]
+                        },
+                        "type": "array"
+                      }
+                    },
+                    "required": [
+                      "include",
+                      "name"
+                    ],
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
+                  },
+                  "managementPolicies": {
+                    "default": [
+                      "*"
+                    ],
+                    "description": "Actions the controller may take. `[\"*\"]` (default) allows all; `[\"Observe\"]`\nonly reads (import without management). `Observe` is always required.",
+                    "items": {
+                      "description": "An action the controller may take on the external resource\n(Crossplane `managementPolicies`).",
+                      "enum": [
+                        "Observe",
+                        "Create",
+                        "Update",
+                        "Delete",
+                        "LateInitialize",
+                        "*"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "forProvider"
+                ],
+                "type": "object"
+              },
+              "status": {
+                "description": "`status` of a managed resource; `A` is the generated `atProvider` type.",
+                "nullable": true,
+                "properties": {
+                  "atProvider": {
+                    "description": "`AccessGroupAtProvider`",
+                    "nullable": true,
+                    "properties": {
+                      "created_at": {
+                        "description": "`AccessCreatedAt`",
+                        "format": "date-time",
+                        "nullable": true,
                         "type": "string"
                       },
                       "exclude": {
-                        "description": "Rules evaluated with a NOT logical operator. To match the policy, a user cannot meet any of the Exclude rules.",
+                        "description": "Rules evaluated with a NOT logical operator. To match a policy, a user cannot meet any of the Exclude rules.",
                         "items": {
                           "description": "`AccessRule`",
                           "properties": {
@@ -2484,6 +3762,11 @@
                         },
                         "nullable": true,
                         "type": "array"
+                      },
+                      "id": {
+                        "description": "UUID.",
+                        "nullable": true,
+                        "type": "string"
                       },
                       "include": {
                         "description": "Rules evaluated with an OR logical operator. A user needs to meet only one of the Include rules.",
@@ -2885,59 +4168,16 @@
                           },
                           "type": "object"
                         },
+                        "nullable": true,
                         "type": "array"
                       },
-                      "isolation_required": {
-                        "description": "Require this application to be served in an isolated browser for users matching this policy. 'Client Web Isolation' must be on for the account in order to use this feature.",
-                        "nullable": true,
-                        "type": "boolean"
-                      },
-                      "mfa_config": {
-                        "description": "Configures multi-factor authentication (MFA) settings.",
-                        "nullable": true,
-                        "properties": {
-                          "allowed_authenticators": {
-                            "description": "Lists the MFA methods that users can authenticate with.",
-                            "items": {
-                              "description": "`AccessMfaConfigAllowedAuthenticatorsItem`",
-                              "enum": [
-                                "totp",
-                                "biometrics",
-                                "security_key"
-                              ],
-                              "type": "string"
-                            },
-                            "type": "array"
-                          },
-                          "mfa_disabled": {
-                            "description": "Indicates whether to disable MFA for this resource. This option is available at the application and policy level.",
-                            "nullable": true,
-                            "type": "boolean"
-                          },
-                          "session_duration": {
-                            "description": "Defines the duration of an MFA session. Must be in minutes (m) or hours (h). Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.",
-                            "nullable": true,
-                            "type": "string"
-                          }
-                        },
-                        "type": "object"
-                      },
                       "name": {
-                        "description": "The name of the Access policy.",
-                        "type": "string"
-                      },
-                      "purpose_justification_prompt": {
-                        "description": "A custom message that will appear on the purpose justification screen.",
+                        "description": "The name of the Access group.",
                         "nullable": true,
                         "type": "string"
-                      },
-                      "purpose_justification_required": {
-                        "description": "Require users to enter a justification when they log in to the application.",
-                        "nullable": true,
-                        "type": "boolean"
                       },
                       "require": {
-                        "description": "Rules evaluated with an AND logical operator. To match the policy, a user must meet all of the Require rules.",
+                        "description": "Rules evaluated with an AND logical operator. To match a policy, a user must meet all of the Require rules.",
                         "items": {
                           "description": "`AccessRule`",
                           "properties": {
@@ -3337,6 +4577,1616 @@
                           "type": "object"
                         },
                         "nullable": true,
+                        "type": "array"
+                      },
+                      "updated_at": {
+                        "description": "`AccessUpdatedAt`",
+                        "format": "date-time",
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "conditions": {
+                    "default": [],
+                    "items": {
+                      "description": "Condition contains details for one aspect of the current state of this API Resource.",
+                      "properties": {
+                        "lastTransitionTime": {
+                          "description": "lastTransitionTime is the last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "message": {
+                          "description": "message is a human readable message indicating details about the transition. This may be an empty string.",
+                          "type": "string"
+                        },
+                        "observedGeneration": {
+                          "description": "observedGeneration represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "reason": {
+                          "description": "reason contains a programmatic identifier indicating the reason for the condition's last transition. Producers of specific condition types may define expected values and meanings for this field, and whether the values are considered a guaranteed API. The value should be a CamelCase string. This field may not be empty.",
+                          "type": "string"
+                        },
+                        "status": {
+                          "description": "status of the condition, one of True, False, Unknown.",
+                          "type": "string"
+                        },
+                        "type": {
+                          "description": "type of condition in CamelCase or in foo.example.com/CamelCase.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "lastTransitionTime",
+                        "message",
+                        "reason",
+                        "status",
+                        "type"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "observedGeneration": {
+                    "format": "int64",
+                    "nullable": true,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "required": [
+              "spec"
+            ],
+            "title": "AccessGroup",
+            "type": "object"
+          }
+        },
+        "served": true,
+        "storage": true,
+        "subresources": {
+          "status": {}
+        }
+      }
+    ]
+  }
+}
+---
+{
+  "apiVersion": "apiextensions.k8s.io/v1",
+  "kind": "CustomResourceDefinition",
+  "metadata": {
+    "name": "accesspolicies.zerotrust.cloudflare.kube.nas1k.dev"
+  },
+  "spec": {
+    "group": "zerotrust.cloudflare.kube.nas1k.dev",
+    "names": {
+      "kind": "AccessPolicy",
+      "plural": "accesspolicies",
+      "singular": "accesspolicy"
+    },
+    "scope": "Namespaced",
+    "versions": [
+      {
+        "additionalPrinterColumns": [
+          {
+            "jsonPath": ".status.conditions[?(@.type==\"Ready\")].status",
+            "name": "Ready",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".status.conditions[?(@.type==\"Synced\")].status",
+            "name": "Synced",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".metadata.annotations.zerotrust\\.cloudflare\\.kube\\.nas1k\\.dev/external-name",
+            "name": "External-Name",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".metadata.creationTimestamp",
+            "name": "Age",
+            "type": "date"
+          }
+        ],
+        "name": "v1alpha1",
+        "schema": {
+          "openAPIV3Schema": {
+            "description": "Auto-generated derived type for AccessPolicySpec via `CustomResource`",
+            "properties": {
+              "spec": {
+                "properties": {
+                  "deletionPolicy": {
+                    "default": "Delete",
+                    "description": "`Orphan` keeps the external resource when the managed resource is deleted.\nWithout `Delete` in `managementPolicies` the resource is always orphaned.",
+                    "enum": [
+                      "Delete",
+                      "Orphan"
+                    ],
+                    "type": "string"
+                  },
+                  "forProvider": {
+                    "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
+                    "properties": {
+                      "accountRef": {
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
+                        "nullable": true,
+                        "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ],
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
+                      },
+                      "approval_groups": {
+                        "description": "Administrators who can approve a temporary authentication request.",
+                        "items": {
+                          "description": "A group of email addresses that can approve a temporary authentication request.",
+                          "properties": {
+                            "approvals_needed": {
+                              "description": "The number of approvals needed to obtain access.",
+                              "format": "double",
+                              "type": "number"
+                            },
+                            "email_addresses": {
+                              "description": "A list of emails that can approve the access request.",
+                              "items": {
+                                "type": "string"
+                              },
+                              "type": "array"
+                            },
+                            "email_list_uuid": {
+                              "description": "The UUID of an re-usable email list.",
+                              "nullable": true,
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "approvals_needed"
+                          ],
+                          "type": "object"
+                        },
+                        "nullable": true,
+                        "type": "array"
+                      },
+                      "approval_required": {
+                        "description": "Requires the user to request access from an administrator at the start of each session.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "connection_rules": {
+                        "description": "The rules that define how users may connect to targets secured by your application.",
+                        "nullable": true,
+                        "properties": {
+                          "rdp": {
+                            "description": "The RDP-specific rules that define clipboard behavior for RDP connections.",
+                            "nullable": true,
+                            "properties": {
+                              "allowed_clipboard_local_to_remote_formats": {
+                                "description": "Clipboard formats allowed when copying from local machine to remote RDP session.",
+                                "items": {
+                                  "description": "Clipboard format for RDP connections.",
+                                  "enum": [
+                                    "text",
+                                    "file"
+                                  ],
+                                  "type": "string"
+                                },
+                                "nullable": true,
+                                "type": "array"
+                              },
+                              "allowed_clipboard_remote_to_local_formats": {
+                                "description": "Clipboard formats allowed when copying from remote RDP session to local machine.",
+                                "items": {
+                                  "description": "Clipboard format for RDP connections.",
+                                  "enum": [
+                                    "text",
+                                    "file"
+                                  ],
+                                  "type": "string"
+                                },
+                                "nullable": true,
+                                "type": "array"
+                              }
+                            },
+                            "type": "object"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "decision": {
+                        "description": "The action Access will take if a user matches this policy. Infrastructure application policies can only use the Allow action.",
+                        "enum": [
+                          "allow",
+                          "deny",
+                          "non_identity",
+                          "bypass"
+                        ],
+                        "type": "string"
+                      },
+                      "exclude": {
+                        "description": "Rules evaluated with a NOT logical operator. To match the policy, a user cannot meet any of the Exclude rules.",
+                        "items": {
+                          "description": "`AccessPolicyForProviderExcludeItem`",
+                          "properties": {
+                            "any_valid_service_token": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "description": "An empty object which matches on all service tokens.",
+                              "type": "object"
+                            },
+                            "auth_context": {
+                              "description": "`AccessAuthContextRuleAuthContext`",
+                              "properties": {
+                                "ac_id": {
+                                  "description": "The ACID of an Authentication context.",
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "description": "The ID of an Authentication context.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Azure identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "ac_id",
+                                "id",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "auth_method": {
+                              "description": "`AccessAuthenticationMethodRuleAuthMethod`",
+                              "properties": {
+                                "auth_method": {
+                                  "description": "The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176#section-2.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "auth_method"
+                              ],
+                              "type": "object"
+                            },
+                            "azureAD": {
+                              "description": "`AccessAzureGroupRuleAzureAd`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of an Azure group.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Azure identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "certificate": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "type": "object"
+                            },
+                            "cloudflare_account_member": {
+                              "description": "`AccessCloudflareAccountMemberRuleCloudflareAccountMember`",
+                              "properties": {
+                                "account_id": {
+                                  "description": "Identifier.",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "common_name": {
+                              "description": "`AccessCommonNameRuleCommonName`",
+                              "properties": {
+                                "common_name": {
+                                  "description": "The common name to match.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "common_name"
+                              ],
+                              "type": "object"
+                            },
+                            "device_posture": {
+                              "description": "`AccessDevicePostureRuleDevicePosture`",
+                              "properties": {
+                                "account_id": {
+                                  "description": "The ID of the account that owns the device posture integration.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "integration_uid": {
+                                  "description": "The ID of a device posture integration.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "integration_uid"
+                              ],
+                              "type": "object"
+                            },
+                            "email": {
+                              "description": "`AccessEmailRuleEmail`",
+                              "properties": {
+                                "email": {
+                                  "description": "The email of the user.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email"
+                              ],
+                              "type": "object"
+                            },
+                            "email_domain": {
+                              "description": "`AccessDomainRuleEmailDomain`",
+                              "properties": {
+                                "domain": {
+                                  "description": "The email domain to match.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "domain"
+                              ],
+                              "type": "object"
+                            },
+                            "email_list": {
+                              "description": "`AccessEmailListRuleEmailList`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created email list.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "everyone": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "description": "An empty object which matches on all users.",
+                              "type": "object"
+                            },
+                            "external_evaluation": {
+                              "description": "`AccessExternalEvaluationRuleExternalEvaluation`",
+                              "properties": {
+                                "evaluate_url": {
+                                  "description": "The API endpoint containing your business logic.",
+                                  "type": "string"
+                                },
+                                "keys_url": {
+                                  "description": "The API endpoint containing the key that Access uses to verify that the response came from your API.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "evaluate_url",
+                                "keys_url"
+                              ],
+                              "type": "object"
+                            },
+                            "geo": {
+                              "description": "`AccessCountryRuleGeo`",
+                              "properties": {
+                                "country_code": {
+                                  "description": "The country code that should be matched.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "country_code"
+                              ],
+                              "type": "object"
+                            },
+                            "github-organization": {
+                              "description": "`AccessGithubOrganizationRuleGithubOrganization`",
+                              "properties": {
+                                "identity_provider_id": {
+                                  "description": "The ID of your Github identity provider.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the organization.",
+                                  "type": "string"
+                                },
+                                "team": {
+                                  "description": "The name of the team",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "identity_provider_id",
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "group": {
+                              "description": "`AccessAccessGroupRuleGroup`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created Access group.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "groupRef": {
+                              "description": "A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`.",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "gsuite": {
+                              "description": "`AccessGsuiteGroupRuleGsuite`",
+                              "properties": {
+                                "email": {
+                                  "description": "The email of the Google Workspace group.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Google Workspace identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "ip": {
+                              "description": "`AccessIpRuleIp`",
+                              "properties": {
+                                "ip": {
+                                  "description": "An IPv4 or IPv6 CIDR block.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "ip"
+                              ],
+                              "type": "object"
+                            },
+                            "ip_list": {
+                              "description": "`AccessIpListRuleIpList`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created IP list.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "linked_app_token": {
+                              "description": "`AccessLinkedAppTokenRuleLinkedAppToken`",
+                              "properties": {
+                                "app_uid": {
+                                  "description": "The ID of an Access OIDC SaaS application",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "app_uid"
+                              ],
+                              "type": "object"
+                            },
+                            "login_method": {
+                              "description": "`AccessLoginMethodRuleLoginMethod`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of an identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "oidc": {
+                              "description": "`AccessOidcClaimRuleOidc`",
+                              "properties": {
+                                "claim_name": {
+                                  "description": "The name of the OIDC claim.",
+                                  "type": "string"
+                                },
+                                "claim_value": {
+                                  "description": "The OIDC claim value to look for.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your OIDC identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "claim_name",
+                                "claim_value",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "okta": {
+                              "description": "`AccessOktaGroupRuleOkta`",
+                              "properties": {
+                                "identity_provider_id": {
+                                  "description": "The ID of your Okta identity provider.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the Okta group.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "identity_provider_id",
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "saml": {
+                              "description": "`AccessSamlGroupRuleSaml`",
+                              "properties": {
+                                "attribute_name": {
+                                  "description": "The name of the SAML attribute.",
+                                  "type": "string"
+                                },
+                                "attribute_value": {
+                                  "description": "The SAML attribute value to look for.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your SAML identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "attribute_name",
+                                "attribute_value",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "serviceTokenRef": {
+                              "description": "A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`.",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "service_token": {
+                              "description": "`AccessServiceTokenRuleServiceToken`",
+                              "properties": {
+                                "token_id": {
+                                  "description": "The ID of a Service Token.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "token_id"
+                              ],
+                              "type": "object"
+                            },
+                            "user_risk_score": {
+                              "description": "`AccessUserRiskScoreRuleUserRiskScore`",
+                              "properties": {
+                                "user_risk_score": {
+                                  "description": "A list of risk score levels to match. Values can be low, medium, high, or unscored.",
+                                  "items": {
+                                    "description": "`AccessUserRiskScoreRuleUserRiskScoreUserRiskScoreItem`",
+                                    "enum": [
+                                      "low",
+                                      "medium",
+                                      "high",
+                                      "unscored"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "type": "array"
+                                }
+                              },
+                              "required": [
+                                "user_risk_score"
+                              ],
+                              "type": "object"
+                            }
+                          },
+                          "type": "object",
+                          "x-kubernetes-validations": [
+                            {
+                              "message": "set at most one of group and groupRef",
+                              "rule": "!(has(self.group) && has(self.groupRef))"
+                            },
+                            {
+                              "message": "set at most one of service_token and serviceTokenRef",
+                              "rule": "!(has(self.service_token) && has(self.serviceTokenRef))"
+                            }
+                          ]
+                        },
+                        "type": "array"
+                      },
+                      "include": {
+                        "description": "Rules evaluated with an OR logical operator. A user needs to meet only one of the Include rules.",
+                        "items": {
+                          "description": "`AccessPolicyForProviderIncludeItem`",
+                          "properties": {
+                            "any_valid_service_token": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "description": "An empty object which matches on all service tokens.",
+                              "type": "object"
+                            },
+                            "auth_context": {
+                              "description": "`AccessAuthContextRuleAuthContext`",
+                              "properties": {
+                                "ac_id": {
+                                  "description": "The ACID of an Authentication context.",
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "description": "The ID of an Authentication context.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Azure identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "ac_id",
+                                "id",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "auth_method": {
+                              "description": "`AccessAuthenticationMethodRuleAuthMethod`",
+                              "properties": {
+                                "auth_method": {
+                                  "description": "The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176#section-2.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "auth_method"
+                              ],
+                              "type": "object"
+                            },
+                            "azureAD": {
+                              "description": "`AccessAzureGroupRuleAzureAd`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of an Azure group.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Azure identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "certificate": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "type": "object"
+                            },
+                            "cloudflare_account_member": {
+                              "description": "`AccessCloudflareAccountMemberRuleCloudflareAccountMember`",
+                              "properties": {
+                                "account_id": {
+                                  "description": "Identifier.",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "common_name": {
+                              "description": "`AccessCommonNameRuleCommonName`",
+                              "properties": {
+                                "common_name": {
+                                  "description": "The common name to match.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "common_name"
+                              ],
+                              "type": "object"
+                            },
+                            "device_posture": {
+                              "description": "`AccessDevicePostureRuleDevicePosture`",
+                              "properties": {
+                                "account_id": {
+                                  "description": "The ID of the account that owns the device posture integration.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "integration_uid": {
+                                  "description": "The ID of a device posture integration.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "integration_uid"
+                              ],
+                              "type": "object"
+                            },
+                            "email": {
+                              "description": "`AccessEmailRuleEmail`",
+                              "properties": {
+                                "email": {
+                                  "description": "The email of the user.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email"
+                              ],
+                              "type": "object"
+                            },
+                            "email_domain": {
+                              "description": "`AccessDomainRuleEmailDomain`",
+                              "properties": {
+                                "domain": {
+                                  "description": "The email domain to match.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "domain"
+                              ],
+                              "type": "object"
+                            },
+                            "email_list": {
+                              "description": "`AccessEmailListRuleEmailList`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created email list.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "everyone": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "description": "An empty object which matches on all users.",
+                              "type": "object"
+                            },
+                            "external_evaluation": {
+                              "description": "`AccessExternalEvaluationRuleExternalEvaluation`",
+                              "properties": {
+                                "evaluate_url": {
+                                  "description": "The API endpoint containing your business logic.",
+                                  "type": "string"
+                                },
+                                "keys_url": {
+                                  "description": "The API endpoint containing the key that Access uses to verify that the response came from your API.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "evaluate_url",
+                                "keys_url"
+                              ],
+                              "type": "object"
+                            },
+                            "geo": {
+                              "description": "`AccessCountryRuleGeo`",
+                              "properties": {
+                                "country_code": {
+                                  "description": "The country code that should be matched.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "country_code"
+                              ],
+                              "type": "object"
+                            },
+                            "github-organization": {
+                              "description": "`AccessGithubOrganizationRuleGithubOrganization`",
+                              "properties": {
+                                "identity_provider_id": {
+                                  "description": "The ID of your Github identity provider.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the organization.",
+                                  "type": "string"
+                                },
+                                "team": {
+                                  "description": "The name of the team",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "identity_provider_id",
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "group": {
+                              "description": "`AccessAccessGroupRuleGroup`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created Access group.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "groupRef": {
+                              "description": "A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`.",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "gsuite": {
+                              "description": "`AccessGsuiteGroupRuleGsuite`",
+                              "properties": {
+                                "email": {
+                                  "description": "The email of the Google Workspace group.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Google Workspace identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "ip": {
+                              "description": "`AccessIpRuleIp`",
+                              "properties": {
+                                "ip": {
+                                  "description": "An IPv4 or IPv6 CIDR block.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "ip"
+                              ],
+                              "type": "object"
+                            },
+                            "ip_list": {
+                              "description": "`AccessIpListRuleIpList`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created IP list.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "linked_app_token": {
+                              "description": "`AccessLinkedAppTokenRuleLinkedAppToken`",
+                              "properties": {
+                                "app_uid": {
+                                  "description": "The ID of an Access OIDC SaaS application",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "app_uid"
+                              ],
+                              "type": "object"
+                            },
+                            "login_method": {
+                              "description": "`AccessLoginMethodRuleLoginMethod`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of an identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "oidc": {
+                              "description": "`AccessOidcClaimRuleOidc`",
+                              "properties": {
+                                "claim_name": {
+                                  "description": "The name of the OIDC claim.",
+                                  "type": "string"
+                                },
+                                "claim_value": {
+                                  "description": "The OIDC claim value to look for.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your OIDC identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "claim_name",
+                                "claim_value",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "okta": {
+                              "description": "`AccessOktaGroupRuleOkta`",
+                              "properties": {
+                                "identity_provider_id": {
+                                  "description": "The ID of your Okta identity provider.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the Okta group.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "identity_provider_id",
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "saml": {
+                              "description": "`AccessSamlGroupRuleSaml`",
+                              "properties": {
+                                "attribute_name": {
+                                  "description": "The name of the SAML attribute.",
+                                  "type": "string"
+                                },
+                                "attribute_value": {
+                                  "description": "The SAML attribute value to look for.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your SAML identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "attribute_name",
+                                "attribute_value",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "serviceTokenRef": {
+                              "description": "A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`.",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "service_token": {
+                              "description": "`AccessServiceTokenRuleServiceToken`",
+                              "properties": {
+                                "token_id": {
+                                  "description": "The ID of a Service Token.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "token_id"
+                              ],
+                              "type": "object"
+                            },
+                            "user_risk_score": {
+                              "description": "`AccessUserRiskScoreRuleUserRiskScore`",
+                              "properties": {
+                                "user_risk_score": {
+                                  "description": "A list of risk score levels to match. Values can be low, medium, high, or unscored.",
+                                  "items": {
+                                    "description": "`AccessUserRiskScoreRuleUserRiskScoreUserRiskScoreItem`",
+                                    "enum": [
+                                      "low",
+                                      "medium",
+                                      "high",
+                                      "unscored"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "type": "array"
+                                }
+                              },
+                              "required": [
+                                "user_risk_score"
+                              ],
+                              "type": "object"
+                            }
+                          },
+                          "type": "object",
+                          "x-kubernetes-validations": [
+                            {
+                              "message": "set at most one of group and groupRef",
+                              "rule": "!(has(self.group) && has(self.groupRef))"
+                            },
+                            {
+                              "message": "set at most one of service_token and serviceTokenRef",
+                              "rule": "!(has(self.service_token) && has(self.serviceTokenRef))"
+                            }
+                          ]
+                        },
+                        "type": "array"
+                      },
+                      "isolation_required": {
+                        "description": "Require this application to be served in an isolated browser for users matching this policy. 'Client Web Isolation' must be on for the account in order to use this feature.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "mfa_config": {
+                        "description": "Configures multi-factor authentication (MFA) settings.",
+                        "nullable": true,
+                        "properties": {
+                          "allowed_authenticators": {
+                            "description": "Lists the MFA methods that users can authenticate with.",
+                            "items": {
+                              "description": "`AccessMfaConfigAllowedAuthenticatorsItem`",
+                              "enum": [
+                                "totp",
+                                "biometrics",
+                                "security_key"
+                              ],
+                              "type": "string"
+                            },
+                            "type": "array"
+                          },
+                          "mfa_disabled": {
+                            "description": "Indicates whether to disable MFA for this resource. This option is available at the application and policy level.",
+                            "nullable": true,
+                            "type": "boolean"
+                          },
+                          "session_duration": {
+                            "description": "Defines the duration of an MFA session. Must be in minutes (m) or hours (h). Minimum: 0m. Maximum: 720h (30 days). Examples:`5m` or `24h`.",
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "name": {
+                        "description": "The name of the Access policy.",
+                        "type": "string"
+                      },
+                      "purpose_justification_prompt": {
+                        "description": "A custom message that will appear on the purpose justification screen.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "purpose_justification_required": {
+                        "description": "Require users to enter a justification when they log in to the application.",
+                        "nullable": true,
+                        "type": "boolean"
+                      },
+                      "require": {
+                        "description": "Rules evaluated with an AND logical operator. To match the policy, a user must meet all of the Require rules.",
+                        "items": {
+                          "description": "`AccessPolicyForProviderRequireItem`",
+                          "properties": {
+                            "any_valid_service_token": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "description": "An empty object which matches on all service tokens.",
+                              "type": "object"
+                            },
+                            "auth_context": {
+                              "description": "`AccessAuthContextRuleAuthContext`",
+                              "properties": {
+                                "ac_id": {
+                                  "description": "The ACID of an Authentication context.",
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "description": "The ID of an Authentication context.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Azure identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "ac_id",
+                                "id",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "auth_method": {
+                              "description": "`AccessAuthenticationMethodRuleAuthMethod`",
+                              "properties": {
+                                "auth_method": {
+                                  "description": "The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176#section-2.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "auth_method"
+                              ],
+                              "type": "object"
+                            },
+                            "azureAD": {
+                              "description": "`AccessAzureGroupRuleAzureAd`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of an Azure group.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Azure identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "certificate": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "type": "object"
+                            },
+                            "cloudflare_account_member": {
+                              "description": "`AccessCloudflareAccountMemberRuleCloudflareAccountMember`",
+                              "properties": {
+                                "account_id": {
+                                  "description": "Identifier.",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "type": "object"
+                            },
+                            "common_name": {
+                              "description": "`AccessCommonNameRuleCommonName`",
+                              "properties": {
+                                "common_name": {
+                                  "description": "The common name to match.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "common_name"
+                              ],
+                              "type": "object"
+                            },
+                            "device_posture": {
+                              "description": "`AccessDevicePostureRuleDevicePosture`",
+                              "properties": {
+                                "account_id": {
+                                  "description": "The ID of the account that owns the device posture integration.",
+                                  "nullable": true,
+                                  "type": "string"
+                                },
+                                "integration_uid": {
+                                  "description": "The ID of a device posture integration.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "integration_uid"
+                              ],
+                              "type": "object"
+                            },
+                            "email": {
+                              "description": "`AccessEmailRuleEmail`",
+                              "properties": {
+                                "email": {
+                                  "description": "The email of the user.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email"
+                              ],
+                              "type": "object"
+                            },
+                            "email_domain": {
+                              "description": "`AccessDomainRuleEmailDomain`",
+                              "properties": {
+                                "domain": {
+                                  "description": "The email domain to match.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "domain"
+                              ],
+                              "type": "object"
+                            },
+                            "email_list": {
+                              "description": "`AccessEmailListRuleEmailList`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created email list.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "everyone": {
+                              "additionalProperties": {
+                                "x-kubernetes-preserve-unknown-fields": true
+                              },
+                              "description": "An empty object which matches on all users.",
+                              "type": "object"
+                            },
+                            "external_evaluation": {
+                              "description": "`AccessExternalEvaluationRuleExternalEvaluation`",
+                              "properties": {
+                                "evaluate_url": {
+                                  "description": "The API endpoint containing your business logic.",
+                                  "type": "string"
+                                },
+                                "keys_url": {
+                                  "description": "The API endpoint containing the key that Access uses to verify that the response came from your API.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "evaluate_url",
+                                "keys_url"
+                              ],
+                              "type": "object"
+                            },
+                            "geo": {
+                              "description": "`AccessCountryRuleGeo`",
+                              "properties": {
+                                "country_code": {
+                                  "description": "The country code that should be matched.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "country_code"
+                              ],
+                              "type": "object"
+                            },
+                            "github-organization": {
+                              "description": "`AccessGithubOrganizationRuleGithubOrganization`",
+                              "properties": {
+                                "identity_provider_id": {
+                                  "description": "The ID of your Github identity provider.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the organization.",
+                                  "type": "string"
+                                },
+                                "team": {
+                                  "description": "The name of the team",
+                                  "nullable": true,
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "identity_provider_id",
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "group": {
+                              "description": "`AccessAccessGroupRuleGroup`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created Access group.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "groupRef": {
+                              "description": "A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`.",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "gsuite": {
+                              "description": "`AccessGsuiteGroupRuleGsuite`",
+                              "properties": {
+                                "email": {
+                                  "description": "The email of the Google Workspace group.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your Google Workspace identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "email",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "ip": {
+                              "description": "`AccessIpRuleIp`",
+                              "properties": {
+                                "ip": {
+                                  "description": "An IPv4 or IPv6 CIDR block.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "ip"
+                              ],
+                              "type": "object"
+                            },
+                            "ip_list": {
+                              "description": "`AccessIpListRuleIpList`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of a previously created IP list.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "linked_app_token": {
+                              "description": "`AccessLinkedAppTokenRuleLinkedAppToken`",
+                              "properties": {
+                                "app_uid": {
+                                  "description": "The ID of an Access OIDC SaaS application",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "app_uid"
+                              ],
+                              "type": "object"
+                            },
+                            "login_method": {
+                              "description": "`AccessLoginMethodRuleLoginMethod`",
+                              "properties": {
+                                "id": {
+                                  "description": "The ID of an identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id"
+                              ],
+                              "type": "object"
+                            },
+                            "oidc": {
+                              "description": "`AccessOidcClaimRuleOidc`",
+                              "properties": {
+                                "claim_name": {
+                                  "description": "The name of the OIDC claim.",
+                                  "type": "string"
+                                },
+                                "claim_value": {
+                                  "description": "The OIDC claim value to look for.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your OIDC identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "claim_name",
+                                "claim_value",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "okta": {
+                              "description": "`AccessOktaGroupRuleOkta`",
+                              "properties": {
+                                "identity_provider_id": {
+                                  "description": "The ID of your Okta identity provider.",
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "description": "The name of the Okta group.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "identity_provider_id",
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "saml": {
+                              "description": "`AccessSamlGroupRuleSaml`",
+                              "properties": {
+                                "attribute_name": {
+                                  "description": "The name of the SAML attribute.",
+                                  "type": "string"
+                                },
+                                "attribute_value": {
+                                  "description": "The SAML attribute value to look for.",
+                                  "type": "string"
+                                },
+                                "identity_provider_id": {
+                                  "description": "The ID of your SAML identity provider.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "attribute_name",
+                                "attribute_value",
+                                "identity_provider_id"
+                              ],
+                              "type": "object"
+                            },
+                            "serviceTokenRef": {
+                              "description": "A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`.",
+                              "properties": {
+                                "name": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "name"
+                              ],
+                              "type": "object"
+                            },
+                            "service_token": {
+                              "description": "`AccessServiceTokenRuleServiceToken`",
+                              "properties": {
+                                "token_id": {
+                                  "description": "The ID of a Service Token.",
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "token_id"
+                              ],
+                              "type": "object"
+                            },
+                            "user_risk_score": {
+                              "description": "`AccessUserRiskScoreRuleUserRiskScore`",
+                              "properties": {
+                                "user_risk_score": {
+                                  "description": "A list of risk score levels to match. Values can be low, medium, high, or unscored.",
+                                  "items": {
+                                    "description": "`AccessUserRiskScoreRuleUserRiskScoreUserRiskScoreItem`",
+                                    "enum": [
+                                      "low",
+                                      "medium",
+                                      "high",
+                                      "unscored"
+                                    ],
+                                    "type": "string"
+                                  },
+                                  "type": "array"
+                                }
+                              },
+                              "required": [
+                                "user_risk_score"
+                              ],
+                              "type": "object"
+                            }
+                          },
+                          "type": "object",
+                          "x-kubernetes-validations": [
+                            {
+                              "message": "set at most one of group and groupRef",
+                              "rule": "!(has(self.group) && has(self.groupRef))"
+                            },
+                            {
+                              "message": "set at most one of service_token and serviceTokenRef",
+                              "rule": "!(has(self.service_token) && has(self.serviceTokenRef))"
+                            }
+                          ]
+                        },
                         "type": "array"
                       },
                       "session_duration": {
@@ -4834,6 +7684,278 @@
               "spec"
             ],
             "title": "AccessPolicy",
+            "type": "object"
+          }
+        },
+        "served": true,
+        "storage": true,
+        "subresources": {
+          "status": {}
+        }
+      }
+    ]
+  }
+}
+---
+{
+  "apiVersion": "apiextensions.k8s.io/v1",
+  "kind": "CustomResourceDefinition",
+  "metadata": {
+    "name": "accessservicetokens.zerotrust.cloudflare.kube.nas1k.dev"
+  },
+  "spec": {
+    "group": "zerotrust.cloudflare.kube.nas1k.dev",
+    "names": {
+      "kind": "AccessServiceToken",
+      "plural": "accessservicetokens",
+      "singular": "accessservicetoken"
+    },
+    "scope": "Namespaced",
+    "versions": [
+      {
+        "additionalPrinterColumns": [
+          {
+            "jsonPath": ".status.conditions[?(@.type==\"Ready\")].status",
+            "name": "Ready",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".status.conditions[?(@.type==\"Synced\")].status",
+            "name": "Synced",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".metadata.annotations.zerotrust\\.cloudflare\\.kube\\.nas1k\\.dev/external-name",
+            "name": "External-Name",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".metadata.creationTimestamp",
+            "name": "Age",
+            "type": "date"
+          }
+        ],
+        "name": "v1alpha1",
+        "schema": {
+          "openAPIV3Schema": {
+            "description": "Auto-generated derived type for AccessServiceTokenSpec via `CustomResource`",
+            "properties": {
+              "spec": {
+                "properties": {
+                  "deletionPolicy": {
+                    "default": "Delete",
+                    "description": "`Orphan` keeps the external resource when the managed resource is deleted.\nWithout `Delete` in `managementPolicies` the resource is always orphaned.",
+                    "enum": [
+                      "Delete",
+                      "Orphan"
+                    ],
+                    "type": "string"
+                  },
+                  "forProvider": {
+                    "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
+                    "properties": {
+                      "accountRef": {
+                        "description": "A reference to an object of kind `Account` (default) in the namespace of the resource holding the reference, or of kind `ClusterAccount`, by `kind`.",
+                        "nullable": true,
+                        "properties": {
+                          "apiVersion": {
+                            "description": "`apiVersion` of the referenced object; needed when its kind is in several groups.",
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "kind": {
+                            "default": "Account",
+                            "enum": [
+                              "Account",
+                              "ClusterAccount"
+                            ],
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ],
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "accountRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
+                      },
+                      "duration": {
+                        "description": "The duration for how long the service token will be valid. Must be in the format `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens. Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in hours (8760h).",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "name": {
+                        "description": "The name of the service token.",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ],
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "accountRef cannot be removed once set",
+                        "rule": "!has(oldSelf.accountRef) || has(self.accountRef)"
+                      }
+                    ]
+                  },
+                  "managementPolicies": {
+                    "default": [
+                      "*"
+                    ],
+                    "description": "Actions the controller may take. `[\"*\"]` (default) allows all; `[\"Observe\"]`\nonly reads (import without management). `Observe` is always required.",
+                    "items": {
+                      "description": "An action the controller may take on the external resource\n(Crossplane `managementPolicies`).",
+                      "enum": [
+                        "Observe",
+                        "Create",
+                        "Update",
+                        "Delete",
+                        "LateInitialize",
+                        "*"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "writeConnectionSecretToRef": {
+                    "description": "The Secret, in the namespace of the resource, that the controller writes the\nconnection details to.",
+                    "nullable": true,
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ],
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "forProvider"
+                ],
+                "type": "object"
+              },
+              "status": {
+                "description": "`status` of a managed resource; `A` is the generated `atProvider` type.",
+                "nullable": true,
+                "properties": {
+                  "atProvider": {
+                    "description": "`AccessServiceTokenAtProvider`",
+                    "nullable": true,
+                    "properties": {
+                      "client_id": {
+                        "description": "The Client ID for the service token. Access will check for this value in the `CF-Access-Client-ID` request header.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "created_at": {
+                        "description": "`AccessCreatedAt`",
+                        "format": "date-time",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "duration": {
+                        "description": "The duration for how long the service token will be valid. Must be in the format `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens. Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in hours (8760h).",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "expires_at": {
+                        "description": "`AccessTimestamp`",
+                        "format": "date-time",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "id": {
+                        "description": "UUID.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "last_seen_at": {
+                        "description": "`AccessTimestamp`",
+                        "format": "date-time",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "name": {
+                        "description": "The name of the service token.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "updated_at": {
+                        "description": "`AccessUpdatedAt`",
+                        "format": "date-time",
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "conditions": {
+                    "default": [],
+                    "items": {
+                      "description": "Condition contains details for one aspect of the current state of this API Resource.",
+                      "properties": {
+                        "lastTransitionTime": {
+                          "description": "lastTransitionTime is the last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "message": {
+                          "description": "message is a human readable message indicating details about the transition. This may be an empty string.",
+                          "type": "string"
+                        },
+                        "observedGeneration": {
+                          "description": "observedGeneration represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "reason": {
+                          "description": "reason contains a programmatic identifier indicating the reason for the condition's last transition. Producers of specific condition types may define expected values and meanings for this field, and whether the values are considered a guaranteed API. The value should be a CamelCase string. This field may not be empty.",
+                          "type": "string"
+                        },
+                        "status": {
+                          "description": "status of the condition, one of True, False, Unknown.",
+                          "type": "string"
+                        },
+                        "type": {
+                          "description": "type of condition in CamelCase or in foo.example.com/CamelCase.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "lastTransitionTime",
+                        "message",
+                        "reason",
+                        "status",
+                        "type"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "observedGeneration": {
+                    "format": "int64",
+                    "nullable": true,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "required": [
+              "spec"
+            ],
+            "title": "AccessServiceToken",
             "type": "object"
           }
         },
@@ -15580,6 +18702,323 @@
   "apiVersion": "apiextensions.k8s.io/v1",
   "kind": "CustomResourceDefinition",
   "metadata": {
+    "name": "pagesdomains.cloudflare.kube.nas1k.dev"
+  },
+  "spec": {
+    "group": "cloudflare.kube.nas1k.dev",
+    "names": {
+      "kind": "PagesDomain",
+      "plural": "pagesdomains",
+      "singular": "pagesdomain"
+    },
+    "scope": "Namespaced",
+    "versions": [
+      {
+        "additionalPrinterColumns": [
+          {
+            "jsonPath": ".status.conditions[?(@.type==\"Ready\")].status",
+            "name": "Ready",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".status.conditions[?(@.type==\"Synced\")].status",
+            "name": "Synced",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".metadata.annotations.cloudflare\\.kube\\.nas1k\\.dev/external-name",
+            "name": "External-Name",
+            "type": "string"
+          },
+          {
+            "jsonPath": ".metadata.creationTimestamp",
+            "name": "Age",
+            "type": "date"
+          }
+        ],
+        "name": "v1alpha1",
+        "schema": {
+          "openAPIV3Schema": {
+            "description": "Auto-generated derived type for PagesDomainSpec via `CustomResource`",
+            "properties": {
+              "spec": {
+                "properties": {
+                  "deletionPolicy": {
+                    "default": "Delete",
+                    "description": "`Orphan` keeps the external resource when the managed resource is deleted.\nWithout `Delete` in `managementPolicies` the resource is always orphaned.",
+                    "enum": [
+                      "Delete",
+                      "Orphan"
+                    ],
+                    "type": "string"
+                  },
+                  "forProvider": {
+                    "description": "`spec.forProvider`: the generated API fields plus references and\ncredentials.",
+                    "properties": {
+                      "name": {
+                        "description": "The domain name.",
+                        "type": "string",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "name is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
+                      },
+                      "projectRef": {
+                        "description": "A reference to another managed resource: a namespaced resource in the namespace\nof the resource holding the reference, or a cluster-scoped one.",
+                        "nullable": true,
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name"
+                        ],
+                        "type": "object",
+                        "x-kubernetes-validations": [
+                          {
+                            "message": "projectRef is immutable",
+                            "rule": "self == oldSelf"
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ],
+                    "type": "object",
+                    "x-kubernetes-validations": [
+                      {
+                        "message": "name cannot be removed once set",
+                        "rule": "!has(oldSelf.name) || has(self.name)"
+                      },
+                      {
+                        "message": "projectRef cannot be removed once set",
+                        "rule": "!has(oldSelf.projectRef) || has(self.projectRef)"
+                      }
+                    ]
+                  },
+                  "managementPolicies": {
+                    "default": [
+                      "*"
+                    ],
+                    "description": "Actions the controller may take. `[\"*\"]` (default) allows all; `[\"Observe\"]`\nonly reads (import without management). `Observe` is always required.",
+                    "items": {
+                      "description": "An action the controller may take on the external resource\n(Crossplane `managementPolicies`).",
+                      "enum": [
+                        "Observe",
+                        "Create",
+                        "Update",
+                        "Delete",
+                        "LateInitialize",
+                        "*"
+                      ],
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "forProvider"
+                ],
+                "type": "object"
+              },
+              "status": {
+                "description": "`status` of a managed resource; `A` is the generated `atProvider` type.",
+                "nullable": true,
+                "properties": {
+                  "atProvider": {
+                    "description": "`PagesDomainAtProvider`",
+                    "nullable": true,
+                    "properties": {
+                      "certificate_authority": {
+                        "description": "`PagesDomainAtProviderCertificateAuthority`",
+                        "enum": [
+                          "google",
+                          "lets_encrypt"
+                        ],
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "created_on": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "domain_id": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "id": {
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "name": {
+                        "description": "The domain name.",
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "status": {
+                        "description": "`PagesDomainAtProviderStatus`",
+                        "enum": [
+                          "initializing",
+                          "pending",
+                          "active",
+                          "deactivated",
+                          "blocked",
+                          "error"
+                        ],
+                        "nullable": true,
+                        "type": "string"
+                      },
+                      "validation_data": {
+                        "description": "`PagesDomainAtProviderValidationData`",
+                        "nullable": true,
+                        "properties": {
+                          "error_message": {
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "method": {
+                            "description": "`PagesDomainAtProviderValidationDataMethod`",
+                            "enum": [
+                              "http",
+                              "txt"
+                            ],
+                            "type": "string"
+                          },
+                          "status": {
+                            "description": "`PagesDomainAtProviderValidationDataStatus`",
+                            "enum": [
+                              "initializing",
+                              "pending",
+                              "active",
+                              "deactivated",
+                              "error"
+                            ],
+                            "type": "string"
+                          },
+                          "txt_name": {
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "txt_value": {
+                            "nullable": true,
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "method",
+                          "status"
+                        ],
+                        "type": "object"
+                      },
+                      "verification_data": {
+                        "description": "`PagesDomainAtProviderVerificationData`",
+                        "nullable": true,
+                        "properties": {
+                          "error_message": {
+                            "nullable": true,
+                            "type": "string"
+                          },
+                          "status": {
+                            "description": "`PagesDomainAtProviderVerificationDataStatus`",
+                            "enum": [
+                              "pending",
+                              "active",
+                              "deactivated",
+                              "blocked",
+                              "error"
+                            ],
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "status"
+                        ],
+                        "type": "object"
+                      },
+                      "zone_tag": {
+                        "nullable": true,
+                        "type": "string"
+                      }
+                    },
+                    "type": "object"
+                  },
+                  "conditions": {
+                    "default": [],
+                    "items": {
+                      "description": "Condition contains details for one aspect of the current state of this API Resource.",
+                      "properties": {
+                        "lastTransitionTime": {
+                          "description": "lastTransitionTime is the last time the condition transitioned from one status to another. This should be when the underlying condition changed.  If that is not known, then using the time when the API field changed is acceptable.",
+                          "format": "date-time",
+                          "type": "string"
+                        },
+                        "message": {
+                          "description": "message is a human readable message indicating details about the transition. This may be an empty string.",
+                          "type": "string"
+                        },
+                        "observedGeneration": {
+                          "description": "observedGeneration represents the .metadata.generation that the condition was set based upon. For instance, if .metadata.generation is currently 12, but the .status.conditions[x].observedGeneration is 9, the condition is out of date with respect to the current state of the instance.",
+                          "format": "int64",
+                          "type": "integer"
+                        },
+                        "reason": {
+                          "description": "reason contains a programmatic identifier indicating the reason for the condition's last transition. Producers of specific condition types may define expected values and meanings for this field, and whether the values are considered a guaranteed API. The value should be a CamelCase string. This field may not be empty.",
+                          "type": "string"
+                        },
+                        "status": {
+                          "description": "status of the condition, one of True, False, Unknown.",
+                          "type": "string"
+                        },
+                        "type": {
+                          "description": "type of condition in CamelCase or in foo.example.com/CamelCase.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "lastTransitionTime",
+                        "message",
+                        "reason",
+                        "status",
+                        "type"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "observedGeneration": {
+                    "format": "int64",
+                    "nullable": true,
+                    "type": "integer"
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "required": [
+              "spec"
+            ],
+            "title": "PagesDomain",
+            "type": "object"
+          }
+        },
+        "served": true,
+        "storage": true,
+        "subresources": {
+          "status": {}
+        }
+      }
+    ]
+  }
+}
+---
+{
+  "apiVersion": "apiextensions.k8s.io/v1",
+  "kind": "CustomResourceDefinition",
+  "metadata": {
     "name": "pagesprojects.cloudflare.kube.nas1k.dev"
   },
   "spec": {
@@ -15808,7 +19247,7 @@
                               },
                               "env_vars": {
                                 "additionalProperties": {
-                                  "description": "`PagesEnvVarsInnerValue`",
+                                  "description": "`PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValue`",
                                   "nullable": true,
                                   "properties": {
                                     "type": {
@@ -15819,14 +19258,46 @@
                                       "type": "string"
                                     },
                                     "value": {
+                                      "nullable": true,
                                       "type": "string"
+                                    },
+                                    "valueFrom": {
+                                      "description": "Reads `value` from a Secret instead.",
+                                      "nullable": true,
+                                      "properties": {
+                                        "secretKeyRef": {
+                                          "description": "A key of a Secret in the namespace of the resource.",
+                                          "properties": {
+                                            "key": {
+                                              "type": "string"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "key",
+                                            "name"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [
+                                        "secretKeyRef"
+                                      ],
+                                      "type": "object"
                                     }
                                   },
                                   "required": [
-                                    "type",
-                                    "value"
+                                    "type"
                                   ],
-                                  "type": "object"
+                                  "type": "object",
+                                  "x-kubernetes-validations": [
+                                    {
+                                      "message": "set exactly one of value and valueFrom",
+                                      "rule": "has(self.value) != has(self.valueFrom)"
+                                    }
+                                  ]
                                 },
                                 "description": "Environment variables used for builds and Pages Functions.",
                                 "nullable": true,
@@ -16016,7 +19487,6 @@
                               "build_image_major_version",
                               "compatibility_date",
                               "compatibility_flags",
-                              "env_vars",
                               "fail_open",
                               "usage_model"
                             ],
@@ -16125,7 +19595,7 @@
                               },
                               "env_vars": {
                                 "additionalProperties": {
-                                  "description": "`PagesEnvVarsInnerValue`",
+                                  "description": "`PagesProjectForProviderDeploymentConfigsProductionEnvVarsValue`",
                                   "nullable": true,
                                   "properties": {
                                     "type": {
@@ -16136,14 +19606,46 @@
                                       "type": "string"
                                     },
                                     "value": {
+                                      "nullable": true,
                                       "type": "string"
+                                    },
+                                    "valueFrom": {
+                                      "description": "Reads `value` from a Secret instead.",
+                                      "nullable": true,
+                                      "properties": {
+                                        "secretKeyRef": {
+                                          "description": "A key of a Secret in the namespace of the resource.",
+                                          "properties": {
+                                            "key": {
+                                              "type": "string"
+                                            },
+                                            "name": {
+                                              "type": "string"
+                                            }
+                                          },
+                                          "required": [
+                                            "key",
+                                            "name"
+                                          ],
+                                          "type": "object"
+                                        }
+                                      },
+                                      "required": [
+                                        "secretKeyRef"
+                                      ],
+                                      "type": "object"
                                     }
                                   },
                                   "required": [
-                                    "type",
-                                    "value"
+                                    "type"
                                   ],
-                                  "type": "object"
+                                  "type": "object",
+                                  "x-kubernetes-validations": [
+                                    {
+                                      "message": "set exactly one of value and valueFrom",
+                                      "rule": "has(self.value) != has(self.valueFrom)"
+                                    }
+                                  ]
                                 },
                                 "description": "Environment variables used for builds and Pages Functions.",
                                 "nullable": true,
@@ -16333,7 +19835,6 @@
                               "build_image_major_version",
                               "compatibility_date",
                               "compatibility_flags",
-                              "env_vars",
                               "fail_open",
                               "usage_model"
                             ],

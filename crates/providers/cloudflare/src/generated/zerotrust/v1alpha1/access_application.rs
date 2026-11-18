@@ -165,7 +165,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
                     "/policyRef",
                     &[&crate::generated::zerotrust::v1alpha1::access_policy::DESCRIPTOR],
                 ),
-                "id",
+                "/id",
                 "external_id",
             ),
         ],

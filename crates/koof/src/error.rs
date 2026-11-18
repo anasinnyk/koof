@@ -18,6 +18,9 @@ pub enum CredentialError {
     #[error(transparent)]
     Resolve(#[from] ResolveValueError),
 
+    #[error("cluster-scoped {kind} cannot read {path} from a Secret")]
+    ClusterScopedSecretValue { kind: &'static str, path: String },
+
     #[error("Secret {secret:?} key {key:?} is not valid UTF-8")]
     InvalidSecretUtf8 {
         secret: String,
@@ -73,6 +76,20 @@ pub enum ResolveValueError {
         kind: &'static str,
         via: String,
         identifier: &'static str,
+    },
+
+    #[error("item field {pointer} is not a JSON pointer")]
+    ItemPointer {
+        pointer: &'static str,
+        #[source]
+        source: jsonptr::ParseError,
+    },
+
+    #[error("cannot set item field {pointer}")]
+    ItemAssign {
+        pointer: &'static str,
+        #[source]
+        source: jsonptr::assign::Error,
     },
 
     #[error("Kubernetes API request failed")]
@@ -151,6 +168,29 @@ pub enum ReconcileError {
     CreateNotRecorded {
         external_name: String,
         annotation: String,
+        #[source]
+        source: Box<ReconcileError>,
+    },
+
+    #[error("cannot write the connection details to Secret {secret}")]
+    ConnectionSecret {
+        secret: String,
+        #[source]
+        source: Box<kube::Error>,
+    },
+
+    #[error(
+        "Secret {secret} is not owned by this resource; delete it or set another \
+         writeConnectionSecretToRef"
+    )]
+    ConnectionSecretNotOwned { secret: String },
+
+    #[error(
+        "created external resource {external_name}, but the values the API returns only on \
+         create could not be written to its connection Secret"
+    )]
+    ConnectionSecretAfterCreate {
+        external_name: String,
         #[source]
         source: Box<ReconcileError>,
     },

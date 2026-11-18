@@ -141,7 +141,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
                     "/widgetRef",
                     &[&crate::generated::shop::v1alpha1::widget::DESCRIPTOR],
                 ),
-                "widgetId",
+                "/widgetId",
                 "external_id",
             ),
         ],

@@ -23,3 +23,18 @@ pub struct ClusterSecretKeySelector {
     pub key: String,
     pub namespace: String,
 }
+
+/// The Secret, in the namespace of the resource, that the controller writes the
+/// connection details to.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+pub struct SecretReference {
+    pub name: String,
+}
+
+/// The Secret, in `namespace`, that the controller writes the connection details of
+/// a cluster-scoped resource to.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
+pub struct ClusterSecretReference {
+    pub name: String,
+    pub namespace: String,
+}

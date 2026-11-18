@@ -236,14 +236,111 @@ pub async fn with_item_references(
             if let Some(item) = resolved
                 .value
                 .pointer_mut(&format!("{}/{index}", item_reference.list))
-                .and_then(Value::as_object_mut)
+                .filter(|item| item.is_object())
             {
-                item.remove(item_reference.reference.from.trim_start_matches('/'));
-                item.insert(item_reference.into.to_owned(), Value::String(value));
+                if let Some(item) = item.as_object_mut() {
+                    item.remove(item_reference.reference.from.trim_start_matches('/'));
+                }
+                assign(item, item_reference.into, Value::String(value))?;
             }
         }
     }
     Ok(resolved)
+}
+
+/// `node` with the values its `secret_values` read from Secrets: each object that
+/// sets `<field>From.secretKeyRef` gets the Secret's value in `<field>` instead.
+///
+/// # Errors
+///
+/// Returns [`CredentialError`] when a selector is malformed, the resource is
+/// cluster-scoped, or the Secret cannot be read.
+pub async fn with_secret_values(
+    client: &kube::Client,
+    node: &Node,
+) -> Result<Node, CredentialError> {
+    let mut resolved = node.clone();
+    for secret_value in node.descriptor.secret_values {
+        let source = format!("{}From", secret_value.field);
+        for pointer in matching(&node.value, secret_value.objects) {
+            let Some(selector) = non_null(&node.value, &format!("{pointer}/{source}/secretKeyRef"))
+            else {
+                continue;
+            };
+            let namespace = node.namespace.as_deref().ok_or_else(|| {
+                CredentialError::ClusterScopedSecretValue {
+                    kind: node.descriptor.kind,
+                    path: format!("{pointer}/{source}"),
+                }
+            })?;
+            let SecretKeySelector { name, key } =
+                serde_json::from_value(selector.clone()).map_err(ResolveValueError::from)?;
+            let value = resolve_secret_key(client, namespace, &name, &key).await?;
+            if let Some(object) = resolved
+                .value
+                .pointer_mut(&pointer)
+                .and_then(Value::as_object_mut)
+            {
+                object.remove(&source);
+                object.insert(secret_value.field.to_owned(), Value::String(value));
+            }
+        }
+    }
+    Ok(resolved)
+}
+
+/// Pointers of the values in `value` that `pattern` matches; a `*` segment matches
+/// every member of an object and every item of a list.
+fn matching(value: &Value, pattern: &str) -> Vec<String> {
+    let mut found = vec![(String::new(), value)];
+    for segment in pattern.split('/').skip(1) {
+        found = found
+            .into_iter()
+            .flat_map(|(pointer, value)| -> Vec<(String, &Value)> {
+                match (segment, value) {
+                    ("*", Value::Object(members)) => members
+                        .iter()
+                        .map(|(key, member)| {
+                            (
+                                format!("{pointer}/{}", jsonptr::Token::new(key).encoded()),
+                                member,
+                            )
+                        })
+                        .collect(),
+                    ("*", Value::Array(items)) => items
+                        .iter()
+                        .enumerate()
+                        .map(|(index, item)| (format!("{pointer}/{index}"), item))
+                        .collect(),
+                    (_, Value::Object(members)) => {
+                        let key = jsonptr::Token::from_encoded(segment).map_or_else(
+                            |_| segment.to_owned(),
+                            |token| token.decoded().into_owned(),
+                        );
+                        members
+                            .get(&key)
+                            .map(|member| (format!("{pointer}/{segment}"), member))
+                            .into_iter()
+                            .collect()
+                    }
+                    _ => Vec::new(),
+                }
+            })
+            .collect();
+    }
+    found
+        .into_iter()
+        .filter(|(_, value)| value.is_object())
+        .map(|(pointer, _)| pointer)
+        .collect()
+}
+
+fn assign(item: &mut Value, pointer: &'static str, value: Value) -> Result<(), ResolveValueError> {
+    jsonptr::Pointer::parse(pointer)
+        .map_err(|source| ResolveValueError::ItemPointer { pointer, source })?
+        .assign(item, value)
+        .map_err(|source| ResolveValueError::ItemAssign { pointer, source })?;
+    Ok(())
 }
 
 /// Credentials for `node`: its own Secret, or the Secret of the resource its
@@ -613,6 +710,128 @@ mod tests {
             assert_eq!(
                 with_aliases(json!([{ "zoneRef": { "name": "example" } }]), objects).await,
                 Err(error.to_owned())
+            );
+        }
+
+        static WITH_SECRETS: ResourceDescriptor = ResourceDescriptor::new(
+            "Project",
+            || (crate::testing::RECORD.api_resource)(),
+            "example.dev",
+            true,
+            ObserveDescriptor::new(OperationDescriptor::new()),
+        )
+        .with_secret_values(&[
+            crate::resource::SecretValue::new("/spec/forProvider/configs/*/env/*", "value"),
+            crate::resource::SecretValue::new("/spec/forProvider/token", "value"),
+        ]);
+
+        async fn with_secrets(
+            namespace: Option<&str>,
+            for_provider: Value,
+            objects: &[Value],
+        ) -> Result<Value, String> {
+            let node = Node {
+                descriptor: &WITH_SECRETS,
+                namespace: namespace.map(str::to_owned),
+                value: json!({ "spec": { "forProvider": for_provider } }),
+            };
+            with_secret_values(&kubernetes(objects), &node)
+                .await
+                .map(|node| node.value["spec"]["forProvider"].clone())
+                .map_err(|error| error.to_string())
+        }
+
+        fn from(name: &str, key: &str) -> Value {
+            json!({ "secretKeyRef": { "name": name, "key": key } })
+        }
+
+        #[tokio::test]
+        async fn secret_values_replace_their_selectors() {
+            let for_provider = json!({
+                "configs": {
+                    "production": { "env": {
+                        "a/b": { "type": "secret_text", "valueFrom": from("app", "token") },
+                        "PLAIN": { "type": "plain_text", "value": "x" },
+                    } },
+                    "preview": { "env": [{ "valueFrom": from("app", "token") }] },
+                },
+                "token": { "valueFrom": null },
+            });
+
+            assert_eq!(
+                with_secrets(
+                    Some("default"),
+                    for_provider,
+                    &[secret("app", "token", "s3cret")]
+                )
+                .await,
+                Ok(json!({
+                    "configs": {
+                        "production": { "env": {
+                            "a/b": { "type": "secret_text", "value": "s3cret" },
+                            "PLAIN": { "type": "plain_text", "value": "x" },
+                        } },
+                        "preview": { "env": [{ "value": "s3cret" }] },
+                    },
+                    "token": { "valueFrom": null },
+                }))
+            );
+        }
+
+        #[rstest]
+        #[case::missing_key(Some("default"), "Secret default/app does not contain key \"token\"")]
+        #[case::cluster_scoped(
+            None,
+            "cluster-scoped Project cannot read /spec/forProvider/token/valueFrom from a Secret"
+        )]
+        #[tokio::test]
+        async fn secret_values_explain_what_is_missing(
+            #[case] namespace: Option<&str>,
+            #[case] error: &str,
+        ) {
+            assert_eq!(
+                with_secrets(
+                    namespace,
+                    json!({ "token": { "valueFrom": from("app", "token") } }),
+                    &[secret("app", "other", "s3cret")]
+                )
+                .await,
+                Err(error.to_owned())
+            );
+        }
+
+        static NESTED: ResourceDescriptor = ResourceDescriptor::new(
+            "Policy",
+            || (crate::testing::RECORD.api_resource)(),
+            "example.dev",
+            true,
+            ObserveDescriptor::new(OperationDescriptor::new()),
+        )
+        .with_item_references(&[crate::resource::ItemReference::new(
+            "/spec/forProvider/include",
+            Reference::new("zone", "/zoneRef", &[&crate::testing::ZONE]),
+            "/zone/id",
+            "external_id",
+        )]);
+
+        #[tokio::test]
+        async fn item_references_fill_nested_fields() {
+            let node = Node {
+                descriptor: &NESTED,
+                namespace: Some("default".to_owned()),
+                value: json!({ "spec": { "forProvider": { "include": [
+                    { "zoneRef": { "name": "example" } },
+                    { "everyone": {} },
+                ] } } }),
+            };
+
+            let resolved = with_item_references(&kubernetes(&[zone()]), &node).await;
+
+            assert_eq!(
+                resolved
+                    .map(|node| node.value["spec"]["forProvider"]["include"].clone())
+                    .map_err(|error| error.to_string()),
+                Ok(json!([{ "zone": { "id": "zone-1" } }, { "everyone": {} }]))
             );
         }
     }

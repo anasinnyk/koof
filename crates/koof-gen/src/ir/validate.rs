@@ -18,6 +18,8 @@ pub struct ValidationError {
 static NO_FIELDS: ResourceFields = ResourceFields {
     late_initialize: Vec::new(),
     list_map_keys: BTreeMap::new(),
+    secret_values: Vec::new(),
+    union_items: BTreeSet::new(),
 };
 
 /// Checks `ir` and resolves it for code generation. `fields` holds the
@@ -116,8 +118,15 @@ impl<'a> Checker<'a, '_> {
             );
         }
         let references = self.references();
-        let item_references = self.item_references();
+        let item_references = self.item_references(fields);
         let credentials = self.credentials();
+        self.connection_secret();
+        if resource.cluster && !fields.secret_values.is_empty() {
+            self.error(
+                "cluster",
+                "a resource with a cluster variant cannot read forProvider fields from Secrets",
+            );
+        }
         let observe = self.operation("observe", Some(&resource.lifecycle.observe));
         let create = self.create();
         let update = self.operation("update", resource.lifecycle.update.as_ref());
@@ -139,6 +148,8 @@ impl<'a> Checker<'a, '_> {
             references,
             item_references,
             credentials,
+            connection_secret: &resource.connection_secret,
+            secret_values: &fields.secret_values,
             validations: &resource.validations,
             immutable: &resource.immutable,
             late_initialize: &fields.late_initialize,
@@ -305,7 +316,28 @@ impl<'a> Checker<'a, '_> {
         })
     }
 
-    fn item_references(&mut self) -> Vec<ItemReference<'a>> {
+    fn connection_secret(&mut self) {
+        for (key, path) in &self.resource.connection_secret {
+            let valid_key = !key.is_empty()
+                && key
+                    .chars()
+                    .all(|c| c.is_ascii_alphanumeric() || matches!(c, '-' | '_' | '.'));
+            if !valid_key {
+                self.error(
+                    &format!("connection_secret.{key}"),
+                    "a Secret key consists of alphanumerics, '-', '_' and '.'",
+                );
+            }
+            if path.split('.').any(str::is_empty) {
+                self.error(
+                    &format!("connection_secret.{key}"),
+                    format!("invalid field path {path:?}"),
+                );
+            }
+        }
+    }
+
+    fn item_references(&mut self, fields: &ResourceFields) -> Vec<ItemReference<'a>> {
         let mut item_references = Vec::new();
         for (name, item_reference) in &self.resource.item_references {
             let location = format!("item_references.{name}");
@@ -346,11 +378,16 @@ impl<'a> Checker<'a, '_> {
             }
             let (target_group, target_version) =
                 target.api_version.split_once('/').unwrap_or_default();
+            if item_reference.into.split('.').any(str::is_empty) {
+                self.error(&location, format!("invalid into {:?}", item_reference.into));
+                continue;
+            }
             item_references.push(ItemReference {
                 name,
                 list,
                 field,
                 into: &item_reference.into,
+                union: fields.union_items.contains(list),
                 identifier: &item_reference.identifier,
                 target: &item_reference.target,
                 target_group,

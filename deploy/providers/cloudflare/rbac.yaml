@@ -15,6 +15,7 @@
         "clusteraccounts",
         "iplists",
         "notificationpolicies",
+        "pagesdomains",
         "pagesprojects",
         "turnstilewidgets",
         "zones"
@@ -36,6 +37,7 @@
         "clusteraccounts/status",
         "iplists/status",
         "notificationpolicies/status",
+        "pagesdomains/status",
         "pagesprojects/status",
         "turnstilewidgets/status",
         "zones/status"
@@ -55,6 +57,7 @@
         "clusteraccounts/finalizers",
         "iplists/finalizers",
         "notificationpolicies/finalizers",
+        "pagesdomains/finalizers",
         "pagesprojects/finalizers",
         "turnstilewidgets/finalizers",
         "zones/finalizers"
@@ -246,7 +249,9 @@
       ],
       "resources": [
         "accessapplications",
+        "accessgroups",
         "accesspolicies",
+        "accessservicetokens",
         "gatewaylists",
         "gatewayrules",
         "tunnels",
@@ -268,7 +273,9 @@
       ],
       "resources": [
         "accessapplications/status",
+        "accessgroups/status",
         "accesspolicies/status",
+        "accessservicetokens/status",
         "gatewaylists/status",
         "gatewayrules/status",
         "tunnels/status",
@@ -288,7 +295,9 @@
       ],
       "resources": [
         "accessapplications/finalizers",
+        "accessgroups/finalizers",
         "accesspolicies/finalizers",
+        "accessservicetokens/finalizers",
         "gatewaylists/finalizers",
         "gatewayrules/finalizers",
         "tunnels/finalizers",
@@ -368,7 +377,9 @@
         "secrets"
       ],
       "verbs": [
-        "get"
+        "get",
+        "create",
+        "patch"
       ]
     },
     {

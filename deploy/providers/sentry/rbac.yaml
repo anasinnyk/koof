@@ -83,7 +83,9 @@
         "secrets"
       ],
       "verbs": [
-        "get"
+        "get",
+        "create",
+        "patch"
       ]
     },
     {
