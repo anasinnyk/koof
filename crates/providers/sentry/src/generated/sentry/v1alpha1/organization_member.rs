@@ -130,7 +130,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
                     "/teamRef",
                     &[&crate::generated::sentry::v1alpha1::team::DESCRIPTOR],
                 ),
-                "teamSlug",
+                "/teamSlug",
                 "slug",
             ),
         ],

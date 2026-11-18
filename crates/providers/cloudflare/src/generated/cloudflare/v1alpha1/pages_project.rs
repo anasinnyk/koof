@@ -8,6 +8,16 @@ fn for_provider_schema(schema: &mut schemars::Schema) {
         schema,
         &[
             koof::schema::Validation {
+                rule: "has(self.value) != has(self.valueFrom)",
+                message: "set exactly one of value and valueFrom",
+                field: "deployment_configs.preview.env_vars.*",
+            },
+            koof::schema::Validation {
+                rule: "has(self.value) != has(self.valueFrom)",
+                message: "set exactly one of value and valueFrom",
+                field: "deployment_configs.production.env_vars.*",
+            },
+            koof::schema::Validation {
                 rule: "self == oldSelf",
                 message: "accountRef is immutable",
                 field: "accountRef",
@@ -115,6 +125,18 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
                     &crate::generated::cloudflare::v1alpha1::account::DESCRIPTOR,
                     &crate::generated::cloudflare::v1alpha1::cluster_account::DESCRIPTOR,
                 ],
+            ),
+        ],
+    )
+    .with_secret_values(
+        &[
+            koof::resource::SecretValue::new(
+                "/spec/forProvider/deployment_configs/preview/env_vars/*",
+                "value",
+            ),
+            koof::resource::SecretValue::new(
+                "/spec/forProvider/deployment_configs/production/env_vars/*",
+                "value",
             ),
         ],
     )

@@ -1,4 +1,5 @@
 pub mod conditions;
+pub mod connection;
 mod context;
 pub mod create_state;
 pub mod drift;
@@ -195,6 +196,9 @@ async fn reconcile_inner<R: ManagedResource>(
         }
     }
 
+    if !deleting && let Some(observed) = &observation.at_provider {
+        write_connection_secret(context, resource, observed).await?;
+    }
     let change = update_status(context, resource, &observation).await?;
     if change.became_ready {
         publish(
@@ -403,8 +407,31 @@ async fn update_external<R: ManagedResource>(
         )
         .await;
     }
+    if let Some(observed) = &observation.at_provider {
+        write_connection_secret(context, resource, observed).await?;
+    }
     update_status(context, resource, &observation).await?;
     Ok(Action::requeue(jitter(context.resync)))
+}
+
+async fn write_connection_secret<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+    external: &serde_json::Value,
+) -> Result<(), ReconcileError> {
+    let details = connection::details(R::descriptor().connection_secret, external);
+    if connection::write(
+        &context.kube_client,
+        &context.field_manager,
+        resource,
+        &details,
+    )
+    .await?
+    {
+        let keys: Vec<&str> = details.keys().map(String::as_str).collect();
+        tracing::info!(?keys, "connection secret written");
+    }
+    Ok(())
 }
 
 fn jitter(duration: Duration) -> Duration {
@@ -459,7 +486,8 @@ async fn create_external<R: ManagedResource>(
         return Ok(Action::requeue(CONFIRM));
     }
 
-    let external_name = external::create(context, resource).await?;
+    let created = external::create(context, resource).await?;
+    let external_name = created.external_name;
     tracing::info!(%external_name, "external resource created");
     context
         .metrics
@@ -472,6 +500,14 @@ async fn create_external<R: ManagedResource>(
         &format!("External resource created: {external_name}"),
     )
     .await;
+    if let Some(created) = &created.resource {
+        write_connection_secret(context, resource, created)
+            .await
+            .map_err(|source| ReconcileError::ConnectionSecretAfterCreate {
+                external_name,
+                source: Box::new(source),
+            })?;
+    }
     Ok(Action::requeue(CONFIRM))
 }
 

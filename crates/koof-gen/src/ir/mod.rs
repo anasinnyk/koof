@@ -36,6 +36,21 @@ pub struct ResourceName(pub String);
 pub struct ResourceFields {
     pub late_initialize: Vec<String>,
     pub list_map_keys: BTreeMap<String, ListMapIr>,
+    pub secret_values: Vec<SecretValueIr>,
+    /// Lists with item references whose items are a union.
+    pub union_items: std::collections::BTreeSet<String>,
+}
+
+/// A `forProvider` field that may be read from a Secret: `field` of the objects at
+/// `objects`, a dotted path whose `*` segments match every member of a map or item
+/// of a list.
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct SecretValueIr {
+    pub objects: Vec<String>,
+    pub field: String,
+    /// Whether the API requires the field, so that exactly one of it and its
+    /// Secret must be set.
+    pub required: bool,
 }
 
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
@@ -58,6 +73,7 @@ pub struct ResourceIr {
     pub references: BTreeMap<String, ReferenceIr>,
     pub item_references: BTreeMap<String, ItemReferenceIr>,
     pub credentials: Option<CredentialsIr>,
+    pub connection_secret: BTreeMap<String, String>,
     pub lifecycle: LifecycleIr,
     pub validations: Vec<ValidationIr>,
     pub immutable: Vec<String>,
@@ -99,6 +115,12 @@ pub struct ItemReferenceIr {
 }
 
 impl ItemReferenceIr {
+    /// The first field of the dotted `into`: the item field that it fills.
+    #[must_use]
+    pub fn into_field(&self) -> &str {
+        self.into.split('.').next().unwrap_or_default()
+    }
+
     /// The list and the reference field of `from`
     /// (`spec.forProvider.<list>[].<field>`).
     #[must_use]

@@ -59,6 +59,8 @@ pub struct ResourceExtension {
     pub item_references: BTreeMap<String, ItemReferenceIr>,
     pub credentials: Option<CredentialsIr>,
     #[serde(default)]
+    pub connection_secret: BTreeMap<String, String>,
+    #[serde(default)]
     pub validations: Vec<ValidationIr>,
     #[serde(default)]
     pub immutable: Vec<String>,
@@ -138,6 +140,7 @@ pub struct ResultExtension {
     pub identifiers: BTreeMap<String, String>,
 }
 
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FieldExtension {
@@ -147,6 +150,8 @@ pub struct FieldExtension {
     pub late_initialize: bool,
     #[serde(default)]
     pub sensitive: bool,
+    #[serde(default)]
+    pub secret_key_ref: bool,
     #[serde(default)]
     pub list_map_keys: Vec<String>,
 }
@@ -161,6 +166,7 @@ impl Default for FieldExtension {
             ignored: false,
             late_initialize: true,
             sensitive: false,
+            secret_key_ref: false,
             list_map_keys: Vec::new(),
         }
     }

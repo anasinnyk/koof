@@ -1,0 +1,95 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare PagesDomain
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # A custom domain of a Pages project. The domain is its name, so it cannot
+  # change; atProvider shows how far its verification and validation got.
+  - target: $.paths['/accounts/{account_id}/pages/projects/{project_name}/domains'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: pages_domain
+        apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+        kind: PagesDomain
+        immutable: [name]
+
+        test:
+          forProvider:
+            name: app.example.com
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          project:
+            from: spec.forProvider.projectRef
+            target: pages_project
+
+        credentials:
+          securityScheme: api_token
+          source:
+            type: related
+            via: [project, account]
+
+        fields:
+          mode: all
+
+  - target: $.paths['/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}'].get
+    update:
+      x-kube-operation:
+        resource: pages_domain
+        lifecycle: observe
+        response:
+          path: result
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [project, account]
+            name: external_id
+          project_name:
+            type: related_identifier
+            via: [project]
+            name: external_id
+          domain_name:
+            type: coalesce
+            values:
+              - type: external_name
+              - type: field
+                path: spec.forProvider.name
+
+  - target: $.paths['/accounts/{account_id}/pages/projects/{project_name}/domains'].post
+    update:
+      x-kube-operation:
+        resource: pages_domain
+        lifecycle: create
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [project, account]
+            name: external_id
+          project_name:
+            type: related_identifier
+            via: [project]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.name
+
+  - target: $.paths['/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}'].delete
+    update:
+      x-kube-operation:
+        resource: pages_domain
+        lifecycle: delete
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [project, account]
+            name: external_id
+          project_name:
+            type: related_identifier
+            via: [project]
+            name: external_id
+          domain_name:
+            type: external_name

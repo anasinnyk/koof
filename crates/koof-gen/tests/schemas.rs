@@ -2,7 +2,7 @@ mod common;
 
 use common::{PARTS, codegen, widgets, widgets_with};
 use koof_gen::{
-    ir::{ListMapIr, ResourceName},
+    ir::{ListMapIr, ResourceName, SecretValueIr},
     spec,
 };
 use pretty_assertions::assert_eq;
@@ -175,6 +175,153 @@ fn item_references_add_their_field_to_the_items() {
                 keys: vec!["widgetId".to_owned()],
                 in_schema: false
             },
+        )
+    );
+}
+
+const RULES: &str = "
+  - target: $.components.schemas
+    update:
+      email_rule:
+        type: object
+        required: [email]
+        properties:
+          email:
+            type: string
+      widget_rule:
+        type: object
+        required: [widget]
+        properties:
+          widget:
+            type: object
+            required: [id]
+            properties:
+              id:
+                type: string
+      rule:
+        type: object
+        oneOf:
+          - $ref: '#/components/schemas/email_rule'
+          - $ref: '#/components/schemas/widget_rule'
+  - target: $.components.schemas.widget.properties
+    update:
+      include:
+        type: array
+        items:
+          $ref: '#/components/schemas/rule'
+  - target: $.components.schemas.widget['x-kube-resource'].fields.forProvider
+    update: [include]
+  - target: $.components.schemas.widget['x-kube-resource']
+    update:
+      itemReferences:
+        widget:
+          from: spec.forProvider.include[].widgetRef
+          target: widget
+          into: widget.id
+          identifier: external_id
+";
+
+#[test]
+fn item_references_into_a_union_add_a_variant() {
+    let codegen = codegen(&widgets_with(RULES));
+
+    assert_eq!(
+        (
+            &codegen.document["components"]["schemas"]["shop_v1alpha1_WidgetForProvider"]["properties"]
+                ["include"]["items"]["oneOf"][2],
+            &codegen.fields[&ResourceName("widget".to_owned())].union_items,
+        ),
+        (
+            &json!({
+                "type": "object",
+                "required": ["widgetRef"],
+                "properties": {
+                    "widgetRef": {
+                        "type": "object",
+                        "description": "A reference to an object of kind `Widget` in the namespace of the resource holding the reference; sets `widget.id`.",
+                        "required": ["name"],
+                        "properties": { "name": { "type": "string" } },
+                    },
+                },
+            }),
+            &["include".to_owned()].into(),
+        )
+    );
+}
+
+const ENV: &str = "
+  - target: $.components.schemas
+    update:
+      plain_var:
+        type: object
+        required: [type, value]
+        properties:
+          type:
+            type: string
+            enum: [plain]
+          value:
+            type: string
+            x-kube-field:
+              secretKeyRef: true
+      secret_var:
+        type: object
+        required: [type]
+        properties:
+          type:
+            type: string
+            enum: [secret]
+          value:
+            type: string
+            x-kube-field:
+              secretKeyRef: true
+      env:
+        type: object
+        additionalProperties:
+          oneOf:
+            - $ref: '#/components/schemas/plain_var'
+            - $ref: '#/components/schemas/secret_var'
+  - target: $.components.schemas.widget.properties
+    update:
+      config:
+        type: object
+        properties:
+          env:
+            $ref: '#/components/schemas/env'
+  - target: $.components.schemas.widget['x-kube-resource'].fields.forProvider
+    update: [config]
+";
+
+#[test]
+fn secret_key_ref_fields_can_be_read_from_a_secret() {
+    let codegen = codegen(&widgets_with(ENV));
+    let variants = &codegen.document["components"]["schemas"]["shop_v1alpha1_WidgetForProvider"]["properties"]
+        ["config"]["properties"]["env"]["additionalProperties"]["oneOf"];
+
+    assert_eq!(
+        (
+            &variants[0]["required"],
+            &variants[0]["properties"]["valueFrom"]["properties"]["secretKeyRef"]["required"],
+            &variants[1]["properties"]["valueFrom"]["required"],
+            &codegen.document["components"]["schemas"]["plain_var"]["required"],
+            &codegen.fields[&ResourceName("widget".to_owned())].secret_values,
+        ),
+        (
+            &json!(["type"]),
+            &json!(["name", "key"]),
+            &json!(["secretKeyRef"]),
+            &json!(["type", "value"]),
+            &vec![
+                SecretValueIr {
+                    objects: vec!["config".to_owned(), "env".to_owned(), "*".to_owned()],
+                    field: "value".to_owned(),
+                    required: false,
+                },
+                SecretValueIr {
+                    objects: vec!["config".to_owned(), "env".to_owned(), "*".to_owned()],
+                    field: "value".to_owned(),
+                    required: true,
+                },
+            ],
         )
     );
 }

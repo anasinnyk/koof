@@ -120,7 +120,10 @@ reference names a namespace); references to the resource then take
 a cluster variant can only reference resources that have one too.
 `itemReferences` adds a reference to each item of a `forProvider` list
 (`from: spec.forProvider.teamRoles[].teamRef`); the identifier `identifier` of the
-referenced object fills the item field `into` before comparing and sending.
+referenced object fills the item field `into` (a dotted path) before comparing and sending; when the items
+are a union, the reference is one more variant of it. `connectionSecret` maps Secret
+keys to fields of the resource the API returns, written to the Secret named by
+`spec.writeConnectionSecretToRef`.
 
 `lifecycle` is one of `observe` (required), `create`, `update` and `delete`.
 For APIs that soft-delete (the observe endpoint keeps answering `200`),
@@ -130,7 +133,8 @@ that field is set. When the API only lists the resource, `response.match`
 list; no match means the resource does not exist.
 Request bodies default to `spec.forProvider`; `request.set` adds values such as
 identifiers of referenced resources. `x-kube-field` on a property sets `ignored`,
-`lateInitialize: false`, `sensitive` (kept out of `status.atProvider`) or
+`lateInitialize: false`, `sensitive` (kept out of `status.atProvider`),
+`secretKeyRef` (the value can come from `<field>From.secretKeyRef`) or
 `listMapKeys` (list items matched by key, in any order).
 
 ## Provider crate

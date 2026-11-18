@@ -111,6 +111,7 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
                 references: extension.references,
                 item_references: extension.item_references,
                 credentials: extension.credentials,
+                connection_secret: extension.connection_secret,
                 validations: extension.validations,
                 immutable: extension.immutable,
                 test: extension.test,

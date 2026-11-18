@@ -193,6 +193,57 @@ the `into` field; the list is then compared by key, but not declared a map in th
 CRD (Kubernetes requires map keys to be set). Deleting a referenced object waits
 while items reference it.
 
+`into` may be nested (`group.id`). When the items are a union (`oneOf` of rule
+objects, like Cloudflare Access rules), the reference becomes one more variant,
+`{groupRef: {name}}`, which is replaced by `{group: {id}}`:
+
+```yaml
+x-kube-resource:
+  itemReferences:
+    include_group:
+      from: spec.forProvider.include[].groupRef
+      target: access_group
+      into: group.id
+      identifier: external_id
+```
+
+## Take a field's value from a Secret
+
+When a request field holds a secret the user should not write into the object (a
+Pages environment variable of type `secret_text`), mark the property:
+
+```yaml
+- target: $.components.schemas.pages_secret_text_env_var.properties.value
+  update:
+    x-kube-field:
+      secretKeyRef: true
+```
+
+The object can then set `valueFrom.secretKeyRef: {name, key}` next to `value`, at
+any depth (lists and maps included); exactly one of the two when the API
+requires the field. The Secret is read from the object's namespace before each
+create and update. The field is not compared with the observation (APIs return
+such values empty or masked), so a changed Secret is sent with the next update,
+not on its own.
+
+## Publish values the API returns
+
+Values clients need (a token's client secret, a DSN) go to a Secret instead of
+the status:
+
+```yaml
+x-kube-resource:
+  connectionSecret:
+    client_id: client_id             # Secret key: dotted path in the resource
+    client_secret: client_secret
+```
+
+The object names the Secret in `spec.writeConnectionSecretToRef`. Keys are taken
+from the create response (set `response.path` on the create operation when the
+resource is wrapped, e.g. `result`) and from every observation; a key the
+observation lacks keeps its value, so a secret the API returns only on create
+survives. Mark such fields `sensitive` as well when the observe response has them.
+
 ## Share a resource across namespaces
 
 `cluster: true` on `x-kube-resource` also generates a cluster-scoped

@@ -152,6 +152,30 @@ async fn creates_a_missing_record_and_reports_it_ready() {
     );
 }
 
+#[tokio::test]
+async fn writes_the_connection_details_to_the_secret_it_is_told_to() {
+    let mut spec = for_provider(&json!({ "name": "www.example.com", "ttl": 300 }));
+    spec["writeConnectionSecretToRef"] = json!({ "name": "www-connection" });
+    let mut record = www(spec);
+    record["metadata"]["uid"] = json!("uid-1");
+    let world = world(record).await;
+
+    world.reconcile_record_times(2).await;
+
+    let secret = world.cluster.get("Secret", "www-connection");
+    assert_eq!(
+        secret.map(|secret| (
+            secret["data"].clone(),
+            secret["metadata"]["ownerReferences"][0]["uid"].clone()
+        )),
+        Some((
+            json!({ "id": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=" }),
+            json!("uid-1")
+        ))
+    );
+    assert_eq!(world.ready(), Some(pair("True", "Available")));
+}
+
 fn koof_owns_the_external_name(object: &Value) -> bool {
     let key = format!("f:{}", RECORD.annotation(EXTERNAL_NAME));
     object["metadata"]["managedFields"]

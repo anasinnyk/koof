@@ -19,6 +19,8 @@ References: `zoneRef` → Zone.
 
 Credentials: via zone → account.
 
+Connection details (`writeConnectionSecretToRef`): `id`, `token`.
+
 ## Example
 
 ```yaml
@@ -48,6 +50,8 @@ spec:
 | `forProvider.zoneRef` | object |  |  |
 | `forProvider.zoneRef.name` | string | yes |  |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
+| `writeConnectionSecretToRef` | object |  | The Secret, in the namespace of the resource, that the controller writes the connection details to. |
+| `writeConnectionSecretToRef.name` | string | yes |  |
 
 Validation:
 

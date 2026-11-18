@@ -88,6 +88,8 @@ spec:
 | `forProvider.exclude[].github-organization.team` | string |  | The name of the team |
 | `forProvider.exclude[].group` | object |  |  |
 | `forProvider.exclude[].group.id` | string | yes | The ID of a previously created Access group. |
+| `forProvider.exclude[].groupRef` | object |  | A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`. |
+| `forProvider.exclude[].groupRef.name` | string | yes |  |
 | `forProvider.exclude[].gsuite` | object |  |  |
 | `forProvider.exclude[].gsuite.email` | string | yes | The email of the Google Workspace group. |
 | `forProvider.exclude[].gsuite.identity_provider_id` | string | yes | The ID of your Google Workspace identity provider. |
@@ -110,6 +112,8 @@ spec:
 | `forProvider.exclude[].saml.attribute_name` | string | yes | The name of the SAML attribute. |
 | `forProvider.exclude[].saml.attribute_value` | string | yes | The SAML attribute value to look for. |
 | `forProvider.exclude[].saml.identity_provider_id` | string | yes | The ID of your SAML identity provider. |
+| `forProvider.exclude[].serviceTokenRef` | object |  | A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`. |
+| `forProvider.exclude[].serviceTokenRef.name` | string | yes |  |
 | `forProvider.exclude[].service_token` | object |  |  |
 | `forProvider.exclude[].service_token.token_id` | string | yes | The ID of a Service Token. |
 | `forProvider.exclude[].user_risk_score` | object |  |  |
@@ -151,6 +155,8 @@ spec:
 | `forProvider.include[].github-organization.team` | string |  | The name of the team |
 | `forProvider.include[].group` | object |  |  |
 | `forProvider.include[].group.id` | string | yes | The ID of a previously created Access group. |
+| `forProvider.include[].groupRef` | object |  | A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`. |
+| `forProvider.include[].groupRef.name` | string | yes |  |
 | `forProvider.include[].gsuite` | object |  |  |
 | `forProvider.include[].gsuite.email` | string | yes | The email of the Google Workspace group. |
 | `forProvider.include[].gsuite.identity_provider_id` | string | yes | The ID of your Google Workspace identity provider. |
@@ -173,6 +179,8 @@ spec:
 | `forProvider.include[].saml.attribute_name` | string | yes | The name of the SAML attribute. |
 | `forProvider.include[].saml.attribute_value` | string | yes | The SAML attribute value to look for. |
 | `forProvider.include[].saml.identity_provider_id` | string | yes | The ID of your SAML identity provider. |
+| `forProvider.include[].serviceTokenRef` | object |  | A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`. |
+| `forProvider.include[].serviceTokenRef.name` | string | yes |  |
 | `forProvider.include[].service_token` | object |  |  |
 | `forProvider.include[].service_token.token_id` | string | yes | The ID of a Service Token. |
 | `forProvider.include[].user_risk_score` | object |  |  |
@@ -222,6 +230,8 @@ spec:
 | `forProvider.require[].github-organization.team` | string |  | The name of the team |
 | `forProvider.require[].group` | object |  |  |
 | `forProvider.require[].group.id` | string | yes | The ID of a previously created Access group. |
+| `forProvider.require[].groupRef` | object |  | A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`. |
+| `forProvider.require[].groupRef.name` | string | yes |  |
 | `forProvider.require[].gsuite` | object |  |  |
 | `forProvider.require[].gsuite.email` | string | yes | The email of the Google Workspace group. |
 | `forProvider.require[].gsuite.identity_provider_id` | string | yes | The ID of your Google Workspace identity provider. |
@@ -244,6 +254,8 @@ spec:
 | `forProvider.require[].saml.attribute_name` | string | yes | The name of the SAML attribute. |
 | `forProvider.require[].saml.attribute_value` | string | yes | The SAML attribute value to look for. |
 | `forProvider.require[].saml.identity_provider_id` | string | yes | The ID of your SAML identity provider. |
+| `forProvider.require[].serviceTokenRef` | object |  | A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`. |
+| `forProvider.require[].serviceTokenRef.name` | string | yes |  |
 | `forProvider.require[].service_token` | object |  |  |
 | `forProvider.require[].service_token.token_id` | string | yes | The ID of a Service Token. |
 | `forProvider.require[].user_risk_score` | object |  |  |
@@ -255,6 +267,12 @@ Validation:
 
 - `forProvider`: accountRef cannot be removed once set
 - `forProvider.accountRef`: accountRef is immutable
+- `forProvider.exclude[]`: set at most one of group and groupRef
+- `forProvider.exclude[]`: set at most one of service_token and serviceTokenRef
+- `forProvider.include[]`: set at most one of group and groupRef
+- `forProvider.include[]`: set at most one of service_token and serviceTokenRef
+- `forProvider.require[]`: set at most one of group and groupRef
+- `forProvider.require[]`: set at most one of service_token and serviceTokenRef
 
 ## Status
 

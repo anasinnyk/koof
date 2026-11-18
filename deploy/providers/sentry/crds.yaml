@@ -3233,6 +3233,19 @@
                       "type": "string"
                     },
                     "type": "array"
+                  },
+                  "writeConnectionSecretToRef": {
+                    "description": "The Secret, in the namespace of the resource, that the controller writes the\nconnection details to.",
+                    "nullable": true,
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ],
+                    "type": "object"
                   }
                 },
                 "required": [

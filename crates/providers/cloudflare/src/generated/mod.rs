@@ -19,7 +19,9 @@ pub static PROVIDER: koof::ProviderInfo = koof::ProviderInfo::new(
 #[must_use]
 pub fn controllers(app: koof::App) -> koof::App {
     app.controller::<zerotrust::v1alpha1::access_application::AccessApplication>()
+        .controller::<zerotrust::v1alpha1::access_group::AccessGroup>()
         .controller::<zerotrust::v1alpha1::access_policy::AccessPolicy>()
+        .controller::<zerotrust::v1alpha1::access_service_token::AccessServiceToken>()
         .controller::<cloudflare::v1alpha1::account::Account>()
         .controller::<cloudflare::v1alpha1::cluster_account::ClusterAccount>()
         .controller::<zones::v1alpha1::custom_hostname::CustomHostname>()
@@ -38,6 +40,7 @@ pub fn controllers(app: koof::App) -> koof::App {
         .controller::<zones::v1alpha1::logpush_job::LogpushJob>()
         .controller::<cloudflare::v1alpha1::notification_policy::NotificationPolicy>()
         .controller::<zones::v1alpha1::page_rule::PageRule>()
+        .controller::<cloudflare::v1alpha1::pages_domain::PagesDomain>()
         .controller::<cloudflare::v1alpha1::pages_project::PagesProject>()
         .controller::<storage::v1alpha1::queue::Queue>()
         .controller::<storage::v1alpha1::r2_bucket::R2Bucket>()
@@ -58,7 +61,9 @@ pub fn controllers(app: koof::App) -> koof::App {
 pub fn fake() -> koof::fake::Fake {
     koof::fake::Fake::new()
         .resource::<zerotrust::v1alpha1::access_application::AccessApplication>()
+        .resource::<zerotrust::v1alpha1::access_group::AccessGroup>()
         .resource::<zerotrust::v1alpha1::access_policy::AccessPolicy>()
+        .resource::<zerotrust::v1alpha1::access_service_token::AccessServiceToken>()
         .resource::<cloudflare::v1alpha1::account::Account>()
         .resource::<cloudflare::v1alpha1::cluster_account::ClusterAccount>()
         .resource::<zones::v1alpha1::custom_hostname::CustomHostname>()
@@ -77,6 +82,7 @@ pub fn fake() -> koof::fake::Fake {
         .resource::<zones::v1alpha1::logpush_job::LogpushJob>()
         .resource::<cloudflare::v1alpha1::notification_policy::NotificationPolicy>()
         .resource::<zones::v1alpha1::page_rule::PageRule>()
+        .resource::<cloudflare::v1alpha1::pages_domain::PagesDomain>()
         .resource::<cloudflare::v1alpha1::pages_project::PagesProject>()
         .resource::<storage::v1alpha1::queue::Queue>()
         .resource::<storage::v1alpha1::r2_bucket::R2Bucket>()
@@ -100,22 +106,26 @@ pub fn crds() -> Vec<
     vec![
         < zerotrust::v1alpha1::access_application::AccessApplication as
         kube::CustomResourceExt > ::crd(), <
-        zerotrust::v1alpha1::access_policy::AccessPolicy as kube::CustomResourceExt >
-        ::crd(), < cloudflare::v1alpha1::account::Account as kube::CustomResourceExt >
-        ::crd(), < cloudflare::v1alpha1::cluster_account::ClusterAccount as
+        zerotrust::v1alpha1::access_group::AccessGroup as kube::CustomResourceExt >
+        ::crd(), < zerotrust::v1alpha1::access_policy::AccessPolicy as
         kube::CustomResourceExt > ::crd(), <
-        zones::v1alpha1::custom_hostname::CustomHostname as kube::CustomResourceExt >
-        ::crd(), < storage::v1alpha1::d1_database::D1Database as kube::CustomResourceExt
-        > ::crd(), < zones::v1alpha1::dns_record::DNSRecord as kube::CustomResourceExt >
-        ::crd(), < zones::v1alpha1::email_routing_rule::EmailRoutingRule as
+        zerotrust::v1alpha1::access_service_token::AccessServiceToken as
+        kube::CustomResourceExt > ::crd(), < cloudflare::v1alpha1::account::Account as
         kube::CustomResourceExt > ::crd(), <
-        zerotrust::v1alpha1::gateway_list::GatewayList as kube::CustomResourceExt >
-        ::crd(), < zerotrust::v1alpha1::gateway_rule::GatewayRule as
-        kube::CustomResourceExt > ::crd(), < zones::v1alpha1::healthcheck::Healthcheck as
-        kube::CustomResourceExt > ::crd(), < storage::v1alpha1::hyperdrive::Hyperdrive as
-        kube::CustomResourceExt > ::crd(), < cloudflare::v1alpha1::ip_list::IPList as
-        kube::CustomResourceExt > ::crd(), < storage::v1alpha1::kv_namespace::KVNamespace
-        as kube::CustomResourceExt > ::crd(), <
+        cloudflare::v1alpha1::cluster_account::ClusterAccount as kube::CustomResourceExt
+        > ::crd(), < zones::v1alpha1::custom_hostname::CustomHostname as
+        kube::CustomResourceExt > ::crd(), < storage::v1alpha1::d1_database::D1Database
+        as kube::CustomResourceExt > ::crd(), < zones::v1alpha1::dns_record::DNSRecord as
+        kube::CustomResourceExt > ::crd(), <
+        zones::v1alpha1::email_routing_rule::EmailRoutingRule as kube::CustomResourceExt
+        > ::crd(), < zerotrust::v1alpha1::gateway_list::GatewayList as
+        kube::CustomResourceExt > ::crd(), <
+        zerotrust::v1alpha1::gateway_rule::GatewayRule as kube::CustomResourceExt >
+        ::crd(), < zones::v1alpha1::healthcheck::Healthcheck as kube::CustomResourceExt >
+        ::crd(), < storage::v1alpha1::hyperdrive::Hyperdrive as kube::CustomResourceExt >
+        ::crd(), < cloudflare::v1alpha1::ip_list::IPList as kube::CustomResourceExt >
+        ::crd(), < storage::v1alpha1::kv_namespace::KVNamespace as
+        kube::CustomResourceExt > ::crd(), <
         loadbalancing::v1alpha1::lb_monitor::LoadBalancerMonitor as
         kube::CustomResourceExt > ::crd(), <
         loadbalancing::v1alpha1::lb_pool::LoadBalancerPool as kube::CustomResourceExt >
@@ -125,9 +135,11 @@ pub fn crds() -> Vec<
         cloudflare::v1alpha1::notification_policy::NotificationPolicy as
         kube::CustomResourceExt > ::crd(), < zones::v1alpha1::page_rule::PageRule as
         kube::CustomResourceExt > ::crd(), <
-        cloudflare::v1alpha1::pages_project::PagesProject as kube::CustomResourceExt >
-        ::crd(), < storage::v1alpha1::queue::Queue as kube::CustomResourceExt > ::crd(),
-        < storage::v1alpha1::r2_bucket::R2Bucket as kube::CustomResourceExt > ::crd(), <
+        cloudflare::v1alpha1::pages_domain::PagesDomain as kube::CustomResourceExt >
+        ::crd(), < cloudflare::v1alpha1::pages_project::PagesProject as
+        kube::CustomResourceExt > ::crd(), < storage::v1alpha1::queue::Queue as
+        kube::CustomResourceExt > ::crd(), < storage::v1alpha1::r2_bucket::R2Bucket as
+        kube::CustomResourceExt > ::crd(), <
         zones::v1alpha1::spectrum_application::SpectrumApplication as
         kube::CustomResourceExt > ::crd(), < zerotrust::v1alpha1::tunnel::Tunnel as
         kube::CustomResourceExt > ::crd(), <
@@ -153,9 +165,13 @@ pub fn docs() -> Vec<koof::docs::ResourceDoc> {
     vec![
         koof::docs::ResourceDoc::of:: <
         zerotrust::v1alpha1::access_application::AccessApplication > (),
-        koof::docs::ResourceDoc::of:: < zerotrust::v1alpha1::access_policy::AccessPolicy
-        > (), koof::docs::ResourceDoc::of:: < cloudflare::v1alpha1::account::Account >
+        koof::docs::ResourceDoc::of:: < zerotrust::v1alpha1::access_group::AccessGroup >
         (), koof::docs::ResourceDoc::of:: <
+        zerotrust::v1alpha1::access_policy::AccessPolicy > (),
+        koof::docs::ResourceDoc::of:: <
+        zerotrust::v1alpha1::access_service_token::AccessServiceToken > (),
+        koof::docs::ResourceDoc::of:: < cloudflare::v1alpha1::account::Account > (),
+        koof::docs::ResourceDoc::of:: <
         cloudflare::v1alpha1::cluster_account::ClusterAccount > (),
         koof::docs::ResourceDoc::of:: < zones::v1alpha1::custom_hostname::CustomHostname
         > (), koof::docs::ResourceDoc::of:: < storage::v1alpha1::d1_database::D1Database
@@ -179,8 +195,10 @@ pub fn docs() -> Vec<koof::docs::ResourceDoc> {
         koof::docs::ResourceDoc::of:: <
         cloudflare::v1alpha1::notification_policy::NotificationPolicy > (),
         koof::docs::ResourceDoc::of:: < zones::v1alpha1::page_rule::PageRule > (),
-        koof::docs::ResourceDoc::of:: < cloudflare::v1alpha1::pages_project::PagesProject
-        > (), koof::docs::ResourceDoc::of:: < storage::v1alpha1::queue::Queue > (),
+        koof::docs::ResourceDoc::of:: < cloudflare::v1alpha1::pages_domain::PagesDomain >
+        (), koof::docs::ResourceDoc::of:: <
+        cloudflare::v1alpha1::pages_project::PagesProject > (),
+        koof::docs::ResourceDoc::of:: < storage::v1alpha1::queue::Queue > (),
         koof::docs::ResourceDoc::of:: < storage::v1alpha1::r2_bucket::R2Bucket > (),
         koof::docs::ResourceDoc::of:: <
         zones::v1alpha1::spectrum_application::SpectrumApplication > (),

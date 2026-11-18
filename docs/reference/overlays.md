@@ -29,9 +29,10 @@ request body.
 | `cluster` | bool | Also generate the cluster-scoped `Cluster<Kind>` |
 | `identifiers` | map of [value](#values) | Named IDs other resources can read with `related_identifier` |
 | `references` | map of `{from, target}` | `from`: the `*Ref` field to add (`spec.forProvider.zoneRef`); `target`: a resource `name` |
-| `itemReferences` | map of `{from, target, into, identifier}` | A reference in each item of a list. `from`: `spec.forProvider.<list>[].<field>`, the field added to the items; `into`: the item field that receives identifier `identifier` of the target; each item sets exactly one of the two |
+| `itemReferences` | map of `{from, target, into, identifier}` | A reference in each item of a list. `from`: `spec.forProvider.<list>[].<field>`, the field added to the items; `into`: the (dotted) item field that receives identifier `identifier` of the target; each item sets exactly one of the two. When the items are a union, the reference is one more variant and an item sets at most one of them |
 | `credentials.securityScheme` | string | Key of `components.securitySchemes` (`apiKey` or `http` bearer) |
 | `credentials.source` | `{type: secret_key_selector, path}` or `{type: related, via}` | Where the secret comes from |
+| `connectionSecret` | map of Secret key to dotted path | Values of the resource (as the API returns it) written to the Secret in `spec.writeConnectionSecretToRef`, from the create response and every observation |
 | `fields.mode` | `all` or `explicit` | `explicit` exposes only the listed properties |
 | `fields.forProvider` | list | Properties in `spec.forProvider` |
 | `fields.atProvider` | list | Properties in `status.atProvider` |
@@ -51,7 +52,7 @@ On an operation (`$.paths['…'].get`).
 | `pathParameters` | map of [value](#values) | One per `{placeholder}` in the path |
 | `request.from` | path | Body source, default `spec.forProvider` |
 | `request.set` | map of dotted body path to [value](#values) | Extra body fields |
-| `response.path` | string | Where the resource is in the response (`result`) |
+| `response.path` | string | Where the resource is in the response (`result`); on create, where `connectionSecret` paths start |
 | `response.deletedWhen` | string | Observe only: the resource is gone once this field is set |
 | `response.match` | `{field, value}` | Observe only: the response is a list and the resource is the item whose `field` equals the value expression `value`; missing when no item matches |
 | `result.identifiers` | map | Create: where an identifier is in the response (`response.body.result.id`) |
@@ -65,6 +66,7 @@ On a property schema.
 | `ignored` | `false` | With `fields.mode: all`, leave the property out of `forProvider` |
 | `lateInitialize` | `true` | Copy the observed value into an unset spec field |
 | `sensitive` | `false` | Never copy the property into `status.atProvider`, at any depth (secrets the API returns) |
+| `secretKeyRef` | `false` | `forProvider` gets `<property>From.secretKeyRef: {name, key}` next to the property, at any depth: its value is read from a Secret in the object's namespace before create and update, and not compared for drift. Not for resources with `cluster: true` |
 | `listMapKeys` | | Top-level list of objects: match items by these keys, in any order, when comparing with the observation. Keys must be required (the CRD then gets `x-kubernetes-list-type: map`) or filled by an item reference |
 
 ## Values

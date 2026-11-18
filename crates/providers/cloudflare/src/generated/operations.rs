@@ -32,6 +32,38 @@ impl koof::Operation for AccessApplicationUpdate {
     type Request = crate::generated::types::AccessAppRequest;
     type Response = crate::generated::types::AccessApplicationUpdateResponse;
 }
+pub struct AccessGroupCreate;
+impl koof::Operation for AccessGroupCreate {
+    const NAME: &'static str = "access_group.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/accounts/{account_id}/access/groups";
+    type Request = crate::generated::types::AccessGroupCreateRequest;
+    type Response = crate::generated::types::AccessSingleResponse4;
+}
+pub struct AccessGroupDelete;
+impl koof::Operation for AccessGroupDelete {
+    const NAME: &'static str = "access_group.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/accounts/{account_id}/access/groups/{group_id}";
+    type Request = ();
+    type Response = crate::generated::types::AccessIdResponse;
+}
+pub struct AccessGroupObserve;
+impl koof::Operation for AccessGroupObserve {
+    const NAME: &'static str = "access_group.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}/access/groups/{group_id}";
+    type Request = ();
+    type Response = crate::generated::types::AccessSingleResponse4;
+}
+pub struct AccessGroupUpdate;
+impl koof::Operation for AccessGroupUpdate {
+    const NAME: &'static str = "access_group.update";
+    const METHOD: reqwest::Method = reqwest::Method::PUT;
+    const PATH: &'static str = "/accounts/{account_id}/access/groups/{group_id}";
+    type Request = crate::generated::types::AccessGroupUpdateRequest;
+    type Response = crate::generated::types::AccessSingleResponse4;
+}
 pub struct AccessPolicyCreate;
 impl koof::Operation for AccessPolicyCreate {
     const NAME: &'static str = "access_policy.create";
@@ -63,6 +95,38 @@ impl koof::Operation for AccessPolicyUpdate {
     const PATH: &'static str = "/accounts/{account_id}/access/policies/{policy_id}";
     type Request = crate::generated::types::AccessPolicyReq;
     type Response = crate::generated::types::AccessSingleResponse10;
+}
+pub struct AccessServiceTokenCreate;
+impl koof::Operation for AccessServiceTokenCreate {
+    const NAME: &'static str = "access_service_token.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/accounts/{account_id}/access/service_tokens";
+    type Request = crate::generated::types::AccessServiceTokenCreateRequest;
+    type Response = crate::generated::types::AccessCreateResponse;
+}
+pub struct AccessServiceTokenDelete;
+impl koof::Operation for AccessServiceTokenDelete {
+    const NAME: &'static str = "access_service_token.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/accounts/{account_id}/access/service_tokens/{service_token_id}";
+    type Request = ();
+    type Response = crate::generated::types::AccessSingleResponse2;
+}
+pub struct AccessServiceTokenObserve;
+impl koof::Operation for AccessServiceTokenObserve {
+    const NAME: &'static str = "access_service_token.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}/access/service_tokens/{service_token_id}";
+    type Request = ();
+    type Response = crate::generated::types::AccessSingleResponse2;
+}
+pub struct AccessServiceTokenUpdate;
+impl koof::Operation for AccessServiceTokenUpdate {
+    const NAME: &'static str = "access_service_token.update";
+    const METHOD: reqwest::Method = reqwest::Method::PUT;
+    const PATH: &'static str = "/accounts/{account_id}/access/service_tokens/{service_token_id}";
+    type Request = crate::generated::types::AccessServiceTokenUpdateRequest;
+    type Response = crate::generated::types::AccessSingleResponse2;
 }
 pub struct AccountCreate;
 impl koof::Operation for AccountCreate {
@@ -607,6 +671,30 @@ impl koof::Operation for PageRuleUpdate {
     const PATH: &'static str = "/zones/{zone_id}/pagerules/{pagerule_id}";
     type Request = crate::generated::types::PageRuleUpdateRequest;
     type Response = crate::generated::types::PageRuleUpdateResponse;
+}
+pub struct PagesDomainCreate;
+impl koof::Operation for PagesDomainCreate {
+    const NAME: &'static str = "pages_domain.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/accounts/{account_id}/pages/projects/{project_name}/domains";
+    type Request = crate::generated::types::PagesDomainCreateRequest;
+    type Response = crate::generated::types::PagesDomainCreateResponse;
+}
+pub struct PagesDomainDelete;
+impl koof::Operation for PagesDomainDelete {
+    const NAME: &'static str = "pages_domain.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}";
+    type Request = ();
+    type Response = crate::generated::types::PagesDomainDeleteResponse;
+}
+pub struct PagesDomainObserve;
+impl koof::Operation for PagesDomainObserve {
+    const NAME: &'static str = "pages_domain.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}";
+    type Request = ();
+    type Response = crate::generated::types::PagesDomainObserveResponse;
 }
 pub struct PagesProjectCreate;
 impl koof::Operation for PagesProjectCreate {

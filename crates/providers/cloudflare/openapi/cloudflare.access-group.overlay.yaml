@@ -1,0 +1,131 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare AccessGroup
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # A reusable set of rules of the account; policies and other groups match it
+  # with groupRef.
+  - target: $.paths['/accounts/{account_id}/access/groups'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: access_group
+        apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+        kind: AccessGroup
+
+        test:
+          forProvider:
+            name: koof e2e
+            include:
+              - email_domain:
+                  domain: example.com
+          update:
+            name: koof e2e renamed
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          account:
+            from: spec.forProvider.accountRef
+            target: account
+
+        itemReferences:
+          include_group:
+            from: spec.forProvider.include[].groupRef
+            target: access_group
+            into: group.id
+            identifier: external_id
+          require_group:
+            from: spec.forProvider.require[].groupRef
+            target: access_group
+            into: group.id
+            identifier: external_id
+          exclude_group:
+            from: spec.forProvider.exclude[].groupRef
+            target: access_group
+            into: group.id
+            identifier: external_id
+          include_service_token:
+            from: spec.forProvider.include[].serviceTokenRef
+            target: access_service_token
+            into: service_token.token_id
+            identifier: external_id
+          require_service_token:
+            from: spec.forProvider.require[].serviceTokenRef
+            target: access_service_token
+            into: service_token.token_id
+            identifier: external_id
+          exclude_service_token:
+            from: spec.forProvider.exclude[].serviceTokenRef
+            target: access_service_token
+            into: service_token.token_id
+            identifier: external_id
+
+        credentials:
+          securityScheme: api_token
+          source:
+            type: related
+            via: [account]
+
+        # The observe response declares is_default with the schema of require.
+        fields:
+          mode: explicit
+          forProvider: [name, include, require, exclude]
+          atProvider: [id, name, include, require, exclude, created_at, updated_at]
+
+  - target: $.paths['/accounts/{account_id}/access/groups/{group_id}'].get
+    update:
+      x-kube-operation:
+        resource: access_group
+        lifecycle: observe
+        response:
+          path: result
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          group_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/access/groups'].post
+    update:
+      x-kube-operation:
+        resource: access_group
+        lifecycle: create
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/accounts/{account_id}/access/groups/{group_id}'].put
+    update:
+      x-kube-operation:
+        resource: access_group
+        lifecycle: update
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          group_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/access/groups/{group_id}'].delete
+    update:
+      x-kube-operation:
+        resource: access_group
+        lifecycle: delete
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          group_id:
+            type: external_name

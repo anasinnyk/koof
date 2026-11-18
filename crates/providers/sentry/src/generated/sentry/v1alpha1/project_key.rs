@@ -60,6 +60,12 @@ pub struct ProjectKeyForProviderSpec {
 pub struct ProjectKeySpec {
     #[serde(rename = "forProvider")]
     pub for_provider: ProjectKeyForProviderSpec,
+    #[serde(
+        rename = "writeConnectionSecretToRef",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub write_connection_secret_to_ref: Option<koof::reference::SecretReference>,
     #[serde(flatten)]
     pub management: koof::managed::ManagedResourceSpec,
 }
@@ -106,6 +112,21 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
                 "/spec/forProvider/projectRef",
                 &[&crate::generated::sentry::v1alpha1::project::DESCRIPTOR],
             ),
+        ],
+    )
+    .with_connection_secret(
+        &[
+            ("dsn", "/dsn/public"),
+            ("dsn_crons", "/dsn/crons"),
+            ("dsn_csp", "/dsn/csp"),
+            ("dsn_minidump", "/dsn/minidump"),
+            ("dsn_otlp_logs", "/dsn/otlp_logs"),
+            ("dsn_otlp_traces", "/dsn/otlp_traces"),
+            ("dsn_secret", "/dsn/secret"),
+            ("dsn_security", "/dsn/security"),
+            ("dsn_unreal", "/dsn/unreal"),
+            ("public_key", "/public"),
+            ("secret_key", "/secret"),
         ],
     )
     .with_credentials(

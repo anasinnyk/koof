@@ -3207,6 +3207,140 @@ impl ::std::str::FromStr for AccessButtonTextColor {
 pub struct AccessCertificateRule {
     pub certificate: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
 }
+///The Client ID for the service token. Access will check for this value in the `CF-Access-Client-ID` request header.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct AccessClientId(pub ::std::string::String);
+impl ::std::ops::Deref for AccessClientId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessClientId> for ::std::string::String {
+    fn from(value: AccessClientId) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::string::String> for AccessClientId {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for AccessClientId {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for AccessClientId {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
+    }
+}
+///The Client Secret for the service token. Access will check for this value in the `CF-Access-Client-Secret` request header.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct AccessClientSecret(pub ::std::string::String);
+impl ::std::ops::Deref for AccessClientSecret {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessClientSecret> for ::std::string::String {
+    fn from(value: AccessClientSecret) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::string::String> for AccessClientSecret {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for AccessClientSecret {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for AccessClientSecret {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
+    }
+}
+///A version number identifying the current `client_secret` associated with the service token. Incrementing it triggers a rotation; the previous secret will still be accepted until the time indicated by `previous_client_secret_expires_at`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct AccessClientSecretVersion(pub f64);
+impl ::std::ops::Deref for AccessClientSecretVersion {
+    type Target = f64;
+    fn deref(&self) -> &f64 {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessClientSecretVersion> for f64 {
+    fn from(value: AccessClientSecretVersion) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<f64> for AccessClientSecretVersion {
+    fn from(value: f64) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for AccessClientSecretVersion {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for AccessClientSecretVersion {
+    type Err = <f64 as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AccessClientSecretVersion {
+    type Error = <f64 as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for AccessClientSecretVersion {
+    type Error = <f64 as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
 /**Matches users who are members of a specific Cloudflare account.
 Requires a Cloudflare identity provider.*/
 #[derive(
@@ -3373,6 +3507,52 @@ pub struct AccessCountryRule {
 pub struct AccessCountryRuleGeo {
     ///The country code that should be matched.
     pub country_code: ::std::string::String,
+}
+///`AccessCreateResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessCreateResponse {
+    pub errors: AccessMessages,
+    pub messages: AccessMessages,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub result: ::std::option::Option<AccessCreateResponseResult>,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`AccessCreateResponseResult`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessCreateResponseResult {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub client_id: ::std::option::Option<AccessClientId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub client_secret: ::std::option::Option<AccessClientSecret>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub duration: ::std::option::Option<AccessDuration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<AccessEnabled>,
+    ///The ID of the service token.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
 }
 ///`AccessCreatedAt`
 #[derive(
@@ -3832,6 +4012,48 @@ pub struct AccessDomainRuleEmailDomain {
     ///The email domain to match.
     pub domain: ::std::string::String,
 }
+///The duration for how long the service token will be valid. Must be in the format `300ms` or `2h45m`, or the special value `forever` for non-expiring tokens. Valid time units are: ns, us (or µs), ms, s, m, h. The default is 1 year in hours (8760h).
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct AccessDuration(pub ::std::string::String);
+impl ::std::ops::Deref for AccessDuration {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessDuration> for ::std::string::String {
+    fn from(value: AccessDuration) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::string::String> for AccessDuration {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for AccessDuration {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for AccessDuration {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
+    }
+}
 ///Preemptively sets the Access session cookie on every hostname in a multi-hostname self-hosted application during the initial redirect chain, rather than setting it lazily on first visit. Defaults to true. Set to false to disable the eager redirect cookie behavior.
 #[derive(
     ::serde::Deserialize,
@@ -3982,6 +4204,56 @@ impl ::std::convert::TryFrom<String> for AccessEnableBindingCookie {
         value.parse()
     }
 }
+///Whether the service token is enabled. A disabled service token cannot be used to authenticate; both its current and previous `client_secret` stop being accepted, but the token itself is preserved and can be re-enabled at any time. Defaults to enabled when omitted on create.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct AccessEnabled(pub bool);
+impl ::std::ops::Deref for AccessEnabled {
+    type Target = bool;
+    fn deref(&self) -> &bool {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessEnabled> for bool {
+    fn from(value: AccessEnabled) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<bool> for AccessEnabled {
+    fn from(value: bool) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for AccessEnabled {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for AccessEnabled {
+    type Err = <bool as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AccessEnabled {
+    type Error = <bool as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for AccessEnabled {
+    type Error = <bool as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
 ///Matches everyone.
 #[derive(
     ::serde::Deserialize,
@@ -3994,6 +4266,33 @@ impl ::std::convert::TryFrom<String> for AccessEnableBindingCookie {
 pub struct AccessEveryoneRule {
     ///An empty object which matches on all users.
     pub everyone: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+}
+///Rules evaluated with a NOT logical operator. To match a policy, a user cannot meet any of the Exclude rules.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct AccessExclude(pub ::std::vec::Vec<AccessRule>);
+impl ::std::ops::Deref for AccessExclude {
+    type Target = ::std::vec::Vec<AccessRule>;
+    fn deref(&self) -> &::std::vec::Vec<AccessRule> {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessExclude> for ::std::vec::Vec<AccessRule> {
+    fn from(value: AccessExclude) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<AccessRule>> for AccessExclude {
+    fn from(value: ::std::vec::Vec<AccessRule>) -> Self {
+        Self(value)
+    }
 }
 ///Rules evaluated with a NOT logical operator. To match the policy, a user cannot meet any of the Exclude rules.
 #[derive(
@@ -4153,6 +4452,72 @@ pub struct AccessGithubOrganizationRuleGithubOrganization {
     ///The name of the team
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub team: ::std::option::Option<::std::string::String>,
+}
+///`AccessGroupCreateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessGroupCreateRequest {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub exclude: ::std::option::Option<AccessExclude>,
+    pub include: AccessInclude,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub is_default: ::std::option::Option<AccessIsDefault>,
+    pub name: AccessName6,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub require: ::std::option::Option<AccessRequire>,
+}
+///`AccessGroupUpdateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessGroupUpdateRequest {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub exclude: ::std::option::Option<AccessExclude>,
+    pub include: AccessInclude,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub is_default: ::std::option::Option<AccessIsDefault>,
+    pub name: AccessName6,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub require: ::std::option::Option<AccessRequire>,
+}
+///`AccessGroups2`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessGroups2 {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub exclude: ::std::option::Option<AccessExclude>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub include: ::std::option::Option<AccessInclude>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub is_default: ::std::option::Option<AccessRequire>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName6>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub require: ::std::option::Option<AccessRequire>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
 }
 /**Matches a group in Google Workspace.
 Requires a Google Workspace identity provider.*/
@@ -4452,6 +4817,33 @@ impl ::std::str::FromStr for AccessImageUrl {
     schemars::JsonSchema
 )]
 #[serde(transparent)]
+pub struct AccessInclude(pub ::std::vec::Vec<AccessRule>);
+impl ::std::ops::Deref for AccessInclude {
+    type Target = ::std::vec::Vec<AccessRule>;
+    fn deref(&self) -> &::std::vec::Vec<AccessRule> {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessInclude> for ::std::vec::Vec<AccessRule> {
+    fn from(value: AccessInclude) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<AccessRule>> for AccessInclude {
+    fn from(value: ::std::vec::Vec<AccessRule>) -> Self {
+        Self(value)
+    }
+}
+///Rules evaluated with an OR logical operator. A user needs to meet only one of the Include rules.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
 pub struct AccessInclude2(pub ::std::vec::Vec<AccessRule>);
 impl ::std::ops::Deref for AccessInclude2 {
     type Target = ::std::vec::Vec<AccessRule>;
@@ -4662,6 +5054,56 @@ pub struct AccessIpRule {
 pub struct AccessIpRuleIp {
     ///An IPv4 or IPv6 CIDR block.
     pub ip: ::std::string::String,
+}
+///Whether this is the default group
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct AccessIsDefault(pub bool);
+impl ::std::ops::Deref for AccessIsDefault {
+    type Target = bool;
+    fn deref(&self) -> &bool {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessIsDefault> for bool {
+    fn from(value: AccessIsDefault) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<bool> for AccessIsDefault {
+    fn from(value: bool) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for AccessIsDefault {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for AccessIsDefault {
+    type Err = <bool as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AccessIsDefault {
+    type Error = <bool as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for AccessIsDefault {
+    type Error = <bool as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
 }
 ///Require this application to be served in an isolated browser for users matching this policy. 'Client Web Isolation' must be on for the account in order to use this feature.
 #[derive(
@@ -5163,6 +5605,90 @@ for AccessMfaConfigAllowedAuthenticatorsItem {
         value: ::std::string::String,
     ) -> ::std::result::Result<Self, self::error::ConversionError> {
         value.parse()
+    }
+}
+///The name of the service token.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct AccessName2(pub ::std::string::String);
+impl ::std::ops::Deref for AccessName2 {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessName2> for ::std::string::String {
+    fn from(value: AccessName2) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::string::String> for AccessName2 {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for AccessName2 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for AccessName2 {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
+    }
+}
+///The name of the Access group.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct AccessName6(pub ::std::string::String);
+impl ::std::ops::Deref for AccessName6 {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessName6> for ::std::string::String {
+    fn from(value: AccessName6) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::string::String> for AccessName6 {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for AccessName6 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for AccessName6 {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
     }
 }
 ///The name of the application.
@@ -6057,6 +6583,60 @@ impl ::std::convert::TryFrom<String> for AccessPrecedence {
         value.parse()
     }
 }
+///The expiration of the previous `client_secret`. This can be modified at any point after a rotation. For example, you may extend it further into the future if you need more time to update services with the new secret; or move it into the past to immediately invalidate the previous token in case of compromise.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct AccessPreviousClientSecretExpiresAt(
+    pub ::chrono::DateTime<::chrono::offset::Utc>,
+);
+impl ::std::ops::Deref for AccessPreviousClientSecretExpiresAt {
+    type Target = ::chrono::DateTime<::chrono::offset::Utc>;
+    fn deref(&self) -> &::chrono::DateTime<::chrono::offset::Utc> {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessPreviousClientSecretExpiresAt>
+for ::chrono::DateTime<::chrono::offset::Utc> {
+    fn from(value: AccessPreviousClientSecretExpiresAt) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::chrono::DateTime<::chrono::offset::Utc>>
+for AccessPreviousClientSecretExpiresAt {
+    fn from(value: ::chrono::DateTime<::chrono::offset::Utc>) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for AccessPreviousClientSecretExpiresAt {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for AccessPreviousClientSecretExpiresAt {
+    type Err = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for AccessPreviousClientSecretExpiresAt {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for AccessPreviousClientSecretExpiresAt {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
 ///The communication protocol your application secures.
 #[derive(
     ::serde::Deserialize,
@@ -6542,6 +7122,33 @@ impl ::std::str::FromStr for AccessReadServiceTokensFromHeader {
     type Err = ::std::convert::Infallible;
     fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
         Ok(Self(value.to_string()))
+    }
+}
+///Rules evaluated with an AND logical operator. To match a policy, a user must meet all of the Require rules.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct AccessRequire(pub ::std::vec::Vec<AccessRule>);
+impl ::std::ops::Deref for AccessRequire {
+    type Target = ::std::vec::Vec<AccessRule>;
+    fn deref(&self) -> &::std::vec::Vec<AccessRule> {
+        &self.0
+    }
+}
+impl ::std::convert::From<AccessRequire> for ::std::vec::Vec<AccessRule> {
+    fn from(value: AccessRequire) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<AccessRule>> for AccessRequire {
+    fn from(value: ::std::vec::Vec<AccessRule>) -> Self {
+        Self(value)
     }
 }
 ///Rules evaluated with an AND logical operator. To match the policy, a user must meet all of the Require rules.
@@ -7900,6 +8507,28 @@ impl ::std::convert::TryFrom<String> for AccessServiceAuth401Redirect {
         value.parse()
     }
 }
+///`AccessServiceTokenCreateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessServiceTokenCreateRequest {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub client_secret_version: ::std::option::Option<AccessClientSecretVersion>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub duration: ::std::option::Option<AccessDuration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<AccessEnabled>,
+    pub name: AccessName2,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub previous_client_secret_expires_at: ::std::option::Option<
+        AccessPreviousClientSecretExpiresAt,
+    >,
+}
 ///Matches a specific Access Service Token
 #[derive(
     ::serde::Deserialize,
@@ -7924,6 +8553,60 @@ pub struct AccessServiceTokenRule {
 pub struct AccessServiceTokenRuleServiceToken {
     ///The ID of a Service Token.
     pub token_id: ::std::string::String,
+}
+///`AccessServiceTokenUpdateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessServiceTokenUpdateRequest {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub client_secret_version: ::std::option::Option<AccessClientSecretVersion>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub duration: ::std::option::Option<AccessDuration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<AccessEnabled>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub previous_client_secret_expires_at: ::std::option::Option<
+        AccessPreviousClientSecretExpiresAt,
+    >,
+}
+///`AccessServiceTokens`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessServiceTokens {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub client_id: ::std::option::Option<AccessClientId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub duration: ::std::option::Option<AccessDuration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<AccessEnabled>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expires_at: ::std::option::Option<AccessTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_seen_at: ::std::option::Option<AccessTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
 }
 ///The amount of time that tokens issued for this application will be valid. Must be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. Note: unsupported for infrastructure type applications.
 #[derive(
@@ -8010,6 +8693,40 @@ pub struct AccessSingleResponse10 {
     pub messages: AccessMessages,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub result: ::std::option::Option<AccessReusablePolicyResp>,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`AccessSingleResponse2`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessSingleResponse2 {
+    pub errors: AccessMessages,
+    pub messages: AccessMessages,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub result: ::std::option::Option<AccessServiceTokens>,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`AccessSingleResponse4`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct AccessSingleResponse4 {
+    pub errors: AccessMessages,
+    pub messages: AccessMessages,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub result: ::std::option::Option<AccessGroups2>,
     ///Whether the API call was successful. Allowed values: true.
     pub success: bool,
 }
@@ -10458,6 +11175,424 @@ pub struct CloudflareV1alpha1NotificationPolicyForProvider {
     pub mechanisms: AaaMechanisms,
     pub name: AaaSchemasName,
 }
+///`PagesDomainAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesDomainAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub certificate_authority: ::std::option::Option<
+        CloudflareV1alpha1PagesDomainAtProviderCertificateAuthority,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain_id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<PagesDomainName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<CloudflareV1alpha1PagesDomainAtProviderStatus>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub validation_data: ::std::option::Option<
+        CloudflareV1alpha1PagesDomainAtProviderValidationData,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub verification_data: ::std::option::Option<
+        CloudflareV1alpha1PagesDomainAtProviderVerificationData,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub zone_tag: ::std::option::Option<::std::string::String>,
+}
+///`PagesDomainAtProviderCertificateAuthority`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudflareV1alpha1PagesDomainAtProviderCertificateAuthority {
+    #[serde(rename = "google")]
+    Google,
+    #[serde(rename = "lets_encrypt")]
+    LetsEncrypt,
+}
+impl ::std::fmt::Display
+for CloudflareV1alpha1PagesDomainAtProviderCertificateAuthority {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Google => f.write_str("google"),
+            Self::LetsEncrypt => f.write_str("lets_encrypt"),
+        }
+    }
+}
+impl ::std::str::FromStr
+for CloudflareV1alpha1PagesDomainAtProviderCertificateAuthority {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "google" => Ok(Self::Google),
+            "lets_encrypt" => Ok(Self::LetsEncrypt),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1PagesDomainAtProviderCertificateAuthority {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1PagesDomainAtProviderCertificateAuthority {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`PagesDomainAtProviderStatus`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudflareV1alpha1PagesDomainAtProviderStatus {
+    #[serde(rename = "initializing")]
+    Initializing,
+    #[serde(rename = "pending")]
+    Pending,
+    #[serde(rename = "active")]
+    Active,
+    #[serde(rename = "deactivated")]
+    Deactivated,
+    #[serde(rename = "blocked")]
+    Blocked,
+    #[serde(rename = "error")]
+    Error,
+}
+impl ::std::fmt::Display for CloudflareV1alpha1PagesDomainAtProviderStatus {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Initializing => f.write_str("initializing"),
+            Self::Pending => f.write_str("pending"),
+            Self::Active => f.write_str("active"),
+            Self::Deactivated => f.write_str("deactivated"),
+            Self::Blocked => f.write_str("blocked"),
+            Self::Error => f.write_str("error"),
+        }
+    }
+}
+impl ::std::str::FromStr for CloudflareV1alpha1PagesDomainAtProviderStatus {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "initializing" => Ok(Self::Initializing),
+            "pending" => Ok(Self::Pending),
+            "active" => Ok(Self::Active),
+            "deactivated" => Ok(Self::Deactivated),
+            "blocked" => Ok(Self::Blocked),
+            "error" => Ok(Self::Error),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for CloudflareV1alpha1PagesDomainAtProviderStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1PagesDomainAtProviderStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`PagesDomainAtProviderValidationData`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesDomainAtProviderValidationData {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub error_message: ::std::option::Option<::std::string::String>,
+    pub method: CloudflareV1alpha1PagesDomainAtProviderValidationDataMethod,
+    pub status: CloudflareV1alpha1PagesDomainAtProviderValidationDataStatus,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub txt_name: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub txt_value: ::std::option::Option<::std::string::String>,
+}
+///`PagesDomainAtProviderValidationDataMethod`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudflareV1alpha1PagesDomainAtProviderValidationDataMethod {
+    #[serde(rename = "http")]
+    Http,
+    #[serde(rename = "txt")]
+    Txt,
+}
+impl ::std::fmt::Display
+for CloudflareV1alpha1PagesDomainAtProviderValidationDataMethod {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Http => f.write_str("http"),
+            Self::Txt => f.write_str("txt"),
+        }
+    }
+}
+impl ::std::str::FromStr
+for CloudflareV1alpha1PagesDomainAtProviderValidationDataMethod {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "http" => Ok(Self::Http),
+            "txt" => Ok(Self::Txt),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1PagesDomainAtProviderValidationDataMethod {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1PagesDomainAtProviderValidationDataMethod {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`PagesDomainAtProviderValidationDataStatus`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudflareV1alpha1PagesDomainAtProviderValidationDataStatus {
+    #[serde(rename = "initializing")]
+    Initializing,
+    #[serde(rename = "pending")]
+    Pending,
+    #[serde(rename = "active")]
+    Active,
+    #[serde(rename = "deactivated")]
+    Deactivated,
+    #[serde(rename = "error")]
+    Error,
+}
+impl ::std::fmt::Display
+for CloudflareV1alpha1PagesDomainAtProviderValidationDataStatus {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Initializing => f.write_str("initializing"),
+            Self::Pending => f.write_str("pending"),
+            Self::Active => f.write_str("active"),
+            Self::Deactivated => f.write_str("deactivated"),
+            Self::Error => f.write_str("error"),
+        }
+    }
+}
+impl ::std::str::FromStr
+for CloudflareV1alpha1PagesDomainAtProviderValidationDataStatus {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "initializing" => Ok(Self::Initializing),
+            "pending" => Ok(Self::Pending),
+            "active" => Ok(Self::Active),
+            "deactivated" => Ok(Self::Deactivated),
+            "error" => Ok(Self::Error),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1PagesDomainAtProviderValidationDataStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1PagesDomainAtProviderValidationDataStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`PagesDomainAtProviderVerificationData`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesDomainAtProviderVerificationData {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub error_message: ::std::option::Option<::std::string::String>,
+    pub status: CloudflareV1alpha1PagesDomainAtProviderVerificationDataStatus,
+}
+///`PagesDomainAtProviderVerificationDataStatus`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudflareV1alpha1PagesDomainAtProviderVerificationDataStatus {
+    #[serde(rename = "pending")]
+    Pending,
+    #[serde(rename = "active")]
+    Active,
+    #[serde(rename = "deactivated")]
+    Deactivated,
+    #[serde(rename = "blocked")]
+    Blocked,
+    #[serde(rename = "error")]
+    Error,
+}
+impl ::std::fmt::Display
+for CloudflareV1alpha1PagesDomainAtProviderVerificationDataStatus {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Pending => f.write_str("pending"),
+            Self::Active => f.write_str("active"),
+            Self::Deactivated => f.write_str("deactivated"),
+            Self::Blocked => f.write_str("blocked"),
+            Self::Error => f.write_str("error"),
+        }
+    }
+}
+impl ::std::str::FromStr
+for CloudflareV1alpha1PagesDomainAtProviderVerificationDataStatus {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "pending" => Ok(Self::Pending),
+            "active" => Ok(Self::Active),
+            "deactivated" => Ok(Self::Deactivated),
+            "blocked" => Ok(Self::Blocked),
+            "error" => Ok(Self::Error),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1PagesDomainAtProviderVerificationDataStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1PagesDomainAtProviderVerificationDataStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`PagesDomainForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesDomainForProvider {
+    pub name: PagesDomainName,
+}
 ///`PagesProjectAtProvider`
 #[derive(
     ::serde::Deserialize,
@@ -10532,9 +11667,1235 @@ pub struct CloudflareV1alpha1PagesProjectForProvider {
 )]
 pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigs {
     ///Configs for preview deploys.
-    pub preview: PagesDeploymentConfigValues,
+    pub preview: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreview,
     ///Configs for production deploys.
-    pub production: PagesDeploymentConfigValues,
+    pub production: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProduction,
+}
+///`PagesProjectForProviderDeploymentConfigsPreview`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreview {
+    ///Constellation bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub ai_bindings: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewAiBindingsValue,
+    >,
+    ///Whether to always use the latest compatibility date for Pages Functions.
+    pub always_use_latest_compatibility_date: bool,
+    ///Analytics Engine bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub analytics_engine_datasets: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewAnalyticsEngineDatasetsValue,
+    >,
+    ///Browser bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub browsers: ::std::collections::HashMap<
+        ::std::string::String,
+        ::std::option::Option<
+            ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+        >,
+    >,
+    ///The major version of the build image to use for Pages Functions.
+    pub build_image_major_version: i64,
+    ///Compatibility date used for Pages Functions.
+    pub compatibility_date: ::std::string::String,
+    ///Compatibility flags used for Pages Functions.
+    pub compatibility_flags: ::std::vec::Vec<::std::string::String>,
+    ///D1 databases used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub d1_databases: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewD1DatabasesValue,
+    >,
+    ///Durable Object namespaces used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub durable_object_namespaces: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewDurableObjectNamespacesValue,
+    >,
+    ///Environment variables used for builds and Pages Functions.
+    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    pub env_vars: ::std::option::Option<
+        ::std::collections::HashMap<
+            ::std::string::String,
+            ::std::option::Option<
+                CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValue,
+            >,
+        >,
+    >,
+    ///Whether to fail open when the deployment config cannot be applied.
+    pub fail_open: bool,
+    ///Hyperdrive bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub hyperdrive_bindings: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewHyperdriveBindingsValue,
+    >,
+    ///KV namespaces used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub kv_namespaces: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewKvNamespacesValue,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub limits: ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewLimits,
+    >,
+    ///mTLS bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub mtls_certificates: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewMtlsCertificatesValue,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub placement: ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewPlacement,
+    >,
+    ///Queue Producer bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub queue_producers: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewQueueProducersValue,
+    >,
+    ///R2 buckets used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub r2_buckets: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewR2BucketsValue,
+    >,
+    ///Services used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub services: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewServicesValue,
+    >,
+    ///The usage model for Pages Functions.
+    pub usage_model: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewUsageModel,
+    ///Vectorize bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub vectorize_bindings: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewVectorizeBindingsValue,
+    >,
+    ///Hash of the Wrangler configuration used for the deployment.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub wrangler_config_hash: ::std::option::Option<::std::string::String>,
+}
+///AI binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewAiBindingsValue {
+    pub project_id: ::std::string::String,
+}
+///Analytics Engine binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewAnalyticsEngineDatasetsValue {
+    ///Name of the dataset.
+    pub dataset: ::std::string::String,
+}
+///D1 binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewD1DatabasesValue {
+    ///UUID of the D1 database.
+    pub id: ::std::string::String,
+}
+///Durable Object binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewDurableObjectNamespacesValue {
+    ///ID of the Durable Object namespace.
+    pub namespace_id: ::std::string::String,
+}
+///`PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValue`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValue {
+    Variant0(
+        ::std::option::Option<
+            CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0,
+        >,
+    ),
+    Variant1(
+        ::std::option::Option<
+            CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1,
+        >,
+    ),
+}
+impl ::std::convert::From<
+    ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0,
+    >,
+> for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValue {
+    fn from(
+        value: ::std::option::Option<
+            CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0,
+        >,
+    ) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<
+    ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1,
+    >,
+> for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValue {
+    fn from(
+        value: ::std::option::Option<
+            CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1,
+        >,
+    ) -> Self {
+        Self::Variant1(value)
+    }
+}
+///A plaintext environment variable.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0 {
+    #[serde(rename = "type")]
+    pub type_: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0Type,
+    ///Environment variable value.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "valueFrom",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub value_from: ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0ValueFrom,
+    >,
+}
+///`PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0Type {
+    #[serde(rename = "plain_text")]
+    PlainText,
+}
+impl ::std::fmt::Display
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0Type {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::PlainText => f.write_str("plain_text"),
+        }
+    }
+}
+impl ::std::str::FromStr
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0Type {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "plain_text" => Ok(Self::PlainText),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0Type {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0Type {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Reads `value` from a Secret instead.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0ValueFrom {
+    #[serde(rename = "secretKeyRef")]
+    pub secret_key_ref: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0ValueFromSecretKeyRef,
+}
+///A key of a Secret in the namespace of the resource.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant0ValueFromSecretKeyRef {
+    pub key: ::std::string::String,
+    pub name: ::std::string::String,
+}
+///An encrypted environment variable.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1 {
+    #[serde(rename = "type")]
+    pub type_: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1Type,
+    ///Secret value.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "valueFrom",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub value_from: ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1ValueFrom,
+    >,
+}
+///`PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1Type {
+    #[serde(rename = "secret_text")]
+    SecretText,
+}
+impl ::std::fmt::Display
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1Type {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::SecretText => f.write_str("secret_text"),
+        }
+    }
+}
+impl ::std::str::FromStr
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1Type {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "secret_text" => Ok(Self::SecretText),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1Type {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1Type {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Reads `value` from a Secret instead.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1ValueFrom {
+    #[serde(rename = "secretKeyRef")]
+    pub secret_key_ref: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1ValueFromSecretKeyRef,
+}
+///A key of a Secret in the namespace of the resource.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewEnvVarsValueVariant1ValueFromSecretKeyRef {
+    pub key: ::std::string::String,
+    pub name: ::std::string::String,
+}
+///Hyperdrive binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewHyperdriveBindingsValue {
+    pub id: ::std::string::String,
+}
+///KV namespace binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewKvNamespacesValue {
+    ///ID of the KV namespace.
+    pub namespace_id: ::std::string::String,
+}
+///Limits for Pages Functions.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewLimits {
+    ///CPU time limit in milliseconds.
+    pub cpu_ms: i64,
+}
+///mTLS binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewMtlsCertificatesValue {
+    pub certificate_id: ::std::string::String,
+}
+///Placement setting used for Pages Functions.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewPlacement {
+    ///Placement mode.
+    pub mode: ::std::string::String,
+}
+///Queue Producer binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewQueueProducersValue {
+    ///Name of the Queue.
+    pub name: ::std::string::String,
+}
+///R2 binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewR2BucketsValue {
+    ///Jurisdiction of the R2 bucket.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub jurisdiction: ::std::option::Option<::std::string::String>,
+    ///Name of the R2 bucket.
+    pub name: ::std::string::String,
+}
+///Service binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewServicesValue {
+    ///The entrypoint to bind to.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub entrypoint: ::std::option::Option<::std::string::String>,
+    ///The Service environment.
+    pub environment: ::std::string::String,
+    ///The Service name.
+    pub service: ::std::string::String,
+}
+///The usage model for Pages Functions.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewUsageModel {
+    #[serde(rename = "standard")]
+    Standard,
+    #[serde(rename = "bundled")]
+    Bundled,
+    #[serde(rename = "unbound")]
+    Unbound,
+}
+impl ::std::fmt::Display
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewUsageModel {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Standard => f.write_str("standard"),
+            Self::Bundled => f.write_str("bundled"),
+            Self::Unbound => f.write_str("unbound"),
+        }
+    }
+}
+impl ::std::str::FromStr
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewUsageModel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "standard" => Ok(Self::Standard),
+            "bundled" => Ok(Self::Bundled),
+            "unbound" => Ok(Self::Unbound),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewUsageModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewUsageModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Vectorize binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewVectorizeBindingsValue {
+    pub index_name: ::std::string::String,
+}
+///`PagesProjectForProviderDeploymentConfigsProduction`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProduction {
+    ///Constellation bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub ai_bindings: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionAiBindingsValue,
+    >,
+    ///Whether to always use the latest compatibility date for Pages Functions.
+    pub always_use_latest_compatibility_date: bool,
+    ///Analytics Engine bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub analytics_engine_datasets: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionAnalyticsEngineDatasetsValue,
+    >,
+    ///Browser bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub browsers: ::std::collections::HashMap<
+        ::std::string::String,
+        ::std::option::Option<
+            ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+        >,
+    >,
+    ///The major version of the build image to use for Pages Functions.
+    pub build_image_major_version: i64,
+    ///Compatibility date used for Pages Functions.
+    pub compatibility_date: ::std::string::String,
+    ///Compatibility flags used for Pages Functions.
+    pub compatibility_flags: ::std::vec::Vec<::std::string::String>,
+    ///D1 databases used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub d1_databases: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionD1DatabasesValue,
+    >,
+    ///Durable Object namespaces used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub durable_object_namespaces: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionDurableObjectNamespacesValue,
+    >,
+    ///Environment variables used for builds and Pages Functions.
+    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    pub env_vars: ::std::option::Option<
+        ::std::collections::HashMap<
+            ::std::string::String,
+            ::std::option::Option<
+                CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValue,
+            >,
+        >,
+    >,
+    ///Whether to fail open when the deployment config cannot be applied.
+    pub fail_open: bool,
+    ///Hyperdrive bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub hyperdrive_bindings: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionHyperdriveBindingsValue,
+    >,
+    ///KV namespaces used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub kv_namespaces: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionKvNamespacesValue,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub limits: ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionLimits,
+    >,
+    ///mTLS bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub mtls_certificates: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionMtlsCertificatesValue,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub placement: ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionPlacement,
+    >,
+    ///Queue Producer bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub queue_producers: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionQueueProducersValue,
+    >,
+    ///R2 buckets used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub r2_buckets: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionR2BucketsValue,
+    >,
+    ///Services used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub services: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionServicesValue,
+    >,
+    ///The usage model for Pages Functions.
+    pub usage_model: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionUsageModel,
+    ///Vectorize bindings used for Pages Functions.
+    #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
+    pub vectorize_bindings: ::std::collections::HashMap<
+        ::std::string::String,
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionVectorizeBindingsValue,
+    >,
+    ///Hash of the Wrangler configuration used for the deployment.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub wrangler_config_hash: ::std::option::Option<::std::string::String>,
+}
+///AI binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionAiBindingsValue {
+    pub project_id: ::std::string::String,
+}
+///Analytics Engine binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionAnalyticsEngineDatasetsValue {
+    ///Name of the dataset.
+    pub dataset: ::std::string::String,
+}
+///D1 binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionD1DatabasesValue {
+    ///UUID of the D1 database.
+    pub id: ::std::string::String,
+}
+///Durable Object binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionDurableObjectNamespacesValue {
+    ///ID of the Durable Object namespace.
+    pub namespace_id: ::std::string::String,
+}
+///`PagesProjectForProviderDeploymentConfigsProductionEnvVarsValue`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValue {
+    Variant0(
+        ::std::option::Option<
+            CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0,
+        >,
+    ),
+    Variant1(
+        ::std::option::Option<
+            CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1,
+        >,
+    ),
+}
+impl ::std::convert::From<
+    ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0,
+    >,
+> for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValue {
+    fn from(
+        value: ::std::option::Option<
+            CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0,
+        >,
+    ) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<
+    ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1,
+    >,
+> for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValue {
+    fn from(
+        value: ::std::option::Option<
+            CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1,
+        >,
+    ) -> Self {
+        Self::Variant1(value)
+    }
+}
+///A plaintext environment variable.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0 {
+    #[serde(rename = "type")]
+    pub type_: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0Type,
+    ///Environment variable value.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "valueFrom",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub value_from: ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0ValueFrom,
+    >,
+}
+///`PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0Type {
+    #[serde(rename = "plain_text")]
+    PlainText,
+}
+impl ::std::fmt::Display
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0Type {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::PlainText => f.write_str("plain_text"),
+        }
+    }
+}
+impl ::std::str::FromStr
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0Type {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "plain_text" => Ok(Self::PlainText),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0Type {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0Type {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Reads `value` from a Secret instead.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0ValueFrom {
+    #[serde(rename = "secretKeyRef")]
+    pub secret_key_ref: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0ValueFromSecretKeyRef,
+}
+///A key of a Secret in the namespace of the resource.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant0ValueFromSecretKeyRef {
+    pub key: ::std::string::String,
+    pub name: ::std::string::String,
+}
+///An encrypted environment variable.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1 {
+    #[serde(rename = "type")]
+    pub type_: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1Type,
+    ///Secret value.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
+    #[serde(
+        rename = "valueFrom",
+        skip_serializing_if = "::std::option::Option::is_none"
+    )]
+    pub value_from: ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1ValueFrom,
+    >,
+}
+///`PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1Type`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1Type {
+    #[serde(rename = "secret_text")]
+    SecretText,
+}
+impl ::std::fmt::Display
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1Type {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::SecretText => f.write_str("secret_text"),
+        }
+    }
+}
+impl ::std::str::FromStr
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1Type {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "secret_text" => Ok(Self::SecretText),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1Type {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1Type {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Reads `value` from a Secret instead.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1ValueFrom {
+    #[serde(rename = "secretKeyRef")]
+    pub secret_key_ref: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1ValueFromSecretKeyRef,
+}
+///A key of a Secret in the namespace of the resource.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionEnvVarsValueVariant1ValueFromSecretKeyRef {
+    pub key: ::std::string::String,
+    pub name: ::std::string::String,
+}
+///Hyperdrive binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionHyperdriveBindingsValue {
+    pub id: ::std::string::String,
+}
+///KV namespace binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionKvNamespacesValue {
+    ///ID of the KV namespace.
+    pub namespace_id: ::std::string::String,
+}
+///Limits for Pages Functions.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionLimits {
+    ///CPU time limit in milliseconds.
+    pub cpu_ms: i64,
+}
+///mTLS binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionMtlsCertificatesValue {
+    pub certificate_id: ::std::string::String,
+}
+///Placement setting used for Pages Functions.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionPlacement {
+    ///Placement mode.
+    pub mode: ::std::string::String,
+}
+///Queue Producer binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionQueueProducersValue {
+    ///Name of the Queue.
+    pub name: ::std::string::String,
+}
+///R2 binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionR2BucketsValue {
+    ///Jurisdiction of the R2 bucket.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub jurisdiction: ::std::option::Option<::std::string::String>,
+    ///Name of the R2 bucket.
+    pub name: ::std::string::String,
+}
+///Service binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionServicesValue {
+    ///The entrypoint to bind to.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub entrypoint: ::std::option::Option<::std::string::String>,
+    ///The Service environment.
+    pub environment: ::std::string::String,
+    ///The Service name.
+    pub service: ::std::string::String,
+}
+///The usage model for Pages Functions.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionUsageModel {
+    #[serde(rename = "standard")]
+    Standard,
+    #[serde(rename = "bundled")]
+    Bundled,
+    #[serde(rename = "unbound")]
+    Unbound,
+}
+impl ::std::fmt::Display
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionUsageModel {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Standard => f.write_str("standard"),
+            Self::Bundled => f.write_str("bundled"),
+            Self::Unbound => f.write_str("unbound"),
+        }
+    }
+}
+impl ::std::str::FromStr
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionUsageModel {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "standard" => Ok(Self::Standard),
+            "bundled" => Ok(Self::Bundled),
+            "unbound" => Ok(Self::Unbound),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str>
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionUsageModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionUsageModel {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///Vectorize binding.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionVectorizeBindingsValue {
+    pub index_name: ::std::string::String,
 }
 ///`TurnstileWidgetAtProvider`
 #[derive(
@@ -33372,6 +35733,525 @@ impl ::std::convert::TryFrom<&str> for PagesDeploymentSkipReason {
     }
 }
 impl ::std::convert::TryFrom<::std::string::String> for PagesDeploymentSkipReason {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`PagesDomain`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct PagesDomain {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub certificate_authority: ::std::option::Option<PagesDomainCertificateAuthority>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub domain_id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    pub name: PagesDomainName,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<PagesDomainStatus>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub validation_data: ::std::option::Option<PagesDomainValidationData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub verification_data: ::std::option::Option<PagesDomainVerificationData>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub zone_tag: ::std::option::Option<::std::string::String>,
+}
+///`PagesDomainCertificateAuthority`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum PagesDomainCertificateAuthority {
+    #[serde(rename = "google")]
+    Google,
+    #[serde(rename = "lets_encrypt")]
+    LetsEncrypt,
+}
+impl ::std::fmt::Display for PagesDomainCertificateAuthority {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Google => f.write_str("google"),
+            Self::LetsEncrypt => f.write_str("lets_encrypt"),
+        }
+    }
+}
+impl ::std::str::FromStr for PagesDomainCertificateAuthority {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "google" => Ok(Self::Google),
+            "lets_encrypt" => Ok(Self::LetsEncrypt),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for PagesDomainCertificateAuthority {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PagesDomainCertificateAuthority {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`PagesDomainCreateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct PagesDomainCreateRequest {
+    pub name: PagesDomainName,
+}
+///`PagesDomainCreateResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct PagesDomainCreateResponse {
+    pub errors: PagesMessages,
+    pub messages: PagesMessages,
+    pub result: PagesDomain,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`PagesDomainDeleteResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct PagesDomainDeleteResponse {
+    pub errors: PagesMessages,
+    pub messages: PagesMessages,
+    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    pub result: ::std::option::Option<
+        ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    >,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///The domain name.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct PagesDomainName(::std::string::String);
+impl ::std::ops::Deref for PagesDomainName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<PagesDomainName> for ::std::string::String {
+    fn from(value: PagesDomainName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for PagesDomainName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        {
+            ::regress::Regex::new(
+                    "^([a-zA-Z0-9][\\-a-zA-Z0-9]*\\.)+[\\-a-zA-Z0-9]{2,20}$",
+                )
+                .unwrap()
+        });
+        if PATTERN.find(value).is_none() {
+            return Err(
+                "doesn't match pattern \"^([a-zA-Z0-9][\\-a-zA-Z0-9]*\\.)+[\\-a-zA-Z0-9]{2,20}$\""
+                    .into(),
+            );
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for PagesDomainName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PagesDomainName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for PagesDomainName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`PagesDomainObserveResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct PagesDomainObserveResponse {
+    pub errors: PagesMessages,
+    pub messages: PagesMessages,
+    pub result: PagesDomain,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`PagesDomainStatus`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum PagesDomainStatus {
+    #[serde(rename = "initializing")]
+    Initializing,
+    #[serde(rename = "pending")]
+    Pending,
+    #[serde(rename = "active")]
+    Active,
+    #[serde(rename = "deactivated")]
+    Deactivated,
+    #[serde(rename = "blocked")]
+    Blocked,
+    #[serde(rename = "error")]
+    Error,
+}
+impl ::std::fmt::Display for PagesDomainStatus {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Initializing => f.write_str("initializing"),
+            Self::Pending => f.write_str("pending"),
+            Self::Active => f.write_str("active"),
+            Self::Deactivated => f.write_str("deactivated"),
+            Self::Blocked => f.write_str("blocked"),
+            Self::Error => f.write_str("error"),
+        }
+    }
+}
+impl ::std::str::FromStr for PagesDomainStatus {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "initializing" => Ok(Self::Initializing),
+            "pending" => Ok(Self::Pending),
+            "active" => Ok(Self::Active),
+            "deactivated" => Ok(Self::Deactivated),
+            "blocked" => Ok(Self::Blocked),
+            "error" => Ok(Self::Error),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for PagesDomainStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PagesDomainStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`PagesDomainValidationData`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct PagesDomainValidationData {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub error_message: ::std::option::Option<::std::string::String>,
+    pub method: PagesDomainValidationDataMethod,
+    pub status: PagesDomainValidationDataStatus,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub txt_name: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub txt_value: ::std::option::Option<::std::string::String>,
+}
+///`PagesDomainValidationDataMethod`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum PagesDomainValidationDataMethod {
+    #[serde(rename = "http")]
+    Http,
+    #[serde(rename = "txt")]
+    Txt,
+}
+impl ::std::fmt::Display for PagesDomainValidationDataMethod {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Http => f.write_str("http"),
+            Self::Txt => f.write_str("txt"),
+        }
+    }
+}
+impl ::std::str::FromStr for PagesDomainValidationDataMethod {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "http" => Ok(Self::Http),
+            "txt" => Ok(Self::Txt),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for PagesDomainValidationDataMethod {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PagesDomainValidationDataMethod {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`PagesDomainValidationDataStatus`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum PagesDomainValidationDataStatus {
+    #[serde(rename = "initializing")]
+    Initializing,
+    #[serde(rename = "pending")]
+    Pending,
+    #[serde(rename = "active")]
+    Active,
+    #[serde(rename = "deactivated")]
+    Deactivated,
+    #[serde(rename = "error")]
+    Error,
+}
+impl ::std::fmt::Display for PagesDomainValidationDataStatus {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Initializing => f.write_str("initializing"),
+            Self::Pending => f.write_str("pending"),
+            Self::Active => f.write_str("active"),
+            Self::Deactivated => f.write_str("deactivated"),
+            Self::Error => f.write_str("error"),
+        }
+    }
+}
+impl ::std::str::FromStr for PagesDomainValidationDataStatus {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "initializing" => Ok(Self::Initializing),
+            "pending" => Ok(Self::Pending),
+            "active" => Ok(Self::Active),
+            "deactivated" => Ok(Self::Deactivated),
+            "error" => Ok(Self::Error),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for PagesDomainValidationDataStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for PagesDomainValidationDataStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`PagesDomainVerificationData`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct PagesDomainVerificationData {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub error_message: ::std::option::Option<::std::string::String>,
+    pub status: PagesDomainVerificationDataStatus,
+}
+///`PagesDomainVerificationDataStatus`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum PagesDomainVerificationDataStatus {
+    #[serde(rename = "pending")]
+    Pending,
+    #[serde(rename = "active")]
+    Active,
+    #[serde(rename = "deactivated")]
+    Deactivated,
+    #[serde(rename = "blocked")]
+    Blocked,
+    #[serde(rename = "error")]
+    Error,
+}
+impl ::std::fmt::Display for PagesDomainVerificationDataStatus {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Pending => f.write_str("pending"),
+            Self::Active => f.write_str("active"),
+            Self::Deactivated => f.write_str("deactivated"),
+            Self::Blocked => f.write_str("blocked"),
+            Self::Error => f.write_str("error"),
+        }
+    }
+}
+impl ::std::str::FromStr for PagesDomainVerificationDataStatus {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "pending" => Ok(Self::Pending),
+            "active" => Ok(Self::Active),
+            "deactivated" => Ok(Self::Deactivated),
+            "blocked" => Ok(Self::Blocked),
+            "error" => Ok(Self::Error),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for PagesDomainVerificationDataStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for PagesDomainVerificationDataStatus {
     type Error = self::error::ConversionError;
     fn try_from(
         value: ::std::string::String,
@@ -62493,6 +65373,730 @@ pub struct ZerotrustV1alpha1AccessApplicationForProviderVariant9Type {
     #[serde(flatten, skip_serializing_if = "::std::option::Option::is_none")]
     pub subtype_1: ::std::option::Option<AccessType>,
 }
+///`AccessGroupAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessGroupAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub exclude: ::std::option::Option<AccessExclude>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub include: ::std::option::Option<AccessInclude>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName6>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub require: ::std::option::Option<AccessRequire>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+}
+///`AccessGroupForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessGroupForProvider {
+    ///Rules evaluated with a NOT logical operator. To match a policy, a user cannot meet any of the Exclude rules.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub exclude: ::std::vec::Vec<ZerotrustV1alpha1AccessGroupForProviderExcludeItem>,
+    ///Rules evaluated with an OR logical operator. A user needs to meet only one of the Include rules.
+    pub include: ::std::vec::Vec<ZerotrustV1alpha1AccessGroupForProviderIncludeItem>,
+    pub name: AccessName6,
+    ///Rules evaluated with an AND logical operator. To match a policy, a user must meet all of the Require rules.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub require: ::std::vec::Vec<ZerotrustV1alpha1AccessGroupForProviderRequireItem>,
+}
+///`AccessGroupForProviderExcludeItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    Variant0(AccessAccessGroupRule),
+    Variant1(AccessAnyValidServiceTokenRule),
+    Variant2(AccessAuthContextRule),
+    Variant3(AccessAuthenticationMethodRule),
+    Variant4(AccessAzureGroupRule),
+    Variant5(AccessCertificateRule),
+    Variant6(AccessCommonNameRule),
+    Variant7(AccessCountryRule),
+    Variant8(AccessDevicePostureRule),
+    Variant9(AccessDomainRule),
+    Variant10(AccessEmailListRule),
+    Variant11(AccessEmailRule),
+    Variant12(AccessEveryoneRule),
+    Variant13(AccessExternalEvaluationRule),
+    Variant14(AccessGithubOrganizationRule),
+    Variant15(AccessGsuiteGroupRule),
+    Variant16(AccessLoginMethodRule),
+    Variant17(AccessIpListRule),
+    Variant18(AccessIpRule),
+    Variant19(AccessOktaGroupRule),
+    Variant20(AccessSamlGroupRule),
+    Variant21(AccessOidcClaimRule),
+    Variant22(AccessServiceTokenRule),
+    Variant23(AccessLinkedAppTokenRule),
+    Variant24(AccessUserRiskScoreRule),
+    Variant25(AccessCloudflareAccountMemberRule),
+    Variant26 {
+        #[serde(rename = "groupRef")]
+        group_ref: ZerotrustV1alpha1AccessGroupForProviderExcludeItemVariant26GroupRef,
+    },
+    Variant27 {
+        #[serde(rename = "serviceTokenRef")]
+        service_token_ref: ZerotrustV1alpha1AccessGroupForProviderExcludeItemVariant27ServiceTokenRef,
+    },
+}
+impl ::std::convert::From<AccessAccessGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessAccessGroupRule) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessAnyValidServiceTokenRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessAnyValidServiceTokenRule) -> Self {
+        Self::Variant1(value)
+    }
+}
+impl ::std::convert::From<AccessAuthContextRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessAuthContextRule) -> Self {
+        Self::Variant2(value)
+    }
+}
+impl ::std::convert::From<AccessAuthenticationMethodRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessAuthenticationMethodRule) -> Self {
+        Self::Variant3(value)
+    }
+}
+impl ::std::convert::From<AccessAzureGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessAzureGroupRule) -> Self {
+        Self::Variant4(value)
+    }
+}
+impl ::std::convert::From<AccessCertificateRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessCertificateRule) -> Self {
+        Self::Variant5(value)
+    }
+}
+impl ::std::convert::From<AccessCommonNameRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessCommonNameRule) -> Self {
+        Self::Variant6(value)
+    }
+}
+impl ::std::convert::From<AccessCountryRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessCountryRule) -> Self {
+        Self::Variant7(value)
+    }
+}
+impl ::std::convert::From<AccessDevicePostureRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessDevicePostureRule) -> Self {
+        Self::Variant8(value)
+    }
+}
+impl ::std::convert::From<AccessDomainRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessDomainRule) -> Self {
+        Self::Variant9(value)
+    }
+}
+impl ::std::convert::From<AccessEmailListRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessEmailListRule) -> Self {
+        Self::Variant10(value)
+    }
+}
+impl ::std::convert::From<AccessEmailRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessEmailRule) -> Self {
+        Self::Variant11(value)
+    }
+}
+impl ::std::convert::From<AccessEveryoneRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessEveryoneRule) -> Self {
+        Self::Variant12(value)
+    }
+}
+impl ::std::convert::From<AccessExternalEvaluationRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessExternalEvaluationRule) -> Self {
+        Self::Variant13(value)
+    }
+}
+impl ::std::convert::From<AccessGithubOrganizationRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessGithubOrganizationRule) -> Self {
+        Self::Variant14(value)
+    }
+}
+impl ::std::convert::From<AccessGsuiteGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessGsuiteGroupRule) -> Self {
+        Self::Variant15(value)
+    }
+}
+impl ::std::convert::From<AccessLoginMethodRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessLoginMethodRule) -> Self {
+        Self::Variant16(value)
+    }
+}
+impl ::std::convert::From<AccessIpListRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessIpListRule) -> Self {
+        Self::Variant17(value)
+    }
+}
+impl ::std::convert::From<AccessIpRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessIpRule) -> Self {
+        Self::Variant18(value)
+    }
+}
+impl ::std::convert::From<AccessOktaGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessOktaGroupRule) -> Self {
+        Self::Variant19(value)
+    }
+}
+impl ::std::convert::From<AccessSamlGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessSamlGroupRule) -> Self {
+        Self::Variant20(value)
+    }
+}
+impl ::std::convert::From<AccessOidcClaimRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessOidcClaimRule) -> Self {
+        Self::Variant21(value)
+    }
+}
+impl ::std::convert::From<AccessServiceTokenRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessServiceTokenRule) -> Self {
+        Self::Variant22(value)
+    }
+}
+impl ::std::convert::From<AccessLinkedAppTokenRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessLinkedAppTokenRule) -> Self {
+        Self::Variant23(value)
+    }
+}
+impl ::std::convert::From<AccessUserRiskScoreRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessUserRiskScoreRule) -> Self {
+        Self::Variant24(value)
+    }
+}
+impl ::std::convert::From<AccessCloudflareAccountMemberRule>
+for ZerotrustV1alpha1AccessGroupForProviderExcludeItem {
+    fn from(value: AccessCloudflareAccountMemberRule) -> Self {
+        Self::Variant25(value)
+    }
+}
+///A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessGroupForProviderExcludeItemVariant26GroupRef {
+    pub name: ::std::string::String,
+}
+///A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessGroupForProviderExcludeItemVariant27ServiceTokenRef {
+    pub name: ::std::string::String,
+}
+///`AccessGroupForProviderIncludeItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    Variant0(AccessAccessGroupRule),
+    Variant1(AccessAnyValidServiceTokenRule),
+    Variant2(AccessAuthContextRule),
+    Variant3(AccessAuthenticationMethodRule),
+    Variant4(AccessAzureGroupRule),
+    Variant5(AccessCertificateRule),
+    Variant6(AccessCommonNameRule),
+    Variant7(AccessCountryRule),
+    Variant8(AccessDevicePostureRule),
+    Variant9(AccessDomainRule),
+    Variant10(AccessEmailListRule),
+    Variant11(AccessEmailRule),
+    Variant12(AccessEveryoneRule),
+    Variant13(AccessExternalEvaluationRule),
+    Variant14(AccessGithubOrganizationRule),
+    Variant15(AccessGsuiteGroupRule),
+    Variant16(AccessLoginMethodRule),
+    Variant17(AccessIpListRule),
+    Variant18(AccessIpRule),
+    Variant19(AccessOktaGroupRule),
+    Variant20(AccessSamlGroupRule),
+    Variant21(AccessOidcClaimRule),
+    Variant22(AccessServiceTokenRule),
+    Variant23(AccessLinkedAppTokenRule),
+    Variant24(AccessUserRiskScoreRule),
+    Variant25(AccessCloudflareAccountMemberRule),
+    Variant26 {
+        #[serde(rename = "groupRef")]
+        group_ref: ZerotrustV1alpha1AccessGroupForProviderIncludeItemVariant26GroupRef,
+    },
+    Variant27 {
+        #[serde(rename = "serviceTokenRef")]
+        service_token_ref: ZerotrustV1alpha1AccessGroupForProviderIncludeItemVariant27ServiceTokenRef,
+    },
+}
+impl ::std::convert::From<AccessAccessGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessAccessGroupRule) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessAnyValidServiceTokenRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessAnyValidServiceTokenRule) -> Self {
+        Self::Variant1(value)
+    }
+}
+impl ::std::convert::From<AccessAuthContextRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessAuthContextRule) -> Self {
+        Self::Variant2(value)
+    }
+}
+impl ::std::convert::From<AccessAuthenticationMethodRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessAuthenticationMethodRule) -> Self {
+        Self::Variant3(value)
+    }
+}
+impl ::std::convert::From<AccessAzureGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessAzureGroupRule) -> Self {
+        Self::Variant4(value)
+    }
+}
+impl ::std::convert::From<AccessCertificateRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessCertificateRule) -> Self {
+        Self::Variant5(value)
+    }
+}
+impl ::std::convert::From<AccessCommonNameRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessCommonNameRule) -> Self {
+        Self::Variant6(value)
+    }
+}
+impl ::std::convert::From<AccessCountryRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessCountryRule) -> Self {
+        Self::Variant7(value)
+    }
+}
+impl ::std::convert::From<AccessDevicePostureRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessDevicePostureRule) -> Self {
+        Self::Variant8(value)
+    }
+}
+impl ::std::convert::From<AccessDomainRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessDomainRule) -> Self {
+        Self::Variant9(value)
+    }
+}
+impl ::std::convert::From<AccessEmailListRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessEmailListRule) -> Self {
+        Self::Variant10(value)
+    }
+}
+impl ::std::convert::From<AccessEmailRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessEmailRule) -> Self {
+        Self::Variant11(value)
+    }
+}
+impl ::std::convert::From<AccessEveryoneRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessEveryoneRule) -> Self {
+        Self::Variant12(value)
+    }
+}
+impl ::std::convert::From<AccessExternalEvaluationRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessExternalEvaluationRule) -> Self {
+        Self::Variant13(value)
+    }
+}
+impl ::std::convert::From<AccessGithubOrganizationRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessGithubOrganizationRule) -> Self {
+        Self::Variant14(value)
+    }
+}
+impl ::std::convert::From<AccessGsuiteGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessGsuiteGroupRule) -> Self {
+        Self::Variant15(value)
+    }
+}
+impl ::std::convert::From<AccessLoginMethodRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessLoginMethodRule) -> Self {
+        Self::Variant16(value)
+    }
+}
+impl ::std::convert::From<AccessIpListRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessIpListRule) -> Self {
+        Self::Variant17(value)
+    }
+}
+impl ::std::convert::From<AccessIpRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessIpRule) -> Self {
+        Self::Variant18(value)
+    }
+}
+impl ::std::convert::From<AccessOktaGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessOktaGroupRule) -> Self {
+        Self::Variant19(value)
+    }
+}
+impl ::std::convert::From<AccessSamlGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessSamlGroupRule) -> Self {
+        Self::Variant20(value)
+    }
+}
+impl ::std::convert::From<AccessOidcClaimRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessOidcClaimRule) -> Self {
+        Self::Variant21(value)
+    }
+}
+impl ::std::convert::From<AccessServiceTokenRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessServiceTokenRule) -> Self {
+        Self::Variant22(value)
+    }
+}
+impl ::std::convert::From<AccessLinkedAppTokenRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessLinkedAppTokenRule) -> Self {
+        Self::Variant23(value)
+    }
+}
+impl ::std::convert::From<AccessUserRiskScoreRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessUserRiskScoreRule) -> Self {
+        Self::Variant24(value)
+    }
+}
+impl ::std::convert::From<AccessCloudflareAccountMemberRule>
+for ZerotrustV1alpha1AccessGroupForProviderIncludeItem {
+    fn from(value: AccessCloudflareAccountMemberRule) -> Self {
+        Self::Variant25(value)
+    }
+}
+///A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessGroupForProviderIncludeItemVariant26GroupRef {
+    pub name: ::std::string::String,
+}
+///A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessGroupForProviderIncludeItemVariant27ServiceTokenRef {
+    pub name: ::std::string::String,
+}
+///`AccessGroupForProviderRequireItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    Variant0(AccessAccessGroupRule),
+    Variant1(AccessAnyValidServiceTokenRule),
+    Variant2(AccessAuthContextRule),
+    Variant3(AccessAuthenticationMethodRule),
+    Variant4(AccessAzureGroupRule),
+    Variant5(AccessCertificateRule),
+    Variant6(AccessCommonNameRule),
+    Variant7(AccessCountryRule),
+    Variant8(AccessDevicePostureRule),
+    Variant9(AccessDomainRule),
+    Variant10(AccessEmailListRule),
+    Variant11(AccessEmailRule),
+    Variant12(AccessEveryoneRule),
+    Variant13(AccessExternalEvaluationRule),
+    Variant14(AccessGithubOrganizationRule),
+    Variant15(AccessGsuiteGroupRule),
+    Variant16(AccessLoginMethodRule),
+    Variant17(AccessIpListRule),
+    Variant18(AccessIpRule),
+    Variant19(AccessOktaGroupRule),
+    Variant20(AccessSamlGroupRule),
+    Variant21(AccessOidcClaimRule),
+    Variant22(AccessServiceTokenRule),
+    Variant23(AccessLinkedAppTokenRule),
+    Variant24(AccessUserRiskScoreRule),
+    Variant25(AccessCloudflareAccountMemberRule),
+    Variant26 {
+        #[serde(rename = "groupRef")]
+        group_ref: ZerotrustV1alpha1AccessGroupForProviderRequireItemVariant26GroupRef,
+    },
+    Variant27 {
+        #[serde(rename = "serviceTokenRef")]
+        service_token_ref: ZerotrustV1alpha1AccessGroupForProviderRequireItemVariant27ServiceTokenRef,
+    },
+}
+impl ::std::convert::From<AccessAccessGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessAccessGroupRule) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessAnyValidServiceTokenRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessAnyValidServiceTokenRule) -> Self {
+        Self::Variant1(value)
+    }
+}
+impl ::std::convert::From<AccessAuthContextRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessAuthContextRule) -> Self {
+        Self::Variant2(value)
+    }
+}
+impl ::std::convert::From<AccessAuthenticationMethodRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessAuthenticationMethodRule) -> Self {
+        Self::Variant3(value)
+    }
+}
+impl ::std::convert::From<AccessAzureGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessAzureGroupRule) -> Self {
+        Self::Variant4(value)
+    }
+}
+impl ::std::convert::From<AccessCertificateRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessCertificateRule) -> Self {
+        Self::Variant5(value)
+    }
+}
+impl ::std::convert::From<AccessCommonNameRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessCommonNameRule) -> Self {
+        Self::Variant6(value)
+    }
+}
+impl ::std::convert::From<AccessCountryRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessCountryRule) -> Self {
+        Self::Variant7(value)
+    }
+}
+impl ::std::convert::From<AccessDevicePostureRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessDevicePostureRule) -> Self {
+        Self::Variant8(value)
+    }
+}
+impl ::std::convert::From<AccessDomainRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessDomainRule) -> Self {
+        Self::Variant9(value)
+    }
+}
+impl ::std::convert::From<AccessEmailListRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessEmailListRule) -> Self {
+        Self::Variant10(value)
+    }
+}
+impl ::std::convert::From<AccessEmailRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessEmailRule) -> Self {
+        Self::Variant11(value)
+    }
+}
+impl ::std::convert::From<AccessEveryoneRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessEveryoneRule) -> Self {
+        Self::Variant12(value)
+    }
+}
+impl ::std::convert::From<AccessExternalEvaluationRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessExternalEvaluationRule) -> Self {
+        Self::Variant13(value)
+    }
+}
+impl ::std::convert::From<AccessGithubOrganizationRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessGithubOrganizationRule) -> Self {
+        Self::Variant14(value)
+    }
+}
+impl ::std::convert::From<AccessGsuiteGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessGsuiteGroupRule) -> Self {
+        Self::Variant15(value)
+    }
+}
+impl ::std::convert::From<AccessLoginMethodRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessLoginMethodRule) -> Self {
+        Self::Variant16(value)
+    }
+}
+impl ::std::convert::From<AccessIpListRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessIpListRule) -> Self {
+        Self::Variant17(value)
+    }
+}
+impl ::std::convert::From<AccessIpRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessIpRule) -> Self {
+        Self::Variant18(value)
+    }
+}
+impl ::std::convert::From<AccessOktaGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessOktaGroupRule) -> Self {
+        Self::Variant19(value)
+    }
+}
+impl ::std::convert::From<AccessSamlGroupRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessSamlGroupRule) -> Self {
+        Self::Variant20(value)
+    }
+}
+impl ::std::convert::From<AccessOidcClaimRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessOidcClaimRule) -> Self {
+        Self::Variant21(value)
+    }
+}
+impl ::std::convert::From<AccessServiceTokenRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessServiceTokenRule) -> Self {
+        Self::Variant22(value)
+    }
+}
+impl ::std::convert::From<AccessLinkedAppTokenRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessLinkedAppTokenRule) -> Self {
+        Self::Variant23(value)
+    }
+}
+impl ::std::convert::From<AccessUserRiskScoreRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessUserRiskScoreRule) -> Self {
+        Self::Variant24(value)
+    }
+}
+impl ::std::convert::From<AccessCloudflareAccountMemberRule>
+for ZerotrustV1alpha1AccessGroupForProviderRequireItem {
+    fn from(value: AccessCloudflareAccountMemberRule) -> Self {
+        Self::Variant25(value)
+    }
+}
+///A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessGroupForProviderRequireItemVariant26GroupRef {
+    pub name: ::std::string::String,
+}
+///A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessGroupForProviderRequireItemVariant27ServiceTokenRef {
+    pub name: ::std::string::String,
+}
 ///`AccessPolicyAtProvider`
 #[derive(
     ::serde::Deserialize,
@@ -62565,9 +66169,11 @@ pub struct ZerotrustV1alpha1AccessPolicyForProvider {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub connection_rules: ::std::option::Option<AccessConnectionRules>,
     pub decision: AccessDecision,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub exclude: ::std::option::Option<AccessExclude2>,
-    pub include: AccessInclude2,
+    ///Rules evaluated with a NOT logical operator. To match the policy, a user cannot meet any of the Exclude rules.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub exclude: ::std::vec::Vec<ZerotrustV1alpha1AccessPolicyForProviderExcludeItem>,
+    ///Rules evaluated with an OR logical operator. A user needs to meet only one of the Include rules.
+    pub include: ::std::vec::Vec<ZerotrustV1alpha1AccessPolicyForProviderIncludeItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub isolation_required: ::std::option::Option<AccessIsolationRequired>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -62581,10 +66187,731 @@ pub struct ZerotrustV1alpha1AccessPolicyForProvider {
     pub purpose_justification_required: ::std::option::Option<
         AccessPurposeJustificationRequired,
     >,
-    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub require: ::std::option::Option<AccessRequire2>,
+    ///Rules evaluated with an AND logical operator. To match the policy, a user must meet all of the Require rules.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub require: ::std::vec::Vec<ZerotrustV1alpha1AccessPolicyForProviderRequireItem>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub session_duration: ::std::option::Option<AccessSessionDuration3>,
+}
+///`AccessPolicyForProviderExcludeItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    Variant0(AccessAccessGroupRule),
+    Variant1(AccessAnyValidServiceTokenRule),
+    Variant2(AccessAuthContextRule),
+    Variant3(AccessAuthenticationMethodRule),
+    Variant4(AccessAzureGroupRule),
+    Variant5(AccessCertificateRule),
+    Variant6(AccessCommonNameRule),
+    Variant7(AccessCountryRule),
+    Variant8(AccessDevicePostureRule),
+    Variant9(AccessDomainRule),
+    Variant10(AccessEmailListRule),
+    Variant11(AccessEmailRule),
+    Variant12(AccessEveryoneRule),
+    Variant13(AccessExternalEvaluationRule),
+    Variant14(AccessGithubOrganizationRule),
+    Variant15(AccessGsuiteGroupRule),
+    Variant16(AccessLoginMethodRule),
+    Variant17(AccessIpListRule),
+    Variant18(AccessIpRule),
+    Variant19(AccessOktaGroupRule),
+    Variant20(AccessSamlGroupRule),
+    Variant21(AccessOidcClaimRule),
+    Variant22(AccessServiceTokenRule),
+    Variant23(AccessLinkedAppTokenRule),
+    Variant24(AccessUserRiskScoreRule),
+    Variant25(AccessCloudflareAccountMemberRule),
+    Variant26 {
+        #[serde(rename = "groupRef")]
+        group_ref: ZerotrustV1alpha1AccessPolicyForProviderExcludeItemVariant26GroupRef,
+    },
+    Variant27 {
+        #[serde(rename = "serviceTokenRef")]
+        service_token_ref: ZerotrustV1alpha1AccessPolicyForProviderExcludeItemVariant27ServiceTokenRef,
+    },
+}
+impl ::std::convert::From<AccessAccessGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessAccessGroupRule) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessAnyValidServiceTokenRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessAnyValidServiceTokenRule) -> Self {
+        Self::Variant1(value)
+    }
+}
+impl ::std::convert::From<AccessAuthContextRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessAuthContextRule) -> Self {
+        Self::Variant2(value)
+    }
+}
+impl ::std::convert::From<AccessAuthenticationMethodRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessAuthenticationMethodRule) -> Self {
+        Self::Variant3(value)
+    }
+}
+impl ::std::convert::From<AccessAzureGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessAzureGroupRule) -> Self {
+        Self::Variant4(value)
+    }
+}
+impl ::std::convert::From<AccessCertificateRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessCertificateRule) -> Self {
+        Self::Variant5(value)
+    }
+}
+impl ::std::convert::From<AccessCommonNameRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessCommonNameRule) -> Self {
+        Self::Variant6(value)
+    }
+}
+impl ::std::convert::From<AccessCountryRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessCountryRule) -> Self {
+        Self::Variant7(value)
+    }
+}
+impl ::std::convert::From<AccessDevicePostureRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessDevicePostureRule) -> Self {
+        Self::Variant8(value)
+    }
+}
+impl ::std::convert::From<AccessDomainRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessDomainRule) -> Self {
+        Self::Variant9(value)
+    }
+}
+impl ::std::convert::From<AccessEmailListRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessEmailListRule) -> Self {
+        Self::Variant10(value)
+    }
+}
+impl ::std::convert::From<AccessEmailRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessEmailRule) -> Self {
+        Self::Variant11(value)
+    }
+}
+impl ::std::convert::From<AccessEveryoneRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessEveryoneRule) -> Self {
+        Self::Variant12(value)
+    }
+}
+impl ::std::convert::From<AccessExternalEvaluationRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessExternalEvaluationRule) -> Self {
+        Self::Variant13(value)
+    }
+}
+impl ::std::convert::From<AccessGithubOrganizationRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessGithubOrganizationRule) -> Self {
+        Self::Variant14(value)
+    }
+}
+impl ::std::convert::From<AccessGsuiteGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessGsuiteGroupRule) -> Self {
+        Self::Variant15(value)
+    }
+}
+impl ::std::convert::From<AccessLoginMethodRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessLoginMethodRule) -> Self {
+        Self::Variant16(value)
+    }
+}
+impl ::std::convert::From<AccessIpListRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessIpListRule) -> Self {
+        Self::Variant17(value)
+    }
+}
+impl ::std::convert::From<AccessIpRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessIpRule) -> Self {
+        Self::Variant18(value)
+    }
+}
+impl ::std::convert::From<AccessOktaGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessOktaGroupRule) -> Self {
+        Self::Variant19(value)
+    }
+}
+impl ::std::convert::From<AccessSamlGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessSamlGroupRule) -> Self {
+        Self::Variant20(value)
+    }
+}
+impl ::std::convert::From<AccessOidcClaimRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessOidcClaimRule) -> Self {
+        Self::Variant21(value)
+    }
+}
+impl ::std::convert::From<AccessServiceTokenRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessServiceTokenRule) -> Self {
+        Self::Variant22(value)
+    }
+}
+impl ::std::convert::From<AccessLinkedAppTokenRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessLinkedAppTokenRule) -> Self {
+        Self::Variant23(value)
+    }
+}
+impl ::std::convert::From<AccessUserRiskScoreRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessUserRiskScoreRule) -> Self {
+        Self::Variant24(value)
+    }
+}
+impl ::std::convert::From<AccessCloudflareAccountMemberRule>
+for ZerotrustV1alpha1AccessPolicyForProviderExcludeItem {
+    fn from(value: AccessCloudflareAccountMemberRule) -> Self {
+        Self::Variant25(value)
+    }
+}
+///A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessPolicyForProviderExcludeItemVariant26GroupRef {
+    pub name: ::std::string::String,
+}
+///A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessPolicyForProviderExcludeItemVariant27ServiceTokenRef {
+    pub name: ::std::string::String,
+}
+///`AccessPolicyForProviderIncludeItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    Variant0(AccessAccessGroupRule),
+    Variant1(AccessAnyValidServiceTokenRule),
+    Variant2(AccessAuthContextRule),
+    Variant3(AccessAuthenticationMethodRule),
+    Variant4(AccessAzureGroupRule),
+    Variant5(AccessCertificateRule),
+    Variant6(AccessCommonNameRule),
+    Variant7(AccessCountryRule),
+    Variant8(AccessDevicePostureRule),
+    Variant9(AccessDomainRule),
+    Variant10(AccessEmailListRule),
+    Variant11(AccessEmailRule),
+    Variant12(AccessEveryoneRule),
+    Variant13(AccessExternalEvaluationRule),
+    Variant14(AccessGithubOrganizationRule),
+    Variant15(AccessGsuiteGroupRule),
+    Variant16(AccessLoginMethodRule),
+    Variant17(AccessIpListRule),
+    Variant18(AccessIpRule),
+    Variant19(AccessOktaGroupRule),
+    Variant20(AccessSamlGroupRule),
+    Variant21(AccessOidcClaimRule),
+    Variant22(AccessServiceTokenRule),
+    Variant23(AccessLinkedAppTokenRule),
+    Variant24(AccessUserRiskScoreRule),
+    Variant25(AccessCloudflareAccountMemberRule),
+    Variant26 {
+        #[serde(rename = "groupRef")]
+        group_ref: ZerotrustV1alpha1AccessPolicyForProviderIncludeItemVariant26GroupRef,
+    },
+    Variant27 {
+        #[serde(rename = "serviceTokenRef")]
+        service_token_ref: ZerotrustV1alpha1AccessPolicyForProviderIncludeItemVariant27ServiceTokenRef,
+    },
+}
+impl ::std::convert::From<AccessAccessGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessAccessGroupRule) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessAnyValidServiceTokenRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessAnyValidServiceTokenRule) -> Self {
+        Self::Variant1(value)
+    }
+}
+impl ::std::convert::From<AccessAuthContextRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessAuthContextRule) -> Self {
+        Self::Variant2(value)
+    }
+}
+impl ::std::convert::From<AccessAuthenticationMethodRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessAuthenticationMethodRule) -> Self {
+        Self::Variant3(value)
+    }
+}
+impl ::std::convert::From<AccessAzureGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessAzureGroupRule) -> Self {
+        Self::Variant4(value)
+    }
+}
+impl ::std::convert::From<AccessCertificateRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessCertificateRule) -> Self {
+        Self::Variant5(value)
+    }
+}
+impl ::std::convert::From<AccessCommonNameRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessCommonNameRule) -> Self {
+        Self::Variant6(value)
+    }
+}
+impl ::std::convert::From<AccessCountryRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessCountryRule) -> Self {
+        Self::Variant7(value)
+    }
+}
+impl ::std::convert::From<AccessDevicePostureRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessDevicePostureRule) -> Self {
+        Self::Variant8(value)
+    }
+}
+impl ::std::convert::From<AccessDomainRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessDomainRule) -> Self {
+        Self::Variant9(value)
+    }
+}
+impl ::std::convert::From<AccessEmailListRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessEmailListRule) -> Self {
+        Self::Variant10(value)
+    }
+}
+impl ::std::convert::From<AccessEmailRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessEmailRule) -> Self {
+        Self::Variant11(value)
+    }
+}
+impl ::std::convert::From<AccessEveryoneRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessEveryoneRule) -> Self {
+        Self::Variant12(value)
+    }
+}
+impl ::std::convert::From<AccessExternalEvaluationRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessExternalEvaluationRule) -> Self {
+        Self::Variant13(value)
+    }
+}
+impl ::std::convert::From<AccessGithubOrganizationRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessGithubOrganizationRule) -> Self {
+        Self::Variant14(value)
+    }
+}
+impl ::std::convert::From<AccessGsuiteGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessGsuiteGroupRule) -> Self {
+        Self::Variant15(value)
+    }
+}
+impl ::std::convert::From<AccessLoginMethodRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessLoginMethodRule) -> Self {
+        Self::Variant16(value)
+    }
+}
+impl ::std::convert::From<AccessIpListRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessIpListRule) -> Self {
+        Self::Variant17(value)
+    }
+}
+impl ::std::convert::From<AccessIpRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessIpRule) -> Self {
+        Self::Variant18(value)
+    }
+}
+impl ::std::convert::From<AccessOktaGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessOktaGroupRule) -> Self {
+        Self::Variant19(value)
+    }
+}
+impl ::std::convert::From<AccessSamlGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessSamlGroupRule) -> Self {
+        Self::Variant20(value)
+    }
+}
+impl ::std::convert::From<AccessOidcClaimRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessOidcClaimRule) -> Self {
+        Self::Variant21(value)
+    }
+}
+impl ::std::convert::From<AccessServiceTokenRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessServiceTokenRule) -> Self {
+        Self::Variant22(value)
+    }
+}
+impl ::std::convert::From<AccessLinkedAppTokenRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessLinkedAppTokenRule) -> Self {
+        Self::Variant23(value)
+    }
+}
+impl ::std::convert::From<AccessUserRiskScoreRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessUserRiskScoreRule) -> Self {
+        Self::Variant24(value)
+    }
+}
+impl ::std::convert::From<AccessCloudflareAccountMemberRule>
+for ZerotrustV1alpha1AccessPolicyForProviderIncludeItem {
+    fn from(value: AccessCloudflareAccountMemberRule) -> Self {
+        Self::Variant25(value)
+    }
+}
+///A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessPolicyForProviderIncludeItemVariant26GroupRef {
+    pub name: ::std::string::String,
+}
+///A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessPolicyForProviderIncludeItemVariant27ServiceTokenRef {
+    pub name: ::std::string::String,
+}
+///`AccessPolicyForProviderRequireItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    Variant0(AccessAccessGroupRule),
+    Variant1(AccessAnyValidServiceTokenRule),
+    Variant2(AccessAuthContextRule),
+    Variant3(AccessAuthenticationMethodRule),
+    Variant4(AccessAzureGroupRule),
+    Variant5(AccessCertificateRule),
+    Variant6(AccessCommonNameRule),
+    Variant7(AccessCountryRule),
+    Variant8(AccessDevicePostureRule),
+    Variant9(AccessDomainRule),
+    Variant10(AccessEmailListRule),
+    Variant11(AccessEmailRule),
+    Variant12(AccessEveryoneRule),
+    Variant13(AccessExternalEvaluationRule),
+    Variant14(AccessGithubOrganizationRule),
+    Variant15(AccessGsuiteGroupRule),
+    Variant16(AccessLoginMethodRule),
+    Variant17(AccessIpListRule),
+    Variant18(AccessIpRule),
+    Variant19(AccessOktaGroupRule),
+    Variant20(AccessSamlGroupRule),
+    Variant21(AccessOidcClaimRule),
+    Variant22(AccessServiceTokenRule),
+    Variant23(AccessLinkedAppTokenRule),
+    Variant24(AccessUserRiskScoreRule),
+    Variant25(AccessCloudflareAccountMemberRule),
+    Variant26 {
+        #[serde(rename = "groupRef")]
+        group_ref: ZerotrustV1alpha1AccessPolicyForProviderRequireItemVariant26GroupRef,
+    },
+    Variant27 {
+        #[serde(rename = "serviceTokenRef")]
+        service_token_ref: ZerotrustV1alpha1AccessPolicyForProviderRequireItemVariant27ServiceTokenRef,
+    },
+}
+impl ::std::convert::From<AccessAccessGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessAccessGroupRule) -> Self {
+        Self::Variant0(value)
+    }
+}
+impl ::std::convert::From<AccessAnyValidServiceTokenRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessAnyValidServiceTokenRule) -> Self {
+        Self::Variant1(value)
+    }
+}
+impl ::std::convert::From<AccessAuthContextRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessAuthContextRule) -> Self {
+        Self::Variant2(value)
+    }
+}
+impl ::std::convert::From<AccessAuthenticationMethodRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessAuthenticationMethodRule) -> Self {
+        Self::Variant3(value)
+    }
+}
+impl ::std::convert::From<AccessAzureGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessAzureGroupRule) -> Self {
+        Self::Variant4(value)
+    }
+}
+impl ::std::convert::From<AccessCertificateRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessCertificateRule) -> Self {
+        Self::Variant5(value)
+    }
+}
+impl ::std::convert::From<AccessCommonNameRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessCommonNameRule) -> Self {
+        Self::Variant6(value)
+    }
+}
+impl ::std::convert::From<AccessCountryRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessCountryRule) -> Self {
+        Self::Variant7(value)
+    }
+}
+impl ::std::convert::From<AccessDevicePostureRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessDevicePostureRule) -> Self {
+        Self::Variant8(value)
+    }
+}
+impl ::std::convert::From<AccessDomainRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessDomainRule) -> Self {
+        Self::Variant9(value)
+    }
+}
+impl ::std::convert::From<AccessEmailListRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessEmailListRule) -> Self {
+        Self::Variant10(value)
+    }
+}
+impl ::std::convert::From<AccessEmailRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessEmailRule) -> Self {
+        Self::Variant11(value)
+    }
+}
+impl ::std::convert::From<AccessEveryoneRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessEveryoneRule) -> Self {
+        Self::Variant12(value)
+    }
+}
+impl ::std::convert::From<AccessExternalEvaluationRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessExternalEvaluationRule) -> Self {
+        Self::Variant13(value)
+    }
+}
+impl ::std::convert::From<AccessGithubOrganizationRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessGithubOrganizationRule) -> Self {
+        Self::Variant14(value)
+    }
+}
+impl ::std::convert::From<AccessGsuiteGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessGsuiteGroupRule) -> Self {
+        Self::Variant15(value)
+    }
+}
+impl ::std::convert::From<AccessLoginMethodRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessLoginMethodRule) -> Self {
+        Self::Variant16(value)
+    }
+}
+impl ::std::convert::From<AccessIpListRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessIpListRule) -> Self {
+        Self::Variant17(value)
+    }
+}
+impl ::std::convert::From<AccessIpRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessIpRule) -> Self {
+        Self::Variant18(value)
+    }
+}
+impl ::std::convert::From<AccessOktaGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessOktaGroupRule) -> Self {
+        Self::Variant19(value)
+    }
+}
+impl ::std::convert::From<AccessSamlGroupRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessSamlGroupRule) -> Self {
+        Self::Variant20(value)
+    }
+}
+impl ::std::convert::From<AccessOidcClaimRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessOidcClaimRule) -> Self {
+        Self::Variant21(value)
+    }
+}
+impl ::std::convert::From<AccessServiceTokenRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessServiceTokenRule) -> Self {
+        Self::Variant22(value)
+    }
+}
+impl ::std::convert::From<AccessLinkedAppTokenRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessLinkedAppTokenRule) -> Self {
+        Self::Variant23(value)
+    }
+}
+impl ::std::convert::From<AccessUserRiskScoreRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessUserRiskScoreRule) -> Self {
+        Self::Variant24(value)
+    }
+}
+impl ::std::convert::From<AccessCloudflareAccountMemberRule>
+for ZerotrustV1alpha1AccessPolicyForProviderRequireItem {
+    fn from(value: AccessCloudflareAccountMemberRule) -> Self {
+        Self::Variant25(value)
+    }
+}
+///A reference to an object of kind `AccessGroup` in the namespace of the resource holding the reference; sets `group.id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessPolicyForProviderRequireItemVariant26GroupRef {
+    pub name: ::std::string::String,
+}
+///A reference to an object of kind `AccessServiceToken` in the namespace of the resource holding the reference; sets `service_token.token_id`.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessPolicyForProviderRequireItemVariant27ServiceTokenRef {
+    pub name: ::std::string::String,
+}
+///`AccessServiceTokenAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessServiceTokenAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub client_id: ::std::option::Option<AccessClientId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<AccessCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub duration: ::std::option::Option<AccessDuration>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expires_at: ::std::option::Option<AccessTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<AccessUuid>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_seen_at: ::std::option::Option<AccessTimestamp>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<AccessName2>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub updated_at: ::std::option::Option<AccessUpdatedAt>,
+}
+///`AccessServiceTokenForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1AccessServiceTokenForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub duration: ::std::option::Option<AccessDuration>,
+    pub name: AccessName2,
 }
 ///`GatewayListAtProvider`
 #[derive(

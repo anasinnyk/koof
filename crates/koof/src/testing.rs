@@ -77,6 +77,12 @@ pub struct ZoneForProvider {
 pub struct RecordSpec {
     #[serde(rename = "forProvider")]
     pub for_provider: RecordForProvider,
+    #[serde(
+        rename = "writeConnectionSecretToRef",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub write_connection_secret_to_ref: Option<crate::reference::SecretReference>,
     #[serde(flatten)]
     pub management: ManagedResourceSpec,
 }
@@ -183,10 +189,11 @@ pub static RECORD: ResourceDescriptor = ResourceDescriptor::new(
     "/spec/forProvider/zoneRef",
     &[&ZONE],
 )])
+.with_connection_secret(&[("id", "/id"), ("token", "/token")])
 .with_item_references(&[ItemReference::new(
     "/spec/forProvider/aliases",
     Reference::new("alias", "/zoneRef", &[&ZONE]),
-    "zoneId",
+    "/zoneId",
     "external_id",
 )])
 .with_credentials(Credentials::new(
@@ -196,7 +203,9 @@ pub static RECORD: ResourceDescriptor = ResourceDescriptor::new(
     AuthScheme::Bearer,
 ))
 .with_create(CreateDescriptor::new(
-    OperationDescriptor::new().with_path_parameters(&[("zone_id", ZONE_ID)]),
+    OperationDescriptor::new()
+        .with_path_parameters(&[("zone_id", ZONE_ID)])
+        .with_response_path("/result"),
     RequestMapping::new("/spec/forProvider"),
     "/result/id",
 ))

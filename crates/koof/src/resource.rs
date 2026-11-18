@@ -63,6 +63,11 @@ pub struct ResourceDescriptor {
     pub list_map_keys: &'static [(&'static str, &'static [&'static str])],
     pub references: &'static [Reference],
     pub item_references: &'static [ItemReference],
+    /// `forProvider` fields that can be read from a Secret instead.
+    pub secret_values: &'static [SecretValue],
+    /// Keys of the connection Secret and the JSON pointers of their values in the
+    /// external resource.
+    pub connection_secret: &'static [(&'static str, &'static str)],
     pub credentials: Option<Credentials>,
     pub observe: ObserveDescriptor,
     pub create: Option<CreateDescriptor>,
@@ -89,6 +94,8 @@ impl ResourceDescriptor {
             list_map_keys: &[],
             references: &[],
             item_references: &[],
+            secret_values: &[],
+            connection_secret: &[],
             credentials: None,
             observe,
             create: None,
@@ -141,6 +148,25 @@ impl ResourceDescriptor {
     pub const fn with_item_references(self, item_references: &'static [ItemReference]) -> Self {
         Self {
             item_references,
+            ..self
+        }
+    }
+
+    #[must_use]
+    pub const fn with_secret_values(self, secret_values: &'static [SecretValue]) -> Self {
+        Self {
+            secret_values,
+            ..self
+        }
+    }
+
+    #[must_use]
+    pub const fn with_connection_secret(
+        self,
+        connection_secret: &'static [(&'static str, &'static str)],
+    ) -> Self {
+        Self {
+            connection_secret,
             ..self
         }
     }
@@ -253,7 +279,8 @@ impl Reference {
 
 /// A reference in each item of the list at `list`; `reference.from` is relative to
 /// the item. Before the desired state is compared or sent, the reference is replaced
-/// by identifier `identifier` of the referenced object in the item's `into`.
+/// by identifier `identifier` of the referenced object at `into`, a JSON pointer into
+/// the item.
 #[derive(Debug)]
 #[non_exhaustive]
 pub struct ItemReference {
@@ -277,6 +304,23 @@ impl ItemReference {
             into,
             identifier,
         }
+    }
+}
+
+/// A field `field` of the objects at `objects` (a JSON pointer whose `*` segments
+/// match every member of a map or item of a list) that may instead be read from a
+/// Secret: `<field>From.secretKeyRef`.
+#[derive(Debug)]
+#[non_exhaustive]
+pub struct SecretValue {
+    pub objects: &'static str,
+    pub field: &'static str,
+}
+
+impl SecretValue {
+    #[must_use]
+    pub const fn new(objects: &'static str, field: &'static str) -> Self {
+        Self { objects, field }
     }
 }
 
