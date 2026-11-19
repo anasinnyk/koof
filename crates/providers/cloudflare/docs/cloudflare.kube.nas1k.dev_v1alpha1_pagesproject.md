@@ -26,21 +26,6 @@ spec:
   forProvider:
     accountRef:
       name: <name>
-    deployment_configs:
-      preview:
-        always_use_latest_compatibility_date: false
-        build_image_major_version: 0
-        compatibility_date: <compatibility_date>
-        compatibility_flags: []
-        fail_open: false
-        usage_model: "standard"
-      production:
-        always_use_latest_compatibility_date: false
-        build_image_major_version: 0
-        compatibility_date: <compatibility_date>
-        compatibility_flags: []
-        fail_open: false
-        usage_model: "standard"
     name: <name>
     production_branch: <production_branch>
 ```
@@ -62,15 +47,15 @@ spec:
 | `forProvider.build_config.root_dir` | string |  | Directory to run the command. |
 | `forProvider.build_config.web_analytics_tag` | string |  | The classifying tag for analytics. |
 | `forProvider.build_config.web_analytics_token` | string |  | The auth token for analytics. |
-| `forProvider.deployment_configs` | object | yes | Configs for deployments in a project. |
+| `forProvider.deployment_configs` | object |  | Configs for deployments in a project. Leave it out for a project whose deployment configs `wrangler pages deploy` writes from wrangler.toml (its `wrangler_config_hash` is set): koof then neither sends nor compares them. |
 | `forProvider.deployment_configs.preview` | object | yes | Configs for preview deploys. |
 | `forProvider.deployment_configs.preview.ai_bindings` | map[string]object |  | Constellation bindings used for Pages Functions. |
 | `forProvider.deployment_configs.preview.always_use_latest_compatibility_date` | boolean | yes | Whether to always use the latest compatibility date for Pages Functions. |
 | `forProvider.deployment_configs.preview.analytics_engine_datasets` | map[string]object |  | Analytics Engine bindings used for Pages Functions. |
 | `forProvider.deployment_configs.preview.browsers` | map[string]map[string]any |  | Browser bindings used for Pages Functions. |
 | `forProvider.deployment_configs.preview.build_image_major_version` | integer (int64) | yes | The major version of the build image to use for Pages Functions. |
-| `forProvider.deployment_configs.preview.compatibility_date` | string | yes | Compatibility date used for Pages Functions. |
-| `forProvider.deployment_configs.preview.compatibility_flags` | []string | yes | Compatibility flags used for Pages Functions. |
+| `forProvider.deployment_configs.preview.compatibility_date` | string |  | Compatibility date used for Pages Functions. |
+| `forProvider.deployment_configs.preview.compatibility_flags` | []string |  | Compatibility flags used for Pages Functions. |
 | `forProvider.deployment_configs.preview.d1_databases` | map[string]object |  | D1 databases used for Pages Functions. |
 | `forProvider.deployment_configs.preview.durable_object_namespaces` | map[string]object |  | Durable Object namespaces used for Pages Functions. |
 | `forProvider.deployment_configs.preview.env_vars` | map[string]object |  | Environment variables used for builds and Pages Functions. |
@@ -81,7 +66,7 @@ spec:
 | `forProvider.deployment_configs.preview.limits.cpu_ms` | integer (int64) | yes | CPU time limit in milliseconds. |
 | `forProvider.deployment_configs.preview.mtls_certificates` | map[string]object |  | mTLS bindings used for Pages Functions. |
 | `forProvider.deployment_configs.preview.placement` | object |  | Placement setting used for Pages Functions. |
-| `forProvider.deployment_configs.preview.placement.mode` | string | yes | Placement mode. |
+| `forProvider.deployment_configs.preview.placement.mode` | string |  | Placement mode. |
 | `forProvider.deployment_configs.preview.queue_producers` | map[string]object |  | Queue Producer bindings used for Pages Functions. |
 | `forProvider.deployment_configs.preview.r2_buckets` | map[string]object |  | R2 buckets used for Pages Functions. |
 | `forProvider.deployment_configs.preview.services` | map[string]object |  | Services used for Pages Functions. |
@@ -94,8 +79,8 @@ spec:
 | `forProvider.deployment_configs.production.analytics_engine_datasets` | map[string]object |  | Analytics Engine bindings used for Pages Functions. |
 | `forProvider.deployment_configs.production.browsers` | map[string]map[string]any |  | Browser bindings used for Pages Functions. |
 | `forProvider.deployment_configs.production.build_image_major_version` | integer (int64) | yes | The major version of the build image to use for Pages Functions. |
-| `forProvider.deployment_configs.production.compatibility_date` | string | yes | Compatibility date used for Pages Functions. |
-| `forProvider.deployment_configs.production.compatibility_flags` | []string | yes | Compatibility flags used for Pages Functions. |
+| `forProvider.deployment_configs.production.compatibility_date` | string |  | Compatibility date used for Pages Functions. |
+| `forProvider.deployment_configs.production.compatibility_flags` | []string |  | Compatibility flags used for Pages Functions. |
 | `forProvider.deployment_configs.production.d1_databases` | map[string]object |  | D1 databases used for Pages Functions. |
 | `forProvider.deployment_configs.production.durable_object_namespaces` | map[string]object |  | Durable Object namespaces used for Pages Functions. |
 | `forProvider.deployment_configs.production.env_vars` | map[string]object |  | Environment variables used for builds and Pages Functions. |
@@ -106,7 +91,7 @@ spec:
 | `forProvider.deployment_configs.production.limits.cpu_ms` | integer (int64) | yes | CPU time limit in milliseconds. |
 | `forProvider.deployment_configs.production.mtls_certificates` | map[string]object |  | mTLS bindings used for Pages Functions. |
 | `forProvider.deployment_configs.production.placement` | object |  | Placement setting used for Pages Functions. |
-| `forProvider.deployment_configs.production.placement.mode` | string | yes | Placement mode. |
+| `forProvider.deployment_configs.production.placement.mode` | string |  | Placement mode. |
 | `forProvider.deployment_configs.production.queue_producers` | map[string]object |  | Queue Producer bindings used for Pages Functions. |
 | `forProvider.deployment_configs.production.r2_buckets` | map[string]object |  | R2 buckets used for Pages Functions. |
 | `forProvider.deployment_configs.production.services` | map[string]object |  | Services used for Pages Functions. |
