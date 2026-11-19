@@ -2094,7 +2094,7 @@ pub struct AccessApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<AccessApiResponseCommonFailureErrorsItem>,
     pub messages: AccessMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -11649,14 +11649,17 @@ pub struct CloudflareV1alpha1PagesProjectAtProvider {
 pub struct CloudflareV1alpha1PagesProjectForProvider {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub build_config: ::std::option::Option<PagesBuildConfig>,
-    pub deployment_configs: CloudflareV1alpha1PagesProjectForProviderDeploymentConfigs,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deployment_configs: ::std::option::Option<
+        CloudflareV1alpha1PagesProjectForProviderDeploymentConfigs,
+    >,
     pub name: PagesProjectName,
     ///Production branch of the project. Used to identify production deployments.
     pub production_branch: ::std::string::String,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub source: ::std::option::Option<PagesSource>,
 }
-///Configs for deployments in a project.
+///Configs for deployments in a project. Leave it out for a project whose deployment configs `wrangler pages deploy` writes from wrangler.toml (its `wrangler_config_hash` is set): koof then neither sends nor compares them.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -11706,8 +11709,10 @@ pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreview {
     ///The major version of the build image to use for Pages Functions.
     pub build_image_major_version: i64,
     ///Compatibility date used for Pages Functions.
-    pub compatibility_date: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub compatibility_date: ::std::option::Option<::std::string::String>,
     ///Compatibility flags used for Pages Functions.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub compatibility_flags: ::std::vec::Vec<::std::string::String>,
     ///D1 databases used for Pages Functions.
     #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
@@ -11722,7 +11727,7 @@ pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreview {
         CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewDurableObjectNamespacesValue,
     >,
     ///Environment variables used for builds and Pages Functions.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub env_vars: ::std::option::Option<
         ::std::collections::HashMap<
             ::std::string::String,
@@ -12154,12 +12159,14 @@ pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewMtls
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
 pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsPreviewPlacement {
     ///Placement mode.
-    pub mode: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode: ::std::option::Option<::std::string::String>,
 }
 ///Queue Producer binding.
 #[derive(
@@ -12319,8 +12326,10 @@ pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProduction 
     ///The major version of the build image to use for Pages Functions.
     pub build_image_major_version: i64,
     ///Compatibility date used for Pages Functions.
-    pub compatibility_date: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub compatibility_date: ::std::option::Option<::std::string::String>,
     ///Compatibility flags used for Pages Functions.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub compatibility_flags: ::std::vec::Vec<::std::string::String>,
     ///D1 databases used for Pages Functions.
     #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
@@ -12335,7 +12344,7 @@ pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProduction 
         CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionDurableObjectNamespacesValue,
     >,
     ///Environment variables used for builds and Pages Functions.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub env_vars: ::std::option::Option<
         ::std::collections::HashMap<
             ::std::string::String,
@@ -12767,12 +12776,14 @@ pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionM
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
 pub struct CloudflareV1alpha1PagesProjectForProviderDeploymentConfigsProductionPlacement {
     ///Placement mode.
-    pub mode: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode: ::std::option::Option<::std::string::String>,
 }
 ///Queue Producer binding.
 #[derive(
@@ -13959,7 +13970,7 @@ pub struct D1ApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<D1ApiResponseCommonFailureErrorsItem>,
     pub messages: D1Messages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -15178,7 +15189,7 @@ pub struct DnsRecordsApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<DnsRecordsApiResponseCommonFailureErrorsItem>,
     pub messages: DnsRecordsMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -21620,7 +21631,7 @@ pub struct HealthchecksApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<HealthchecksApiResponseCommonFailureErrorsItem>,
     pub messages: HealthchecksMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -23021,7 +23032,7 @@ pub struct HyperdriveApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<HyperdriveApiResponseCommonFailureErrorsItem>,
     pub messages: HyperdriveMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -24341,7 +24352,7 @@ pub struct IamApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<IamApiResponseCommonFailureErrorsItem>,
     pub messages: IamMessages2,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -25127,7 +25138,7 @@ pub struct ListsApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<ListsApiResponseCommonFailureErrorsItem>,
     pub messages: ListsMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -25971,7 +25982,7 @@ pub struct LoadBalancingApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<LoadBalancingApiResponseCommonFailureErrorsItem>,
     pub messages: LoadBalancingMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -31251,7 +31262,7 @@ pub struct LogpushApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<LogpushApiResponseCommonFailureErrorsItem>,
     pub messages: LogpushMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -34638,7 +34649,7 @@ pub struct PagesApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<PagesApiResponseCommonFailureErrorsItem>,
     pub messages: PagesMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -34699,10 +34710,10 @@ pub struct PagesBuildConfig {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub root_dir: ::std::option::Option<::std::string::String>,
     ///The classifying tag for analytics.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub web_analytics_tag: ::std::option::Option<::std::string::String>,
     ///The auth token for analytics.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub web_analytics_token: ::std::option::Option<::std::string::String>,
 }
 ///`PagesDeployment`
@@ -34795,8 +34806,10 @@ pub struct PagesDeploymentConfigValues {
     ///The major version of the build image to use for Pages Functions.
     pub build_image_major_version: i64,
     ///Compatibility date used for Pages Functions.
-    pub compatibility_date: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub compatibility_date: ::std::option::Option<::std::string::String>,
     ///Compatibility flags used for Pages Functions.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub compatibility_flags: ::std::vec::Vec<::std::string::String>,
     ///D1 databases used for Pages Functions.
     #[serde(default, skip_serializing_if = ":: std :: collections :: HashMap::is_empty")]
@@ -34972,12 +34985,14 @@ pub struct PagesDeploymentConfigValuesMtlsCertificatesValue {
     ::serde::Serialize,
     Clone,
     Debug,
+    Default,
     PartialEq,
     schemars::JsonSchema
 )]
 pub struct PagesDeploymentConfigValuesPlacement {
     ///Placement mode.
-    pub mode: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub mode: ::std::option::Option<::std::string::String>,
 }
 ///Queue Producer binding.
 #[derive(
@@ -35864,7 +35879,7 @@ pub struct PagesDomainCreateResponse {
 pub struct PagesDomainDeleteResponse {
     pub errors: PagesMessages,
     pub messages: PagesMessages,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -36584,7 +36599,8 @@ pub struct PagesProject {
     ///When the project was created.
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    pub deployment_configs: PagesProjectDeploymentConfigs,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deployment_configs: ::std::option::Option<PagesProjectDeploymentConfigs>,
     ///A list of associated custom domains for the project.
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub domains: ::std::vec::Vec<::std::string::String>,
@@ -36907,14 +36923,14 @@ pub struct PagesProjectCreateResponse {
 pub struct PagesProjectDeleteResponse {
     pub errors: PagesMessages,
     pub messages: PagesMessages,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
     ///Whether the API call was successful. Allowed values: true.
     pub success: bool,
 }
-///Configs for deployments in a project.
+///Configs for deployments in a project. Leave it out for a project whose deployment configs `wrangler pages deploy` writes from wrangler.toml (its `wrangler_config_hash` is set): koof then neither sends nor compares them.
 #[derive(
     ::serde::Deserialize,
     ::serde::Serialize,
@@ -39165,7 +39181,7 @@ pub struct R2V4ResponseFailure {
     pub errors: R2Errors,
     pub messages: R2Messages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -48619,7 +48635,7 @@ pub struct SpectrumConfigApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<SpectrumConfigApiResponseCommonFailureErrorsItem>,
     pub messages: SpectrumConfigMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -50670,7 +50686,7 @@ pub struct TlsCertificatesAndHostnamesApiResponseCommonFailure {
     >,
     pub messages: TlsCertificatesAndHostnamesMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -52899,7 +52915,7 @@ pub struct TunnelApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<TunnelApiResponseCommonFailureErrorsItem>,
     pub messages: TunnelMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -52919,7 +52935,7 @@ pub struct TunnelApiResponseCommonFailure2 {
     pub errors: ::std::vec::Vec<TunnelApiResponseCommonFailure2ErrorsItem>,
     pub messages: TunnelMessages2,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -55425,7 +55441,7 @@ pub struct TurnstileApiResponseCommon {
 pub struct TurnstileApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<TurnstileApiResponseCommonFailureErrorsItem>,
     pub messages: TurnstileMessages,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -56517,7 +56533,7 @@ pub struct VectorizeApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<VectorizeApiResponseCommonFailureErrorsItem>,
     pub messages: VectorizeMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -57319,7 +57335,7 @@ pub struct WaitingroomApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<WaitingroomApiResponseCommonFailureErrorsItem>,
     pub messages: WaitingroomMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -59411,7 +59427,7 @@ pub struct WorkersApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<WorkersApiResponseCommonFailureErrorsItem>,
     pub messages: WorkersMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -59540,7 +59556,7 @@ pub struct WorkersKvApiResponseCommon {
 pub struct WorkersKvApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<WorkersKvApiResponseCommonFailureErrorsItem>,
     pub messages: WorkersKvMessages,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -60168,7 +60184,7 @@ pub struct ZeroTrustGatewayApiResponseCommonFailure {
     pub errors: ZeroTrustGatewayApiResponseCommonFailureErrors,
     pub messages: ZeroTrustGatewayMessages,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -67989,7 +68005,7 @@ pub struct ZonesApiResponseCommon2 {
 pub struct ZonesApiResponseCommonFailure {
     pub errors: ::std::vec::Vec<ZonesApiResponseCommonFailureErrorsItem>,
     pub messages: ZonesMessages,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,
@@ -68009,7 +68025,7 @@ pub struct ZonesApiResponseCommonFailure2 {
     pub errors: ::std::vec::Vec<ZonesApiResponseCommonFailure2ErrorsItem>,
     pub messages: ZonesMessages2,
     ///Allowed values: null.
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub result: ::std::option::Option<
         ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     >,

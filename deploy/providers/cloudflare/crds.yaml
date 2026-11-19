@@ -19142,7 +19142,8 @@
                         "type": "object"
                       },
                       "deployment_configs": {
-                        "description": "Configs for deployments in a project.",
+                        "description": "Configs for deployments in a project. Leave it out for a project whose deployment configs `wrangler pages deploy` writes from wrangler.toml (its `wrangler_config_hash` is set): koof then neither sends nor compares them.",
+                        "nullable": true,
                         "properties": {
                           "preview": {
                             "description": "Configs for preview deploys.",
@@ -19202,6 +19203,7 @@
                               },
                               "compatibility_date": {
                                 "description": "Compatibility date used for Pages Functions.",
+                                "nullable": true,
                                 "type": "string"
                               },
                               "compatibility_flags": {
@@ -19377,12 +19379,10 @@
                                 "properties": {
                                   "mode": {
                                     "description": "Placement mode.",
+                                    "nullable": true,
                                     "type": "string"
                                   }
                                 },
-                                "required": [
-                                  "mode"
-                                ],
                                 "type": "object"
                               },
                               "queue_producers": {
@@ -19485,8 +19485,6 @@
                             "required": [
                               "always_use_latest_compatibility_date",
                               "build_image_major_version",
-                              "compatibility_date",
-                              "compatibility_flags",
                               "fail_open",
                               "usage_model"
                             ],
@@ -19550,6 +19548,7 @@
                               },
                               "compatibility_date": {
                                 "description": "Compatibility date used for Pages Functions.",
+                                "nullable": true,
                                 "type": "string"
                               },
                               "compatibility_flags": {
@@ -19725,12 +19724,10 @@
                                 "properties": {
                                   "mode": {
                                     "description": "Placement mode.",
+                                    "nullable": true,
                                     "type": "string"
                                   }
                                 },
-                                "required": [
-                                  "mode"
-                                ],
                                 "type": "object"
                               },
                               "queue_producers": {
@@ -19833,8 +19830,6 @@
                             "required": [
                               "always_use_latest_compatibility_date",
                               "build_image_major_version",
-                              "compatibility_date",
-                              "compatibility_flags",
                               "fail_open",
                               "usage_model"
                             ],
@@ -19966,7 +19961,6 @@
                       }
                     },
                     "required": [
-                      "deployment_configs",
                       "name",
                       "production_branch"
                     ],

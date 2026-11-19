@@ -722,10 +722,7 @@ for DashboardCreateRequestWidgetsItemWidgetType {
     schemars::JsonSchema
 )]
 pub struct DashboardCreateResponse {
-    #[serde(
-        rename = "createdBy",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "createdBy", default)]
     pub created_by: ::std::option::Option<DashboardCreateResponseCreatedBy>,
     #[serde(rename = "dateCreated")]
     pub date_created: ::std::string::String,
@@ -741,12 +738,9 @@ pub struct DashboardCreateResponse {
     pub is_favorited: bool,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub period: ::std::option::Option<::std::string::String>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub permissions: ::std::option::Option<DashboardCreateResponsePermissions>,
-    #[serde(
-        rename = "prebuiltId",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "prebuiltId", default)]
     pub prebuilt_id: ::std::option::Option<i64>,
     pub projects: ::std::vec::Vec<i64>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -798,15 +792,9 @@ pub struct DashboardCreateResponseCreatedBy {
     pub is_superuser: bool,
     #[serde(rename = "isSuspended")]
     pub is_suspended: bool,
-    #[serde(
-        rename = "lastActive",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "lastActive", default)]
     pub last_active: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(
-        rename = "lastLogin",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "lastLogin", default)]
     pub last_login: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub name: ::std::string::String,
     pub username: ::std::string::String,
@@ -950,57 +938,39 @@ pub struct DashboardCreateResponsePermissions {
     schemars::JsonSchema
 )]
 pub struct DashboardCreateResponseWidgetsItem {
-    #[serde(
-        rename = "axisRange",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "axisRange", default)]
     pub axis_range: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "changedReason",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "changedReason", default)]
     pub changed_reason: ::std::option::Option<
         ::std::vec::Vec<DashboardCreateResponseWidgetsItemChangedReasonItem>,
     >,
     #[serde(rename = "dashboardId")]
     pub dashboard_id: ::std::string::String,
-    #[serde(
-        rename = "datasetSource",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "datasetSource", default)]
     pub dataset_source: ::std::option::Option<::std::string::String>,
     #[serde(rename = "dateCreated")]
     pub date_created: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub description: ::std::option::Option<::std::string::String>,
     #[serde(rename = "displayType")]
     pub display_type: ::std::string::String,
-    #[serde(
-        rename = "exploreUrls",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "exploreUrls", default)]
     pub explore_urls: ::std::option::Option<::std::vec::Vec<::std::string::String>>,
     pub id: ::std::string::String,
     pub interval: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub layout: ::std::option::Option<
         ::std::collections::HashMap<::std::string::String, i64>,
     >,
-    #[serde(
-        rename = "legendType",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "legendType", default)]
     pub legend_type: ::std::option::Option<DashboardCreateResponseWidgetsItemLegendType>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub limit: ::std::option::Option<i64>,
     pub queries: ::std::vec::Vec<DashboardCreateResponseWidgetsItemQueriesItem>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub thresholds: ::std::option::Option<DashboardCreateResponseWidgetsItemThresholds>,
     pub title: ::std::string::String,
-    #[serde(
-        rename = "widgetType",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "widgetType", default)]
     pub widget_type: ::std::option::Option<::std::string::String>,
 }
 ///`DashboardCreateResponseWidgetsItemChangedReasonItem`
@@ -1013,7 +983,7 @@ pub struct DashboardCreateResponseWidgetsItem {
     schemars::JsonSchema
 )]
 pub struct DashboardCreateResponseWidgetsItemChangedReasonItem {
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub equations: ::std::option::Option<
         ::std::vec::Vec<
             ::std::collections::HashMap<
@@ -1022,7 +992,7 @@ pub struct DashboardCreateResponseWidgetsItemChangedReasonItem {
             >,
         >,
     >,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub orderby: ::std::option::Option<
         ::std::vec::Vec<
             ::std::collections::HashMap<::std::string::String, ::std::string::String>,
@@ -1136,10 +1106,7 @@ pub struct DashboardCreateResponseWidgetsItemQueriesItem {
         DashboardCreateResponseWidgetsItemQueriesItemOnDemandItem,
     >,
     pub orderby: ::std::string::String,
-    #[serde(
-        rename = "selectedAggregate",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "selectedAggregate", default)]
     pub selected_aggregate: ::std::option::Option<i64>,
     #[serde(rename = "widgetId")]
     pub widget_id: ::std::string::String,
@@ -1207,10 +1174,7 @@ pub struct DashboardCreateResponseWidgetsItemThresholds {
     schemars::JsonSchema
 )]
 pub struct DashboardObserveResponse {
-    #[serde(
-        rename = "createdBy",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "createdBy", default)]
     pub created_by: ::std::option::Option<DashboardObserveResponseCreatedBy>,
     #[serde(rename = "dateCreated")]
     pub date_created: ::std::string::String,
@@ -1226,12 +1190,9 @@ pub struct DashboardObserveResponse {
     pub is_favorited: bool,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub period: ::std::option::Option<::std::string::String>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub permissions: ::std::option::Option<DashboardObserveResponsePermissions>,
-    #[serde(
-        rename = "prebuiltId",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "prebuiltId", default)]
     pub prebuilt_id: ::std::option::Option<i64>,
     pub projects: ::std::vec::Vec<i64>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -1283,15 +1244,9 @@ pub struct DashboardObserveResponseCreatedBy {
     pub is_superuser: bool,
     #[serde(rename = "isSuspended")]
     pub is_suspended: bool,
-    #[serde(
-        rename = "lastActive",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "lastActive", default)]
     pub last_active: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(
-        rename = "lastLogin",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "lastLogin", default)]
     pub last_login: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub name: ::std::string::String,
     pub username: ::std::string::String,
@@ -1435,59 +1390,41 @@ pub struct DashboardObserveResponsePermissions {
     schemars::JsonSchema
 )]
 pub struct DashboardObserveResponseWidgetsItem {
-    #[serde(
-        rename = "axisRange",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "axisRange", default)]
     pub axis_range: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "changedReason",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "changedReason", default)]
     pub changed_reason: ::std::option::Option<
         ::std::vec::Vec<DashboardObserveResponseWidgetsItemChangedReasonItem>,
     >,
     #[serde(rename = "dashboardId")]
     pub dashboard_id: ::std::string::String,
-    #[serde(
-        rename = "datasetSource",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "datasetSource", default)]
     pub dataset_source: ::std::option::Option<::std::string::String>,
     #[serde(rename = "dateCreated")]
     pub date_created: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub description: ::std::option::Option<::std::string::String>,
     #[serde(rename = "displayType")]
     pub display_type: ::std::string::String,
-    #[serde(
-        rename = "exploreUrls",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "exploreUrls", default)]
     pub explore_urls: ::std::option::Option<::std::vec::Vec<::std::string::String>>,
     pub id: ::std::string::String,
     pub interval: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub layout: ::std::option::Option<
         ::std::collections::HashMap<::std::string::String, i64>,
     >,
-    #[serde(
-        rename = "legendType",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "legendType", default)]
     pub legend_type: ::std::option::Option<
         DashboardObserveResponseWidgetsItemLegendType,
     >,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub limit: ::std::option::Option<i64>,
     pub queries: ::std::vec::Vec<DashboardObserveResponseWidgetsItemQueriesItem>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub thresholds: ::std::option::Option<DashboardObserveResponseWidgetsItemThresholds>,
     pub title: ::std::string::String,
-    #[serde(
-        rename = "widgetType",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "widgetType", default)]
     pub widget_type: ::std::option::Option<::std::string::String>,
 }
 ///`DashboardObserveResponseWidgetsItemChangedReasonItem`
@@ -1500,7 +1437,7 @@ pub struct DashboardObserveResponseWidgetsItem {
     schemars::JsonSchema
 )]
 pub struct DashboardObserveResponseWidgetsItemChangedReasonItem {
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub equations: ::std::option::Option<
         ::std::vec::Vec<
             ::std::collections::HashMap<
@@ -1509,7 +1446,7 @@ pub struct DashboardObserveResponseWidgetsItemChangedReasonItem {
             >,
         >,
     >,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub orderby: ::std::option::Option<
         ::std::vec::Vec<
             ::std::collections::HashMap<::std::string::String, ::std::string::String>,
@@ -1623,10 +1560,7 @@ pub struct DashboardObserveResponseWidgetsItemQueriesItem {
         DashboardObserveResponseWidgetsItemQueriesItemOnDemandItem,
     >,
     pub orderby: ::std::string::String,
-    #[serde(
-        rename = "selectedAggregate",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "selectedAggregate", default)]
     pub selected_aggregate: ::std::option::Option<i64>,
     #[serde(rename = "widgetId")]
     pub widget_id: ::std::string::String,
@@ -2401,10 +2335,7 @@ for DashboardUpdateRequestWidgetsItemWidgetType {
     schemars::JsonSchema
 )]
 pub struct DashboardUpdateResponse {
-    #[serde(
-        rename = "createdBy",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "createdBy", default)]
     pub created_by: ::std::option::Option<DashboardUpdateResponseCreatedBy>,
     #[serde(rename = "dateCreated")]
     pub date_created: ::std::string::String,
@@ -2420,12 +2351,9 @@ pub struct DashboardUpdateResponse {
     pub is_favorited: bool,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub period: ::std::option::Option<::std::string::String>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub permissions: ::std::option::Option<DashboardUpdateResponsePermissions>,
-    #[serde(
-        rename = "prebuiltId",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "prebuiltId", default)]
     pub prebuilt_id: ::std::option::Option<i64>,
     pub projects: ::std::vec::Vec<i64>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -2477,15 +2405,9 @@ pub struct DashboardUpdateResponseCreatedBy {
     pub is_superuser: bool,
     #[serde(rename = "isSuspended")]
     pub is_suspended: bool,
-    #[serde(
-        rename = "lastActive",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "lastActive", default)]
     pub last_active: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(
-        rename = "lastLogin",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "lastLogin", default)]
     pub last_login: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub name: ::std::string::String,
     pub username: ::std::string::String,
@@ -2629,57 +2551,39 @@ pub struct DashboardUpdateResponsePermissions {
     schemars::JsonSchema
 )]
 pub struct DashboardUpdateResponseWidgetsItem {
-    #[serde(
-        rename = "axisRange",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "axisRange", default)]
     pub axis_range: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "changedReason",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "changedReason", default)]
     pub changed_reason: ::std::option::Option<
         ::std::vec::Vec<DashboardUpdateResponseWidgetsItemChangedReasonItem>,
     >,
     #[serde(rename = "dashboardId")]
     pub dashboard_id: ::std::string::String,
-    #[serde(
-        rename = "datasetSource",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "datasetSource", default)]
     pub dataset_source: ::std::option::Option<::std::string::String>,
     #[serde(rename = "dateCreated")]
     pub date_created: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub description: ::std::option::Option<::std::string::String>,
     #[serde(rename = "displayType")]
     pub display_type: ::std::string::String,
-    #[serde(
-        rename = "exploreUrls",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "exploreUrls", default)]
     pub explore_urls: ::std::option::Option<::std::vec::Vec<::std::string::String>>,
     pub id: ::std::string::String,
     pub interval: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub layout: ::std::option::Option<
         ::std::collections::HashMap<::std::string::String, i64>,
     >,
-    #[serde(
-        rename = "legendType",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "legendType", default)]
     pub legend_type: ::std::option::Option<DashboardUpdateResponseWidgetsItemLegendType>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub limit: ::std::option::Option<i64>,
     pub queries: ::std::vec::Vec<DashboardUpdateResponseWidgetsItemQueriesItem>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub thresholds: ::std::option::Option<DashboardUpdateResponseWidgetsItemThresholds>,
     pub title: ::std::string::String,
-    #[serde(
-        rename = "widgetType",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "widgetType", default)]
     pub widget_type: ::std::option::Option<::std::string::String>,
 }
 ///`DashboardUpdateResponseWidgetsItemChangedReasonItem`
@@ -2692,7 +2596,7 @@ pub struct DashboardUpdateResponseWidgetsItem {
     schemars::JsonSchema
 )]
 pub struct DashboardUpdateResponseWidgetsItemChangedReasonItem {
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub equations: ::std::option::Option<
         ::std::vec::Vec<
             ::std::collections::HashMap<
@@ -2701,7 +2605,7 @@ pub struct DashboardUpdateResponseWidgetsItemChangedReasonItem {
             >,
         >,
     >,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub orderby: ::std::option::Option<
         ::std::vec::Vec<
             ::std::collections::HashMap<::std::string::String, ::std::string::String>,
@@ -2815,10 +2719,7 @@ pub struct DashboardUpdateResponseWidgetsItemQueriesItem {
         DashboardUpdateResponseWidgetsItemQueriesItemOnDemandItem,
     >,
     pub orderby: ::std::string::String,
-    #[serde(
-        rename = "selectedAggregate",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "selectedAggregate", default)]
     pub selected_aggregate: ::std::option::Option<i64>,
     #[serde(rename = "widgetId")]
     pub widget_id: ::std::string::String,
@@ -3968,19 +3869,19 @@ pub struct MonitorCreateResponseAlertRuleTargetsItem {
     schemars::JsonSchema
 )]
 pub struct MonitorCreateResponseConfig {
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub alert_rule_id: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub checkin_margin: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub failure_issue_threshold: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub max_runtime: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub recovery_threshold: ::std::option::Option<i64>,
     pub schedule: MonitorCreateResponseConfigSchedule,
     pub schedule_type: MonitorCreateResponseConfigScheduleType,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub timezone: ::std::option::Option<::std::string::String>,
 }
 ///`MonitorCreateResponseConfigSchedule`
@@ -4069,10 +3970,7 @@ for MonitorCreateResponseConfigScheduleType {
     schemars::JsonSchema
 )]
 pub struct MonitorCreateResponseEnvironments {
-    #[serde(
-        rename = "activeIncident",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "activeIncident", default)]
     pub active_incident: ::std::option::Option<
         MonitorCreateResponseEnvironmentsActiveIncident,
     >,
@@ -4099,10 +3997,7 @@ pub struct MonitorCreateResponseEnvironments {
     schemars::JsonSchema
 )]
 pub struct MonitorCreateResponseEnvironmentsActiveIncident {
-    #[serde(
-        rename = "brokenNotice",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "brokenNotice", default)]
     pub broken_notice: ::std::option::Option<
         MonitorCreateResponseEnvironmentsActiveIncidentBrokenNotice,
     >,
@@ -4215,10 +4110,7 @@ pub struct MonitorCreateResponseProject {
     #[serde(rename = "dateCreated")]
     pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
     pub features: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "firstEvent",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "firstEvent", default)]
     pub first_event: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(rename = "firstTransactionEvent")]
     pub first_transaction_event: bool,
@@ -4274,7 +4166,7 @@ pub struct MonitorCreateResponseProject {
     #[serde(rename = "isPublic")]
     pub is_public: bool,
     pub name: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub platform: ::std::option::Option<::std::string::String>,
     #[serde(
         rename = "sessionStats",
@@ -4386,19 +4278,19 @@ pub struct MonitorObserveResponseAlertRuleTargetsItem {
     schemars::JsonSchema
 )]
 pub struct MonitorObserveResponseConfig {
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub alert_rule_id: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub checkin_margin: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub failure_issue_threshold: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub max_runtime: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub recovery_threshold: ::std::option::Option<i64>,
     pub schedule: MonitorObserveResponseConfigSchedule,
     pub schedule_type: MonitorObserveResponseConfigScheduleType,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub timezone: ::std::option::Option<::std::string::String>,
 }
 ///`MonitorObserveResponseConfigSchedule`
@@ -4488,10 +4380,7 @@ for MonitorObserveResponseConfigScheduleType {
     schemars::JsonSchema
 )]
 pub struct MonitorObserveResponseEnvironments {
-    #[serde(
-        rename = "activeIncident",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "activeIncident", default)]
     pub active_incident: ::std::option::Option<
         MonitorObserveResponseEnvironmentsActiveIncident,
     >,
@@ -4518,10 +4407,7 @@ pub struct MonitorObserveResponseEnvironments {
     schemars::JsonSchema
 )]
 pub struct MonitorObserveResponseEnvironmentsActiveIncident {
-    #[serde(
-        rename = "brokenNotice",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "brokenNotice", default)]
     pub broken_notice: ::std::option::Option<
         MonitorObserveResponseEnvironmentsActiveIncidentBrokenNotice,
     >,
@@ -4634,10 +4520,7 @@ pub struct MonitorObserveResponseProject {
     #[serde(rename = "dateCreated")]
     pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
     pub features: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "firstEvent",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "firstEvent", default)]
     pub first_event: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(rename = "firstTransactionEvent")]
     pub first_transaction_event: bool,
@@ -4693,7 +4576,7 @@ pub struct MonitorObserveResponseProject {
     #[serde(rename = "isPublic")]
     pub is_public: bool,
     pub name: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub platform: ::std::option::Option<::std::string::String>,
     #[serde(
         rename = "sessionStats",
@@ -5829,19 +5712,19 @@ pub struct MonitorUpdateResponseAlertRuleTargetsItem {
     schemars::JsonSchema
 )]
 pub struct MonitorUpdateResponseConfig {
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub alert_rule_id: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub checkin_margin: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub failure_issue_threshold: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub max_runtime: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub recovery_threshold: ::std::option::Option<i64>,
     pub schedule: MonitorUpdateResponseConfigSchedule,
     pub schedule_type: MonitorUpdateResponseConfigScheduleType,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub timezone: ::std::option::Option<::std::string::String>,
 }
 ///`MonitorUpdateResponseConfigSchedule`
@@ -5930,10 +5813,7 @@ for MonitorUpdateResponseConfigScheduleType {
     schemars::JsonSchema
 )]
 pub struct MonitorUpdateResponseEnvironments {
-    #[serde(
-        rename = "activeIncident",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "activeIncident", default)]
     pub active_incident: ::std::option::Option<
         MonitorUpdateResponseEnvironmentsActiveIncident,
     >,
@@ -5960,10 +5840,7 @@ pub struct MonitorUpdateResponseEnvironments {
     schemars::JsonSchema
 )]
 pub struct MonitorUpdateResponseEnvironmentsActiveIncident {
-    #[serde(
-        rename = "brokenNotice",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "brokenNotice", default)]
     pub broken_notice: ::std::option::Option<
         MonitorUpdateResponseEnvironmentsActiveIncidentBrokenNotice,
     >,
@@ -6076,10 +5953,7 @@ pub struct MonitorUpdateResponseProject {
     #[serde(rename = "dateCreated")]
     pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
     pub features: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "firstEvent",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "firstEvent", default)]
     pub first_event: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(rename = "firstTransactionEvent")]
     pub first_transaction_event: bool,
@@ -6135,7 +6009,7 @@ pub struct MonitorUpdateResponseProject {
     #[serde(rename = "isPublic")]
     pub is_public: bool,
     pub name: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub platform: ::std::option::Option<::std::string::String>,
     #[serde(
         rename = "sessionStats",
@@ -6565,16 +6439,13 @@ pub struct OrganizationMemberCreateResponse {
     pub id: ::std::string::String,
     #[serde(rename = "inviteStatus")]
     pub invite_status: ::std::string::String,
-    #[serde(
-        rename = "inviterName",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "inviterName", default)]
     pub inviter_name: ::std::option::Option<::std::string::String>,
     pub name: ::std::string::String,
     #[serde(rename = "orgRole")]
     pub org_role: ::std::string::String,
     pub pending: bool,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub user: ::std::option::Option<OrganizationMemberCreateResponseUser>,
 }
 ///`OrganizationMemberCreateResponseExternalUsersItem`
@@ -6668,15 +6539,9 @@ pub struct OrganizationMemberCreateResponseUser {
     pub is_superuser: bool,
     #[serde(rename = "isSuspended")]
     pub is_suspended: bool,
-    #[serde(
-        rename = "lastActive",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "lastActive", default)]
     pub last_active: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(
-        rename = "lastLogin",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "lastLogin", default)]
     pub last_login: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub name: ::std::string::String,
     pub username: ::std::string::String,
@@ -6791,14 +6656,11 @@ pub struct OrganizationMemberObserveResponse {
     >,
     pub flags: OrganizationMemberObserveResponseFlags,
     pub id: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub invite_link: ::std::option::Option<::std::string::String>,
     #[serde(rename = "inviteStatus")]
     pub invite_status: ::std::string::String,
-    #[serde(
-        rename = "inviterName",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "inviterName", default)]
     pub inviter_name: ::std::option::Option<::std::string::String>,
     #[serde(rename = "isOnlyOwner")]
     pub is_only_owner: bool,
@@ -6913,10 +6775,7 @@ pub struct OrganizationMemberObserveResponseTeamRoleListItem {
     pub id: ::std::string::String,
     #[serde(rename = "isAllowed")]
     pub is_allowed: bool,
-    #[serde(
-        rename = "isMinimumRoleFor",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "isMinimumRoleFor", default)]
     pub is_minimum_role_for: ::std::option::Option<::std::string::String>,
     #[serde(rename = "isRetired")]
     pub is_retired: bool,
@@ -7118,14 +6977,11 @@ pub struct OrganizationMemberUpdateResponse {
     >,
     pub flags: OrganizationMemberUpdateResponseFlags,
     pub id: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub invite_link: ::std::option::Option<::std::string::String>,
     #[serde(rename = "inviteStatus")]
     pub invite_status: ::std::string::String,
-    #[serde(
-        rename = "inviterName",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "inviterName", default)]
     pub inviter_name: ::std::option::Option<::std::string::String>,
     #[serde(rename = "isOnlyOwner")]
     pub is_only_owner: bool,
@@ -7240,10 +7096,7 @@ pub struct OrganizationMemberUpdateResponseTeamRoleListItem {
     pub id: ::std::string::String,
     #[serde(rename = "isAllowed")]
     pub is_allowed: bool,
-    #[serde(
-        rename = "isMinimumRoleFor",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "isMinimumRoleFor", default)]
     pub is_minimum_role_for: ::std::option::Option<::std::string::String>,
     #[serde(rename = "isRetired")]
     pub is_retired: bool,
@@ -7391,10 +7244,7 @@ pub struct OrganizationObserveResponseLinks {
     schemars::JsonSchema
 )]
 pub struct OrganizationObserveResponseOnboardingTasksItem {
-    #[serde(
-        rename = "completionSeen",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "completionSeen", default)]
     pub completion_seen: ::std::option::Option<
         ::chrono::DateTime<::chrono::offset::Utc>,
     >,
@@ -7402,7 +7252,7 @@ pub struct OrganizationObserveResponseOnboardingTasksItem {
     #[serde(rename = "dateCompleted")]
     pub date_completed: ::chrono::DateTime<::chrono::offset::Utc>,
     pub status: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub task: ::std::option::Option<::std::string::String>,
 }
 ///`OrganizationObserveResponseStatus`
@@ -8118,10 +7968,7 @@ pub struct OrganizationUpdateResponse {
     pub default_code_review_triggers: ::std::vec::Vec<::std::string::String>,
     #[serde(rename = "defaultCodingAgent")]
     pub default_coding_agent: ::std::string::String,
-    #[serde(
-        rename = "defaultCodingAgentIntegrationId",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "defaultCodingAgentIntegrationId", default)]
     pub default_coding_agent_integration_id: ::std::option::Option<
         ::std::string::String,
     >,
@@ -8192,15 +8039,9 @@ pub struct OrganizationUpdateResponse {
     )]
     pub plan_sample_rate: ::std::option::Option<f64>,
     pub projects: ::std::vec::Vec<OrganizationUpdateResponseProjectsItem>,
-    #[serde(
-        rename = "relayDsnEndpoint",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "relayDsnEndpoint", default)]
     pub relay_dsn_endpoint: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "relayPiiConfig",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "relayPiiConfig", default)]
     pub relay_pii_config: ::std::option::Option<::std::string::String>,
     #[serde(rename = "require2FA")]
     pub require2_fa: bool,
@@ -8288,10 +8129,7 @@ pub struct OrganizationUpdateResponseLinks {
     schemars::JsonSchema
 )]
 pub struct OrganizationUpdateResponseOnboardingTasksItem {
-    #[serde(
-        rename = "completionSeen",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "completionSeen", default)]
     pub completion_seen: ::std::option::Option<
         ::chrono::DateTime<::chrono::offset::Utc>,
     >,
@@ -8299,7 +8137,7 @@ pub struct OrganizationUpdateResponseOnboardingTasksItem {
     #[serde(rename = "dateCompleted")]
     pub date_completed: ::chrono::DateTime<::chrono::offset::Utc>,
     pub status: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub task: ::std::option::Option<::std::string::String>,
 }
 ///`OrganizationUpdateResponseOrgRoleListItem`
@@ -8343,10 +8181,7 @@ pub struct OrganizationUpdateResponseProjectsItem {
     pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
     pub environments: ::std::vec::Vec<::std::string::String>,
     pub features: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "firstEvent",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "firstEvent", default)]
     pub first_event: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(rename = "firstTransactionEvent")]
     pub first_transaction_event: bool,
@@ -8409,17 +8244,14 @@ pub struct OrganizationUpdateResponseProjectsItem {
             ::std::collections::HashMap<::std::string::String, ::std::string::String>,
         >,
     >,
-    #[serde(
-        rename = "latestRelease",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "latestRelease", default)]
     pub latest_release: ::std::option::Option<
         OrganizationUpdateResponseProjectsItemLatestRelease,
     >,
     pub name: ::std::string::String,
     #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
     pub options: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub platform: ::std::option::Option<::std::string::String>,
     pub platforms: ::std::vec::Vec<::std::string::String>,
     #[serde(
@@ -8430,7 +8262,7 @@ pub struct OrganizationUpdateResponseProjectsItem {
     pub slug: ::std::string::String,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub stats: ::std::option::Option<::serde_json::Value>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub team: ::std::option::Option<OrganizationUpdateResponseProjectsItemTeam>,
     pub teams: ::std::vec::Vec<OrganizationUpdateResponseProjectsItemTeamsItem>,
     #[serde(
@@ -8507,10 +8339,7 @@ pub struct OrganizationUpdateResponseTeamRoleListItem {
     pub id: ::std::string::String,
     #[serde(rename = "isAllowed")]
     pub is_allowed: bool,
-    #[serde(
-        rename = "isMinimumRoleFor",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "isMinimumRoleFor", default)]
     pub is_minimum_role_for: ::std::option::Option<::std::string::String>,
     #[serde(rename = "isRetired")]
     pub is_retired: bool,
@@ -8531,10 +8360,7 @@ pub struct OrganizationUpdateResponseTeamRoleListItem {
 pub struct OrganizationUpdateResponseTeamsItem {
     pub access: ::std::vec::Vec<::std::string::String>,
     pub avatar: OrganizationUpdateResponseTeamsItemAvatar,
-    #[serde(
-        rename = "dateCreated",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "dateCreated", default)]
     pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(
         rename = "externalTeams",
@@ -8562,10 +8388,7 @@ pub struct OrganizationUpdateResponseTeamsItem {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub projects: ::std::vec::Vec<OrganizationUpdateResponseTeamsItemProjectsItem>,
     pub slug: ::std::string::String,
-    #[serde(
-        rename = "teamRole",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "teamRole", default)]
     pub team_role: ::std::option::Option<::std::string::String>,
 }
 ///`OrganizationUpdateResponseTeamsItemAvatar`
@@ -8725,10 +8548,7 @@ pub struct OrganizationUpdateResponseTeamsItemOrganizationLinks {
     schemars::JsonSchema
 )]
 pub struct OrganizationUpdateResponseTeamsItemOrganizationOnboardingTasksItem {
-    #[serde(
-        rename = "completionSeen",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "completionSeen", default)]
     pub completion_seen: ::std::option::Option<
         ::chrono::DateTime<::chrono::offset::Utc>,
     >,
@@ -8736,7 +8556,7 @@ pub struct OrganizationUpdateResponseTeamsItemOrganizationOnboardingTasksItem {
     #[serde(rename = "dateCompleted")]
     pub date_completed: ::chrono::DateTime<::chrono::offset::Utc>,
     pub status: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub task: ::std::option::Option<::std::string::String>,
 }
 ///`OrganizationUpdateResponseTeamsItemOrganizationStatus`
@@ -8768,10 +8588,7 @@ pub struct OrganizationUpdateResponseTeamsItemProjectsItem {
     #[serde(rename = "dateCreated")]
     pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
     pub features: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "firstEvent",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "firstEvent", default)]
     pub first_event: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(rename = "firstTransactionEvent")]
     pub first_transaction_event: bool,
@@ -8827,7 +8644,7 @@ pub struct OrganizationUpdateResponseTeamsItemProjectsItem {
     #[serde(rename = "isPublic")]
     pub is_public: bool,
     pub name: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub platform: ::std::option::Option<::std::string::String>,
     #[serde(
         rename = "sessionStats",
@@ -9075,10 +8892,7 @@ pub struct ProjectCreateResponse {
     pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
     pub environments: ::std::vec::Vec<::std::string::String>,
     pub features: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "firstEvent",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "firstEvent", default)]
     pub first_event: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(rename = "firstTransactionEvent")]
     pub first_transaction_event: bool,
@@ -9141,15 +8955,12 @@ pub struct ProjectCreateResponse {
             ::std::collections::HashMap<::std::string::String, ::std::string::String>,
         >,
     >,
-    #[serde(
-        rename = "latestRelease",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "latestRelease", default)]
     pub latest_release: ::std::option::Option<ProjectCreateResponseLatestRelease>,
     pub name: ::std::string::String,
     #[serde(default, skip_serializing_if = "::serde_json::Map::is_empty")]
     pub options: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub platform: ::std::option::Option<::std::string::String>,
     pub platforms: ::std::vec::Vec<::std::string::String>,
     #[serde(
@@ -9160,7 +8971,7 @@ pub struct ProjectCreateResponse {
     pub slug: ::std::string::String,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub stats: ::std::option::Option<::serde_json::Value>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub team: ::std::option::Option<ProjectCreateResponseTeam>,
     pub teams: ::std::vec::Vec<ProjectCreateResponseTeamsItem>,
     #[serde(
@@ -9415,10 +9226,7 @@ pub struct ProjectKeyCreateResponse {
     pub browser_sdk: ProjectKeyCreateResponseBrowserSdk,
     #[serde(rename = "browserSdkVersion")]
     pub browser_sdk_version: ::std::string::String,
-    #[serde(
-        rename = "dateCreated",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "dateCreated", default)]
     pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub dsn: ProjectKeyCreateResponseDsn,
     #[serde(rename = "dynamicSdkLoaderOptions")]
@@ -9430,14 +9238,11 @@ pub struct ProjectKeyCreateResponse {
     pub name: ::std::string::String,
     #[serde(rename = "projectId")]
     pub project_id: i64,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub public: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "rateLimit",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "rateLimit", default)]
     pub rate_limit: ::std::option::Option<ProjectKeyCreateResponseRateLimit>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub secret: ::std::option::Option<::std::string::String>,
     #[serde(rename = "useCase", skip_serializing_if = "::std::option::Option::is_none")]
     pub use_case: ::std::option::Option<::std::string::String>,
@@ -9526,10 +9331,7 @@ pub struct ProjectKeyObserveResponse {
     pub browser_sdk: ProjectKeyObserveResponseBrowserSdk,
     #[serde(rename = "browserSdkVersion")]
     pub browser_sdk_version: ::std::string::String,
-    #[serde(
-        rename = "dateCreated",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "dateCreated", default)]
     pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub dsn: ProjectKeyObserveResponseDsn,
     #[serde(rename = "dynamicSdkLoaderOptions")]
@@ -9541,14 +9343,11 @@ pub struct ProjectKeyObserveResponse {
     pub name: ::std::string::String,
     #[serde(rename = "projectId")]
     pub project_id: i64,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub public: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "rateLimit",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "rateLimit", default)]
     pub rate_limit: ::std::option::Option<ProjectKeyObserveResponseRateLimit>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub secret: ::std::option::Option<::std::string::String>,
     #[serde(rename = "useCase", skip_serializing_if = "::std::option::Option::is_none")]
     pub use_case: ::std::option::Option<::std::string::String>,
@@ -9813,10 +9612,7 @@ pub struct ProjectKeyUpdateResponse {
     pub browser_sdk: ProjectKeyUpdateResponseBrowserSdk,
     #[serde(rename = "browserSdkVersion")]
     pub browser_sdk_version: ::std::string::String,
-    #[serde(
-        rename = "dateCreated",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "dateCreated", default)]
     pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub dsn: ProjectKeyUpdateResponseDsn,
     #[serde(rename = "dynamicSdkLoaderOptions")]
@@ -9828,14 +9624,11 @@ pub struct ProjectKeyUpdateResponse {
     pub name: ::std::string::String,
     #[serde(rename = "projectId")]
     pub project_id: i64,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub public: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "rateLimit",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "rateLimit", default)]
     pub rate_limit: ::std::option::Option<ProjectKeyUpdateResponseRateLimit>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub secret: ::std::option::Option<::std::string::String>,
     #[serde(rename = "useCase", skip_serializing_if = "::std::option::Option::is_none")]
     pub use_case: ::std::option::Option<::std::string::String>,
@@ -9982,10 +9775,7 @@ pub struct ProjectTeamCreateResponse {
     #[serde(rename = "dateCreated")]
     pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
     pub features: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "firstEvent",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "firstEvent", default)]
     pub first_event: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(rename = "firstTransactionEvent")]
     pub first_transaction_event: bool,
@@ -10041,7 +9831,7 @@ pub struct ProjectTeamCreateResponse {
     #[serde(rename = "isPublic")]
     pub is_public: bool,
     pub name: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub platform: ::std::option::Option<::std::string::String>,
     #[serde(
         rename = "sessionStats",
@@ -10132,10 +9922,7 @@ pub struct ProjectTeamDeleteResponse {
     #[serde(rename = "dateCreated")]
     pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
     pub features: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "firstEvent",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "firstEvent", default)]
     pub first_event: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(rename = "firstTransactionEvent")]
     pub first_transaction_event: bool,
@@ -10191,7 +9978,7 @@ pub struct ProjectTeamDeleteResponse {
     #[serde(rename = "isPublic")]
     pub is_public: bool,
     pub name: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub platform: ::std::option::Option<::std::string::String>,
     #[serde(
         rename = "sessionStats",
@@ -10309,10 +10096,7 @@ for ProjectTeamObserveResponse {
 pub struct ProjectTeamObserveResponseItem {
     pub access: ::std::vec::Vec<::std::string::String>,
     pub avatar: ProjectTeamObserveResponseItemAvatar,
-    #[serde(
-        rename = "dateCreated",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "dateCreated", default)]
     pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub flags: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     #[serde(rename = "hasAccess")]
@@ -10326,10 +10110,7 @@ pub struct ProjectTeamObserveResponseItem {
     pub member_count: i64,
     pub name: ::std::string::String,
     pub slug: ::std::string::String,
-    #[serde(
-        rename = "teamRole",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "teamRole", default)]
     pub team_role: ::std::option::Option<::std::string::String>,
 }
 ///`ProjectTeamObserveResponseItemAvatar`
@@ -11555,15 +11336,9 @@ pub struct SentryV1alpha1DashboardAtProviderCreatedBy {
     pub is_superuser: bool,
     #[serde(rename = "isSuspended")]
     pub is_suspended: bool,
-    #[serde(
-        rename = "lastActive",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "lastActive", default)]
     pub last_active: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
-    #[serde(
-        rename = "lastLogin",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "lastLogin", default)]
     pub last_login: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub name: ::std::string::String,
     pub username: ::std::string::String,
@@ -11707,63 +11482,45 @@ pub struct SentryV1alpha1DashboardAtProviderPermissions {
     schemars::JsonSchema
 )]
 pub struct SentryV1alpha1DashboardAtProviderWidgetsItem {
-    #[serde(
-        rename = "axisRange",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "axisRange", default)]
     pub axis_range: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "changedReason",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "changedReason", default)]
     pub changed_reason: ::std::option::Option<
         ::std::vec::Vec<SentryV1alpha1DashboardAtProviderWidgetsItemChangedReasonItem>,
     >,
     #[serde(rename = "dashboardId")]
     pub dashboard_id: ::std::string::String,
-    #[serde(
-        rename = "datasetSource",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "datasetSource", default)]
     pub dataset_source: ::std::option::Option<::std::string::String>,
     #[serde(rename = "dateCreated")]
     pub date_created: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub description: ::std::option::Option<::std::string::String>,
     #[serde(rename = "displayType")]
     pub display_type: ::std::string::String,
-    #[serde(
-        rename = "exploreUrls",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "exploreUrls", default)]
     pub explore_urls: ::std::option::Option<::std::vec::Vec<::std::string::String>>,
     pub id: ::std::string::String,
     pub interval: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub layout: ::std::option::Option<
         ::std::collections::HashMap<::std::string::String, i64>,
     >,
-    #[serde(
-        rename = "legendType",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "legendType", default)]
     pub legend_type: ::std::option::Option<
         SentryV1alpha1DashboardAtProviderWidgetsItemLegendType,
     >,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub limit: ::std::option::Option<i64>,
     pub queries: ::std::vec::Vec<
         SentryV1alpha1DashboardAtProviderWidgetsItemQueriesItem,
     >,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub thresholds: ::std::option::Option<
         SentryV1alpha1DashboardAtProviderWidgetsItemThresholds,
     >,
     pub title: ::std::string::String,
-    #[serde(
-        rename = "widgetType",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "widgetType", default)]
     pub widget_type: ::std::option::Option<::std::string::String>,
 }
 ///`DashboardAtProviderWidgetsItemChangedReasonItem`
@@ -11776,7 +11533,7 @@ pub struct SentryV1alpha1DashboardAtProviderWidgetsItem {
     schemars::JsonSchema
 )]
 pub struct SentryV1alpha1DashboardAtProviderWidgetsItemChangedReasonItem {
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub equations: ::std::option::Option<
         ::std::vec::Vec<
             ::std::collections::HashMap<
@@ -11785,7 +11542,7 @@ pub struct SentryV1alpha1DashboardAtProviderWidgetsItemChangedReasonItem {
             >,
         >,
     >,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub orderby: ::std::option::Option<
         ::std::vec::Vec<
             ::std::collections::HashMap<::std::string::String, ::std::string::String>,
@@ -11900,10 +11657,7 @@ pub struct SentryV1alpha1DashboardAtProviderWidgetsItemQueriesItem {
         SentryV1alpha1DashboardAtProviderWidgetsItemQueriesItemOnDemandItem,
     >,
     pub orderby: ::std::string::String,
-    #[serde(
-        rename = "selectedAggregate",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "selectedAggregate", default)]
     pub selected_aggregate: ::std::option::Option<i64>,
     #[serde(rename = "widgetId")]
     pub widget_id: ::std::string::String,
@@ -12774,19 +12528,19 @@ pub struct SentryV1alpha1MonitorAtProviderAlertRuleTargetsItem {
     schemars::JsonSchema
 )]
 pub struct SentryV1alpha1MonitorAtProviderConfig {
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub alert_rule_id: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub checkin_margin: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub failure_issue_threshold: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub max_runtime: ::std::option::Option<i64>,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub recovery_threshold: ::std::option::Option<i64>,
     pub schedule: SentryV1alpha1MonitorAtProviderConfigSchedule,
     pub schedule_type: SentryV1alpha1MonitorAtProviderConfigScheduleType,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub timezone: ::std::option::Option<::std::string::String>,
 }
 ///`MonitorAtProviderConfigSchedule`
@@ -12877,10 +12631,7 @@ for SentryV1alpha1MonitorAtProviderConfigScheduleType {
     schemars::JsonSchema
 )]
 pub struct SentryV1alpha1MonitorAtProviderEnvironments {
-    #[serde(
-        rename = "activeIncident",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "activeIncident", default)]
     pub active_incident: ::std::option::Option<
         SentryV1alpha1MonitorAtProviderEnvironmentsActiveIncident,
     >,
@@ -12907,10 +12658,7 @@ pub struct SentryV1alpha1MonitorAtProviderEnvironments {
     schemars::JsonSchema
 )]
 pub struct SentryV1alpha1MonitorAtProviderEnvironmentsActiveIncident {
-    #[serde(
-        rename = "brokenNotice",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "brokenNotice", default)]
     pub broken_notice: ::std::option::Option<
         SentryV1alpha1MonitorAtProviderEnvironmentsActiveIncidentBrokenNotice,
     >,
@@ -13024,10 +12772,7 @@ pub struct SentryV1alpha1MonitorAtProviderProject {
     #[serde(rename = "dateCreated")]
     pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
     pub features: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "firstEvent",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "firstEvent", default)]
     pub first_event: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(rename = "firstTransactionEvent")]
     pub first_transaction_event: bool,
@@ -13083,7 +12828,7 @@ pub struct SentryV1alpha1MonitorAtProviderProject {
     #[serde(rename = "isPublic")]
     pub is_public: bool,
     pub name: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub platform: ::std::option::Option<::std::string::String>,
     #[serde(
         rename = "sessionStats",
@@ -14387,10 +14132,7 @@ pub struct SentryV1alpha1OrganizationMemberAtProviderTeamRoleListItem {
     pub id: ::std::string::String,
     #[serde(rename = "isAllowed")]
     pub is_allowed: bool,
-    #[serde(
-        rename = "isMinimumRoleFor",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "isMinimumRoleFor", default)]
     pub is_minimum_role_for: ::std::option::Option<::std::string::String>,
     #[serde(rename = "isRetired")]
     pub is_retired: bool,
@@ -16025,10 +15767,7 @@ impl<'de> ::serde::Deserialize<'de> for TeamCreateRequestSlug {
 pub struct TeamCreateResponse {
     pub access: ::std::vec::Vec<::std::string::String>,
     pub avatar: TeamCreateResponseAvatar,
-    #[serde(
-        rename = "dateCreated",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "dateCreated", default)]
     pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(
         rename = "externalTeams",
@@ -16052,10 +15791,7 @@ pub struct TeamCreateResponse {
     #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
     pub projects: ::std::vec::Vec<TeamCreateResponseProjectsItem>,
     pub slug: ::std::string::String,
-    #[serde(
-        rename = "teamRole",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "teamRole", default)]
     pub team_role: ::std::option::Option<::std::string::String>,
 }
 ///`TeamCreateResponseAvatar`
@@ -16215,10 +15951,7 @@ pub struct TeamCreateResponseOrganizationLinks {
     schemars::JsonSchema
 )]
 pub struct TeamCreateResponseOrganizationOnboardingTasksItem {
-    #[serde(
-        rename = "completionSeen",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "completionSeen", default)]
     pub completion_seen: ::std::option::Option<
         ::chrono::DateTime<::chrono::offset::Utc>,
     >,
@@ -16226,7 +15959,7 @@ pub struct TeamCreateResponseOrganizationOnboardingTasksItem {
     #[serde(rename = "dateCompleted")]
     pub date_completed: ::chrono::DateTime<::chrono::offset::Utc>,
     pub status: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub task: ::std::option::Option<::std::string::String>,
 }
 ///`TeamCreateResponseOrganizationStatus`
@@ -16258,10 +15991,7 @@ pub struct TeamCreateResponseProjectsItem {
     #[serde(rename = "dateCreated")]
     pub date_created: ::chrono::DateTime<::chrono::offset::Utc>,
     pub features: ::std::vec::Vec<::std::string::String>,
-    #[serde(
-        rename = "firstEvent",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "firstEvent", default)]
     pub first_event: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     #[serde(rename = "firstTransactionEvent")]
     pub first_transaction_event: bool,
@@ -16317,7 +16047,7 @@ pub struct TeamCreateResponseProjectsItem {
     #[serde(rename = "isPublic")]
     pub is_public: bool,
     pub name: ::std::string::String,
-    #[serde(deserialize_with = "::std::option::Option::deserialize")]
+    #[serde(default)]
     pub platform: ::std::option::Option<::std::string::String>,
     #[serde(
         rename = "sessionStats",
@@ -16446,10 +16176,7 @@ for TeamMembershipCreateRequestTeamRole {
 pub struct TeamMembershipCreateResponse {
     pub access: ::std::vec::Vec<::std::string::String>,
     pub avatar: TeamMembershipCreateResponseAvatar,
-    #[serde(
-        rename = "dateCreated",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "dateCreated", default)]
     pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub flags: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     #[serde(rename = "hasAccess")]
@@ -16463,10 +16190,7 @@ pub struct TeamMembershipCreateResponse {
     pub member_count: i64,
     pub name: ::std::string::String,
     pub slug: ::std::string::String,
-    #[serde(
-        rename = "teamRole",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "teamRole", default)]
     pub team_role: ::std::option::Option<::std::string::String>,
 }
 ///`TeamMembershipCreateResponseAvatar`
@@ -16508,10 +16232,7 @@ pub struct TeamMembershipCreateResponseAvatar {
 pub struct TeamMembershipDeleteResponse {
     pub access: ::std::vec::Vec<::std::string::String>,
     pub avatar: TeamMembershipDeleteResponseAvatar,
-    #[serde(
-        rename = "dateCreated",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "dateCreated", default)]
     pub date_created: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
     pub flags: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
     #[serde(rename = "hasAccess")]
@@ -16525,10 +16246,7 @@ pub struct TeamMembershipDeleteResponse {
     pub member_count: i64,
     pub name: ::std::string::String,
     pub slug: ::std::string::String,
-    #[serde(
-        rename = "teamRole",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "teamRole", default)]
     pub team_role: ::std::option::Option<::std::string::String>,
 }
 ///`TeamMembershipDeleteResponseAvatar`
@@ -16615,10 +16333,7 @@ pub struct TeamMembershipObserveResponseItem {
     pub id: ::std::string::String,
     #[serde(rename = "inviteStatus")]
     pub invite_status: ::std::string::String,
-    #[serde(
-        rename = "inviterName",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "inviterName", default)]
     pub inviter_name: ::std::option::Option<::std::string::String>,
     pub name: ::std::string::String,
     #[serde(rename = "orgRole")]
@@ -16628,10 +16343,7 @@ pub struct TeamMembershipObserveResponseItem {
     pub role: ::std::option::Option<::std::string::String>,
     #[serde(rename = "roleName", skip_serializing_if = "::std::option::Option::is_none")]
     pub role_name: ::std::option::Option<::std::string::String>,
-    #[serde(
-        rename = "teamRole",
-        deserialize_with = "::std::option::Option::deserialize"
-    )]
+    #[serde(rename = "teamRole", default)]
     pub team_role: ::std::option::Option<::std::string::String>,
     #[serde(rename = "teamSlug")]
     pub team_slug: ::std::string::String,

@@ -157,3 +157,46 @@ actions:
     update:
       x-kube-field:
         secretKeyRef: true
+
+  # The API leaves compatibility_date and compatibility_flags out for some
+  # projects; they only matter for Pages Functions.
+  - target: $.components.schemas.pages_deployment_config_values.required
+    remove: true
+  - target: $.components.schemas.pages_deployment_config_values
+    update:
+      required:
+        - env_vars
+        - fail_open
+        - always_use_latest_compatibility_date
+        - build_image_major_version
+        - usage_model
+
+  # Projects without Smart Placement return `placement: {}`.
+  - target: $.components.schemas.pages_deployment_config_values.properties.placement.required
+    remove: true
+
+  # Projects deployed with `wrangler pages deploy` (wrangler_config_hash is set)
+  # get their deployment configs from wrangler.toml; leaving deployment_configs
+  # out keeps koof from sending or comparing them.
+  - target: $.components.schemas.pages_project.required
+    remove: true
+  - target: $.components.schemas.pages_project
+    update:
+      required:
+        - id
+        - name
+        - latest_deployment
+        - canonical_deployment
+        - created_on
+        - production_branch
+        - production_script_name
+        - preview_script_name
+        - uses_functions
+        - framework
+        - framework_version
+  - target: $.components.schemas.pages_project.properties.deployment_configs
+    update:
+      description: >-
+        Configs for deployments in a project. Leave it out for a project whose
+        deployment configs `wrangler pages deploy` writes from wrangler.toml (its
+        `wrangler_config_hash` is set): koof then neither sends nor compares them.

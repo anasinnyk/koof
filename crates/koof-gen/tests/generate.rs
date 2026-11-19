@@ -76,3 +76,29 @@ fn item_references_reach_the_descriptor_and_the_crd_schema() {
         &files["src/generated/shop/v1alpha1/widget.rs"]
     );
 }
+
+#[test]
+fn required_nullable_fields_may_be_missing() {
+    let files = generated(&widgets_with(
+        "
+  - target: $.components.schemas.widget
+    update:
+      required: [note, lastSeen]
+      properties:
+        note:
+          type: string
+          nullable: true
+        lastSeen:
+          type: string
+          nullable: true
+",
+    ))
+    .expect("generated");
+    let types = &files["src/generated/types.rs"];
+
+    assert!(!types.contains("Option::deserialize"));
+    assert!(types.contains(
+        "#[serde(default)]\n    pub note: ::std::option::Option<::std::string::String>,"
+    ));
+    assert!(types.contains("#[serde(rename = \"lastSeen\", default)]\n    pub last_seen:"));
+}

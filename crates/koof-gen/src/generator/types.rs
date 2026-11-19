@@ -1,8 +1,9 @@
 use crate::generator::{errors::GeneratorError, naming::typify_type_name};
 use proc_macro2::TokenStream;
-use quote::quote;
+use quote::{ToTokens as _, quote};
 use serde_json::Value;
 use std::collections::BTreeSet;
+use syn::{Attribute, Expr, ExprLit, Item, Lit, Meta, Token, parse_quote, punctuated::Punctuated};
 
 pub struct GeneratedTypes {
     pub tokens: TokenStream,
@@ -88,9 +89,57 @@ pub fn generate_types(
 
     let names = space.iter_types().map(|ty| ty.name()).collect();
     Ok(GeneratedTypes {
-        tokens: space.to_stream(),
+        tokens: default_missing_nullable(space.to_stream())?,
         names,
     })
+}
+
+fn default_missing_nullable(tokens: TokenStream) -> Result<TokenStream, GeneratorError> {
+    let mut file: syn::File = syn::parse2(tokens)?;
+    for item in &mut file.items {
+        if let Item::Struct(item) = item {
+            for field in &mut item.fields {
+                for attribute in &mut field.attrs {
+                    default_when_missing(attribute)?;
+                }
+            }
+        }
+    }
+    Ok(file.into_token_stream())
+}
+
+fn default_when_missing(attribute: &mut Attribute) -> syn::Result<()> {
+    if !attribute.path().is_ident("serde") {
+        return Ok(());
+    }
+    let arguments = attribute.parse_args_with(Punctuated::<Meta, Token![,]>::parse_terminated)?;
+    if !arguments.iter().any(is_option_deserialize) {
+        return Ok(());
+    }
+    let arguments: Punctuated<Meta, Token![,]> = arguments
+        .into_iter()
+        .map(|meta| {
+            if is_option_deserialize(&meta) {
+                parse_quote!(default)
+            } else {
+                meta
+            }
+        })
+        .collect();
+    *attribute = parse_quote!(#[serde(#arguments)]);
+    Ok(())
+}
+
+fn is_option_deserialize(meta: &Meta) -> bool {
+    let Meta::NameValue(pair) = meta else {
+        return false;
+    };
+    pair.path.is_ident("deserialize_with")
+        && matches!(
+            &pair.value,
+            Expr::Lit(ExprLit { lit: Lit::Str(path), .. })
+                if path.value() == "::std::option::Option::deserialize"
+        )
 }
 
 fn explain(
