@@ -1,5 +1,6 @@
 use crate::{
     http::Operation,
+    multipart::{self, Encoding, Multipart, Part},
     resource::{AuthScheme, GroupKind, ManagedResource, ValueExpr},
 };
 use axum::{
@@ -26,6 +27,7 @@ enum Lifecycle {
     Update,
     Delete,
     Connection,
+    Merge,
 }
 
 #[derive(Debug)]
@@ -51,6 +53,7 @@ struct Shape {
     fields: Vec<(String, Value)>,
     schema: Value,
     connection: Option<(&'static str, &'static [(&'static str, &'static str)])>,
+    multipart: Option<Multipart>,
 }
 
 #[derive(Debug, Default)]
@@ -127,6 +130,14 @@ impl Fake {
                 &R::Delete::METHOD,
                 R::Delete::PATH,
                 delete.path_parameters,
+            );
+        }
+        if let Some(merge) = &descriptor.merge {
+            route(
+                Lifecycle::Merge,
+                &R::Merge::METHOD,
+                R::Merge::PATH,
+                merge.operation.path_parameters,
             );
         }
         if let Some(connection) = &descriptor.connection {
@@ -224,6 +235,27 @@ impl Shape {
                 .connection
                 .as_ref()
                 .map(|connection| (connection.operation.response_path, connection.details)),
+            multipart: [R::Create::ENCODING, R::Update::ENCODING]
+                .into_iter()
+                .find_map(|encoding| match encoding {
+                    Encoding::Multipart(multipart) => Some(multipart),
+                    Encoding::Json => None,
+                }),
+        }
+    }
+
+    fn body(&self, headers: &HeaderMap, body: &[u8]) -> Result<Value, String> {
+        let content_type = headers
+            .get(axum::http::header::CONTENT_TYPE)
+            .and_then(|value| value.to_str().ok())
+            .filter(|content_type| multipart::is_multipart(content_type));
+        match (content_type, self.multipart) {
+            (Some(content_type), Some(form)) => multipart::decode(content_type, body)
+                .and_then(|parts| form.body(parts))
+                .map_err(|error| error.to_string()),
+            (Some(_), None) => Err("multipart body for a JSON operation".to_owned()),
+            (None, _) if body.is_empty() => Ok(Value::Object(Map::new())),
+            (None, _) => serde_json::from_slice(body).map_err(|error| error.to_string()),
         }
     }
 
@@ -574,7 +606,7 @@ async fn handle(
         return error(StatusCode::NOT_FOUND, "no such route in the fake API");
     };
     let response = if route.authorized(&headers) {
-        store.apply(route, &parameters, &body)
+        store.apply(route, &parameters, &headers, &body)
     } else {
         error(StatusCode::UNAUTHORIZED, "missing credentials")
     };
@@ -623,18 +655,15 @@ impl Store {
         &self,
         route: &Route,
         parameters: &BTreeMap<&'static str, String>,
+        headers: &HeaderMap,
         body: &[u8],
     ) -> Response {
         let Some(shape) = self.fake.shapes.get(&route.kind) else {
             return error(StatusCode::INTERNAL_SERVER_ERROR, "unregistered kind");
         };
-        let body: Value = if body.is_empty() {
-            Value::Object(Map::new())
-        } else {
-            match serde_json::from_slice(body) {
-                Ok(body) => body,
-                Err(error_) => return error(StatusCode::BAD_REQUEST, &error_.to_string()),
-            }
+        let body = match shape.body(headers, body) {
+            Ok(body) => body,
+            Err(message) => return error(StatusCode::BAD_REQUEST, &message),
         };
         let Ok(mut objects) = self.objects.lock() else {
             return error(StatusCode::INTERNAL_SERVER_ERROR, "store poisoned");
@@ -693,6 +722,10 @@ impl Store {
                 }
                 None => error(StatusCode::NOT_FOUND, "not found"),
             },
+            Lifecycle::Merge => match (objects.get(&key), shape.multipart) {
+                (Some(object), Some(multipart)) => files(object.get(multipart.files)),
+                _ => error(StatusCode::NOT_FOUND, "not found"),
+            },
             Lifecycle::Connection => match (objects.get(&key), shape.connection) {
                 (Some(_), Some((response_path, details))) => {
                     wrap(response_path, connection_details(details))
@@ -716,6 +749,7 @@ impl Store {
         let id = match object.get(shape.id_field) {
             Some(Value::String(id)) if !id.is_empty() => id.clone(),
             Some(Value::Number(id)) => id.to_string(),
+            _ if let Some(name) = route.parameter(EXTERNAL_NAME, parameters) => name,
             _ => {
                 let next = self.next_id.fetch_add(1, Ordering::Relaxed);
                 if shape.numeric_id {
@@ -738,12 +772,36 @@ impl Store {
         }
         shape.complete(&mut object);
         let key = (route.kind, route.key(shape, parameters, Some(&id)));
-        if objects.contains_key(&key) {
+        if objects.contains_key(&key) && route.method != Method::PUT {
             return error(StatusCode::CONFLICT, "already exists");
         }
         objects.insert(key, object.clone());
         wrap(shape.create_path, object)
     }
+}
+
+fn files(files: Option<&Value>) -> Response {
+    let parts: Vec<Part> = files
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter_map(|file| {
+            let name = file.get("name")?.as_str()?.to_owned();
+            Some(Part {
+                filename: Some(name.clone()),
+                name,
+                content_type: None,
+                body: file.get("content")?.as_str()?.as_bytes().to_vec(),
+            })
+        })
+        .collect();
+    let (content_type, message) = multipart::encode(&parts);
+    (
+        StatusCode::OK,
+        [(axum::http::header::CONTENT_TYPE, content_type)],
+        message,
+    )
+        .into_response()
 }
 
 fn connection_details(details: &[(&str, &str)]) -> Value {

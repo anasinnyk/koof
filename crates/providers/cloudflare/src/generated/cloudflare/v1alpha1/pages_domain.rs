@@ -189,6 +189,7 @@ impl koof::ManagedResource for PagesDomain {
     type Update = koof::http::Unsupported;
     type Delete = crate::generated::operations::PagesDomainDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

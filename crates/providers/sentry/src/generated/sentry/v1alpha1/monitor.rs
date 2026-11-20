@@ -187,6 +187,7 @@ impl koof::ManagedResource for Monitor {
     type Update = crate::generated::operations::MonitorUpdate;
     type Delete = crate::generated::operations::MonitorDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

@@ -184,6 +184,7 @@ impl koof::ManagedResource for LogpushJob {
     type Update = crate::generated::operations::LogpushJobUpdate;
     type Delete = crate::generated::operations::LogpushJobDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

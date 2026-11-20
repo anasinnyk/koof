@@ -168,6 +168,7 @@ impl koof::ManagedResource for Ruleset {
     type Update = crate::generated::operations::ZoneRulesetUpdate;
     type Delete = crate::generated::operations::ZoneRulesetDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

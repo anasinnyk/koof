@@ -1,6 +1,8 @@
 mod common;
 
-use common::{LABELS, PARTS, TOKEN_OPERATION, TOKEN_SECRET, generated, widgets, widgets_with};
+use common::{
+    LABELS, NOTES, PARTS, TOKEN_OPERATION, TOKEN_SECRET, generated, widgets, widgets_with,
+};
 
 #[test]
 fn generates_the_provider_crate() {
@@ -129,4 +131,49 @@ fn a_bare_list_is_managed_as_a_field() {
     assert!(labels.contains(r#"RequestMapping::new("/spec/forProvider/labels")"#));
     assert!(types.contains("pub struct WidgetsV1alpha1LabelsAtProvider {"));
     assert!(types.contains("pub labels: ::std::vec::Vec<Label>,"));
+}
+
+#[test]
+fn a_merge_read_fills_a_field_and_a_body_can_be_multipart() {
+    let files = generated(&widgets_with(NOTES)).expect("generated");
+    let widget: String = files["src/generated/shop/v1alpha1/widget.rs"]
+        .split_whitespace()
+        .collect();
+    let operations: String = files["src/generated/operations.rs"]
+        .split_whitespace()
+        .collect();
+    let types = &files["src/generated/types.rs"];
+
+    assert!(widget.contains(".with_merge(koof::resource::MergeDescriptor::new("));
+    assert!(widget.contains(r#"],),"notes",),)"#));
+    assert!(widget.contains("typeMerge=crate::generated::operations::WidgetMerge;"));
+    assert!(operations.contains(
+        r#"koof::multipart::Multipart::new(&["metadata"],"notes","application/octet-stream",)"#
+    ));
+    assert!(operations.contains("typeRequest=serde_json::Value;"));
+    let at_provider = &types[types
+        .find("pub struct ShopV1alpha1WidgetAtProvider")
+        .expect("atProvider")..];
+    assert!(at_provider[..at_provider.find('}').expect("end")].contains("pub notes:"));
+}
+
+#[test]
+fn one_operation_can_serve_several_lifecycles() {
+    let files = generated(&widgets_with(
+        "
+  - target: $.paths['/accounts/{account_id}/widgets/{widget_id}'].delete['x-kube-operation']
+    remove: true
+  - target: $.paths['/accounts/{account_id}/widgets/{widget_id}'].patch['x-kube-operation']
+    update:
+      lifecycle: [update, delete]
+",
+    ))
+    .expect("generated");
+    let operations: String = files["src/generated/operations.rs"]
+        .split_whitespace()
+        .collect();
+
+    assert!(operations.contains(
+        r#"pubstructWidgetDelete;implkoof::OperationforWidgetDelete{constNAME:&'staticstr="widget.delete";constMETHOD:reqwest::Method=reqwest::Method::PATCH;"#
+    ));
 }

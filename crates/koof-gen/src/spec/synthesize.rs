@@ -35,6 +35,7 @@ pub fn synthesize(
         .and_then(Value::as_object)
         .ok_or_else(|| SpecError::Missing("components.schemas".to_owned()))?;
     let observe_responses = observe_responses(&snapshot, schemas)?;
+    let merged = merged_fields(&snapshot)?;
     let creatable = creatable_resources(&snapshot)?;
 
     let mut synthesized = Map::new();
@@ -57,7 +58,26 @@ pub fn synthesize(
             &mut synthesized,
         )?;
         match observe_responses.get(&extension.name) {
-            Some(response) => resource.at_provider(response, &mut synthesized)?,
+            Some(response) => {
+                let response = match merged.get(&extension.name) {
+                    Some(field) => {
+                        let property = kube_resource
+                            .schema
+                            .pointer(&format!("/properties/{field}"))
+                            .ok_or_else(|| {
+                                resource.error(&format!(
+                                    "merge into {field}: the resource schema has no field {field}"
+                                ))
+                            })?;
+                        json!({ "allOf": [
+                            response,
+                            { "type": "object", "properties": { field.as_str(): property } },
+                        ] })
+                    }
+                    None => response.clone(),
+                };
+                resource.at_provider(&response, &mut synthesized)?;
+            }
             None if extension.fields.at_provider.is_empty() => {}
             None => {
                 return Err(resource.error(
@@ -871,6 +891,20 @@ fn creatable_resources(document: &Value) -> Result<BTreeSet<ResourceName>, SpecE
         }
     }
     Ok(resources)
+}
+
+/// The field of the observation each resource's merge read fills.
+fn merged_fields(document: &Value) -> Result<BTreeMap<ResourceName, String>, SpecError> {
+    let mut fields = BTreeMap::new();
+    for kube_operation in kube_operations(document) {
+        let extension = kube_operation?.extension;
+        if extension.lifecycle == LifecycleAction::Merge
+            && let Some(into) = extension.response.and_then(|response| response.into)
+        {
+            fields.insert(extension.resource, into);
+        }
+    }
+    Ok(fields)
 }
 
 fn observe_responses(

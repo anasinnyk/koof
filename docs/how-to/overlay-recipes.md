@@ -151,6 +151,37 @@ request:
 Without create and delete the list exists as long as its parent does; deleting
 the object keeps the rules.
 
+## Code uploaded as multipart
+
+When the API takes files as `multipart/form-data` and returns them from a
+separate endpoint (a Cloudflare snippet: `PUT …/snippets/{name}` with a
+`metadata` part and one part per module, `GET …/snippets/{name}/content`), keep
+the files in `forProvider` as a list of `{name, content}`:
+
+```yaml
+# PUT creates or replaces
+lifecycle: [create, update]
+request:
+  set:
+    metadata.main_module:
+      type: field
+      path: spec.forProvider.main_module
+  multipart:
+    json: [metadata]                 # body fields sent as JSON parts
+    files: files                     # [{name, content}] sent as file parts
+    fileType: application/javascript+module
+---
+# on GET …/content
+lifecycle: observe
+merge: true                          # an extra read after the observation
+response:
+  into: files                        # its response becomes atProvider.files
+```
+
+A multipart response is read as a list of `{name, content}`, so the code in
+`spec.forProvider.files` is compared with what the API holds; give the list
+`listMapKeys: [name]` when the API may return the files in another order.
+
 ## Immutable fields and validation
 
 ```yaml

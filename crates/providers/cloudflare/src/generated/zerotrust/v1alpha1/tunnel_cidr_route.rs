@@ -191,6 +191,7 @@ impl koof::ManagedResource for TunnelCidrRoute {
     type Update = crate::generated::operations::TunnelCidrRouteUpdate;
     type Delete = crate::generated::operations::TunnelCidrRouteDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

@@ -173,6 +173,7 @@ impl koof::ManagedResource for IPList {
     type Update = crate::generated::operations::IpListUpdate;
     type Delete = crate::generated::operations::IpListDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

@@ -1,3 +1,4 @@
+use crate::multipart::{self, Encoding, MultipartError};
 use serde::{Serialize, de::DeserializeOwned};
 use std::{fmt, time::Duration};
 use tracing::Instrument as _;
@@ -6,6 +7,8 @@ pub trait Operation {
     const NAME: &'static str;
     const METHOD: reqwest::Method;
     const PATH: &'static str;
+    /// How the request body is sent; JSON by default.
+    const ENCODING: Encoding = Encoding::Json;
     type Request: Serialize + Send + Sync;
     type Response: DeserializeOwned + Send + Sync;
 }
@@ -57,6 +60,9 @@ pub enum HttpError {
 
     #[error("failed to decode response")]
     Decode(#[from] serde_json::Error),
+
+    #[error("multipart body")]
+    Multipart(#[from] MultipartError),
 }
 
 #[derive(Clone)]
@@ -179,6 +185,7 @@ impl HttpClient {
             const NAME: &'static str = O::NAME;
             const METHOD: reqwest::Method = O::METHOD;
             const PATH: &'static str = O::PATH;
+            const ENCODING: Encoding = O::ENCODING;
             type Request = O::Request;
             type Response = serde_json::Value;
         }
@@ -218,7 +225,16 @@ impl HttpClient {
                 .header(name.as_str(), value.as_str()),
         };
         if let Some(body) = body {
-            request = request.json(body);
+            request = match O::ENCODING {
+                Encoding::Json => request.json(body),
+                Encoding::Multipart(form) => {
+                    let parts = form.parts(&serde_json::to_value(body)?)?;
+                    let (content_type, message) = multipart::encode(&parts);
+                    request
+                        .header(reqwest::header::CONTENT_TYPE, content_type)
+                        .body(message)
+                }
+            };
         }
 
         let response = request.send().await?;
@@ -234,6 +250,11 @@ impl HttpClient {
             .and_then(|value| value.to_str().ok())
             .and_then(|value| value.trim().parse::<u64>().ok())
             .map(Duration::from_secs);
+        let content_type = response
+            .headers()
+            .get(reqwest::header::CONTENT_TYPE)
+            .and_then(|value| value.to_str().ok())
+            .map(str::to_owned);
         let bytes = response.bytes().await?;
         if !status.is_success() {
             return Err(HttpError::Status {
@@ -244,7 +265,13 @@ impl HttpClient {
                 retry_after,
             });
         }
-        Ok(Some(bytes.to_vec()))
+        match content_type.filter(|content_type| multipart::is_multipart(content_type)) {
+            Some(content_type) => {
+                let files = multipart::files(multipart::decode(&content_type, &bytes)?)?;
+                Ok(Some(serde_json::to_vec(&files)?))
+            }
+            None => Ok(Some(bytes.to_vec())),
+        }
     }
 }
 

@@ -255,6 +255,7 @@ macro_rules! managed {
             type Update = $update;
             type Delete = $delete;
             type Connection = $connection;
+            type Merge = Unsupported;
 
             fn descriptor() -> &'static ResourceDescriptor {
                 &$descriptor

@@ -210,6 +210,7 @@ impl koof::ManagedResource for WarpConnector {
     type Update = crate::generated::operations::WarpConnectorUpdate;
     type Delete = crate::generated::operations::WarpConnectorDelete;
     type Connection = crate::generated::operations::WarpConnectorConnection;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }
