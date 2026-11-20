@@ -189,6 +189,7 @@ impl koof::ManagedResource for GatewayRule {
     type Update = crate::generated::operations::GatewayRuleUpdate;
     type Delete = crate::generated::operations::GatewayRuleDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

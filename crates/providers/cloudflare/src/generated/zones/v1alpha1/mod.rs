@@ -5,6 +5,7 @@ pub mod email_routing_rule;
 pub mod healthcheck;
 pub mod logpush_job;
 pub mod page_rule;
+pub mod snippet;
 pub mod snippet_rules;
 pub mod spectrum_application;
 pub mod waiting_room;
@@ -101,6 +102,10 @@ pub use crate::generated::types::ZonesV1alpha1LogpushJobAtProvider as LogpushJob
 pub use crate::generated::types::ZonesV1alpha1LogpushJobForProvider as LogpushJobForProvider;
 pub use crate::generated::types::ZonesV1alpha1PageRuleAtProvider as PageRuleAtProvider;
 pub use crate::generated::types::ZonesV1alpha1PageRuleForProvider as PageRuleForProvider;
+pub use crate::generated::types::ZonesV1alpha1SnippetAtProvider as SnippetAtProvider;
+pub use crate::generated::types::ZonesV1alpha1SnippetAtProviderFilesItem as SnippetAtProviderFilesItem;
+pub use crate::generated::types::ZonesV1alpha1SnippetForProvider as SnippetForProvider;
+pub use crate::generated::types::ZonesV1alpha1SnippetForProviderFilesItem as SnippetForProviderFilesItem;
 pub use crate::generated::types::ZonesV1alpha1SnippetRulesAtProvider as SnippetRulesAtProvider;
 pub use crate::generated::types::ZonesV1alpha1SnippetRulesForProvider as SnippetRulesForProvider;
 pub use crate::generated::types::ZonesV1alpha1SpectrumApplicationAtProvider as SpectrumApplicationAtProvider;

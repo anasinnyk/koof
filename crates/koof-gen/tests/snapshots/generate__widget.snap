@@ -192,6 +192,7 @@ impl koof::ManagedResource for Widget {
     type Update = crate::generated::operations::WidgetUpdate;
     type Delete = crate::generated::operations::WidgetDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

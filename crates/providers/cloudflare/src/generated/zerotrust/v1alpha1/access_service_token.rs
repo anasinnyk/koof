@@ -183,6 +183,7 @@ impl koof::ManagedResource for AccessServiceToken {
     type Update = crate::generated::operations::AccessServiceTokenUpdate;
     type Delete = crate::generated::operations::AccessServiceTokenDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

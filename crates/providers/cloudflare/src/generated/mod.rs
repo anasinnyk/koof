@@ -46,6 +46,7 @@ pub fn controllers(app: koof::App) -> koof::App {
         .controller::<cloudflare::v1alpha1::pages_project::PagesProject>()
         .controller::<storage::v1alpha1::queue::Queue>()
         .controller::<storage::v1alpha1::r2_bucket::R2Bucket>()
+        .controller::<zones::v1alpha1::snippet::Snippet>()
         .controller::<zones::v1alpha1::snippet_rules::SnippetRules>()
         .controller::<zones::v1alpha1::spectrum_application::SpectrumApplication>()
         .controller::<zerotrust::v1alpha1::tunnel::Tunnel>()
@@ -93,6 +94,7 @@ pub fn fake() -> koof::fake::Fake {
         .resource::<cloudflare::v1alpha1::pages_project::PagesProject>()
         .resource::<storage::v1alpha1::queue::Queue>()
         .resource::<storage::v1alpha1::r2_bucket::R2Bucket>()
+        .resource::<zones::v1alpha1::snippet::Snippet>()
         .resource::<zones::v1alpha1::snippet_rules::SnippetRules>()
         .resource::<zones::v1alpha1::spectrum_application::SpectrumApplication>()
         .resource::<zerotrust::v1alpha1::tunnel::Tunnel>()
@@ -152,6 +154,7 @@ pub fn crds() -> Vec<
         ::crd(), < cloudflare::v1alpha1::pages_project::PagesProject as
         kube::CustomResourceExt > ::crd(), < storage::v1alpha1::queue::Queue as
         kube::CustomResourceExt > ::crd(), < storage::v1alpha1::r2_bucket::R2Bucket as
+        kube::CustomResourceExt > ::crd(), < zones::v1alpha1::snippet::Snippet as
         kube::CustomResourceExt > ::crd(), < zones::v1alpha1::snippet_rules::SnippetRules
         as kube::CustomResourceExt > ::crd(), <
         zones::v1alpha1::spectrum_application::SpectrumApplication as
@@ -220,6 +223,7 @@ pub fn docs() -> Vec<koof::docs::ResourceDoc> {
         cloudflare::v1alpha1::pages_project::PagesProject > (),
         koof::docs::ResourceDoc::of:: < storage::v1alpha1::queue::Queue > (),
         koof::docs::ResourceDoc::of:: < storage::v1alpha1::r2_bucket::R2Bucket > (),
+        koof::docs::ResourceDoc::of:: < zones::v1alpha1::snippet::Snippet > (),
         koof::docs::ResourceDoc::of:: < zones::v1alpha1::snippet_rules::SnippetRules >
         (), koof::docs::ResourceDoc::of:: <
         zones::v1alpha1::spectrum_application::SpectrumApplication > (),

@@ -191,6 +191,7 @@ impl koof::ManagedResource for Dashboard {
     type Update = crate::generated::operations::DashboardUpdate;
     type Delete = crate::generated::operations::DashboardDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

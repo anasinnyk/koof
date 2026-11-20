@@ -13,26 +13,33 @@ const HEADER: &str =
 pub struct ResourceDoc {
     descriptor: &'static ResourceDescriptor,
     crd: Value,
-    operations: Vec<(&'static str, reqwest::Method, &'static str)>,
+    operations: Vec<(String, reqwest::Method, &'static str)>,
 }
 
 impl ResourceDoc {
     #[must_use]
     pub fn of<R: ManagedResource + kube::CustomResourceExt>() -> Self {
         let descriptor = R::descriptor();
-        let mut operations = vec![("observe", R::Observe::METHOD, R::Observe::PATH)];
+        let mut operations = vec![("observe".to_owned(), R::Observe::METHOD, R::Observe::PATH)];
         if descriptor.create.is_some() {
-            operations.push(("create", R::Create::METHOD, R::Create::PATH));
+            operations.push(("create".to_owned(), R::Create::METHOD, R::Create::PATH));
         }
         if descriptor.update.is_some() {
-            operations.push(("update", R::Update::METHOD, R::Update::PATH));
+            operations.push(("update".to_owned(), R::Update::METHOD, R::Update::PATH));
         }
         if descriptor.delete.is_some() {
-            operations.push(("delete", R::Delete::METHOD, R::Delete::PATH));
+            operations.push(("delete".to_owned(), R::Delete::METHOD, R::Delete::PATH));
+        }
+        if let Some(merge) = &descriptor.merge {
+            operations.push((
+                format!("observe {}", merge.into),
+                R::Merge::METHOD,
+                R::Merge::PATH,
+            ));
         }
         if descriptor.connection.is_some() {
             operations.push((
-                "connection details",
+                "connection details".to_owned(),
                 R::Connection::METHOD,
                 R::Connection::PATH,
             ));
@@ -112,7 +119,11 @@ pub fn readme(provider: &ProviderInfo, resources: &[ResourceDoc]) -> String {
     sorted.sort_by_key(|resource| (resource.descriptor.group, resource.descriptor.kind));
     for resource in sorted {
         let descriptor = resource.descriptor;
-        let operations: Vec<&str> = resource.operations.iter().map(|(name, ..)| *name).collect();
+        let operations: Vec<&str> = resource
+            .operations
+            .iter()
+            .map(|(name, ..)| name.as_str())
+            .collect();
         let _ = writeln!(
             out,
             "| [{kind}](docs/{file}) | `{api_version}` | {scope} | {operations} | {references} | {credentials} |",

@@ -32,6 +32,8 @@ pub trait ManagedResource:
 
     type Connection: Operation;
 
+    type Merge: Operation;
+
     fn descriptor() -> &'static ResourceDescriptor;
 
     fn status(&self) -> Option<&ManagedStatus<Self::AtProvider>>;
@@ -71,6 +73,8 @@ pub struct ResourceDescriptor {
     /// external resource.
     pub connection_secret: &'static [(&'static str, &'static str)],
     pub connection: Option<ConnectionDescriptor>,
+    /// A read after each observation whose response becomes a field of it.
+    pub merge: Option<MergeDescriptor>,
     pub credentials: Option<Credentials>,
     pub observe: ObserveDescriptor,
     pub create: Option<CreateDescriptor>,
@@ -100,6 +104,7 @@ impl ResourceDescriptor {
             secret_values: &[],
             connection_secret: &[],
             connection: None,
+            merge: None,
             credentials: None,
             observe,
             create: None,
@@ -171,6 +176,14 @@ impl ResourceDescriptor {
     ) -> Self {
         Self {
             connection_secret,
+            ..self
+        }
+    }
+
+    #[must_use]
+    pub const fn with_merge(self, merge: MergeDescriptor) -> Self {
+        Self {
+            merge: Some(merge),
             ..self
         }
     }
@@ -539,5 +552,21 @@ impl RequestMapping {
     #[must_use]
     pub const fn with_set(self, set: &'static [(&'static str, ValueExpr)]) -> Self {
         Self { set, ..self }
+    }
+}
+
+/// A read operation whose response (after `response_path`) is field `into` of the
+/// observed resource, for values the observe operation does not return.
+#[derive(Debug)]
+#[non_exhaustive]
+pub struct MergeDescriptor {
+    pub operation: OperationDescriptor,
+    pub into: &'static str,
+}
+
+impl MergeDescriptor {
+    #[must_use]
+    pub const fn new(operation: OperationDescriptor, into: &'static str) -> Self {
+        Self { operation, into }
     }
 }

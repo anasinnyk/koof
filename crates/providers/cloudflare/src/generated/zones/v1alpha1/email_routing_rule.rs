@@ -178,6 +178,7 @@ impl koof::ManagedResource for EmailRoutingRule {
     type Update = crate::generated::operations::EmailRoutingRuleUpdate;
     type Delete = crate::generated::operations::EmailRoutingRuleDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

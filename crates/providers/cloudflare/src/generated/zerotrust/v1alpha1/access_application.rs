@@ -236,6 +236,7 @@ impl koof::ManagedResource for AccessApplication {
     type Update = crate::generated::operations::AccessApplicationUpdate;
     type Delete = crate::generated::operations::AccessApplicationDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

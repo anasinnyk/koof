@@ -12,6 +12,7 @@ pub mod leader;
 pub mod managed;
 pub mod manifests;
 pub mod metrics;
+pub mod multipart;
 pub mod object;
 pub mod reference;
 pub mod resource;

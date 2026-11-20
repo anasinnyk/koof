@@ -133,6 +133,7 @@ impl koof::ManagedResource for CloudConnectorRules {
     type Update = crate::generated::operations::CloudConnectorRulesUpdate;
     type Delete = koof::http::Unsupported;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

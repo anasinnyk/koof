@@ -39,6 +39,7 @@ pub struct Resource<'a> {
     pub update: Option<Operation<'a>>,
     pub delete: Option<Operation<'a>>,
     pub connection: Option<Operation<'a>>,
+    pub merge: Option<Operation<'a>>,
 }
 
 #[derive(Debug, Clone, Copy)]

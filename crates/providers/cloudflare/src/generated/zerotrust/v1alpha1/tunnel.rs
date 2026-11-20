@@ -200,6 +200,7 @@ impl koof::ManagedResource for Tunnel {
     type Update = crate::generated::operations::TunnelUpdate;
     type Delete = crate::generated::operations::TunnelDelete;
     type Connection = crate::generated::operations::TunnelConnection;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

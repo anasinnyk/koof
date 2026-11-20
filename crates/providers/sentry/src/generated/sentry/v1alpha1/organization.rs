@@ -140,6 +140,7 @@ impl koof::ManagedResource for Organization {
     type Update = crate::generated::operations::OrganizationUpdate;
     type Delete = koof::http::Unsupported;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

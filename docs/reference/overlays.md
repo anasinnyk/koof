@@ -48,11 +48,13 @@ On an operation (`$.paths['…'].get`).
 | Key | Type | |
 |---|---|---|
 | `resource` | string | Resource `name` |
-| `lifecycle` | `observe`, `create`, `update`, `delete` | `observe` is required, the others optional |
+| `lifecycle` | `observe`, `create`, `update`, `delete`, or a list of them | `observe` is required, the others optional. A list declares one operation for several (`[create, update]` for a `PUT` that creates or replaces) |
 | `connectionDetails` | bool | With `lifecycle: observe`: not the observation but an extra `GET` after it, whose response only feeds `connectionSecret` keys with `from: connectionDetails` |
+| `merge` | bool | With `lifecycle: observe`: not the observation but an extra `GET` after it, whose response becomes field `response.into` of the observation (values the observe operation does not return, such as code). Needs `response.into` |
 | `pathParameters` | map of [value](#values) | One per `{placeholder}` in the path |
 | `request.from` | path | Body source, default `spec.forProvider`; a list is sent as it is (without `set`). Drift is checked on this field |
 | `request.set` | map of dotted body path to [value](#values) | Extra body fields |
+| `request.multipart` | `{json, files, fileType?}` | Send the body as `multipart/form-data`: each body field in `json` as a JSON part, each item `{name, content}` of the list field `files` as a file part of type `fileType` (default `application/octet-stream`); other fields are not sent. A `multipart/form-data` response is read as a list of `{name, content}` |
 | `response.path` | string | Where the resource is in the response (`result`); on create, where `connectionSecret` paths start |
 | `response.deletedWhen` | string | Observe only: the resource is gone once this field is set |
 | `response.match` | `{field, value}` | Observe only: the response is a list and the resource is the item whose `field` equals the value expression `value`; missing when no item matches |

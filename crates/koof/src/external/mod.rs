@@ -9,7 +9,9 @@ use crate::{
         external_name,
     },
     error::{ReconcileError, ResolveValueError},
-    resource::{EXTERNAL_NAME, ManagedResource, ObserveDescriptor, OperationDescriptor},
+    resource::{
+        EXTERNAL_NAME, ManagedResource, MergeDescriptor, ObserveDescriptor, OperationDescriptor,
+    },
 };
 use http::{Auth, HttpError, Operation};
 use resolve::{Node, resolve_credentials, resolve_value, with_item_references, with_secret_values};
@@ -130,7 +132,33 @@ pub async fn observe<R: ManagedResource>(
     let matching = matching
         .as_ref()
         .map(|(field, value)| (*field, value.as_str()));
-    Ok(observation(response.as_ref(), observe, matching))
+    let mut observation = observation(response.as_ref(), observe, matching);
+    if let (Some(merge), Some(Value::Object(at_provider))) =
+        (&node.descriptor.merge, observation.at_provider.as_mut())
+    {
+        let value = merged::<R>(context, &node, merge).await?;
+        at_provider.insert(merge.into.to_owned(), value);
+    }
+    Ok(observation)
+}
+
+async fn merged<R: ManagedResource>(
+    context: &ControllerContext,
+    node: &Node,
+    merge: &MergeDescriptor,
+) -> Result<Value, ReconcileError> {
+    let Some(call) = Call::prepare(context, node, &merge.operation).await? else {
+        return Ok(Value::Null);
+    };
+    let response = context
+        .provider_client
+        .send_json::<R::Merge>(&call.auth, &call.parameters(), None)
+        .await?;
+    Ok(response
+        .as_ref()
+        .and_then(|response| resolve::non_null(response, merge.operation.response_path))
+        .cloned()
+        .unwrap_or(Value::Null))
 }
 
 fn matched_item<'a>(list: &'a Value, field: &str, value: &str) -> Option<&'a Value> {
@@ -293,7 +321,8 @@ fn not_created(error: &HttpError) -> bool {
         HttpError::Transport(error) => error.is_connect(),
         HttpError::MissingParameter(_)
         | HttpError::InvalidParameter { .. }
-        | HttpError::Decode(_) => false,
+        | HttpError::Decode(_)
+        | HttpError::Multipart(_) => false,
     }
 }
 
