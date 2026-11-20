@@ -50969,6 +50969,54 @@ impl ::std::convert::TryFrom<::std::string::String> for SetStaticHeaderOperation
         value.parse()
     }
 }
+///`SnippetCreateResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetCreateResponse {
+    pub errors: SnippetsErrors,
+    pub messages: SnippetsMessages,
+    pub result: SnippetsSnippet,
+    pub success: bool,
+}
+///`SnippetDeleteResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetDeleteResponse {
+    pub errors: SnippetsErrors,
+    pub messages: SnippetsMessages,
+    #[serde(default)]
+    pub result: ::std::option::Option<
+        ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    >,
+    pub success: bool,
+}
+///`SnippetObserveResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetObserveResponse {
+    pub errors: SnippetsErrors,
+    pub messages: SnippetsMessages,
+    pub result: SnippetsSnippet,
+    pub success: bool,
+}
 ///Define a snippet rule.
 #[derive(
     ::serde::Deserialize,
@@ -51123,6 +51171,117 @@ pub struct SnippetsResponse {
     pub result: ::serde_json::Value,
     ///Indicate whether the API call was successful.
     pub success: bool,
+}
+///Define a snippet.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetsSnippet {
+    ///Indicates when the snippet was created.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    ///Indicates when the snippet was last modified.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    pub snippet_name: SnippetsSnippetName,
+}
+///Contain files belonging to the snippet.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct SnippetsSnippetFiles(pub ::std::vec::Vec<::std::string::String>);
+impl ::std::ops::Deref for SnippetsSnippetFiles {
+    type Target = ::std::vec::Vec<::std::string::String>;
+    fn deref(&self) -> &::std::vec::Vec<::std::string::String> {
+        &self.0
+    }
+}
+impl ::std::convert::From<SnippetsSnippetFiles>
+for ::std::vec::Vec<::std::string::String> {
+    fn from(value: SnippetsSnippetFiles) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<::std::string::String>>
+for SnippetsSnippetFiles {
+    fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
+        Self(value)
+    }
+}
+///Specify the name of the file that contains the main module of the snippet.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct SnippetsSnippetMainModule(::std::string::String);
+impl ::std::ops::Deref for SnippetsSnippetMainModule {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<SnippetsSnippetMainModule> for ::std::string::String {
+    fn from(value: SnippetsSnippetMainModule) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for SnippetsSnippetMainModule {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() < 1usize {
+            return Err("shorter than 1 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for SnippetsSnippetMainModule {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SnippetsSnippetMainModule {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SnippetsSnippetMainModule {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
 }
 ///Identify the snippet.
 #[derive(
@@ -51282,6 +51441,36 @@ impl<'de> ::serde::Deserialize<'de> for SnippetsZoneId {
                 <D::Error as ::serde::de::Error>::custom(e.to_string())
             })
     }
+}
+///`SnippetsZoneSnippet`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetsZoneSnippet {
+    ///The snippet's modules; main_module names the one that runs.
+    pub files: ::std::vec::Vec<SnippetsZoneSnippetFilesItem>,
+    pub main_module: SnippetsSnippetMainModule,
+    pub snippet_name: SnippetsSnippetName,
+}
+///`SnippetsZoneSnippetFilesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetsZoneSnippetFilesItem {
+    ///The module's source.
+    pub content: ::std::string::String,
+    ///File name, e.g. `main.js`.
+    pub name: ::std::string::String,
 }
 ///`SnippetsZoneSnippetRules`
 #[derive(
@@ -80506,6 +80695,74 @@ pub struct ZonesV1alpha1PageRuleForProvider {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub status: ::std::option::Option<ZonesStatus>,
     pub targets: ZonesTargets,
+}
+///`SnippetAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1SnippetAtProvider {
+    ///Indicates when the snippet was created.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    ///The snippet's modules; main_module names the one that runs.
+    #[serde(default, skip_serializing_if = "::std::vec::Vec::is_empty")]
+    pub files: ::std::vec::Vec<ZonesV1alpha1SnippetAtProviderFilesItem>,
+    ///Indicates when the snippet was last modified.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub snippet_name: ::std::option::Option<SnippetsSnippetName>,
+}
+///`SnippetAtProviderFilesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1SnippetAtProviderFilesItem {
+    ///The module's source.
+    pub content: ::std::string::String,
+    ///File name, e.g. `main.js`.
+    pub name: ::std::string::String,
+}
+///`SnippetForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1SnippetForProvider {
+    ///The snippet's modules; main_module names the one that runs.
+    pub files: ::std::vec::Vec<ZonesV1alpha1SnippetForProviderFilesItem>,
+    pub main_module: SnippetsSnippetMainModule,
+    pub snippet_name: SnippetsSnippetName,
+}
+///`SnippetForProviderFilesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1SnippetForProviderFilesItem {
+    ///The module's source.
+    pub content: ::std::string::String,
+    ///File name, e.g. `main.js`.
+    pub name: ::std::string::String,
 }
 ///`SnippetRulesAtProvider`
 #[derive(

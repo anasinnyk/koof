@@ -31,6 +31,7 @@ struct LifecycleDraft {
     update: Option<OperationId>,
     delete: Option<OperationId>,
     connection: Option<OperationId>,
+    merge: Option<OperationId>,
 }
 
 impl LifecycleDraft {
@@ -41,6 +42,7 @@ impl LifecycleDraft {
             LifecycleAction::Update => &mut self.update,
             LifecycleAction::Delete => &mut self.delete,
             LifecycleAction::Connection => &mut self.connection,
+            LifecycleAction::Merge => &mut self.merge,
         }
     }
 }
@@ -133,6 +135,7 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
                     update: lifecycle.update,
                     delete: lifecycle.delete,
                     connection: lifecycle.connection,
+                    merge: lifecycle.merge,
                 },
             };
             Ok((name, resource))
@@ -279,7 +282,7 @@ fn response_fields(extension: &OperationExtension) -> Result<ResponseFields, Ext
         if response.matching.is_some() {
             return Err(only_observe("match"));
         }
-        if response.into.is_some() {
+        if response.into.is_some() && extension.lifecycle != LifecycleAction::Merge {
             return Err(only_observe("into"));
         }
     }

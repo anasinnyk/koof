@@ -46,7 +46,8 @@ fn http(error: &HttpError) -> Failure {
         HttpError::Status { .. }
         | HttpError::MissingParameter(_)
         | HttpError::InvalidParameter { .. }
-        | HttpError::Decode(_) => Failure::Permanent,
+        | HttpError::Decode(_)
+        | HttpError::Multipart(_) => Failure::Permanent,
     }
 }
 

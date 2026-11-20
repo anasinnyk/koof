@@ -273,6 +273,7 @@ impl koof::ManagedResource for AccessGroup {
     type Update = crate::generated::operations::AccessGroupUpdate;
     type Delete = crate::generated::operations::AccessGroupDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

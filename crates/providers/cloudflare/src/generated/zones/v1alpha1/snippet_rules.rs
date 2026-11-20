@@ -133,6 +133,7 @@ impl koof::ManagedResource for SnippetRules {
     type Update = crate::generated::operations::SnippetRulesUpdate;
     type Delete = koof::http::Unsupported;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

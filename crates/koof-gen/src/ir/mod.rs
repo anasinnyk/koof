@@ -182,6 +182,7 @@ pub struct LifecycleIr {
     pub update: Option<OperationId>,
     pub delete: Option<OperationId>,
     pub connection: Option<OperationId>,
+    pub merge: Option<OperationId>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -216,6 +217,26 @@ pub struct RequestMappingIr {
     pub from: FieldPath,
     #[serde(default)]
     pub set: BTreeMap<String, ValueExpr>,
+    #[serde(default)]
+    pub multipart: Option<MultipartIr>,
+}
+
+/// A `multipart/form-data` body: the fields in `json` as JSON parts, and each item
+/// `{name, content}` of the list `files` as a file part of type `file_type`.
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct MultipartIr {
+    #[serde(default)]
+    pub json: Vec<String>,
+    pub files: String,
+    #[serde(default = "MultipartIr::default_file_type")]
+    pub file_type: String,
+}
+
+impl MultipartIr {
+    fn default_file_type() -> String {
+        "application/octet-stream".to_owned()
+    }
 }
 
 impl RequestMappingIr {
@@ -229,6 +250,7 @@ impl Default for RequestMappingIr {
         Self {
             from: Self::default_from(),
             set: BTreeMap::new(),
+            multipart: None,
         }
     }
 }

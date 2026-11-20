@@ -108,6 +108,8 @@ struct RawOperationExtension {
     #[serde(default)]
     connection_details: bool,
     #[serde(default)]
+    merge: bool,
+    #[serde(default)]
     path_parameters: BTreeMap<String, ValueExpr>,
     #[serde(default)]
     response: Option<ResponseExtension>,
@@ -121,10 +123,17 @@ impl TryFrom<RawOperationExtension> for OperationExtension {
     type Error = &'static str;
 
     fn try_from(raw: RawOperationExtension) -> Result<Self, Self::Error> {
-        let lifecycle = match (raw.lifecycle, raw.connection_details) {
-            (_, false) => raw.lifecycle,
-            (LifecycleAction::Observe, true) => LifecycleAction::Connection,
-            _ => return Err("connectionDetails is only allowed with lifecycle: observe"),
+        let lifecycle = match (raw.lifecycle, raw.connection_details, raw.merge) {
+            (_, false, false) => raw.lifecycle,
+            (LifecycleAction::Observe, true, false) => LifecycleAction::Connection,
+            (LifecycleAction::Observe, false, true) => LifecycleAction::Merge,
+            (LifecycleAction::Observe, true, true) => {
+                return Err("connectionDetails and merge cannot be combined");
+            }
+            (_, true, _) => {
+                return Err("connectionDetails is only allowed with lifecycle: observe");
+            }
+            (_, _, true) => return Err("merge is only allowed with lifecycle: observe"),
         };
         Ok(Self {
             resource: raw.resource,
@@ -146,6 +155,8 @@ pub enum LifecycleAction {
     Delete,
     #[serde(skip)]
     Connection,
+    #[serde(skip)]
+    Merge,
 }
 
 impl LifecycleAction {
@@ -157,6 +168,7 @@ impl LifecycleAction {
             Self::Update => "update",
             Self::Delete => "delete",
             Self::Connection => "connection",
+            Self::Merge => "merge",
         }
     }
 }
@@ -257,19 +269,44 @@ pub fn kube_operations(
                 .filter(|(method, _)| HTTP_METHODS.contains(&method.as_str()))
                 .map(move |(method, operation)| (path, method, operation))
         })
-        .filter_map(|(path, method, operation)| {
+        .flat_map(|(path, method, operation)| {
             let location = format!("paths.{path}.{method}");
-            parse::<OperationExtension>(operation, OPERATION, &location)
-                .transpose()
-                .map(|extension| {
-                    extension.map(|extension| KubeOperation {
-                        path,
-                        method,
-                        operation,
-                        extension,
-                    })
+            per_lifecycle(operation.get(OPERATION))
+                .into_iter()
+                .map(move |extension| {
+                    serde_json::from_value::<OperationExtension>(extension)
+                        .map_err(|source| SpecError::Extension {
+                            extension: OPERATION,
+                            location: location.clone(),
+                            source,
+                        })
+                        .map(|extension| KubeOperation {
+                            path,
+                            method,
+                            operation,
+                            extension,
+                        })
                 })
         })
+}
+
+/// One extension per lifecycle: `lifecycle: [create, update]` declares the
+/// operation for both.
+fn per_lifecycle(extension: Option<&Value>) -> Vec<Value> {
+    let Some(extension) = extension else {
+        return Vec::new();
+    };
+    match extension.get("lifecycle") {
+        Some(Value::Array(lifecycles)) => lifecycles
+            .iter()
+            .map(|lifecycle| {
+                let mut single = extension.clone();
+                single["lifecycle"] = lifecycle.clone();
+                single
+            })
+            .collect(),
+        _ => vec![extension.clone()],
+    }
 }
 
 pub struct KubeResource<'a> {

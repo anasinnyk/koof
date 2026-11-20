@@ -54,6 +54,11 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
         quote!(.with_delete(#delete))
     });
     let connection = connection_tokens(resource);
+    let merge = resource.merge.and_then(|merge| {
+        let into = merge.ir.response_into.as_deref()?;
+        let operation = operation_descriptor(merge);
+        Some(quote!(.with_merge(koof::resource::MergeDescriptor::new(#operation, #into))))
+    });
     let namespaced = resource.namespaced;
 
     Ok(quote! {
@@ -74,6 +79,7 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
                 #create
                 #update
                 #delete
+                #merge
                 #connection;
     })
 }
@@ -223,6 +229,7 @@ pub fn generate_managed_resource(
     let update = operation_type(resource.update)?;
     let delete = operation_type(resource.delete)?;
     let connection = operation_type(resource.connection)?;
+    let merge = operation_type(resource.merge)?;
 
     Ok(quote! {
         impl koof::ManagedResource for #resource_ident {
@@ -232,6 +239,7 @@ pub fn generate_managed_resource(
             type Update = #update;
             type Delete = #delete;
             type Connection = #connection;
+            type Merge = #merge;
 
             fn descriptor() -> &'static koof::ResourceDescriptor {
                 &DESCRIPTOR

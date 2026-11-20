@@ -155,6 +155,7 @@ impl koof::ManagedResource for VectorizeIndex {
     type Update = koof::http::Unsupported;
     type Delete = crate::generated::operations::VectorizeIndexDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

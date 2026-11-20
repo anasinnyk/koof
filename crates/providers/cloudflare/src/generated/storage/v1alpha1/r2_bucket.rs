@@ -155,6 +155,7 @@ impl koof::ManagedResource for R2Bucket {
     type Update = koof::http::Unsupported;
     type Delete = crate::generated::operations::R2BucketDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

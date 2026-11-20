@@ -1,0 +1,165 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare Snippet
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # A snippet: JavaScript modules run on requests a SnippetRules rule matches.
+  # The API takes the code as multipart/form-data (one part per file plus the
+  # metadata naming the main module) and returns it from a separate endpoint,
+  # also as multipart; koof reads that after each observation, so the code is
+  # compared like any other field.
+  - target: $.components.schemas
+    update:
+      snippets_ZoneSnippet:
+        type: object
+        properties:
+          snippet_name:
+            $ref: '#/components/schemas/snippets_SnippetName'
+          main_module:
+            $ref: '#/components/schemas/snippets_SnippetMainModule'
+          files:
+            description: The snippet's modules; main_module names the one that runs.
+            type: array
+            minItems: 1
+            items:
+              type: object
+              properties:
+                name:
+                  description: File name, e.g. `main.js`.
+                  type: string
+                content:
+                  description: The module's source.
+                  type: string
+              required: [name, content]
+            x-kube-field:
+              listMapKeys: [name]
+        required: [snippet_name, main_module, files]
+        x-kube-resource:
+          name: snippet
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Snippet
+          immutable: [snippet_name]
+
+          test:
+            forProvider:
+              snippet_name: koof_e2e
+              main_module: main.js
+              files:
+                - name: main.js
+                  content: |
+                    export default {
+                      async fetch(request) {
+                        return fetch(request);
+                      },
+                    };
+            update:
+              files:
+                - name: main.js
+                  content: |
+                    export default {
+                      async fetch(request) {
+                        const response = await fetch(request);
+                        return new Response(response.body, response);
+                      },
+                    };
+
+          identifiers:
+            external_id:
+              type: external_name
+
+          references:
+            zone:
+              from: spec.forProvider.zoneRef
+              target: zone
+
+          credentials:
+            securityScheme: api_token
+            source:
+              type: related
+              via: [zone, account]
+
+          fields:
+            mode: all
+
+  # `modified_one` is a typo for modified_on.
+  - target: $.components.schemas.snippets_Snippet.required
+    remove: true
+
+  - target: $.components.schemas.snippets_Snippet
+    update:
+      required: [snippet_name]
+
+  - target: $.paths['/zones/{zone_id}/snippets/{snippet_name}'].get
+    update:
+      x-kube-operation:
+        resource: snippet
+        lifecycle: observe
+        response:
+          path: result
+        pathParameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          snippet_name:
+            type: external_name
+
+  - target: $.paths['/zones/{zone_id}/snippets/{snippet_name}/content'].get
+    update:
+      x-kube-operation:
+        resource: snippet
+        lifecycle: observe
+        merge: true
+        response:
+          into: files
+        pathParameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          snippet_name:
+            type: external_name
+
+  # PUT creates or replaces the snippet named in the path.
+  - target: $.paths['/zones/{zone_id}/snippets/{snippet_name}'].put
+    update:
+      x-kube-operation:
+        resource: snippet
+        lifecycle: [create, update]
+        request:
+          set:
+            metadata.main_module:
+              type: field
+              path: spec.forProvider.main_module
+          multipart:
+            json: [metadata]
+            files: files
+            fileType: application/javascript+module
+        pathParameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          snippet_name:
+            type: coalesce
+            values:
+              - type: external_name
+              - type: field
+                path: spec.forProvider.snippet_name
+        result:
+          identifiers:
+            external_id: response.body.result.snippet_name
+
+  - target: $.paths['/zones/{zone_id}/snippets/{snippet_name}'].delete
+    update:
+      x-kube-operation:
+        resource: snippet
+        lifecycle: delete
+        pathParameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          snippet_name:
+            type: external_name

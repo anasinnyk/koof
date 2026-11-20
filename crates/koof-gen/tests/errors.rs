@@ -1,6 +1,6 @@
 mod common;
 
-use common::{LABELS, TOKEN_OPERATION, TOKEN_SECRET, generated, widgets_with};
+use common::{LABELS, NOTES, TOKEN_OPERATION, TOKEN_SECRET, generated, widgets_with};
 use pretty_assertions::assert_eq;
 use rstest::rstest;
 
@@ -307,4 +307,40 @@ fn connection_details_are_an_extra_observe_read() {
 )]
 fn a_bare_list_goes_into_one_field(#[case] actions: String, #[case] message: &str) {
     assert_eq!(error(&actions).as_deref(), Some(message));
+}
+
+#[rstest]
+#[case::a_get(
+    NOTES.replace("        get:\n          operationId: getWidgetNotes", "        post:\n          operationId: getWidgetNotes"),
+    "resources.widget.lifecycle.merge: operation widget.merge must be a GET: koof calls it on every observation"
+)]
+#[case::with_into(
+    NOTES.replace("            response:\n              into: notes\n", ""),
+    "resources.widget.lifecycle.merge: operation widget.merge needs response.into: the field of the observation its response becomes"
+)]
+#[case::not_with_connection_details(
+    NOTES.replace("            merge: true", "            merge: true\n            connectionDetails: true"),
+    "invalid x-kube-operation at paths./accounts/{account_id}/widgets/{widget_id}/notes.get: connectionDetails and merge cannot be combined"
+)]
+#[case::only_with_observe(
+    NOTES.replace("            lifecycle: observe\n            merge: true", "            lifecycle: update\n            merge: true"),
+    "invalid x-kube-operation at paths./accounts/{account_id}/widgets/{widget_id}/notes.get: merge is only allowed with lifecycle: observe"
+)]
+fn a_merge_read(#[case] actions: String, #[case] message: &str) {
+    assert_eq!(error(&actions).as_deref(), Some(message));
+}
+
+#[test]
+fn several_lifecycles_still_cannot_repeat_one() {
+    assert_eq!(
+        error(
+            "
+  - target: $.paths['/accounts/{account_id}/widgets/{widget_id}'].patch['x-kube-operation']
+    update:
+      lifecycle: [update, update]
+"
+        )
+        .as_deref(),
+        Some("failed to build ProviderIr: resource widget has duplicate update operation")
+    );
 }

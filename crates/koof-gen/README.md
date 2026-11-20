@@ -129,7 +129,11 @@ the response of the resource's connection details read instead.
 `lifecycle` is one of `observe` (required), `create`, `update` and `delete`. A
 second `observe` with `connectionDetails: true` is an extra `GET` after each
 observation of an object with a connection Secret, for values the API returns
-from a separate endpoint; its response only feeds `connectionSecret`.
+from a separate endpoint; its response only feeds `connectionSecret`. With
+`merge: true` instead, the extra read's response becomes field `response.into`
+of the observation, so it is compared like the rest. `lifecycle: [create, update]`
+declares one operation for both, and `request.multipart` sends the body as
+`multipart/form-data`.
 For APIs that soft-delete (the observe endpoint keeps answering `200`),
 `response.deletedWhen: deleted_at` on `observe` treats the resource as gone once
 that field is set. When the API only lists the resource, `response.match`
