@@ -73,7 +73,7 @@ pub struct ResourceIr {
     pub references: BTreeMap<String, ReferenceIr>,
     pub item_references: BTreeMap<String, ItemReferenceIr>,
     pub credentials: Option<CredentialsIr>,
-    pub connection_secret: BTreeMap<String, String>,
+    pub connection_secret: BTreeMap<String, ConnectionDetailIr>,
     pub lifecycle: LifecycleIr,
     pub validations: Vec<ValidationIr>,
     pub immutable: Vec<String>,
@@ -87,6 +87,31 @@ pub struct TestIr {
     pub for_provider: serde_json::Map<String, serde_json::Value>,
     #[serde(default)]
     pub update: Option<serde_json::Map<String, serde_json::Value>>,
+}
+
+/// Where a connection Secret key takes its value from: a dotted path in the
+/// resource the API returns, or `{from: connectionDetails, path}` in the response
+/// of the resource's observe operation with `connectionDetails: true` (the whole
+/// value when `path` is empty).
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(untagged)]
+pub enum ConnectionDetailIr {
+    Resource(String),
+    Operation(ConnectionOperationDetailIr),
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ConnectionOperationDetailIr {
+    pub from: ConnectionSourceIr,
+    #[serde(default)]
+    pub path: String,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub enum ConnectionSourceIr {
+    ConnectionDetails,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
@@ -156,6 +181,7 @@ pub struct LifecycleIr {
     pub create: Option<OperationId>,
     pub update: Option<OperationId>,
     pub delete: Option<OperationId>,
+    pub connection: Option<OperationId>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

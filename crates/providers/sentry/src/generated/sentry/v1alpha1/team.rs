@@ -180,6 +180,7 @@ impl koof::ManagedResource for Team {
     type Create = crate::generated::operations::TeamCreate;
     type Update = crate::generated::operations::TeamUpdate;
     type Delete = crate::generated::operations::TeamDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

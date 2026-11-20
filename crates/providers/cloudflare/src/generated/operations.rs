@@ -816,6 +816,14 @@ impl koof::Operation for SpectrumApplicationUpdate {
     type Request = crate::generated::types::SpectrumConfigUpdateAppConfig;
     type Response = crate::generated::types::SpectrumConfigAppConfigSingle;
 }
+pub struct TunnelConnection;
+impl koof::Operation for TunnelConnection {
+    const NAME: &'static str = "tunnel.connection";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}/cfd_tunnel/{tunnel_id}/token";
+    type Request = ();
+    type Response = crate::generated::types::TunnelTunnelResponseToken;
+}
 pub struct TunnelCreate;
 impl koof::Operation for TunnelCreate {
     const NAME: &'static str = "tunnel.create";
@@ -1015,6 +1023,46 @@ impl koof::Operation for WaitingRoomUpdate {
     const PATH: &'static str = "/zones/{zone_id}/waiting_rooms/{waiting_room_id}";
     type Request = crate::generated::types::WaitingroomQueryWaitingroom;
     type Response = crate::generated::types::WaitingroomSingleResponse;
+}
+pub struct WarpConnectorConnection;
+impl koof::Operation for WarpConnectorConnection {
+    const NAME: &'static str = "warp_connector.connection";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}/warp_connector/{tunnel_id}/token";
+    type Request = ();
+    type Response = crate::generated::types::TunnelTunnelResponseToken;
+}
+pub struct WarpConnectorCreate;
+impl koof::Operation for WarpConnectorCreate {
+    const NAME: &'static str = "warp_connector.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/accounts/{account_id}/warp_connector";
+    type Request = crate::generated::types::WarpConnectorCreateRequest;
+    type Response = crate::generated::types::TunnelWarpConnectorResponseSingle;
+}
+pub struct WarpConnectorDelete;
+impl koof::Operation for WarpConnectorDelete {
+    const NAME: &'static str = "warp_connector.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/accounts/{account_id}/warp_connector/{tunnel_id}";
+    type Request = ();
+    type Response = crate::generated::types::TunnelWarpConnectorResponseSingle;
+}
+pub struct WarpConnectorObserve;
+impl koof::Operation for WarpConnectorObserve {
+    const NAME: &'static str = "warp_connector.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}/warp_connector/{tunnel_id}";
+    type Request = ();
+    type Response = crate::generated::types::TunnelWarpConnectorResponseSingle;
+}
+pub struct WarpConnectorUpdate;
+impl koof::Operation for WarpConnectorUpdate {
+    const NAME: &'static str = "warp_connector.update";
+    const METHOD: reqwest::Method = reqwest::Method::PATCH;
+    const PATH: &'static str = "/accounts/{account_id}/warp_connector/{tunnel_id}";
+    type Request = crate::generated::types::WarpConnectorUpdateRequest;
+    type Response = crate::generated::types::TunnelWarpConnectorResponseSingle;
 }
 pub struct WorkerRouteCreate;
 impl koof::Operation for WorkerRouteCreate {

@@ -315,6 +315,35 @@ pub async fn update<R: ManagedResource>(
     Ok(())
 }
 
+/// Reads the connection details that `R::Connection` returns, at its
+/// `response_path`; `None` when the resource has no connection operation, its path
+/// parameters are not set yet or the API answers `404`.
+///
+/// # Errors
+///
+/// Returns [`ReconcileError`] when a reference or the credentials cannot be
+/// resolved, or the request fails.
+pub async fn connection<R: ManagedResource>(
+    context: &ControllerContext,
+    resource: &R,
+) -> Result<Option<Value>, ReconcileError> {
+    let node = Node::of(resource)?;
+    let Some(connection) = &node.descriptor.connection else {
+        return Ok(None);
+    };
+    let Some(call) = Call::prepare(context, &node, &connection.operation).await? else {
+        return Ok(None);
+    };
+    let response = context
+        .provider_client
+        .send_json::<R::Connection>(&call.auth, &call.parameters(), None)
+        .await?;
+    Ok(response
+        .as_ref()
+        .and_then(|response| resolve::non_null(response, connection.operation.response_path))
+        .cloned())
+}
+
 /// Deletes the external resource through `R::Delete`. `Ok(false)` when it was
 /// already gone (or its path parameters are not set).
 ///

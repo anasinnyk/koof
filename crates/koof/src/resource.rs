@@ -30,6 +30,8 @@ pub trait ManagedResource:
 
     type Delete: Operation;
 
+    type Connection: Operation;
+
     fn descriptor() -> &'static ResourceDescriptor;
 
     fn status(&self) -> Option<&ManagedStatus<Self::AtProvider>>;
@@ -68,6 +70,7 @@ pub struct ResourceDescriptor {
     /// Keys of the connection Secret and the JSON pointers of their values in the
     /// external resource.
     pub connection_secret: &'static [(&'static str, &'static str)],
+    pub connection: Option<ConnectionDescriptor>,
     pub credentials: Option<Credentials>,
     pub observe: ObserveDescriptor,
     pub create: Option<CreateDescriptor>,
@@ -96,6 +99,7 @@ impl ResourceDescriptor {
             item_references: &[],
             secret_values: &[],
             connection_secret: &[],
+            connection: None,
             credentials: None,
             observe,
             create: None,
@@ -167,6 +171,14 @@ impl ResourceDescriptor {
     ) -> Self {
         Self {
             connection_secret,
+            ..self
+        }
+    }
+
+    #[must_use]
+    pub const fn with_connection(self, connection: ConnectionDescriptor) -> Self {
+        Self {
+            connection: Some(connection),
             ..self
         }
     }
@@ -440,6 +452,25 @@ impl ResponseMatch {
     #[must_use]
     pub const fn new(field: &'static str, value: ValueExpr) -> Self {
         Self { field, value }
+    }
+}
+
+/// A read operation whose response holds more connection details: Secret keys and
+/// the JSON pointers of their values in the response (after `response_path`).
+#[derive(Debug)]
+#[non_exhaustive]
+pub struct ConnectionDescriptor {
+    pub operation: OperationDescriptor,
+    pub details: &'static [(&'static str, &'static str)],
+}
+
+impl ConnectionDescriptor {
+    #[must_use]
+    pub const fn new(
+        operation: OperationDescriptor,
+        details: &'static [(&'static str, &'static str)],
+    ) -> Self {
+        Self { operation, details }
     }
 }
 

@@ -25,6 +25,7 @@ enum Lifecycle {
     Create,
     Update,
     Delete,
+    Connection,
 }
 
 #[derive(Debug)]
@@ -48,6 +49,7 @@ struct Shape {
     numeric_id: bool,
     fields: Vec<(String, Value)>,
     schema: Value,
+    connection: Option<(&'static str, &'static [(&'static str, &'static str)])>,
 }
 
 #[derive(Debug, Default)]
@@ -126,47 +128,16 @@ impl Fake {
                 delete.path_parameters,
             );
         }
+        if let Some(connection) = &descriptor.connection {
+            route(
+                Lifecycle::Connection,
+                &R::Connection::METHOD,
+                R::Connection::PATH,
+                connection.operation.path_parameters,
+            );
+        }
 
-        let (create_path, id_field) = descriptor.create.as_ref().map_or(("", "id"), |create| {
-            create
-                .external_name
-                .rsplit_once('/')
-                .unwrap_or(("", create.external_name))
-        });
-        self.shapes.insert(
-            kind,
-            Shape {
-                creatable: descriptor.create.is_some(),
-                key: {
-                    let mut key: Vec<String> = observe
-                        .path_parameters
-                        .iter()
-                        .map(|(_, expression)| expression)
-                        .chain(
-                            descriptor
-                                .observe
-                                .matching
-                                .as_ref()
-                                .map(|matching| &matching.value),
-                        )
-                        .map(expression_key)
-                        .collect();
-                    key.sort_unstable();
-                    key
-                },
-                response_path: observe.response_path,
-                matching: descriptor
-                    .observe
-                    .matching
-                    .as_ref()
-                    .map(|matching| (expression_key(&matching.value), matching.field)),
-                create_path,
-                id_field,
-                numeric_id: is_integer(&schemars::schema_for!(R::AtProvider), id_field),
-                fields: top_level_fields(&schemars::schema_for!(R::AtProvider)),
-                schema: schemars::schema_for!(R::AtProvider).to_value(),
-            },
-        );
+        self.shapes.insert(kind, Shape::of::<R>());
         self
     }
 
@@ -209,6 +180,51 @@ impl Fake {
 }
 
 impl Shape {
+    fn of<R: ManagedResource>() -> Self {
+        let descriptor = R::descriptor();
+        let observe = &descriptor.observe.operation;
+        let (create_path, id_field) = descriptor.create.as_ref().map_or(("", "id"), |create| {
+            create
+                .external_name
+                .rsplit_once('/')
+                .unwrap_or(("", create.external_name))
+        });
+        let mut key: Vec<String> = observe
+            .path_parameters
+            .iter()
+            .map(|(_, expression)| expression)
+            .chain(
+                descriptor
+                    .observe
+                    .matching
+                    .as_ref()
+                    .map(|matching| &matching.value),
+            )
+            .map(expression_key)
+            .collect();
+        key.sort_unstable();
+        let schema = schemars::schema_for!(R::AtProvider);
+        Self {
+            creatable: descriptor.create.is_some(),
+            key,
+            response_path: observe.response_path,
+            matching: descriptor
+                .observe
+                .matching
+                .as_ref()
+                .map(|matching| (expression_key(&matching.value), matching.field)),
+            create_path,
+            id_field,
+            numeric_id: is_integer(&schema, id_field),
+            fields: top_level_fields(&schema),
+            schema: schema.to_value(),
+            connection: descriptor
+                .connection
+                .as_ref()
+                .map(|connection| (connection.operation.response_path, connection.details)),
+        }
+    }
+
     fn complete(&self, object: &mut Value) {
         fill_required(&self.schema, &self.schema, object);
         if let Value::Object(object) = object {
@@ -610,39 +626,7 @@ impl Store {
         let key = (route.kind, route.key(shape, parameters, None));
 
         match route.lifecycle {
-            Lifecycle::Create => {
-                let mut object = body;
-                let id = match object.get(shape.id_field) {
-                    Some(Value::String(id)) if !id.is_empty() => id.clone(),
-                    Some(Value::Number(id)) => id.to_string(),
-                    _ => {
-                        let next = self.next_id.fetch_add(1, Ordering::Relaxed);
-                        if shape.numeric_id {
-                            next.to_string()
-                        } else {
-                            format!("{next:032x}")
-                        }
-                    }
-                };
-                let id_value = match id.parse::<u64>() {
-                    Ok(number) if shape.numeric_id => json!(number),
-                    _ => Value::String(id.clone()),
-                };
-                insert(&mut object, shape.id_field, id_value);
-                if let Some((expression, field)) = &shape.matching
-                    && let Some(value) = route.parameter(expression, parameters)
-                    && let Ok(pointer) = jsonptr::Pointer::parse(field)
-                {
-                    pointer.assign(&mut object, Value::String(value)).ok();
-                }
-                shape.complete(&mut object);
-                let key = (route.kind, route.key(shape, parameters, Some(&id)));
-                if objects.contains_key(&key) {
-                    return error(StatusCode::CONFLICT, "already exists");
-                }
-                objects.insert(key, object.clone());
-                wrap(shape.create_path, object)
-            }
+            Lifecycle::Create => self.create(&mut objects, route, shape, parameters, body),
             Lifecycle::Observe if shape.matching.is_some() => {
                 let items = objects
                     .iter()
@@ -693,8 +677,69 @@ impl Store {
                 }
                 None => error(StatusCode::NOT_FOUND, "not found"),
             },
+            Lifecycle::Connection => match (objects.get(&key), shape.connection) {
+                (Some(_), Some((response_path, details))) => {
+                    wrap(response_path, connection_details(details))
+                }
+                _ => error(StatusCode::NOT_FOUND, "not found"),
+            },
         }
     }
+}
+
+impl Store {
+    fn create(
+        &self,
+        objects: &mut BTreeMap<Key, Value>,
+        route: &Route,
+        shape: &Shape,
+        parameters: &BTreeMap<&'static str, String>,
+        body: Value,
+    ) -> Response {
+        let mut object = body;
+        let id = match object.get(shape.id_field) {
+            Some(Value::String(id)) if !id.is_empty() => id.clone(),
+            Some(Value::Number(id)) => id.to_string(),
+            _ => {
+                let next = self.next_id.fetch_add(1, Ordering::Relaxed);
+                if shape.numeric_id {
+                    next.to_string()
+                } else {
+                    format!("{next:032x}")
+                }
+            }
+        };
+        let id_value = match id.parse::<u64>() {
+            Ok(number) if shape.numeric_id => json!(number),
+            _ => Value::String(id.clone()),
+        };
+        insert(&mut object, shape.id_field, id_value);
+        if let Some((expression, field)) = &shape.matching
+            && let Some(value) = route.parameter(expression, parameters)
+            && let Ok(pointer) = jsonptr::Pointer::parse(field)
+        {
+            pointer.assign(&mut object, Value::String(value)).ok();
+        }
+        shape.complete(&mut object);
+        let key = (route.kind, route.key(shape, parameters, Some(&id)));
+        if objects.contains_key(&key) {
+            return error(StatusCode::CONFLICT, "already exists");
+        }
+        objects.insert(key, object.clone());
+        wrap(shape.create_path, object)
+    }
+}
+
+fn connection_details(details: &[(&str, &str)]) -> Value {
+    let mut value = Value::Null;
+    for (key, pointer) in details {
+        if let Ok(pointer) = jsonptr::Pointer::parse(pointer) {
+            pointer
+                .assign(&mut value, Value::String(format!("fake-{key}")))
+                .ok();
+        }
+    }
+    value
 }
 
 fn merge(target: &mut Value, patch: Value) {

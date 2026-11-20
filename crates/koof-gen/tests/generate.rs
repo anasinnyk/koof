@@ -1,6 +1,6 @@
 mod common;
 
-use common::{PARTS, generated, widgets, widgets_with};
+use common::{PARTS, TOKEN_OPERATION, TOKEN_SECRET, generated, widgets, widgets_with};
 
 #[test]
 fn generates_the_provider_crate() {
@@ -101,4 +101,17 @@ fn required_nullable_fields_may_be_missing() {
         "#[serde(default)]\n    pub note: ::std::option::Option<::std::string::String>,"
     ));
     assert!(types.contains("#[serde(rename = \"lastSeen\", default)]\n    pub last_seen:"));
+}
+
+#[test]
+fn connection_details_can_come_from_a_connection_operation() {
+    let files =
+        generated(&widgets_with(&format!("{TOKEN_OPERATION}{TOKEN_SECRET}"))).expect("generated");
+    let widget = &files["src/generated/shop/v1alpha1/widget.rs"];
+
+    let descriptor: String = widget.split_whitespace().collect();
+
+    assert!(descriptor.contains(r#".with_connection_secret(&[("widget_id","/id")])"#));
+    assert!(descriptor.contains(r#"&[("token","")]"#));
+    assert!(descriptor.contains("typeConnection=crate::generated::operations::WidgetConnection;"));
 }

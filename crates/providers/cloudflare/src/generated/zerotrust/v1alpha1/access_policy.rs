@@ -288,6 +288,7 @@ impl koof::ManagedResource for AccessPolicy {
     type Create = crate::generated::operations::AccessPolicyCreate;
     type Update = crate::generated::operations::AccessPolicyUpdate;
     type Delete = crate::generated::operations::AccessPolicyDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

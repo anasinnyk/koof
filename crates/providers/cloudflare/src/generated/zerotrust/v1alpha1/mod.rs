@@ -8,6 +8,7 @@ pub mod tunnel;
 pub mod tunnel_cidr_route;
 pub mod tunnel_configuration;
 pub mod tunnel_hostname_route;
+pub mod warp_connector;
 pub use crate::generated::types::ZerotrustV1alpha1AccessApplicationAtProvider as AccessApplicationAtProvider;
 pub use crate::generated::types::ZerotrustV1alpha1AccessApplicationAtProviderVariant0 as AccessApplicationAtProviderVariant0;
 pub use crate::generated::types::ZerotrustV1alpha1AccessApplicationAtProviderVariant1 as AccessApplicationAtProviderVariant1;
@@ -111,3 +112,5 @@ pub use crate::generated::types::ZerotrustV1alpha1TunnelConfigurationForProvider
 pub use crate::generated::types::ZerotrustV1alpha1TunnelForProvider as TunnelForProvider;
 pub use crate::generated::types::ZerotrustV1alpha1TunnelHostnameRouteAtProvider as TunnelHostnameRouteAtProvider;
 pub use crate::generated::types::ZerotrustV1alpha1TunnelHostnameRouteForProvider as TunnelHostnameRouteForProvider;
+pub use crate::generated::types::ZerotrustV1alpha1WarpConnectorAtProvider as WarpConnectorAtProvider;
+pub use crate::generated::types::ZerotrustV1alpha1WarpConnectorForProvider as WarpConnectorForProvider;

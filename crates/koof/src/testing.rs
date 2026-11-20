@@ -4,9 +4,9 @@ use crate::{
     managed::ManagedResourceSpec,
     reference::SecretKeySelector,
     resource::{
-        AuthScheme, CreateDescriptor, CredentialSource, Credentials, ItemReference,
-        ObserveDescriptor, OperationDescriptor, Reference, RequestMapping, UpdateDescriptor,
-        ValueExpr,
+        AuthScheme, ConnectionDescriptor, CreateDescriptor, CredentialSource, Credentials,
+        ItemReference, ObserveDescriptor, OperationDescriptor, Reference, RequestMapping,
+        UpdateDescriptor, ValueExpr,
     },
     status::ManagedStatus,
 };
@@ -213,7 +213,11 @@ pub static RECORD: ResourceDescriptor = ResourceDescriptor::new(
     RECORD_OPERATION.with_response_path("/result"),
     RequestMapping::new("/spec/forProvider"),
 ))
-.with_delete(RECORD_OPERATION.with_response_path("/result"));
+.with_delete(RECORD_OPERATION.with_response_path("/result"))
+.with_connection(ConnectionDescriptor::new(
+    RECORD_OPERATION.with_response_path("/result"),
+    &[("secret", "")],
+));
 
 const RECORD_OPERATION: OperationDescriptor = OperationDescriptor::new()
     .with_path_parameters(&[("zone_id", ZONE_ID), ("record_id", ValueExpr::ExternalName)]);
@@ -236,15 +240,21 @@ operation!(RecordObserve, GET, "/zones/{zone_id}/records/{record_id}");
 operation!(RecordCreate, POST, "/zones/{zone_id}/records");
 operation!(RecordUpdate, PATCH, "/zones/{zone_id}/records/{record_id}");
 operation!(RecordDelete, DELETE, "/zones/{zone_id}/records/{record_id}");
+operation!(
+    RecordConnection,
+    GET,
+    "/zones/{zone_id}/records/{record_id}/secret"
+);
 
 macro_rules! managed {
-    ($kind:ident, $descriptor:ident, $at_provider:ty, $observe:ty, $create:ty, $update:ty, $delete:ty) => {
+    ($kind:ident, $descriptor:ident, $at_provider:ty, $observe:ty, $create:ty, $update:ty, $delete:ty, $connection:ty) => {
         impl ManagedResource for $kind {
             type AtProvider = $at_provider;
             type Observe = $observe;
             type Create = $create;
             type Update = $update;
             type Delete = $delete;
+            type Connection = $connection;
 
             fn descriptor() -> &'static ResourceDescriptor {
                 &$descriptor
@@ -268,12 +278,14 @@ managed!(
     Unsupported,
     Unsupported,
     Unsupported,
+    Unsupported,
     Unsupported
 );
 managed!(
     Zone,
     ZONE,
     Value,
+    Unsupported,
     Unsupported,
     Unsupported,
     Unsupported,
@@ -286,7 +298,8 @@ managed!(
     RecordObserve,
     RecordCreate,
     RecordUpdate,
-    RecordDelete
+    RecordDelete,
+    RecordConnection
 );
 
 /// A managed object of `kind` in [`NAMESPACE`] with `spec` and, when given, the

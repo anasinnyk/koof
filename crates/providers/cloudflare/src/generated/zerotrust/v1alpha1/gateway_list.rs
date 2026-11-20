@@ -172,6 +172,7 @@ impl koof::ManagedResource for GatewayList {
     type Create = crate::generated::operations::GatewayListCreate;
     type Update = crate::generated::operations::GatewayListUpdate;
     type Delete = crate::generated::operations::GatewayListDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

@@ -1,8 +1,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use super::{
-    ApiKeyLocationIr, CredentialSourceIr, FieldPath, OperationId, OperationIr, ProviderIr,
-    ResourceFields, ResourceIr, ResourceName, SecuritySchemeIr, ValueExpr,
+    ApiKeyLocationIr, ConnectionDetailIr, CredentialSourceIr, FieldPath, HttpMethod, OperationId,
+    OperationIr, ProviderIr, ResourceFields, ResourceIr, ResourceName, SecuritySchemeIr, ValueExpr,
     resolved::{
         Auth, Create, Credentials, ItemReference, Operation, Provider, Reference, Resource,
         cluster_kind, cluster_name,
@@ -131,6 +131,7 @@ impl<'a> Checker<'a, '_> {
         let create = self.create();
         let update = self.operation("update", resource.lifecycle.update.as_ref());
         let delete = self.operation("delete", resource.lifecycle.delete.as_ref());
+        let connection = self.connection();
 
         if self.errors.len() != errors_before {
             return None;
@@ -159,6 +160,7 @@ impl<'a> Checker<'a, '_> {
             create,
             update,
             delete,
+            connection,
         })
     }
 
@@ -316,8 +318,31 @@ impl<'a> Checker<'a, '_> {
         })
     }
 
+    fn connection(&mut self) -> Option<Operation<'a>> {
+        let connection =
+            self.operation("connection", self.resource.lifecycle.connection.as_ref())?;
+        if connection.ir.method != HttpMethod::Get {
+            self.error(
+                "lifecycle.connection",
+                format!(
+                    "operation {} must be a GET: koof calls it on every observation",
+                    connection.id.0
+                ),
+            );
+        }
+        Some(connection)
+    }
+
     fn connection_secret(&mut self) {
-        for (key, path) in &self.resource.connection_secret {
+        let mut reads_connection = false;
+        for (key, detail) in &self.resource.connection_secret {
+            let path = match detail {
+                ConnectionDetailIr::Resource(path) => Some(path),
+                ConnectionDetailIr::Operation(detail) => {
+                    reads_connection = true;
+                    (!detail.path.is_empty()).then_some(&detail.path)
+                }
+            };
             let valid_key = !key.is_empty()
                 && key
                     .chars()
@@ -328,12 +353,25 @@ impl<'a> Checker<'a, '_> {
                     "a Secret key consists of alphanumerics, '-', '_' and '.'",
                 );
             }
-            if path.split('.').any(str::is_empty) {
+            if let Some(path) = path
+                && path.split('.').any(str::is_empty)
+            {
                 self.error(
                     &format!("connection_secret.{key}"),
                     format!("invalid field path {path:?}"),
                 );
             }
+        }
+        match (reads_connection, self.resource.lifecycle.connection.is_some()) {
+            (true, false) => self.error(
+                "connection_secret",
+                "a key reads from connectionDetails, but no observe operation has connectionDetails: true",
+            ),
+            (false, true) => self.error(
+                "lifecycle.connection",
+                "no connectionSecret key reads from it (from: connectionDetails)",
+            ),
+            _ => {}
         }
     }
 

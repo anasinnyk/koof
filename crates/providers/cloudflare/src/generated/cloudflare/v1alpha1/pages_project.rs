@@ -223,6 +223,7 @@ impl koof::ManagedResource for PagesProject {
     type Create = crate::generated::operations::PagesProjectCreate;
     type Update = crate::generated::operations::PagesProjectUpdate;
     type Delete = crate::generated::operations::PagesProjectDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

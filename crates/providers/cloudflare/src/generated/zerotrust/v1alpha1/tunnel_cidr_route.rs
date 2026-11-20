@@ -190,6 +190,7 @@ impl koof::ManagedResource for TunnelCidrRoute {
     type Create = crate::generated::operations::TunnelCidrRouteCreate;
     type Update = crate::generated::operations::TunnelCidrRouteUpdate;
     type Delete = crate::generated::operations::TunnelCidrRouteDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

@@ -102,3 +102,56 @@ pub fn generated(document: &Value) -> Result<BTreeMap<String, String>, String> {
 pub fn codegen(document: &Value) -> spec::CodegenSpec {
     spec::for_codegen(&spec::prepare(document).expect("prepare")).expect("codegen")
 }
+
+/// An extra observe read of widgets (`connectionDetails`) that returns a token.
+pub const TOKEN_OPERATION: &str = "
+  - target: $.paths
+    update:
+      /accounts/{account_id}/widgets/{widget_id}/token:
+        parameters:
+          - name: account_id
+            in: path
+            required: true
+            schema:
+              type: string
+          - name: widget_id
+            in: path
+            required: true
+            schema:
+              type: string
+        get:
+          operationId: getWidgetToken
+          responses:
+            '200':
+              description: The token.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      result:
+                        type: string
+          x-kube-operation:
+            resource: widget
+            lifecycle: observe
+            connectionDetails: true
+            response:
+              path: result
+            pathParameters:
+              account_id:
+                type: related_identifier
+                via: [account]
+                name: external_id
+              widget_id:
+                type: external_name
+";
+
+/// Widget connection details: its id, and the token from the `connectionDetails` read.
+pub const TOKEN_SECRET: &str = "
+  - target: $.components.schemas.widget['x-kube-resource']
+    update:
+      connectionSecret:
+        widget_id: id
+        token:
+          from: connectionDetails
+";

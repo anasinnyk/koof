@@ -30,6 +30,19 @@ struct LifecycleDraft {
     create: Option<OperationId>,
     update: Option<OperationId>,
     delete: Option<OperationId>,
+    connection: Option<OperationId>,
+}
+
+impl LifecycleDraft {
+    fn slot(&mut self, action: LifecycleAction) -> &mut Option<OperationId> {
+        match action {
+            LifecycleAction::Observe => &mut self.observe,
+            LifecycleAction::Create => &mut self.create,
+            LifecycleAction::Update => &mut self.update,
+            LifecycleAction::Delete => &mut self.delete,
+            LifecycleAction::Connection => &mut self.connection,
+        }
+    }
 }
 
 /// Builds a [`ProviderIr`] from a document prepared by [`crate::spec::prepare`]
@@ -63,13 +76,11 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
             extension.lifecycle.name()
         ));
         let lifecycle = lifecycles.entry(extension.resource.clone()).or_default();
-        let slot = match extension.lifecycle {
-            LifecycleAction::Observe => &mut lifecycle.observe,
-            LifecycleAction::Create => &mut lifecycle.create,
-            LifecycleAction::Update => &mut lifecycle.update,
-            LifecycleAction::Delete => &mut lifecycle.delete,
-        };
-        if slot.replace(id.clone()).is_some() {
+        if lifecycle
+            .slot(extension.lifecycle)
+            .replace(id.clone())
+            .is_some()
+        {
             return Err(ir_error(format!(
                 "resource {} has duplicate {} operation",
                 extension.resource.0,
@@ -120,6 +131,7 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
                     create: lifecycle.create,
                     update: lifecycle.update,
                     delete: lifecycle.delete,
+                    connection: lifecycle.connection,
                 },
             };
             Ok((name, resource))

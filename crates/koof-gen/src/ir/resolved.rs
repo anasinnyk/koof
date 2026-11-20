@@ -1,6 +1,6 @@
 use super::{
-    CredentialSourceIr, HttpIr, ListMapIr, OperationId, OperationIr, ResourceName, SecretValueIr,
-    TestIr, ValidationIr, ValueExpr,
+    ConnectionDetailIr, CredentialSourceIr, HttpIr, ListMapIr, OperationId, OperationIr,
+    ResourceName, SecretValueIr, TestIr, ValidationIr, ValueExpr,
 };
 use std::collections::BTreeMap;
 
@@ -26,8 +26,8 @@ pub struct Resource<'a> {
     pub references: Vec<Reference<'a>>,
     pub item_references: Vec<ItemReference<'a>>,
     pub credentials: Option<Credentials<'a>>,
-    /// Secret keys and the dotted paths of their values in the external resource.
-    pub connection_secret: &'a BTreeMap<String, String>,
+    /// Secret keys and where their values come from.
+    pub connection_secret: &'a BTreeMap<String, ConnectionDetailIr>,
     pub secret_values: &'a [SecretValueIr],
     pub validations: &'a [ValidationIr],
     pub immutable: &'a [String],
@@ -38,6 +38,7 @@ pub struct Resource<'a> {
     pub create: Option<Create<'a>>,
     pub update: Option<Operation<'a>>,
     pub delete: Option<Operation<'a>>,
+    pub connection: Option<Operation<'a>>,
 }
 
 #[derive(Debug, Clone, Copy)]

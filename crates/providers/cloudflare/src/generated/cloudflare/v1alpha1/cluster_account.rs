@@ -118,6 +118,7 @@ impl koof::ManagedResource for ClusterAccount {
     type Create = crate::generated::operations::AccountCreate;
     type Update = crate::generated::operations::AccountUpdate;
     type Delete = crate::generated::operations::AccountDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

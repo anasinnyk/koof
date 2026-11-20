@@ -238,6 +238,7 @@ impl koof::ManagedResource for TeamMembership {
     type Create = crate::generated::operations::TeamMembershipCreate;
     type Update = crate::generated::operations::TeamMembershipUpdate;
     type Delete = crate::generated::operations::TeamMembershipDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

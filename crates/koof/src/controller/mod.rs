@@ -197,7 +197,7 @@ async fn reconcile_inner<R: ManagedResource>(
     }
 
     if !deleting && let Some(observed) = &observation.at_provider {
-        write_connection_secret(context, resource, observed).await?;
+        write_connection_secret(context, resource, observed, true).await?;
     }
     let change = update_status(context, resource, &observation).await?;
     if change.became_ready {
@@ -408,7 +408,7 @@ async fn update_external<R: ManagedResource>(
         .await;
     }
     if let Some(observed) = &observation.at_provider {
-        write_connection_secret(context, resource, observed).await?;
+        write_connection_secret(context, resource, observed, true).await?;
     }
     update_status(context, resource, &observation).await?;
     Ok(Action::requeue(jitter(context.resync)))
@@ -418,8 +418,17 @@ async fn write_connection_secret<R: ManagedResource>(
     context: &ControllerContext,
     resource: &R,
     external: &serde_json::Value,
+    read_connection: bool,
 ) -> Result<(), ReconcileError> {
-    let details = connection::details(R::descriptor().connection_secret, external);
+    let descriptor = R::descriptor();
+    let mut details = connection::details(descriptor.connection_secret, external);
+    if read_connection
+        && let Some(operation) = &descriptor.connection
+        && connection::requested(resource)?
+        && let Some(response) = external::connection(context, resource).await?
+    {
+        details.extend(connection::details(operation.details, &response));
+    }
     if connection::write(
         &context.kube_client,
         &context.field_manager,
@@ -501,7 +510,7 @@ async fn create_external<R: ManagedResource>(
     )
     .await;
     if let Some(created) = &created.resource {
-        write_connection_secret(context, resource, created)
+        write_connection_secret(context, resource, created, false)
             .await
             .map_err(|source| ReconcileError::ConnectionSecretAfterCreate {
                 external_name,

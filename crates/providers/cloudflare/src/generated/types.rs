@@ -55138,6 +55138,22 @@ impl ::std::str::FromStr for TunnelTunnelName2 {
         Ok(Self(value.to_string()))
     }
 }
+///`TunnelTunnelResponseToken`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelTunnelResponseToken {
+    pub errors: TunnelMessages,
+    pub messages: TunnelMessages,
+    pub result: TunnelTunnelToken,
+    ///Whether the API call was successful Allowed values: true.
+    pub success: bool,
+}
 ///Sets the password required to run a locally-managed tunnel. Must be at least 32 bytes and encoded as a base64 string.
 #[derive(
     ::serde::Deserialize,
@@ -55175,6 +55191,48 @@ impl ::std::fmt::Display for TunnelTunnelSecret {
     }
 }
 impl ::std::str::FromStr for TunnelTunnelSecret {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
+    }
+}
+///The Tunnel Token is used as a mechanism to authenticate the operation of a tunnel.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct TunnelTunnelToken(pub ::std::string::String);
+impl ::std::ops::Deref for TunnelTunnelToken {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<TunnelTunnelToken> for ::std::string::String {
+    fn from(value: TunnelTunnelToken) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::string::String> for TunnelTunnelToken {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for TunnelTunnelToken {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for TunnelTunnelToken {
     type Err = ::std::convert::Infallible;
     fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
         Ok(Self(value.to_string()))
@@ -55413,6 +55471,56 @@ impl ::std::convert::TryFrom<String> for TunnelVirtualNetworkIdComputedOptional 
     fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
         value.parse()
     }
+}
+///`TunnelWarpConnectorResponseSingle`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelWarpConnectorResponseSingle {
+    pub errors: TunnelMessages,
+    pub messages: TunnelMessages,
+    pub result: TunnelWarpConnectorTunnel,
+    ///Whether the API call was successful Allowed values: true.
+    pub success: bool,
+}
+///A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct TunnelWarpConnectorTunnel {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub account_tag: ::std::option::Option<TunnelAccountId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub connections: ::std::option::Option<TunnelConnectionsDeprecated>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub conns_active_at: ::std::option::Option<TunnelConnsActiveAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub conns_inactive_at: ::std::option::Option<TunnelConnsInactiveAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TunnelCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deleted_at: ::std::option::Option<TunnelDeletedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<TunnelTunnelId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub metadata: ::std::option::Option<TunnelMetadata>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<TunnelTunnelName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<TunnelStatus>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tun_type: ::std::option::Option<TunnelTunnelType>,
 }
 ///`TurnstileApiResponseCommon`
 #[derive(
@@ -59268,6 +59376,37 @@ pub struct WaitingroomWaitingroom {
     pub turnstile_action: ::std::option::Option<WaitingroomTurnstileAction>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub turnstile_mode: ::std::option::Option<WaitingroomTurnstileMode>,
+}
+///`WarpConnectorCreateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct WarpConnectorCreateRequest {
+    ///Indicates that the tunnel will be created to be highly available. If omitted, defaults to false.
+    #[serde(default)]
+    pub ha: bool,
+    pub name: TunnelTunnelName,
+}
+///`WarpConnectorUpdateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct WarpConnectorUpdateRequest {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<TunnelTunnelName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tunnel_secret: ::std::option::Option<TunnelTunnelSecret>,
 }
 ///`WorkerDestinationType`
 #[derive(
@@ -67235,6 +67374,55 @@ pub struct ZerotrustV1alpha1TunnelHostnameRouteForProvider {
     pub comment: ::std::option::Option<TunnelHostnameComment>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub hostname: ::std::option::Option<TunnelHostname>,
+}
+///`WarpConnectorAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1WarpConnectorAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub account_tag: ::std::option::Option<TunnelAccountId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub connections: ::std::option::Option<TunnelConnectionsDeprecated>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub conns_active_at: ::std::option::Option<TunnelConnsActiveAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub conns_inactive_at: ::std::option::Option<TunnelConnsInactiveAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_at: ::std::option::Option<TunnelCreatedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub deleted_at: ::std::option::Option<TunnelDeletedAt>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<TunnelTunnelId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub metadata: ::std::option::Option<TunnelMetadata>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<TunnelTunnelName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<TunnelStatus>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub tun_type: ::std::option::Option<TunnelTunnelType>,
+}
+///`WarpConnectorForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZerotrustV1alpha1WarpConnectorForProvider {
+    ///Indicates that the tunnel will be created to be highly available. If omitted, defaults to false.
+    #[serde(default)]
+    pub ha: bool,
+    pub name: TunnelTunnelName,
 }
 ///`ZoneCreateRequest`
 #[derive(

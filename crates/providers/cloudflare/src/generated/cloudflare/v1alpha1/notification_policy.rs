@@ -182,6 +182,7 @@ impl koof::ManagedResource for NotificationPolicy {
     type Create = crate::generated::operations::NotificationPolicyCreate;
     type Update = crate::generated::operations::NotificationPolicyUpdate;
     type Delete = crate::generated::operations::NotificationPolicyDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

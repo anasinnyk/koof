@@ -1,6 +1,6 @@
 mod common;
 
-use common::{generated, widgets_with};
+use common::{TOKEN_OPERATION, TOKEN_SECRET, generated, widgets_with};
 use pretty_assertions::assert_eq;
 use rstest::rstest;
 
@@ -240,6 +240,54 @@ fn e2e_fixtures_cannot_depend_on_each_other_in_a_cycle() {
         message.as_deref(),
         Some(
             "e2e dependencies form a cycle: account -> widget -> account; remove `test` or break the cycle"
+        )
+    );
+}
+
+#[test]
+fn connection_details_need_an_operation() {
+    assert_eq!(
+        error(TOKEN_SECRET).as_deref(),
+        Some(
+            "resources.widget.connection_secret: a key reads from connectionDetails, but no \
+             observe operation has connectionDetails: true"
+        )
+    );
+}
+
+#[test]
+fn a_connection_details_operation_needs_a_key_reading_it() {
+    assert_eq!(
+        error(TOKEN_OPERATION).as_deref(),
+        Some(
+            "resources.widget.lifecycle.connection: no connectionSecret key reads from it (from: connectionDetails)"
+        )
+    );
+}
+
+#[test]
+fn the_connection_details_operation_only_reads() {
+    let actions =
+        format!("{TOKEN_OPERATION}{TOKEN_SECRET}").replace("        get:", "        post:");
+
+    assert_eq!(
+        error(&actions).as_deref(),
+        Some(
+            "resources.widget.lifecycle.connection: operation widget.connection must be a GET: \
+             koof calls it on every observation"
+        )
+    );
+}
+
+#[test]
+fn connection_details_are_an_extra_observe_read() {
+    let actions = TOKEN_OPERATION.replace("lifecycle: observe", "lifecycle: update");
+
+    assert_eq!(
+        error(&actions).as_deref(),
+        Some(
+            "invalid x-kube-operation at paths./accounts/{account_id}/widgets/{widget_id}/token.get: \
+             connectionDetails is only allowed with lifecycle: observe"
         )
     );
 }

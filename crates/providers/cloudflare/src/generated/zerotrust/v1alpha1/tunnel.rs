@@ -62,6 +62,12 @@ pub struct TunnelForProviderSpec {
 pub struct TunnelSpec {
     #[serde(rename = "forProvider")]
     pub for_provider: TunnelForProviderSpec,
+    #[serde(
+        rename = "writeConnectionSecretToRef",
+        default,
+        skip_serializing_if = "Option::is_none"
+    )]
+    pub write_connection_secret_to_ref: Option<koof::reference::SecretReference>,
     #[serde(flatten)]
     pub management: koof::managed::ManagedResourceSpec,
 }
@@ -108,6 +114,7 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
             ),
         ],
     )
+    .with_connection_secret(&[("tunnel_id", "/id")])
     .with_credentials(
         koof::resource::Credentials::new(
             koof::resource::CredentialSource::Related {
@@ -166,6 +173,25 @@ pub static DESCRIPTOR: koof::ResourceDescriptor = koof::ResourceDescriptor::new(
                     ("tunnel_id", koof::resource::ValueExpr::ExternalName),
                 ],
             ),
+    )
+    .with_connection(
+        koof::resource::ConnectionDescriptor::new(
+            koof::resource::OperationDescriptor::new()
+                .with_path_parameters(
+                    &[
+                        (
+                            "account_id",
+                            koof::resource::ValueExpr::RelatedIdentifier {
+                                via: &["account"],
+                                name: "external_id",
+                            },
+                        ),
+                        ("tunnel_id", koof::resource::ValueExpr::ExternalName),
+                    ],
+                )
+                .with_response_path("/result"),
+            &[("token", "")],
+        ),
     );
 impl koof::ManagedResource for Tunnel {
     type AtProvider = crate::generated::types::ZerotrustV1alpha1TunnelAtProvider;
@@ -173,6 +199,7 @@ impl koof::ManagedResource for Tunnel {
     type Create = crate::generated::operations::TunnelCreate;
     type Update = crate::generated::operations::TunnelUpdate;
     type Delete = crate::generated::operations::TunnelDelete;
+    type Connection = crate::generated::operations::TunnelConnection;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

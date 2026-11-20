@@ -123,9 +123,13 @@ a cluster variant can only reference resources that have one too.
 referenced object fills the item field `into` (a dotted path) before comparing and sending; when the items
 are a union, the reference is one more variant of it. `connectionSecret` maps Secret
 keys to fields of the resource the API returns, written to the Secret named by
-`spec.writeConnectionSecretToRef`.
+`spec.writeConnectionSecretToRef`; a key `{from: connectionDetails, path}` reads
+the response of the resource's connection details read instead.
 
-`lifecycle` is one of `observe` (required), `create`, `update` and `delete`.
+`lifecycle` is one of `observe` (required), `create`, `update` and `delete`. A
+second `observe` with `connectionDetails: true` is an extra `GET` after each
+observation of an object with a connection Secret, for values the API returns
+from a separate endpoint; its response only feeds `connectionSecret`.
 For APIs that soft-delete (the observe endpoint keeps answering `200`),
 `response.deletedWhen: deleted_at` on `observe` treats the resource as gone once
 that field is set. When the API only lists the resource, `response.match`

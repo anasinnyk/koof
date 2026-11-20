@@ -257,7 +257,8 @@
         "tunnels",
         "tunnelcidrroutes",
         "tunnelconfigurations",
-        "tunnelhostnameroutes"
+        "tunnelhostnameroutes",
+        "warpconnectors"
       ],
       "verbs": [
         "get",
@@ -281,7 +282,8 @@
         "tunnels/status",
         "tunnelcidrroutes/status",
         "tunnelconfigurations/status",
-        "tunnelhostnameroutes/status"
+        "tunnelhostnameroutes/status",
+        "warpconnectors/status"
       ],
       "verbs": [
         "get",
@@ -303,7 +305,8 @@
         "tunnels/finalizers",
         "tunnelcidrroutes/finalizers",
         "tunnelconfigurations/finalizers",
-        "tunnelhostnameroutes/finalizers"
+        "tunnelhostnameroutes/finalizers",
+        "warpconnectors/finalizers"
       ],
       "verbs": [
         "update"

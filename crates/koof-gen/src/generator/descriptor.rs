@@ -5,7 +5,7 @@ use crate::{
         types::GeneratedTypes,
     },
     ir::{
-        CredentialSourceIr, ValueExpr,
+        ConnectionDetailIr, CredentialSourceIr, ValueExpr,
         resolved::{Auth, Create, Credentials, ItemReference, Operation, Resource},
     },
 };
@@ -53,6 +53,7 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
         let delete = operation_descriptor(delete);
         quote!(.with_delete(#delete))
     });
+    let connection = connection_tokens(resource);
     let namespaced = resource.namespaced;
 
     Ok(quote! {
@@ -72,7 +73,8 @@ pub fn generate_descriptor(resource: &Resource<'_>) -> Result<TokenStream, Gener
                 #credentials
                 #create
                 #update
-                #delete;
+                #delete
+                #connection;
     })
 }
 
@@ -143,12 +145,35 @@ fn secret_tokens(resource: &Resource<'_>) -> (Option<TokenStream>, Option<TokenS
     );
     let connection_secret = slice_setter(
         "with_connection_secret",
-        resource.connection_secret.iter().map(|(key, path)| {
-            let path = pointer(path);
-            quote!((#key, #path))
-        }),
+        resource
+            .connection_secret
+            .iter()
+            .filter_map(|(key, detail)| match detail {
+                ConnectionDetailIr::Resource(path) => {
+                    let path = pointer(path);
+                    Some(quote!((#key, #path)))
+                }
+                ConnectionDetailIr::Operation(_) => None,
+            }),
     );
     (secret_values, connection_secret)
+}
+
+fn connection_tokens(resource: &Resource<'_>) -> Option<TokenStream> {
+    let operation = operation_descriptor(resource.connection?);
+    let details = resource
+        .connection_secret
+        .iter()
+        .filter_map(|(key, detail)| match detail {
+            ConnectionDetailIr::Operation(detail) => {
+                let path = pointer(&detail.path);
+                Some(quote!((#key, #path)))
+            }
+            ConnectionDetailIr::Resource(_) => None,
+        });
+    Some(
+        quote!(.with_connection(koof::resource::ConnectionDescriptor::new(#operation, &[#(#details),*]))),
+    )
 }
 
 fn slice_setter<T: ToTokens>(
@@ -197,6 +222,7 @@ pub fn generate_managed_resource(
     let create = operation_type(resource.create.map(|create| create.operation))?;
     let update = operation_type(resource.update)?;
     let delete = operation_type(resource.delete)?;
+    let connection = operation_type(resource.connection)?;
 
     Ok(quote! {
         impl koof::ManagedResource for #resource_ident {
@@ -205,6 +231,7 @@ pub fn generate_managed_resource(
             type Create = #create;
             type Update = #update;
             type Delete = #delete;
+            type Connection = #connection;
 
             fn descriptor() -> &'static koof::ResourceDescriptor {
                 &DESCRIPTOR

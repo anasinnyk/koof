@@ -1,0 +1,97 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: warp-connector
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: account
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: WarpConnector
+          metadata:
+            name: warp-connector
+          spec:
+            forProvider:
+              accountRef:
+                name: account
+              name: koof-e2e
+            writeConnectionSecretToRef:
+              name: warp-connector-connection
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: account
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: WarpConnector
+          metadata:
+            name: warp-connector
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: v1
+          data:
+            token: (base64_encode('fake-token'))
+          kind: Secret
+          metadata:
+            name: warp-connector-connection
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: WarpConnector
+          metadata:
+            name: warp-connector
+          spec:
+            forProvider:
+              name: koof-e2e-renamed
+    - assert:
+        resource:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: WarpConnector
+          metadata:
+            name: warp-connector
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              name: koof-e2e-renamed
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: WarpConnector
+          name: warp-connector

@@ -191,6 +191,7 @@ impl koof::ManagedResource for LoadBalancerMonitor {
     type Create = crate::generated::operations::LbMonitorCreate;
     type Update = crate::generated::operations::LbMonitorUpdate;
     type Delete = crate::generated::operations::LbMonitorDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

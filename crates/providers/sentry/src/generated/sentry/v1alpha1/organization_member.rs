@@ -200,6 +200,7 @@ impl koof::ManagedResource for OrganizationMember {
     type Create = crate::generated::operations::OrganizationMemberCreate;
     type Update = crate::generated::operations::OrganizationMemberUpdate;
     type Delete = crate::generated::operations::OrganizationMemberDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }
