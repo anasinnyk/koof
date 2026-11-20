@@ -122,6 +122,35 @@ response:
 
 Missing when no item matches. Only the first page of a paginated list is read.
 
+## A list replaced as a whole
+
+When the API reads and writes a bare list (a zone's rules:
+`GET`/`PUT /zones/{zone_id}/cloud_connector/rules`), put `x-kube-resource` on an
+object schema with the list as one field, and map the list in and out of it:
+
+```yaml
+- target: $.components.schemas
+  update:
+    zone_rules:
+      type: object
+      properties:
+        rules:
+          $ref: '#/components/schemas/rules'
+      x-kube-resource: …
+
+# observe
+response:
+  path: result
+  into: rules
+
+# update
+request:
+  from: spec.forProvider.rules
+```
+
+Without create and delete the list exists as long as its parent does; deleting
+the object keeps the rules.
+
 ## Immutable fields and validation
 
 ```yaml

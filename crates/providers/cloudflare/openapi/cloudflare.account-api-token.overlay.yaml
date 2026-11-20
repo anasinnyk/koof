@@ -1,0 +1,119 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare AccountAPIToken
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # An account-owned API token. Cloudflare returns its value only when the token
+  # is created, so it reaches the connection Secret only for tokens this kind
+  # creates; an adopted token keeps its value unknown. For R2's S3 API the access
+  # key ID is the token ID and the secret access key is the SHA-256 of the token
+  # value, which the Secret's consumer derives (e.g. sha256sum in an
+  # External Secrets template).
+  - target: $.components.schemas.iam_create_payload
+    update:
+      x-kube-resource:
+        name: account_api_token
+        apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+        kind: AccountAPIToken
+
+        test:
+          forProvider:
+            name: koof e2e
+            policies:
+              - effect: allow
+                permission_groups:
+                  - id: 2efd5506f9c8494dacb1fa10a3e7d5b6
+                resources:
+                  com.cloudflare.api.account.0000000000000000000000000000000a: '*'
+          update:
+            name: koof e2e renamed
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          account:
+            from: spec.forProvider.accountRef
+            target: account
+
+        credentials:
+          securityScheme: api_token
+          source:
+            type: related
+            via: [account]
+
+        connectionSecret:
+          token: value
+          access_key_id: id
+
+        fields:
+          mode: explicit
+          forProvider: [name, policies, condition, expires_on, not_before]
+          atProvider: [id, name, policies, condition, expires_on, not_before, status, issued_on, modified_on, last_used_on]
+
+  # Policy and permission group IDs and names are assigned by the API.
+  - target: $.components.schemas.iam_policy_with_permission_groups_and_resources.required
+    remove: true
+
+  - target: $.components.schemas.iam_policy_with_permission_groups_and_resources
+    update:
+      required: [effect, permission_groups, resources]
+
+  - target: $.paths['/accounts/{account_id}/tokens/{token_id}'].get
+    update:
+      x-kube-operation:
+        resource: account_api_token
+        lifecycle: observe
+        response:
+          path: result
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          token_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/tokens'].post
+    update:
+      x-kube-operation:
+        resource: account_api_token
+        lifecycle: create
+        response:
+          path: result
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/accounts/{account_id}/tokens/{token_id}'].put
+    update:
+      x-kube-operation:
+        resource: account_api_token
+        lifecycle: update
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          token_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/tokens/{token_id}'].delete
+    update:
+      x-kube-operation:
+        resource: account_api_token
+        lifecycle: delete
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          token_id:
+            type: external_name

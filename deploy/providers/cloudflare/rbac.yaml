@@ -13,6 +13,7 @@
       "resources": [
         "accounts",
         "clusteraccounts",
+        "accountapitokens",
         "iplists",
         "notificationpolicies",
         "pagesdomains",
@@ -35,6 +36,7 @@
       "resources": [
         "accounts/status",
         "clusteraccounts/status",
+        "accountapitokens/status",
         "iplists/status",
         "notificationpolicies/status",
         "pagesdomains/status",
@@ -55,6 +57,7 @@
       "resources": [
         "accounts/finalizers",
         "clusteraccounts/finalizers",
+        "accountapitokens/finalizers",
         "iplists/finalizers",
         "notificationpolicies/finalizers",
         "pagesdomains/finalizers",
@@ -317,14 +320,17 @@
         "zones.cloudflare.kube.nas1k.dev"
       ],
       "resources": [
+        "cloudconnectorrules",
         "customhostnames",
         "dnsrecords",
         "emailroutingrules",
         "healthchecks",
         "logpushjobs",
         "pagerules",
+        "snippetrules",
         "spectrumapplications",
-        "waitingrooms"
+        "waitingrooms",
+        "zonelockdowns"
       ],
       "verbs": [
         "get",
@@ -339,14 +345,17 @@
         "zones.cloudflare.kube.nas1k.dev"
       ],
       "resources": [
+        "cloudconnectorrules/status",
         "customhostnames/status",
         "dnsrecords/status",
         "emailroutingrules/status",
         "healthchecks/status",
         "logpushjobs/status",
         "pagerules/status",
+        "snippetrules/status",
         "spectrumapplications/status",
-        "waitingrooms/status"
+        "waitingrooms/status",
+        "zonelockdowns/status"
       ],
       "verbs": [
         "get",
@@ -359,14 +368,17 @@
         "zones.cloudflare.kube.nas1k.dev"
       ],
       "resources": [
+        "cloudconnectorrules/finalizers",
         "customhostnames/finalizers",
         "dnsrecords/finalizers",
         "emailroutingrules/finalizers",
         "healthchecks/finalizers",
         "logpushjobs/finalizers",
         "pagerules/finalizers",
+        "snippetrules/finalizers",
         "spectrumapplications/finalizers",
-        "waitingrooms/finalizers"
+        "waitingrooms/finalizers",
+        "zonelockdowns/finalizers"
       ],
       "verbs": [
         "update"

@@ -170,6 +170,8 @@ pub struct ResponseExtension {
     pub deleted_when: Option<String>,
     #[serde(default, rename = "match")]
     pub matching: Option<ResponseMatchIr>,
+    #[serde(default)]
+    pub into: Option<String>,
 }
 
 #[derive(Debug, Default, Deserialize)]

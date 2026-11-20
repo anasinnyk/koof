@@ -3,7 +3,7 @@ use serde_json::Value;
 
 /// Desired fields of `node` (a resource with its item references resolved) that
 /// differ from the observation; the desired state is the update request's source
-/// (`spec.forProvider` by default).
+/// (`spec.forProvider` by default), compared with the same field of the observation.
 #[must_use]
 pub fn drift(node: &Node, observation: &Observation) -> Vec<String> {
     let Some(observed) = &observation.at_provider else {
@@ -13,11 +13,33 @@ pub fn drift(node: &Node, observation: &Observation) -> Vec<String> {
     let from = descriptor
         .update
         .as_ref()
-        .map_or("/spec/forProvider", |update| update.request.from);
+        .map_or(FOR_PROVIDER, |update| update.request.from);
     node.value.pointer(from).map_or_else(Vec::new, |desired| {
-        drifted(desired, observed, descriptor.list_map_keys)
+        drifted_from(from, desired, observed, descriptor.list_map_keys)
     })
 }
+
+fn drifted_from(
+    from: &str,
+    desired: &Value,
+    observed: &Value,
+    list_map_keys: &[ListMapKeys],
+) -> Vec<String> {
+    let field = from.strip_prefix(FOR_PROVIDER).unwrap_or_default();
+    let Some(observed) = observed.pointer(field) else {
+        return Vec::new();
+    };
+    let mut paths = Vec::new();
+    Comparison { list_map_keys }.collect(
+        &field.trim_start_matches('/').replace('/', "."),
+        desired,
+        observed,
+        &mut paths,
+    );
+    paths
+}
+
+const FOR_PROVIDER: &str = "/spec/forProvider";
 
 /// Paths of the `desired` fields that differ from `observed`. Lists in
 /// `list_map_keys` are matched item by item on those keys, in any order; other lists
@@ -175,5 +197,25 @@ mod tests {
     )]
     fn is_drift(#[case] desired: Value, #[case] observed: Value, #[case] fields: &[&str]) {
         assert_eq!(drifted(&desired, &observed, KEYED), fields);
+    }
+
+    #[test]
+    fn a_request_field_is_compared_with_the_same_field_of_the_observation() {
+        let desired = json!([{ "expression": "true", "enabled": true }]);
+        let observed = json!({ "rules": [{ "id": "1", "expression": "true", "enabled": false }] });
+
+        assert_eq!(
+            drifted_from(
+                "/spec/forProvider/rules",
+                &desired,
+                &observed,
+                &[("rules", &[])]
+            ),
+            vec!["rules".to_owned()]
+        );
+        assert_eq!(
+            drifted_from("/spec/forProvider/rules", &desired, &json!({}), &[]),
+            Vec::<String>::new()
+        );
     }
 }

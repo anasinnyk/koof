@@ -1,6 +1,6 @@
 mod common;
 
-use common::{TOKEN_OPERATION, TOKEN_SECRET, generated, widgets_with};
+use common::{LABELS, TOKEN_OPERATION, TOKEN_SECRET, generated, widgets_with};
 use pretty_assertions::assert_eq;
 use rstest::rstest;
 
@@ -290,4 +290,21 @@ fn connection_details_are_an_extra_observe_read() {
              connectionDetails is only allowed with lifecycle: observe"
         )
     );
+}
+
+#[rstest]
+#[case::only_on_observe(
+    LABELS.replace("              from: spec.forProvider.labels", "              from: spec.forProvider.labels\n            response:\n              into: labels"),
+    "failed to build ProviderIr: resource labels: response.into is only allowed on the observe operation"
+)]
+#[case::not_with_match(
+    LABELS.replace("              into: labels", "              into: labels\n              match:\n                field: key\n                value:\n                  type: literal\n                  value: a"),
+    "failed to build ProviderIr: resource labels: response.into and response.match cannot be combined"
+)]
+#[case::a_single_field(
+    LABELS.replace("              into: labels", "              into: spec.labels"),
+    "failed to build ProviderIr: resource labels: response.into must be a single field name"
+)]
+fn a_bare_list_goes_into_one_field(#[case] actions: String, #[case] message: &str) {
+    assert_eq!(error(&actions).as_deref(), Some(message));
 }

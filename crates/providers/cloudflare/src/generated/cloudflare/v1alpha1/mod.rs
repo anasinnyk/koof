@@ -1,11 +1,14 @@
 pub mod account;
 pub mod cluster_account;
+pub mod account_api_token;
 pub mod ip_list;
 pub mod notification_policy;
 pub mod pages_domain;
 pub mod pages_project;
 pub mod turnstile_widget;
 pub mod zone;
+pub use crate::generated::types::CloudflareV1alpha1AccountApiTokenAtProvider as AccountApiTokenAtProvider;
+pub use crate::generated::types::CloudflareV1alpha1AccountApiTokenForProvider as AccountApiTokenForProvider;
 pub use crate::generated::types::CloudflareV1alpha1AccountAtProvider as AccountAtProvider;
 pub use crate::generated::types::CloudflareV1alpha1AccountAtProviderManagedBy as AccountAtProviderManagedBy;
 pub use crate::generated::types::CloudflareV1alpha1AccountAtProviderManagedByParentOrgId as AccountAtProviderManagedByParentOrgId;

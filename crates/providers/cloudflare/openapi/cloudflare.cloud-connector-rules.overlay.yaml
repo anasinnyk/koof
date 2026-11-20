@@ -1,0 +1,81 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare CloudConnectorRules
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # The Cloud Connector rules of a zone: one list per zone, replaced as a whole
+  # (PUT), so rules added elsewhere are removed on the next resync. The API has
+  # no create or delete: the list exists as long as the zone does, and deleting
+  # the object keeps the rules.
+  - target: $.components.schemas
+    update:
+      cloud-connector_zone_rules:
+        type: object
+        properties:
+          rules:
+            $ref: '#/components/schemas/cloud-connector_rules'
+        required: [rules]
+        x-kube-resource:
+          name: cloud_connector_rules
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: CloudConnectorRules
+
+          test:
+            forProvider:
+              rules:
+                - description: images from S3
+                  enabled: true
+                  expression: http.request.uri.path wildcard "/images/*"
+                  provider: aws_s3
+                  parameters:
+                    host: examplebucket.s3.eu-north-1.amazonaws.com
+            update:
+              rules:
+                - description: images from R2
+                  enabled: true
+                  expression: http.request.uri.path wildcard "/images/*"
+                  provider: cloudflare_r2
+                  parameters:
+                    host: images.example.com
+
+          references:
+            zone:
+              from: spec.forProvider.zoneRef
+              target: zone
+
+          credentials:
+            securityScheme: api_token
+            source:
+              type: related
+              via: [zone, account]
+
+          fields:
+            mode: all
+
+  - target: $.paths['/zones/{zone_id}/cloud_connector/rules'].get
+    update:
+      x-kube-operation:
+        resource: cloud_connector_rules
+        lifecycle: observe
+        response:
+          path: result
+          into: rules
+        pathParameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+
+  - target: $.paths['/zones/{zone_id}/cloud_connector/rules'].put
+    update:
+      x-kube-operation:
+        resource: cloud_connector_rules
+        lifecycle: update
+        request:
+          from: spec.forProvider.rules
+        pathParameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id

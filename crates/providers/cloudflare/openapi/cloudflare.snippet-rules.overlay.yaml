@@ -1,0 +1,97 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare SnippetRules
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  # The snippet rules of a zone: one list per zone, replaced as a whole (PUT), so
+  # rules added elsewhere are removed on the next resync. The API has no create,
+  # and its delete removes every rule while the list keeps existing; deleting the
+  # object keeps the rules.
+  - target: $.components.schemas
+    update:
+      snippets_ZoneSnippetRules:
+        type: object
+        properties:
+          rules:
+            $ref: '#/components/schemas/snippets_SnippetRules'
+        required: [rules]
+        x-kube-resource:
+          name: snippet_rules
+          apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+          kind: SnippetRules
+
+          test:
+            forProvider:
+              rules:
+                - description: koof e2e
+                  enabled: true
+                  expression: http.request.uri.path eq "/koof"
+                  snippet_name: koof_e2e
+            update:
+              rules:
+                - description: koof e2e
+                  enabled: false
+                  expression: http.request.uri.path eq "/koof"
+                  snippet_name: koof_e2e
+
+          references:
+            zone:
+              from: spec.forProvider.zoneRef
+              target: zone
+
+          credentials:
+            securityScheme: api_token
+            source:
+              type: related
+              via: [zone, account]
+
+          fields:
+            mode: all
+
+  # id and last_updated are set by the API, so a rule to send needs neither.
+  - target: $.components.schemas.snippets_SnippetRules.items.required
+    remove: true
+
+  - target: $.components.schemas.snippets_SnippetRules.items
+    update:
+      required: [expression, snippet_name]
+
+  # The rules response narrows the envelope's `result: object` to a list, and
+  # its errors to `enum: [[]]`; together typify makes the response uninhabited.
+  - target: $.components.schemas.snippets_Response.properties.result
+    remove: true
+
+  - target: $.components.schemas.snippets_Response.properties
+    update:
+      result:
+        description: Contain the response result.
+        title: Result
+
+  - target: $.components.responses.snippets_SnippetRules.content['application/json'].schema.allOf[1].properties.errors.enum
+    remove: true
+
+  - target: $.paths['/zones/{zone_id}/snippets/snippet_rules'].get
+    update:
+      x-kube-operation:
+        resource: snippet_rules
+        lifecycle: observe
+        response:
+          path: result
+          into: rules
+        pathParameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+
+  - target: $.paths['/zones/{zone_id}/snippets/snippet_rules'].put
+    update:
+      x-kube-operation:
+        resource: snippet_rules
+        lifecycle: update
+        pathParameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id

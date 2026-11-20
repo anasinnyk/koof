@@ -10778,6 +10778,458 @@ impl<'de> ::serde::Deserialize<'de> for Characteristic {
             })
     }
 }
+///`CloudConnectorApiResponseCommon`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudConnectorApiResponseCommon {
+    pub errors: CloudConnectorMessages,
+    pub messages: CloudConnectorMessages,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`CloudConnectorApiResponseCommonFailure`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudConnectorApiResponseCommonFailure {
+    pub errors: ::std::vec::Vec<CloudConnectorApiResponseCommonFailureErrorsItem>,
+    pub messages: CloudConnectorMessages,
+    ///Allowed values: null.
+    #[serde(default)]
+    pub result: ::std::option::Option<
+        ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    >,
+    ///Whether the API call was successful. Allowed values: false.
+    pub success: bool,
+}
+///`CloudConnectorApiResponseCommonFailureErrorsItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudConnectorApiResponseCommonFailureErrorsItem {
+    pub code: i64,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub documentation_url: ::std::option::Option<::std::string::String>,
+    pub message: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub source: ::std::option::Option<
+        CloudConnectorApiResponseCommonFailureErrorsItemSource,
+    >,
+}
+///`CloudConnectorApiResponseCommonFailureErrorsItemSource`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudConnectorApiResponseCommonFailureErrorsItemSource {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub pointer: ::std::option::Option<::std::string::String>,
+}
+///Identifier.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudConnectorIdentifier(::std::string::String);
+impl ::std::ops::Deref for CloudConnectorIdentifier {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudConnectorIdentifier> for ::std::string::String {
+    fn from(value: CloudConnectorIdentifier) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for CloudConnectorIdentifier {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 32usize {
+            return Err("longer than 32 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for CloudConnectorIdentifier {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CloudConnectorIdentifier {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for CloudConnectorIdentifier {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`CloudConnectorMessages`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudConnectorMessages(pub ::std::vec::Vec<CloudConnectorMessagesItem>);
+impl ::std::ops::Deref for CloudConnectorMessages {
+    type Target = ::std::vec::Vec<CloudConnectorMessagesItem>;
+    fn deref(&self) -> &::std::vec::Vec<CloudConnectorMessagesItem> {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudConnectorMessages>
+for ::std::vec::Vec<CloudConnectorMessagesItem> {
+    fn from(value: CloudConnectorMessages) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<CloudConnectorMessagesItem>>
+for CloudConnectorMessages {
+    fn from(value: ::std::vec::Vec<CloudConnectorMessagesItem>) -> Self {
+        Self(value)
+    }
+}
+///`CloudConnectorMessagesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudConnectorMessagesItem {
+    pub code: i64,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub documentation_url: ::std::option::Option<::std::string::String>,
+    pub message: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub source: ::std::option::Option<CloudConnectorMessagesItemSource>,
+}
+///`CloudConnectorMessagesItemSource`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudConnectorMessagesItemSource {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub pointer: ::std::option::Option<::std::string::String>,
+}
+///Cloud Provider type
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum CloudConnectorProvider {
+    #[serde(rename = "aws_s3")]
+    AwsS3,
+    #[serde(rename = "cloudflare_r2")]
+    CloudflareR2,
+    #[serde(rename = "gcp_storage")]
+    GcpStorage,
+    #[serde(rename = "azure_storage")]
+    AzureStorage,
+    #[serde(rename = "oci_storage")]
+    OciStorage,
+}
+impl ::std::fmt::Display for CloudConnectorProvider {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::AwsS3 => f.write_str("aws_s3"),
+            Self::CloudflareR2 => f.write_str("cloudflare_r2"),
+            Self::GcpStorage => f.write_str("gcp_storage"),
+            Self::AzureStorage => f.write_str("azure_storage"),
+            Self::OciStorage => f.write_str("oci_storage"),
+        }
+    }
+}
+impl ::std::str::FromStr for CloudConnectorProvider {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "aws_s3" => Ok(Self::AwsS3),
+            "cloudflare_r2" => Ok(Self::CloudflareR2),
+            "gcp_storage" => Ok(Self::GcpStorage),
+            "azure_storage" => Ok(Self::AzureStorage),
+            "oci_storage" => Ok(Self::OciStorage),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for CloudConnectorProvider {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for CloudConnectorProvider {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`CloudConnectorRule`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudConnectorRule {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub enabled: ::std::option::Option<bool>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expression: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub parameters: ::std::option::Option<CloudConnectorRuleParameters>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub provider: ::std::option::Option<CloudConnectorProvider>,
+}
+///Parameters of Cloud Connector Rule
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudConnectorRuleParameters {
+    ///Host to perform Cloud Connection to
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub host: ::std::option::Option<::std::string::String>,
+}
+///List of Cloud Connector rules
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudConnectorRules(pub ::std::vec::Vec<CloudConnectorRule>);
+impl ::std::ops::Deref for CloudConnectorRules {
+    type Target = ::std::vec::Vec<CloudConnectorRule>;
+    fn deref(&self) -> &::std::vec::Vec<CloudConnectorRule> {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudConnectorRules> for ::std::vec::Vec<CloudConnectorRule> {
+    fn from(value: CloudConnectorRules) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<CloudConnectorRule>> for CloudConnectorRules {
+    fn from(value: ::std::vec::Vec<CloudConnectorRule>) -> Self {
+        Self(value)
+    }
+}
+///`CloudConnectorRulesObserveResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudConnectorRulesObserveResponse {
+    pub errors: CloudConnectorMessages,
+    pub messages: CloudConnectorMessages,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub result: ::std::option::Option<CloudConnectorRules>,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`CloudConnectorRulesUpdateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct CloudConnectorRulesUpdateRequest(pub ::std::vec::Vec<CloudConnectorRule>);
+impl ::std::ops::Deref for CloudConnectorRulesUpdateRequest {
+    type Target = ::std::vec::Vec<CloudConnectorRule>;
+    fn deref(&self) -> &::std::vec::Vec<CloudConnectorRule> {
+        &self.0
+    }
+}
+impl ::std::convert::From<CloudConnectorRulesUpdateRequest>
+for ::std::vec::Vec<CloudConnectorRule> {
+    fn from(value: CloudConnectorRulesUpdateRequest) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<CloudConnectorRule>>
+for CloudConnectorRulesUpdateRequest {
+    fn from(value: ::std::vec::Vec<CloudConnectorRule>) -> Self {
+        Self(value)
+    }
+}
+///`CloudConnectorRulesUpdateResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudConnectorRulesUpdateResponse {
+    pub errors: CloudConnectorMessages,
+    pub messages: CloudConnectorMessages,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub result: ::std::option::Option<CloudConnectorRules>,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`CloudConnectorZoneRules`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudConnectorZoneRules {
+    pub rules: CloudConnectorRules,
+}
+///`AccountApiTokenAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1AccountApiTokenAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub condition: ::std::option::Option<IamCondition>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expires_on: ::std::option::Option<IamExpiresOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<IamTokenIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub issued_on: ::std::option::Option<IamIssuedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_used_on: ::std::option::Option<IamLastUsedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<IamModifiedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<IamName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_before: ::std::option::Option<IamNotBefore>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub policies: ::std::option::Option<IamTokenPolicies>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<IamTokenStatus>,
+}
+///`AccountApiTokenForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct CloudflareV1alpha1AccountApiTokenForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub condition: ::std::option::Option<IamCondition>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expires_on: ::std::option::Option<IamExpiresOn>,
+    pub name: IamName,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_before: ::std::option::Option<IamNotBefore>,
+    pub policies: IamTokenPolicies,
+}
 ///`AccountAtProvider`
 #[derive(
     ::serde::Deserialize,
@@ -21144,6 +21596,830 @@ impl<'de> ::serde::Deserialize<'de> for Expression {
             })
     }
 }
+///`FirewallApiResponseCommon`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct FirewallApiResponseCommon {
+    pub errors: FirewallMessages,
+    pub messages: FirewallMessages,
+    pub result: FirewallApiResponseCommonResult,
+    ///Defines whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`FirewallApiResponseCommonFailure`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct FirewallApiResponseCommonFailure {
+    pub errors: ::std::vec::Vec<FirewallApiResponseCommonFailureErrorsItem>,
+    pub messages: FirewallMessages,
+    ///Allowed values: null.
+    #[serde(default)]
+    pub result: ::std::option::Option<
+        ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    >,
+    ///Defines whether the API call was successful. Allowed values: false.
+    pub success: bool,
+}
+///`FirewallApiResponseCommonFailureErrorsItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct FirewallApiResponseCommonFailureErrorsItem {
+    pub code: i64,
+    pub message: ::std::string::String,
+}
+///`FirewallApiResponseCommonResult`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum FirewallApiResponseCommonResult {
+    Object(::serde_json::Map<::std::string::String, ::serde_json::Value>),
+    Array(
+        ::std::vec::Vec<::serde_json::Map<::std::string::String, ::serde_json::Value>>,
+    ),
+    String(::std::string::String),
+}
+impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+for FirewallApiResponseCommonResult {
+    fn from(
+        value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    ) -> Self {
+        Self::Object(value)
+    }
+}
+impl ::std::convert::From<
+    ::std::vec::Vec<::serde_json::Map<::std::string::String, ::serde_json::Value>>,
+> for FirewallApiResponseCommonResult {
+    fn from(
+        value: ::std::vec::Vec<
+            ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+        >,
+    ) -> Self {
+        Self::Array(value)
+    }
+}
+///`FirewallApiResponseSingle`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct FirewallApiResponseSingle {
+    pub errors: FirewallMessages,
+    pub messages: FirewallMessages,
+    pub result: FirewallApiResponseSingleResult,
+    ///Defines whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`FirewallApiResponseSingleResult`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum FirewallApiResponseSingleResult {
+    Variant0(::serde_json::Map<::std::string::String, ::serde_json::Value>),
+    Variant1(::std::string::String),
+}
+impl ::std::convert::From<::serde_json::Map<::std::string::String, ::serde_json::Value>>
+for FirewallApiResponseSingleResult {
+    fn from(
+        value: ::serde_json::Map<::std::string::String, ::serde_json::Value>,
+    ) -> Self {
+        Self::Variant0(value)
+    }
+}
+///A list of IP addresses or CIDR ranges that will be allowed to access the URLs specified in the Zone Lockdown rule. You can include any number of `ip` or `ip_range` configurations.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct FirewallConfigurations(pub ::std::vec::Vec<FirewallConfigurationsItem>);
+impl ::std::ops::Deref for FirewallConfigurations {
+    type Target = ::std::vec::Vec<FirewallConfigurationsItem>;
+    fn deref(&self) -> &::std::vec::Vec<FirewallConfigurationsItem> {
+        &self.0
+    }
+}
+impl ::std::convert::From<FirewallConfigurations>
+for ::std::vec::Vec<FirewallConfigurationsItem> {
+    fn from(value: FirewallConfigurations) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<FirewallConfigurationsItem>>
+for FirewallConfigurations {
+    fn from(value: ::std::vec::Vec<FirewallConfigurationsItem>) -> Self {
+        Self(value)
+    }
+}
+///`FirewallConfigurationsItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct FirewallConfigurationsItem {
+    ///`ip` for an IP address, `ip_range` for a /16 or /24 range.
+    pub target: FirewallConfigurationsItemTarget,
+    ///The IP address or range to match against the IP address of incoming requests.
+    pub value: ::std::string::String,
+}
+///`ip` for an IP address, `ip_range` for a /16 or /24 range.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum FirewallConfigurationsItemTarget {
+    #[serde(rename = "ip")]
+    Ip,
+    #[serde(rename = "ip_range")]
+    IpRange,
+}
+impl ::std::fmt::Display for FirewallConfigurationsItemTarget {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Ip => f.write_str("ip"),
+            Self::IpRange => f.write_str("ip_range"),
+        }
+    }
+}
+impl ::std::str::FromStr for FirewallConfigurationsItemTarget {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "ip" => Ok(Self::Ip),
+            "ip_range" => Ok(Self::IpRange),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for FirewallConfigurationsItemTarget {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for FirewallConfigurationsItemTarget {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///The timestamp of when the rule was created.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct FirewallCreatedOn(pub ::chrono::DateTime<::chrono::offset::Utc>);
+impl ::std::ops::Deref for FirewallCreatedOn {
+    type Target = ::chrono::DateTime<::chrono::offset::Utc>;
+    fn deref(&self) -> &::chrono::DateTime<::chrono::offset::Utc> {
+        &self.0
+    }
+}
+impl ::std::convert::From<FirewallCreatedOn>
+for ::chrono::DateTime<::chrono::offset::Utc> {
+    fn from(value: FirewallCreatedOn) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::chrono::DateTime<::chrono::offset::Utc>>
+for FirewallCreatedOn {
+    fn from(value: ::chrono::DateTime<::chrono::offset::Utc>) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for FirewallCreatedOn {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for FirewallCreatedOn {
+    type Err = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for FirewallCreatedOn {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for FirewallCreatedOn {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+///An informative summary of the rule. This value is sanitized and any tags will be removed.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct FirewallDescription(::std::string::String);
+impl ::std::ops::Deref for FirewallDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<FirewallDescription> for ::std::string::String {
+    fn from(value: FirewallDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for FirewallDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 1024usize {
+            return Err("longer than 1024 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for FirewallDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for FirewallDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for FirewallDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Defines an identifier.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct FirewallIdentifier(::std::string::String);
+impl ::std::ops::Deref for FirewallIdentifier {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<FirewallIdentifier> for ::std::string::String {
+    fn from(value: FirewallIdentifier) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for FirewallIdentifier {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 32usize {
+            return Err("longer than 32 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for FirewallIdentifier {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for FirewallIdentifier {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for FirewallIdentifier {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///An informative summary of the rule.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct FirewallLockdownsComponentsSchemasDescription(::std::string::String);
+impl ::std::ops::Deref for FirewallLockdownsComponentsSchemasDescription {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<FirewallLockdownsComponentsSchemasDescription>
+for ::std::string::String {
+    fn from(value: FirewallLockdownsComponentsSchemasDescription) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for FirewallLockdownsComponentsSchemasDescription {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 1024usize {
+            return Err("longer than 1024 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for FirewallLockdownsComponentsSchemasDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for FirewallLockdownsComponentsSchemasDescription {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for FirewallLockdownsComponentsSchemasDescription {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///The unique identifier of the Zone Lockdown rule.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct FirewallLockdownsComponentsSchemasId(::std::string::String);
+impl ::std::ops::Deref for FirewallLockdownsComponentsSchemasId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<FirewallLockdownsComponentsSchemasId>
+for ::std::string::String {
+    fn from(value: FirewallLockdownsComponentsSchemasId) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for FirewallLockdownsComponentsSchemasId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 32usize {
+            return Err("longer than 32 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for FirewallLockdownsComponentsSchemasId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String>
+for FirewallLockdownsComponentsSchemasId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for FirewallLockdownsComponentsSchemasId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`FirewallMessages`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct FirewallMessages(pub ::std::vec::Vec<FirewallMessagesItem>);
+impl ::std::ops::Deref for FirewallMessages {
+    type Target = ::std::vec::Vec<FirewallMessagesItem>;
+    fn deref(&self) -> &::std::vec::Vec<FirewallMessagesItem> {
+        &self.0
+    }
+}
+impl ::std::convert::From<FirewallMessages> for ::std::vec::Vec<FirewallMessagesItem> {
+    fn from(value: FirewallMessages) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<FirewallMessagesItem>> for FirewallMessages {
+    fn from(value: ::std::vec::Vec<FirewallMessagesItem>) -> Self {
+        Self(value)
+    }
+}
+///`FirewallMessagesItem`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct FirewallMessagesItem {
+    pub code: i64,
+    pub message: ::std::string::String,
+}
+///The timestamp of when the rule was last modified.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct FirewallModifiedOn(pub ::chrono::DateTime<::chrono::offset::Utc>);
+impl ::std::ops::Deref for FirewallModifiedOn {
+    type Target = ::chrono::DateTime<::chrono::offset::Utc>;
+    fn deref(&self) -> &::chrono::DateTime<::chrono::offset::Utc> {
+        &self.0
+    }
+}
+impl ::std::convert::From<FirewallModifiedOn>
+for ::chrono::DateTime<::chrono::offset::Utc> {
+    fn from(value: FirewallModifiedOn) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::chrono::DateTime<::chrono::offset::Utc>>
+for FirewallModifiedOn {
+    fn from(value: ::chrono::DateTime<::chrono::offset::Utc>) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for FirewallModifiedOn {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for FirewallModifiedOn {
+    type Err = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for FirewallModifiedOn {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for FirewallModifiedOn {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+///When true, indicates that the rule is currently paused.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct FirewallSchemasPaused(pub bool);
+impl ::std::ops::Deref for FirewallSchemasPaused {
+    type Target = bool;
+    fn deref(&self) -> &bool {
+        &self.0
+    }
+}
+impl ::std::convert::From<FirewallSchemasPaused> for bool {
+    fn from(value: FirewallSchemasPaused) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<bool> for FirewallSchemasPaused {
+    fn from(value: bool) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for FirewallSchemasPaused {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for FirewallSchemasPaused {
+    type Err = <bool as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for FirewallSchemasPaused {
+    type Error = <bool as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for FirewallSchemasPaused {
+    type Error = <bool as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+///The priority of the rule to control the processing order. A lower number indicates higher priority. If not provided, any rules with a configured priority will be processed before rules without a priority.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct FirewallSchemasPriority(pub i64);
+impl ::std::ops::Deref for FirewallSchemasPriority {
+    type Target = i64;
+    fn deref(&self) -> &i64 {
+        &self.0
+    }
+}
+impl ::std::convert::From<FirewallSchemasPriority> for i64 {
+    fn from(value: FirewallSchemasPriority) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<i64> for FirewallSchemasPriority {
+    fn from(value: i64) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for FirewallSchemasPriority {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for FirewallSchemasPriority {
+    type Err = <i64 as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for FirewallSchemasPriority {
+    type Error = <i64 as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for FirewallSchemasPriority {
+    type Error = <i64 as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+///The URLs to include in the rule definition. You can use wildcards. Each entered URL will be escaped before use, which means you can only use simple wildcard patterns.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct FirewallSchemasUrls(pub ::std::vec::Vec<::std::string::String>);
+impl ::std::ops::Deref for FirewallSchemasUrls {
+    type Target = ::std::vec::Vec<::std::string::String>;
+    fn deref(&self) -> &::std::vec::Vec<::std::string::String> {
+        &self.0
+    }
+}
+impl ::std::convert::From<FirewallSchemasUrls>
+for ::std::vec::Vec<::std::string::String> {
+    fn from(value: FirewallSchemasUrls) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<::std::string::String>>
+for FirewallSchemasUrls {
+    fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
+        Self(value)
+    }
+}
+///The URLs to include in the current WAF override. You can use wildcards. Each entered URL will be escaped before use, which means you can only use simple wildcard patterns.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct FirewallUrls(pub ::std::vec::Vec<::std::string::String>);
+impl ::std::ops::Deref for FirewallUrls {
+    type Target = ::std::vec::Vec<::std::string::String>;
+    fn deref(&self) -> &::std::vec::Vec<::std::string::String> {
+        &self.0
+    }
+}
+impl ::std::convert::From<FirewallUrls> for ::std::vec::Vec<::std::string::String> {
+    fn from(value: FirewallUrls) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<::std::string::String>> for FirewallUrls {
+    fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
+        Self(value)
+    }
+}
+///`FirewallZonelockdown`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(deny_unknown_fields)]
+pub struct FirewallZonelockdown {
+    pub configurations: FirewallConfigurations,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<FirewallCreatedOn>,
+    pub description: FirewallLockdownsComponentsSchemasDescription,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<FirewallLockdownsComponentsSchemasId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<FirewallModifiedOn>,
+    pub paused: FirewallSchemasPaused,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<FirewallSchemasPriority>,
+    pub urls: FirewallSchemasUrls,
+}
+///`FirewallZonelockdownResponseSingle`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct FirewallZonelockdownResponseSingle {
+    pub errors: FirewallMessages,
+    pub messages: FirewallMessages,
+    pub result: FirewallZonelockdown,
+    ///Defines whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
 ///`GatewayIdentityProxyEndpointApplication`
 #[derive(
     ::serde::Deserialize,
@@ -24446,6 +25722,33 @@ pub struct IamApiResponseSingleId {
 pub struct IamApiResponseSingleIdResult {
     pub id: IamCommonComponentsSchemasIdentifier,
 }
+///List of IPv4/IPv6 CIDR addresses.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamCidrList(pub ::std::vec::Vec<::std::string::String>);
+impl ::std::ops::Deref for IamCidrList {
+    type Target = ::std::vec::Vec<::std::string::String>;
+    fn deref(&self) -> &::std::vec::Vec<::std::string::String> {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamCidrList> for ::std::vec::Vec<::std::string::String> {
+    fn from(value: IamCidrList) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<::std::string::String>> for IamCidrList {
+    fn from(value: ::std::vec::Vec<::std::string::String>) -> Self {
+        Self(value)
+    }
+}
 ///Identifier
 #[derive(
     ::serde::Serialize,
@@ -24542,6 +25845,20 @@ impl ::std::convert::From<IamAccount> for IamComponentsSchemasAccount {
         Self(value)
     }
 }
+///`IamCondition`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct IamCondition {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub request_ip: ::std::option::Option<IamRequestIp>,
+}
 ///`IamCreateAccount`
 #[derive(
     ::serde::Deserialize,
@@ -24573,6 +25890,231 @@ pub struct IamCreateAccountUnit {
     ///Tenant unit ID
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub id: ::std::option::Option<::std::string::String>,
+}
+///`IamCreatePayload`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct IamCreatePayload {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub condition: ::std::option::Option<IamCondition>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expires_on: ::std::option::Option<IamExpiresOn>,
+    pub name: IamName,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_before: ::std::option::Option<IamNotBefore>,
+    pub policies: IamTokenPolicies,
+}
+///Allow or deny operations against the resources.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum IamEffect {
+    #[serde(rename = "allow")]
+    Allow,
+    #[serde(rename = "deny")]
+    Deny,
+}
+impl ::std::fmt::Display for IamEffect {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Allow => f.write_str("allow"),
+            Self::Deny => f.write_str("deny"),
+        }
+    }
+}
+impl ::std::str::FromStr for IamEffect {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "allow" => Ok(Self::Allow),
+            "deny" => Ok(Self::Deny),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for IamEffect {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for IamEffect {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///The expiration time on or after which the JWT MUST NOT be accepted for processing.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamExpiresOn(pub ::chrono::DateTime<::chrono::offset::Utc>);
+impl ::std::ops::Deref for IamExpiresOn {
+    type Target = ::chrono::DateTime<::chrono::offset::Utc>;
+    fn deref(&self) -> &::chrono::DateTime<::chrono::offset::Utc> {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamExpiresOn> for ::chrono::DateTime<::chrono::offset::Utc> {
+    fn from(value: IamExpiresOn) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::chrono::DateTime<::chrono::offset::Utc>> for IamExpiresOn {
+    fn from(value: ::chrono::DateTime<::chrono::offset::Utc>) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for IamExpiresOn {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for IamExpiresOn {
+    type Err = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for IamExpiresOn {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for IamExpiresOn {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+///The time on which the token was created.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamIssuedOn(pub ::chrono::DateTime<::chrono::offset::Utc>);
+impl ::std::ops::Deref for IamIssuedOn {
+    type Target = ::chrono::DateTime<::chrono::offset::Utc>;
+    fn deref(&self) -> &::chrono::DateTime<::chrono::offset::Utc> {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamIssuedOn> for ::chrono::DateTime<::chrono::offset::Utc> {
+    fn from(value: IamIssuedOn) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::chrono::DateTime<::chrono::offset::Utc>> for IamIssuedOn {
+    fn from(value: ::chrono::DateTime<::chrono::offset::Utc>) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for IamIssuedOn {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for IamIssuedOn {
+    type Err = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for IamIssuedOn {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for IamIssuedOn {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+///Last time the token was used.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamLastUsedOn(pub ::chrono::DateTime<::chrono::offset::Utc>);
+impl ::std::ops::Deref for IamLastUsedOn {
+    type Target = ::chrono::DateTime<::chrono::offset::Utc>;
+    fn deref(&self) -> &::chrono::DateTime<::chrono::offset::Utc> {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamLastUsedOn> for ::chrono::DateTime<::chrono::offset::Utc> {
+    fn from(value: IamLastUsedOn) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::chrono::DateTime<::chrono::offset::Utc>> for IamLastUsedOn {
+    fn from(value: ::chrono::DateTime<::chrono::offset::Utc>) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for IamLastUsedOn {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for IamLastUsedOn {
+    type Err = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for IamLastUsedOn {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for IamLastUsedOn {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
 }
 ///`IamMessages2`
 #[derive(
@@ -24632,6 +26174,422 @@ pub struct IamMessages2ItemSource {
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub pointer: ::std::option::Option<::std::string::String>,
 }
+///Last time the token was modified.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamModifiedOn(pub ::chrono::DateTime<::chrono::offset::Utc>);
+impl ::std::ops::Deref for IamModifiedOn {
+    type Target = ::chrono::DateTime<::chrono::offset::Utc>;
+    fn deref(&self) -> &::chrono::DateTime<::chrono::offset::Utc> {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamModifiedOn> for ::chrono::DateTime<::chrono::offset::Utc> {
+    fn from(value: IamModifiedOn) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::chrono::DateTime<::chrono::offset::Utc>> for IamModifiedOn {
+    fn from(value: ::chrono::DateTime<::chrono::offset::Utc>) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for IamModifiedOn {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for IamModifiedOn {
+    type Err = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for IamModifiedOn {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for IamModifiedOn {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+///Token name.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamName(::std::string::String);
+impl ::std::ops::Deref for IamName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamName> for ::std::string::String {
+    fn from(value: IamName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for IamName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 120usize {
+            return Err("longer than 120 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for IamName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for IamName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for IamName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///The time before which the token MUST NOT be accepted for processing.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamNotBefore(pub ::chrono::DateTime<::chrono::offset::Utc>);
+impl ::std::ops::Deref for IamNotBefore {
+    type Target = ::chrono::DateTime<::chrono::offset::Utc>;
+    fn deref(&self) -> &::chrono::DateTime<::chrono::offset::Utc> {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamNotBefore> for ::chrono::DateTime<::chrono::offset::Utc> {
+    fn from(value: IamNotBefore) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::chrono::DateTime<::chrono::offset::Utc>> for IamNotBefore {
+    fn from(value: ::chrono::DateTime<::chrono::offset::Utc>) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for IamNotBefore {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for IamNotBefore {
+    type Err = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.parse()?))
+    }
+}
+impl ::std::convert::TryFrom<&str> for IamNotBefore {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: &str) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<String> for IamNotBefore {
+    type Error = <::chrono::DateTime<::chrono::offset::Utc> as ::std::str::FromStr>::Err;
+    fn try_from(value: String) -> ::std::result::Result<Self, Self::Error> {
+        value.parse()
+    }
+}
+///A named group of permissions that map to a group of operations against resources.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct IamPermissionGroup {
+    ///Identifier of the permission group.
+    pub id: ::std::string::String,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub meta: ::std::option::Option<IamPermissionGroupMeta>,
+    ///Name of the permission group.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<::std::string::String>,
+}
+///Attributes associated to the permission group.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct IamPermissionGroupMeta {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub key: ::std::option::Option<::std::string::String>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<::std::string::String>,
+}
+///A set of permission groups that are specified to the policy.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamPermissionGroups(pub ::std::vec::Vec<IamPermissionGroup>);
+impl ::std::ops::Deref for IamPermissionGroups {
+    type Target = ::std::vec::Vec<IamPermissionGroup>;
+    fn deref(&self) -> &::std::vec::Vec<IamPermissionGroup> {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamPermissionGroups> for ::std::vec::Vec<IamPermissionGroup> {
+    fn from(value: IamPermissionGroups) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<IamPermissionGroup>> for IamPermissionGroups {
+    fn from(value: ::std::vec::Vec<IamPermissionGroup>) -> Self {
+        Self(value)
+    }
+}
+///Policy identifier.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamPolicyIdentifier(pub ::std::string::String);
+impl ::std::ops::Deref for IamPolicyIdentifier {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamPolicyIdentifier> for ::std::string::String {
+    fn from(value: IamPolicyIdentifier) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::string::String> for IamPolicyIdentifier {
+    fn from(value: ::std::string::String) -> Self {
+        Self(value)
+    }
+}
+impl ::std::fmt::Display for IamPolicyIdentifier {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        self.0.fmt(f)
+    }
+}
+impl ::std::str::FromStr for IamPolicyIdentifier {
+    type Err = ::std::convert::Infallible;
+    fn from_str(value: &str) -> ::std::result::Result<Self, Self::Err> {
+        Ok(Self(value.to_string()))
+    }
+}
+///`IamPolicyWithPermissionGroupsAndResources`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct IamPolicyWithPermissionGroupsAndResources {
+    pub effect: IamEffect,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<IamPolicyIdentifier>,
+    pub permission_groups: IamPermissionGroups,
+    pub resources: IamResources,
+}
+///Client IP restrictions.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct IamRequestIp {
+    #[serde(rename = "in", skip_serializing_if = "::std::option::Option::is_none")]
+    pub in_: ::std::option::Option<IamCidrList>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_in: ::std::option::Option<IamCidrList>,
+}
+///A list of resource names that the policy applies to.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(untagged)]
+pub enum IamResources {
+    String(IamResourcesTypeObjectString),
+    Nested(IamResourcesTypeObjectNested),
+}
+impl ::std::convert::From<IamResourcesTypeObjectString> for IamResources {
+    fn from(value: IamResourcesTypeObjectString) -> Self {
+        Self::String(value)
+    }
+}
+impl ::std::convert::From<IamResourcesTypeObjectNested> for IamResources {
+    fn from(value: IamResourcesTypeObjectNested) -> Self {
+        Self::Nested(value)
+    }
+}
+///Map of nested resource permissions
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamResourcesTypeObjectNested(
+    pub ::std::collections::HashMap<
+        ::std::string::String,
+        ::std::collections::HashMap<::std::string::String, ::std::string::String>,
+    >,
+);
+impl ::std::ops::Deref for IamResourcesTypeObjectNested {
+    type Target = ::std::collections::HashMap<
+        ::std::string::String,
+        ::std::collections::HashMap<::std::string::String, ::std::string::String>,
+    >;
+    fn deref(
+        &self,
+    ) -> &::std::collections::HashMap<
+        ::std::string::String,
+        ::std::collections::HashMap<::std::string::String, ::std::string::String>,
+    > {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamResourcesTypeObjectNested>
+for ::std::collections::HashMap<
+    ::std::string::String,
+    ::std::collections::HashMap<::std::string::String, ::std::string::String>,
+> {
+    fn from(value: IamResourcesTypeObjectNested) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<
+    ::std::collections::HashMap<
+        ::std::string::String,
+        ::std::collections::HashMap<::std::string::String, ::std::string::String>,
+    >,
+> for IamResourcesTypeObjectNested {
+    fn from(
+        value: ::std::collections::HashMap<
+            ::std::string::String,
+            ::std::collections::HashMap<::std::string::String, ::std::string::String>,
+        >,
+    ) -> Self {
+        Self(value)
+    }
+}
+///Map of simple string resource permissions
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamResourcesTypeObjectString(
+    pub ::std::collections::HashMap<::std::string::String, ::std::string::String>,
+);
+impl ::std::ops::Deref for IamResourcesTypeObjectString {
+    type Target = ::std::collections::HashMap<
+        ::std::string::String,
+        ::std::string::String,
+    >;
+    fn deref(
+        &self,
+    ) -> &::std::collections::HashMap<::std::string::String, ::std::string::String> {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamResourcesTypeObjectString>
+for ::std::collections::HashMap<::std::string::String, ::std::string::String> {
+    fn from(value: IamResourcesTypeObjectString) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<
+    ::std::collections::HashMap<::std::string::String, ::std::string::String>,
+> for IamResourcesTypeObjectString {
+    fn from(
+        value: ::std::collections::HashMap<::std::string::String, ::std::string::String>,
+    ) -> Self {
+        Self(value)
+    }
+}
 ///`IamResponseSingleAccount`
 #[derive(
     ::serde::Deserialize,
@@ -24648,6 +26606,423 @@ pub struct IamResponseSingleAccount {
     pub result: ::std::option::Option<IamAccount>,
     ///Whether the API call was successful. Allowed values: true.
     pub success: bool,
+}
+///`IamSingleTokenCreateResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct IamSingleTokenCreateResponse {
+    pub errors: IamMessages2,
+    pub messages: IamMessages2,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub result: ::std::option::Option<IamTokenWithValue>,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`IamSingleTokenResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct IamSingleTokenResponse {
+    pub errors: IamMessages2,
+    pub messages: IamMessages2,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub result: ::std::option::Option<IamTokenBase>,
+    ///Whether the API call was successful. Allowed values: true.
+    pub success: bool,
+}
+///`IamTokenBase`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct IamTokenBase {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub condition: ::std::option::Option<IamCondition>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expires_on: ::std::option::Option<IamExpiresOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<IamTokenIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub issued_on: ::std::option::Option<IamIssuedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_used_on: ::std::option::Option<IamLastUsedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<IamModifiedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<IamName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_before: ::std::option::Option<IamNotBefore>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub policies: ::std::option::Option<IamTokenPolicies>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<IamTokenStatus>,
+}
+///`IamTokenBody`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct IamTokenBody {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub condition: ::std::option::Option<IamCondition>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expires_on: ::std::option::Option<IamExpiresOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<IamTokenIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub issued_on: ::std::option::Option<IamIssuedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_used_on: ::std::option::Option<IamLastUsedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<IamModifiedOn>,
+    pub name: IamName,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_before: ::std::option::Option<IamNotBefore>,
+    pub policies: IamTokenPolicies,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<IamTokenStatus>,
+}
+///Token identifier tag.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamTokenIdentifier(::std::string::String);
+impl ::std::ops::Deref for IamTokenIdentifier {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamTokenIdentifier> for ::std::string::String {
+    fn from(value: IamTokenIdentifier) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for IamTokenIdentifier {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 32usize {
+            return Err("longer than 32 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for IamTokenIdentifier {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for IamTokenIdentifier {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for IamTokenIdentifier {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///List of access policies assigned to the token.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamTokenPolicies(
+    pub ::std::vec::Vec<IamPolicyWithPermissionGroupsAndResources>,
+);
+impl ::std::ops::Deref for IamTokenPolicies {
+    type Target = ::std::vec::Vec<IamPolicyWithPermissionGroupsAndResources>;
+    fn deref(&self) -> &::std::vec::Vec<IamPolicyWithPermissionGroupsAndResources> {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamTokenPolicies>
+for ::std::vec::Vec<IamPolicyWithPermissionGroupsAndResources> {
+    fn from(value: IamTokenPolicies) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<IamPolicyWithPermissionGroupsAndResources>>
+for IamTokenPolicies {
+    fn from(value: ::std::vec::Vec<IamPolicyWithPermissionGroupsAndResources>) -> Self {
+        Self(value)
+    }
+}
+///Status of the token.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Copy,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+pub enum IamTokenStatus {
+    #[serde(rename = "active")]
+    Active,
+    #[serde(rename = "disabled")]
+    Disabled,
+    #[serde(rename = "expired")]
+    Expired,
+}
+impl ::std::fmt::Display for IamTokenStatus {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match *self {
+            Self::Active => f.write_str("active"),
+            Self::Disabled => f.write_str("disabled"),
+            Self::Expired => f.write_str("expired"),
+        }
+    }
+}
+impl ::std::str::FromStr for IamTokenStatus {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        match value {
+            "active" => Ok(Self::Active),
+            "disabled" => Ok(Self::Disabled),
+            "expired" => Ok(Self::Expired),
+            _ => Err("invalid value".into()),
+        }
+    }
+}
+impl ::std::convert::TryFrom<&str> for IamTokenStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for IamTokenStatus {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+///`IamTokenWithValue`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct IamTokenWithValue {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub condition: ::std::option::Option<IamCondition>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub expires_on: ::std::option::Option<IamExpiresOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<IamTokenIdentifier>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub issued_on: ::std::option::Option<IamIssuedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_used_on: ::std::option::Option<IamLastUsedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<IamModifiedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub name: ::std::option::Option<IamName>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub not_before: ::std::option::Option<IamNotBefore>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub policies: ::std::option::Option<IamTokenPolicies>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub status: ::std::option::Option<IamTokenStatus>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub value: ::std::option::Option<IamValue>,
+}
+///The token value.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct IamValue(::std::string::String);
+impl ::std::ops::Deref for IamValue {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<IamValue> for ::std::string::String {
+    fn from(value: IamValue) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for IamValue {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        if value.chars().count() > 80usize {
+            return Err("longer than 80 characters".into());
+        }
+        if value.chars().count() < 40usize {
+            return Err("shorter than 40 characters".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for IamValue {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for IamValue {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for IamValue {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Specify the unique ID of the rule.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct Id(::std::string::String);
+impl ::std::ops::Deref for Id {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<Id> for ::std::string::String {
+    fn from(value: Id) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for Id {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[0-9a-f]{32}$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[0-9a-f]{32}$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for Id {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for Id {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for Id {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
 }
 ///Which query string parameters to include in the cache key.
 #[derive(
@@ -48594,6 +50969,332 @@ impl ::std::convert::TryFrom<::std::string::String> for SetStaticHeaderOperation
         value.parse()
     }
 }
+///Define a snippet rule.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetRule {
+    ///Provide an informative description of the rule.
+    #[serde(default)]
+    pub description: ::std::string::String,
+    ///Indicate whether to execute the rule.
+    #[serde(default)]
+    pub enabled: bool,
+    ///Define the expression that determines which traffic matches the rule.
+    pub expression: Expression,
+    ///Specify the unique ID of the rule.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<Id>,
+    ///Specify the timestamp of when the rule was last modified.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub last_updated: ::std::option::Option<::chrono::DateTime<::chrono::offset::Utc>>,
+    pub snippet_name: SnippetsSnippetName,
+}
+///`SnippetRulesObserveResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetRulesObserveResponse {
+    pub errors: SnippetsErrors,
+    pub messages: SnippetsMessages,
+    pub result: SnippetsSnippetRules,
+    pub success: bool,
+}
+///Define a snippet rules object.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetRulesUpdateRequest {
+    pub rules: SnippetsSnippetRules,
+}
+///`SnippetRulesUpdateResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetRulesUpdateResponse {
+    pub errors: SnippetsErrors,
+    pub messages: SnippetsMessages,
+    pub result: SnippetsSnippetRules,
+    pub success: bool,
+}
+///Lists error messages.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct SnippetsErrors(pub ::std::vec::Vec<SnippetsMessage>);
+impl ::std::ops::Deref for SnippetsErrors {
+    type Target = ::std::vec::Vec<SnippetsMessage>;
+    fn deref(&self) -> &::std::vec::Vec<SnippetsMessage> {
+        &self.0
+    }
+}
+impl ::std::convert::From<SnippetsErrors> for ::std::vec::Vec<SnippetsMessage> {
+    fn from(value: SnippetsErrors) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<SnippetsMessage>> for SnippetsErrors {
+    fn from(value: ::std::vec::Vec<SnippetsMessage>) -> Self {
+        Self(value)
+    }
+}
+///Describes an API message.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetsMessage {
+    ///Identify the message code.
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub code: ::std::option::Option<i64>,
+    ///Describes the message text.
+    pub message: Description,
+}
+///Contain warning messages.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct SnippetsMessages(pub ::std::vec::Vec<SnippetsMessage>);
+impl ::std::ops::Deref for SnippetsMessages {
+    type Target = ::std::vec::Vec<SnippetsMessage>;
+    fn deref(&self) -> &::std::vec::Vec<SnippetsMessage> {
+        &self.0
+    }
+}
+impl ::std::convert::From<SnippetsMessages> for ::std::vec::Vec<SnippetsMessage> {
+    fn from(value: SnippetsMessages) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<SnippetsMessage>> for SnippetsMessages {
+    fn from(value: ::std::vec::Vec<SnippetsMessage>) -> Self {
+        Self(value)
+    }
+}
+///Return all API responses using this object.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetsResponse {
+    pub errors: SnippetsErrors,
+    pub messages: SnippetsMessages,
+    ///Contain the response result.
+    pub result: ::serde_json::Value,
+    ///Indicate whether the API call was successful.
+    pub success: bool,
+}
+///Identify the snippet.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct SnippetsSnippetName(::std::string::String);
+impl ::std::ops::Deref for SnippetsSnippetName {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<SnippetsSnippetName> for ::std::string::String {
+    fn from(value: SnippetsSnippetName) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for SnippetsSnippetName {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[A-Za-z0-9_]+$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[A-Za-z0-9_]+$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for SnippetsSnippetName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SnippetsSnippetName {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SnippetsSnippetName {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///Lists snippet rules.
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct SnippetsSnippetRules(pub ::std::vec::Vec<SnippetRule>);
+impl ::std::ops::Deref for SnippetsSnippetRules {
+    type Target = ::std::vec::Vec<SnippetRule>;
+    fn deref(&self) -> &::std::vec::Vec<SnippetRule> {
+        &self.0
+    }
+}
+impl ::std::convert::From<SnippetsSnippetRules> for ::std::vec::Vec<SnippetRule> {
+    fn from(value: SnippetsSnippetRules) -> Self {
+        value.0
+    }
+}
+impl ::std::convert::From<::std::vec::Vec<SnippetRule>> for SnippetsSnippetRules {
+    fn from(value: ::std::vec::Vec<SnippetRule>) -> Self {
+        Self(value)
+    }
+}
+///Use this field to specify the unique ID of the zone.
+#[derive(
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Eq,
+    Hash,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    schemars::JsonSchema
+)]
+#[serde(transparent)]
+pub struct SnippetsZoneId(::std::string::String);
+impl ::std::ops::Deref for SnippetsZoneId {
+    type Target = ::std::string::String;
+    fn deref(&self) -> &::std::string::String {
+        &self.0
+    }
+}
+impl ::std::convert::From<SnippetsZoneId> for ::std::string::String {
+    fn from(value: SnippetsZoneId) -> Self {
+        value.0
+    }
+}
+impl ::std::str::FromStr for SnippetsZoneId {
+    type Err = self::error::ConversionError;
+    fn from_str(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        static PATTERN: ::std::sync::LazyLock<::regress::Regex> = ::std::sync::LazyLock::new(||
+        { ::regress::Regex::new("^[0-9a-f]{32}$").unwrap() });
+        if PATTERN.find(value).is_none() {
+            return Err("doesn't match pattern \"^[0-9a-f]{32}$\"".into());
+        }
+        Ok(Self(value.to_string()))
+    }
+}
+impl ::std::convert::TryFrom<&str> for SnippetsZoneId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: &str,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl ::std::convert::TryFrom<::std::string::String> for SnippetsZoneId {
+    type Error = self::error::ConversionError;
+    fn try_from(
+        value: ::std::string::String,
+    ) -> ::std::result::Result<Self, self::error::ConversionError> {
+        value.parse()
+    }
+}
+impl<'de> ::serde::Deserialize<'de> for SnippetsZoneId {
+    fn deserialize<D>(deserializer: D) -> ::std::result::Result<Self, D::Error>
+    where
+        D: ::serde::Deserializer<'de>,
+    {
+        ::std::string::String::deserialize(deserializer)?
+            .parse()
+            .map_err(|e: self::error::ConversionError| {
+                <D::Error as ::serde::de::Error>::custom(e.to_string())
+            })
+    }
+}
+///`SnippetsZoneSnippetRules`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct SnippetsZoneSnippetRules {
+    pub rules: SnippetsSnippetRules,
+}
 ///The source of this message.
 #[derive(
     ::serde::Deserialize,
@@ -67470,6 +70171,72 @@ pub struct ZoneCreateResponse {
     ///Whether the API call was successful.
     pub success: bool,
 }
+///`ZoneLockdownCreateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZoneLockdownCreateRequest {
+    pub configurations: FirewallConfigurations,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<FirewallDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub paused: ::std::option::Option<FirewallSchemasPaused>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<FirewallSchemasPriority>,
+    pub urls: FirewallUrls,
+}
+///`ZoneLockdownDeleteResponse`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZoneLockdownDeleteResponse {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub result: ::std::option::Option<ZoneLockdownDeleteResponseResult>,
+}
+///`ZoneLockdownDeleteResponseResult`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZoneLockdownDeleteResponseResult {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<FirewallLockdownsComponentsSchemasId>,
+}
+///`ZoneLockdownUpdateRequest`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZoneLockdownUpdateRequest {
+    pub configurations: FirewallConfigurations,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<FirewallDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub paused: ::std::option::Option<FirewallSchemasPaused>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<FirewallSchemasPriority>,
+    pub urls: FirewallUrls,
+}
 ///`ZoneObserveResponse`
 #[derive(
     ::serde::Deserialize,
@@ -74280,6 +77047,34 @@ impl ::std::convert::TryFrom<::std::string::String> for ZonesUrlTargetTarget {
         value.parse()
     }
 }
+///`CloudConnectorRulesAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1CloudConnectorRulesAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rules: ::std::option::Option<CloudConnectorRules>,
+}
+///`CloudConnectorRulesForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1CloudConnectorRulesForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rules: ::std::option::Option<CloudConnectorRules>,
+}
 ///`CustomHostnameAtProvider`
 #[derive(
     ::serde::Deserialize,
@@ -77712,6 +80507,34 @@ pub struct ZonesV1alpha1PageRuleForProvider {
     pub status: ::std::option::Option<ZonesStatus>,
     pub targets: ZonesTargets,
 }
+///`SnippetRulesAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1SnippetRulesAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rules: ::std::option::Option<SnippetsSnippetRules>,
+}
+///`SnippetRulesForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1SnippetRulesForProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub rules: ::std::option::Option<SnippetsSnippetRules>,
+}
 ///`SpectrumApplicationAtProvider`
 #[derive(
     ::serde::Deserialize,
@@ -78005,6 +80828,55 @@ pub struct ZonesV1alpha1WaitingRoomForProvider {
     pub turnstile_action: ::std::option::Option<WaitingroomTurnstileAction>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub turnstile_mode: ::std::option::Option<WaitingroomTurnstileMode>,
+}
+///`ZoneLockdownAtProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    Default,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1ZoneLockdownAtProvider {
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub configurations: ::std::option::Option<FirewallConfigurations>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub created_on: ::std::option::Option<FirewallCreatedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<
+        FirewallLockdownsComponentsSchemasDescription,
+    >,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub id: ::std::option::Option<FirewallLockdownsComponentsSchemasId>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub modified_on: ::std::option::Option<FirewallModifiedOn>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub paused: ::std::option::Option<FirewallSchemasPaused>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<FirewallSchemasPriority>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub urls: ::std::option::Option<FirewallSchemasUrls>,
+}
+///`ZoneLockdownForProvider`
+#[derive(
+    ::serde::Deserialize,
+    ::serde::Serialize,
+    Clone,
+    Debug,
+    PartialEq,
+    schemars::JsonSchema
+)]
+pub struct ZonesV1alpha1ZoneLockdownForProvider {
+    pub configurations: FirewallConfigurations,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub description: ::std::option::Option<FirewallDescription>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub paused: ::std::option::Option<FirewallSchemasPaused>,
+    #[serde(skip_serializing_if = "::std::option::Option::is_none")]
+    pub priority: ::std::option::Option<FirewallSchemasPriority>,
+    pub urls: FirewallUrls,
 }
 /**An array of domains used for custom name servers. This is only
 available for Business and Enterprise plans.*/

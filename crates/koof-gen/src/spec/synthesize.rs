@@ -925,6 +925,13 @@ fn observe_responses(
                         ),
                     })?;
             }
+            if let Some(into) = &response.into {
+                schema = json!({
+                    "type": "object",
+                    "properties": { into: schema },
+                    "required": [into],
+                });
+            }
         }
         responses.insert(extension.resource.clone(), schema);
     }

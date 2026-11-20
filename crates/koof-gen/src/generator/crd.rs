@@ -39,6 +39,10 @@ pub fn generate_spec(
         .then(|| quote!(koof::schema::add_list_maps(schema, &[#(#list_maps),*]);));
     let print_columns = print_columns(resource);
     let namespaced = resource.namespaced.then(|| quote!(namespaced,));
+    let lowercase = kind.to_lowercase();
+    let plural = lowercase
+        .ends_with('s')
+        .then(|| quote!(plural = #lowercase,));
     let mut fields = reference_fields(resource)?;
     if let Some(credentials) = credential_field(resource)? {
         fields.push(credentials);
@@ -99,6 +103,7 @@ pub fn generate_spec(
             group = #group,
             version = #version,
             kind = #kind,
+            #plural
             #namespaced
             status = #status_name,
             #(#print_columns),*

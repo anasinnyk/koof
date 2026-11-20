@@ -155,3 +155,96 @@ pub const TOKEN_SECRET: &str = "
         token:
           from: connectionDetails
 ";
+
+/// Account `labels`: a bare list the API reads and replaces as a whole, managed as
+/// field `labels` of one resource.
+pub const LABELS: &str = "
+  - target: $.components.schemas
+    update:
+      label:
+        type: object
+        required: [key]
+        properties:
+          key:
+            type: string
+          value:
+            type: string
+      labels:
+        type: object
+        properties:
+          labels:
+            type: array
+            items:
+              $ref: '#/components/schemas/label'
+        x-kube-resource:
+          name: labels
+          apiVersion: widgets.example.dev/v1alpha1
+          kind: Labels
+          references:
+            account:
+              from: spec.forProvider.accountRef
+              target: account
+          credentials:
+            securityScheme: api_token
+            source:
+              type: related
+              via: [account]
+          fields:
+            mode: all
+  - target: $.paths
+    update:
+      /accounts/{account_id}/labels:
+        parameters:
+          - name: account_id
+            in: path
+            required: true
+            schema:
+              type: string
+        get:
+          operationId: getLabels
+          responses:
+            '200':
+              description: The labels.
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/label'
+          x-kube-operation:
+            resource: labels
+            lifecycle: observe
+            response:
+              path: result
+              into: labels
+            pathParameters:
+              account_id:
+                type: related_identifier
+                via: [account]
+                name: external_id
+        put:
+          operationId: putLabels
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/label'
+          responses:
+            '200':
+              description: Replaced.
+          x-kube-operation:
+            resource: labels
+            lifecycle: update
+            request:
+              from: spec.forProvider.labels
+            pathParameters:
+              account_id:
+                type: related_identifier
+                via: [account]
+                name: external_id
+";

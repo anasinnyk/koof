@@ -13,7 +13,7 @@ use crate::{
 };
 use http::{Auth, HttpError, Operation};
 use resolve::{Node, resolve_credentials, resolve_value, with_item_references, with_secret_values};
-use serde_json::Value;
+use serde_json::{Map, Value};
 
 pub struct Observation {
     pub exists: bool,
@@ -155,6 +155,15 @@ fn observation(
         None => found,
     }
     .cloned();
+    let at_provider = match observe.into {
+        Some(field) => response.map(|_| {
+            Value::Object(Map::from_iter([(
+                field.to_owned(),
+                at_provider.unwrap_or(Value::Null),
+            )]))
+        }),
+        None => at_provider,
+    };
     let exists = match matching {
         Some(_) => at_provider.is_some(),
         None => response.is_some(),
@@ -409,5 +418,33 @@ mod tests {
         let observation = observation(Some(&response), &observe(), Some(("/id", "1")));
 
         assert_eq!((observation.exists, observation.at_provider), (false, None));
+    }
+
+    #[test]
+    fn a_bare_list_is_the_field_into_of_the_resource() {
+        let observe =
+            ObserveDescriptor::new(OperationDescriptor::new().with_response_path("/result"))
+                .with_into("rules");
+        let response = json!({ "result": [{ "id": "1" }] });
+        let observation = observation(Some(&response), &observe, None);
+
+        assert_eq!(
+            (observation.exists, observation.at_provider),
+            (true, Some(json!({ "rules": [{ "id": "1" }] })))
+        );
+    }
+
+    #[test]
+    fn an_empty_bare_list_is_an_unset_field() {
+        let observe =
+            ObserveDescriptor::new(OperationDescriptor::new().with_response_path("/result"))
+                .with_into("rules");
+        let response = json!({ "result": null });
+        let observation = observation(Some(&response), &observe, None);
+
+        assert_eq!(
+            (observation.exists, observation.at_provider),
+            (true, Some(json!({ "rules": null })))
+        );
     }
 }
