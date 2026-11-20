@@ -42,7 +42,7 @@ actions:
         connectionSecret:
           tunnel_id: id
           token:
-            from: connection
+            from: connectionDetails
 
         fields:
           mode: all
@@ -107,7 +107,8 @@ actions:
     update:
       x-kube-operation:
         resource: warp_connector
-        lifecycle: connection
+        lifecycle: observe
+        connectionDetails: true
         response:
           path: result
         pathParameters:

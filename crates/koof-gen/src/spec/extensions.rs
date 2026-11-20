@@ -86,19 +86,55 @@ pub enum FieldSelectionMode {
     Explicit,
 }
 
+/// `x-kube-operation`. An observe operation with `connectionDetails: true` is not
+/// the observation but an extra read for `connectionSecret`; its `lifecycle` is
+/// [`LifecycleAction::Connection`].
 #[derive(Debug, Deserialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
+#[serde(try_from = "RawOperationExtension")]
 pub struct OperationExtension {
     pub resource: ResourceName,
     pub lifecycle: LifecycleAction,
-    #[serde(default)]
     pub path_parameters: BTreeMap<String, ValueExpr>,
-    #[serde(default)]
     pub response: Option<ResponseExtension>,
-    #[serde(default)]
     pub request: Option<RequestMappingIr>,
-    #[serde(default)]
     pub result: Option<ResultExtension>,
+}
+
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+struct RawOperationExtension {
+    resource: ResourceName,
+    lifecycle: LifecycleAction,
+    #[serde(default)]
+    connection_details: bool,
+    #[serde(default)]
+    path_parameters: BTreeMap<String, ValueExpr>,
+    #[serde(default)]
+    response: Option<ResponseExtension>,
+    #[serde(default)]
+    request: Option<RequestMappingIr>,
+    #[serde(default)]
+    result: Option<ResultExtension>,
+}
+
+impl TryFrom<RawOperationExtension> for OperationExtension {
+    type Error = &'static str;
+
+    fn try_from(raw: RawOperationExtension) -> Result<Self, Self::Error> {
+        let lifecycle = match (raw.lifecycle, raw.connection_details) {
+            (_, false) => raw.lifecycle,
+            (LifecycleAction::Observe, true) => LifecycleAction::Connection,
+            _ => return Err("connectionDetails is only allowed with lifecycle: observe"),
+        };
+        Ok(Self {
+            resource: raw.resource,
+            lifecycle,
+            path_parameters: raw.path_parameters,
+            response: raw.response,
+            request: raw.request,
+            result: raw.result,
+        })
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
@@ -108,6 +144,7 @@ pub enum LifecycleAction {
     Create,
     Update,
     Delete,
+    #[serde(skip)]
     Connection,
 }
 

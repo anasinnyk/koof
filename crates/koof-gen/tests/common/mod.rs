@@ -103,7 +103,7 @@ pub fn codegen(document: &Value) -> spec::CodegenSpec {
     spec::for_codegen(&spec::prepare(document).expect("prepare")).expect("codegen")
 }
 
-/// A `connection` operation of widgets that returns a token.
+/// An extra observe read of widgets (`connectionDetails`) that returns a token.
 pub const TOKEN_OPERATION: &str = "
   - target: $.paths
     update:
@@ -133,7 +133,8 @@ pub const TOKEN_OPERATION: &str = "
                         type: string
           x-kube-operation:
             resource: widget
-            lifecycle: connection
+            lifecycle: observe
+            connectionDetails: true
             response:
               path: result
             pathParameters:
@@ -145,12 +146,12 @@ pub const TOKEN_OPERATION: &str = "
                 type: external_name
 ";
 
-/// Widget connection details: its id, and the token from the `connection` operation.
+/// Widget connection details: its id, and the token from the `connectionDetails` read.
 pub const TOKEN_SECRET: &str = "
   - target: $.components.schemas.widget['x-kube-resource']
     update:
       connectionSecret:
         widget_id: id
         token:
-          from: connection
+          from: connectionDetails
 ";

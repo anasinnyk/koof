@@ -31,7 +31,11 @@ impl ResourceDoc {
             operations.push(("delete", R::Delete::METHOD, R::Delete::PATH));
         }
         if descriptor.connection.is_some() {
-            operations.push(("connection", R::Connection::METHOD, R::Connection::PATH));
+            operations.push((
+                "connection details",
+                R::Connection::METHOD,
+                R::Connection::PATH,
+            ));
         }
         Self {
             descriptor,

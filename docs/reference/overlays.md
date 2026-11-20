@@ -32,7 +32,7 @@ request body.
 | `itemReferences` | map of `{from, target, into, identifier}` | A reference in each item of a list. `from`: `spec.forProvider.<list>[].<field>`, the field added to the items; `into`: the (dotted) item field that receives identifier `identifier` of the target; each item sets exactly one of the two. When the items are a union, the reference is one more variant and an item sets at most one of them |
 | `credentials.securityScheme` | string | Key of `components.securitySchemes` (`apiKey` or `http` bearer) |
 | `credentials.source` | `{type: secret_key_selector, path}` or `{type: related, via}` | Where the secret comes from |
-| `connectionSecret` | map of Secret key to dotted path or `{from: connection, path?}` | Values written to the Secret in `spec.writeConnectionSecretToRef`. A dotted path is a field of the resource as the API returns it, read from the create response and every observation. `from: connection` reads the response of the `connection` operation (at `path`, the whole value by default) after every observation |
+| `connectionSecret` | map of Secret key to dotted path or `{from: connectionDetails, path?}` | Values written to the Secret in `spec.writeConnectionSecretToRef`. A dotted path is a field of the resource as the API returns it, read from the create response and every observation. `from: connectionDetails` reads the response of the observe operation with `connectionDetails: true` (at `path`, the whole value by default) after every observation |
 | `fields.mode` | `all` or `explicit` | `explicit` exposes only the listed properties |
 | `fields.forProvider` | list | Properties in `spec.forProvider` |
 | `fields.atProvider` | list | Properties in `status.atProvider` |
@@ -48,7 +48,8 @@ On an operation (`$.paths['…'].get`).
 | Key | Type | |
 |---|---|---|
 | `resource` | string | Resource `name` |
-| `lifecycle` | `observe`, `create`, `update`, `delete`, `connection` | `observe` is required, the others optional. `connection` is a `GET` whose response feeds `connectionSecret` keys with `from: connection` |
+| `lifecycle` | `observe`, `create`, `update`, `delete` | `observe` is required, the others optional |
+| `connectionDetails` | bool | With `lifecycle: observe`: not the observation but an extra `GET` after it, whose response only feeds `connectionSecret` keys with `from: connectionDetails` |
 | `pathParameters` | map of [value](#values) | One per `{placeholder}` in the path |
 | `request.from` | path | Body source, default `spec.forProvider` |
 | `request.set` | map of dotted body path to [value](#values) | Extra body fields |

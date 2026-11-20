@@ -245,27 +245,30 @@ observation lacks keeps its value, so a secret the API returns only on create
 survives. Mark such fields `sensitive` as well when the observe response has them.
 
 When the API returns a value from a separate endpoint (a tunnel token), mark that
-`GET` operation `lifecycle: connection` and read the key from its response:
+`GET` as an extra observe read with `connectionDetails: true` and read the key
+from its response:
 
 ```yaml
 x-kube-resource:
   connectionSecret:
     tunnel_id: id
     token:
-      from: connection               # the whole value at the operation's response.path
+      from: connectionDetails        # the whole value at the operation's response.path
       # path: some.field             # or a dotted path in it
 ---
 # on GET /accounts/{account_id}/cfd_tunnel/{tunnel_id}/token
 x-kube-operation:
   resource: tunnel
-  lifecycle: connection
+  lifecycle: observe
+  connectionDetails: true            # not the observation: only feeds connectionSecret
   response:
     path: result
   pathParameters: { … }              # as on observe
 ```
 
 koof calls it after each observation of an object that has
-`writeConnectionSecretToRef`, so a rotated value reaches the Secret.
+`writeConnectionSecretToRef`, so a rotated value reaches the Secret. Its response
+never reaches `status.atProvider`.
 
 ## Share a resource across namespaces
 

@@ -14,7 +14,7 @@ expression: "page(&ResourceDoc::of::<Record>())"
 | create | `POST /zones/{zone_id}/records` |
 | update | `PATCH /zones/{zone_id}/records/{record_id}` |
 | delete | `DELETE /zones/{zone_id}/records/{record_id}` |
-| connection | `GET /zones/{zone_id}/records/{record_id}/secret` |
+| connection details | `GET /zones/{zone_id}/records/{record_id}/secret` |
 
 References: `zoneRef` → Zone.
 

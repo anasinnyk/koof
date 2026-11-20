@@ -90,8 +90,9 @@ pub struct TestIr {
 }
 
 /// Where a connection Secret key takes its value from: a dotted path in the
-/// resource the API returns, or `{from: connection, path}` in the response of the
-/// resource's `connection` operation (the whole value when `path` is empty).
+/// resource the API returns, or `{from: connectionDetails, path}` in the response
+/// of the resource's observe operation with `connectionDetails: true` (the whole
+/// value when `path` is empty).
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
 #[serde(untagged)]
 pub enum ConnectionDetailIr {
@@ -108,9 +109,9 @@ pub struct ConnectionOperationDetailIr {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[serde(rename_all = "camelCase")]
 pub enum ConnectionSourceIr {
-    Connection,
+    ConnectionDetails,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize)]

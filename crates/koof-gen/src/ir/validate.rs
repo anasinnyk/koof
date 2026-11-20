@@ -365,11 +365,11 @@ impl<'a> Checker<'a, '_> {
         match (reads_connection, self.resource.lifecycle.connection.is_some()) {
             (true, false) => self.error(
                 "connection_secret",
-                "a key reads from the connection operation, but no operation has lifecycle: connection",
+                "a key reads from connectionDetails, but no observe operation has connectionDetails: true",
             ),
             (false, true) => self.error(
                 "lifecycle.connection",
-                "no connectionSecret key reads from it (from: connection)",
+                "no connectionSecret key reads from it (from: connectionDetails)",
             ),
             _ => {}
         }

@@ -10,7 +10,7 @@
 | create | `POST /accounts/{account_id}/warp_connector` |
 | update | `PATCH /accounts/{account_id}/warp_connector/{tunnel_id}` |
 | delete | `DELETE /accounts/{account_id}/warp_connector/{tunnel_id}` |
-| connection | `GET /accounts/{account_id}/warp_connector/{tunnel_id}/token` |
+| connection details | `GET /accounts/{account_id}/warp_connector/{tunnel_id}/token` |
 
 References: `accountRef` → Account / ClusterAccount.
 

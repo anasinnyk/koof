@@ -10,7 +10,7 @@
 | create | `POST /accounts/{account_id}/cfd_tunnel` |
 | update | `PATCH /accounts/{account_id}/cfd_tunnel/{tunnel_id}` |
 | delete | `DELETE /accounts/{account_id}/cfd_tunnel/{tunnel_id}` |
-| connection | `GET /accounts/{account_id}/cfd_tunnel/{tunnel_id}/token` |
+| connection details | `GET /accounts/{account_id}/cfd_tunnel/{tunnel_id}/token` |
 
 References: `accountRef` → Account / ClusterAccount.
 
