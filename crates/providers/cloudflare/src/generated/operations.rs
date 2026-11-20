@@ -160,6 +160,38 @@ impl koof::Operation for AccountUpdate {
     type Request = crate::generated::types::IamComponentsSchemasAccount;
     type Response = crate::generated::types::IamResponseSingleAccount;
 }
+pub struct AccountApiTokenCreate;
+impl koof::Operation for AccountApiTokenCreate {
+    const NAME: &'static str = "account_api_token.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/accounts/{account_id}/tokens";
+    type Request = crate::generated::types::IamCreatePayload;
+    type Response = crate::generated::types::IamSingleTokenCreateResponse;
+}
+pub struct AccountApiTokenDelete;
+impl koof::Operation for AccountApiTokenDelete {
+    const NAME: &'static str = "account_api_token.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/accounts/{account_id}/tokens/{token_id}";
+    type Request = ();
+    type Response = crate::generated::types::IamApiResponseSingleId;
+}
+pub struct AccountApiTokenObserve;
+impl koof::Operation for AccountApiTokenObserve {
+    const NAME: &'static str = "account_api_token.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/accounts/{account_id}/tokens/{token_id}";
+    type Request = ();
+    type Response = crate::generated::types::IamSingleTokenResponse;
+}
+pub struct AccountApiTokenUpdate;
+impl koof::Operation for AccountApiTokenUpdate {
+    const NAME: &'static str = "account_api_token.update";
+    const METHOD: reqwest::Method = reqwest::Method::PUT;
+    const PATH: &'static str = "/accounts/{account_id}/tokens/{token_id}";
+    type Request = crate::generated::types::IamTokenBody;
+    type Response = crate::generated::types::IamSingleTokenResponse;
+}
 pub struct CloudConnectorRulesObserve;
 impl koof::Operation for CloudConnectorRulesObserve {
     const NAME: &'static str = "cloud_connector_rules.observe";
@@ -799,6 +831,22 @@ impl koof::Operation for R2BucketObserve {
     const PATH: &'static str = "/accounts/{account_id}/r2/buckets/{bucket_name}";
     type Request = ();
     type Response = crate::generated::types::R2BucketObserveResponse;
+}
+pub struct SnippetRulesObserve;
+impl koof::Operation for SnippetRulesObserve {
+    const NAME: &'static str = "snippet_rules.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/zones/{zone_id}/snippets/snippet_rules";
+    type Request = ();
+    type Response = crate::generated::types::SnippetRulesObserveResponse;
+}
+pub struct SnippetRulesUpdate;
+impl koof::Operation for SnippetRulesUpdate {
+    const NAME: &'static str = "snippet_rules.update";
+    const METHOD: reqwest::Method = reqwest::Method::PUT;
+    const PATH: &'static str = "/zones/{zone_id}/snippets/snippet_rules";
+    type Request = crate::generated::types::SnippetRulesUpdateRequest;
+    type Response = crate::generated::types::SnippetRulesUpdateResponse;
 }
 pub struct SpectrumApplicationCreate;
 impl koof::Operation for SpectrumApplicationCreate {

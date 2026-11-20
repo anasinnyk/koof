@@ -13,6 +13,7 @@
       "resources": [
         "accounts",
         "clusteraccounts",
+        "accountapitokens",
         "iplists",
         "notificationpolicies",
         "pagesdomains",
@@ -35,6 +36,7 @@
       "resources": [
         "accounts/status",
         "clusteraccounts/status",
+        "accountapitokens/status",
         "iplists/status",
         "notificationpolicies/status",
         "pagesdomains/status",
@@ -55,6 +57,7 @@
       "resources": [
         "accounts/finalizers",
         "clusteraccounts/finalizers",
+        "accountapitokens/finalizers",
         "iplists/finalizers",
         "notificationpolicies/finalizers",
         "pagesdomains/finalizers",
@@ -324,6 +327,7 @@
         "healthchecks",
         "logpushjobs",
         "pagerules",
+        "snippetrules",
         "spectrumapplications",
         "waitingrooms",
         "zonelockdowns"
@@ -348,6 +352,7 @@
         "healthchecks/status",
         "logpushjobs/status",
         "pagerules/status",
+        "snippetrules/status",
         "spectrumapplications/status",
         "waitingrooms/status",
         "zonelockdowns/status"
@@ -370,6 +375,7 @@
         "healthchecks/finalizers",
         "logpushjobs/finalizers",
         "pagerules/finalizers",
+        "snippetrules/finalizers",
         "spectrumapplications/finalizers",
         "waitingrooms/finalizers",
         "zonelockdowns/finalizers"
