@@ -134,7 +134,10 @@ For APIs that soft-delete (the observe endpoint keeps answering `200`),
 `response.deletedWhen: deleted_at` on `observe` treats the resource as gone once
 that field is set. When the API only lists the resource, `response.match`
 (`field`, value expression `value`) on `observe` picks the matching item of the
-list; no match means the resource does not exist.
+list; no match means the resource does not exist. When the resource is a bare
+list the API replaces as a whole, `response.into: rules` on `observe` makes the
+list field `rules` of the resource, and `request.from: spec.forProvider.rules`
+sends it back.
 Request bodies default to `spec.forProvider`; `request.set` adds values such as
 identifiers of referenced resources. `x-kube-field` on a property sets `ignored`,
 `lateInitialize: false`, `sensitive` (kept out of `status.atProvider`),

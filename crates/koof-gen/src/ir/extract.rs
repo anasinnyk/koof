@@ -87,7 +87,7 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
                 extension.lifecycle.name()
             )));
         }
-        let (response_path, deleted_when, response_match) = response_fields(&extension)?;
+        let response = response_fields(&extension)?;
 
         operations.insert(
             id,
@@ -98,9 +98,10 @@ pub fn extract(prepared: &Value) -> Result<ProviderIr, ExtractError> {
                 request: spec::request_schema_name(kube_operation.operation).map(SchemaName),
                 response: spec::response_schema_name(prepared, kube_operation.operation)
                     .map(SchemaName),
-                response_path,
-                deleted_when,
-                response_match,
+                response_path: response.path,
+                deleted_when: response.deleted_when,
+                response_match: response.matching,
+                response_into: response.into,
                 request_mapping: extension.request,
                 result_identifiers: extension.result.unwrap_or_default().identifiers,
             },
@@ -253,11 +254,17 @@ fn extract_security_schemes(
     Ok(result)
 }
 
-type ResponseFields = (Option<String>, Option<String>, Option<ResponseMatchIr>);
+#[derive(Default)]
+struct ResponseFields {
+    path: Option<String>,
+    deleted_when: Option<String>,
+    matching: Option<ResponseMatchIr>,
+    into: Option<String>,
+}
 
 fn response_fields(extension: &OperationExtension) -> Result<ResponseFields, ExtractError> {
     let Some(response) = &extension.response else {
-        return Ok((None, None, None));
+        return Ok(ResponseFields::default());
     };
     if extension.lifecycle != LifecycleAction::Observe {
         let only_observe = |field: &str| {
@@ -272,6 +279,25 @@ fn response_fields(extension: &OperationExtension) -> Result<ResponseFields, Ext
         if response.matching.is_some() {
             return Err(only_observe("match"));
         }
+        if response.into.is_some() {
+            return Err(only_observe("into"));
+        }
+    }
+    if response.into.is_some() && response.matching.is_some() {
+        return Err(ir_error(format!(
+            "resource {}: response.into and response.match cannot be combined",
+            extension.resource.0
+        )));
+    }
+    if response
+        .into
+        .as_ref()
+        .is_some_and(|into| into.is_empty() || into.contains('.'))
+    {
+        return Err(ir_error(format!(
+            "resource {}: response.into must be a single field name",
+            extension.resource.0
+        )));
     }
     if response
         .matching
@@ -283,12 +309,12 @@ fn response_fields(extension: &OperationExtension) -> Result<ResponseFields, Ext
             extension.resource.0
         )));
     }
-    let path = (!response.path.is_empty()).then(|| response.path.clone());
-    Ok((
-        path,
-        response.deleted_when.clone(),
-        response.matching.clone(),
-    ))
+    Ok(ResponseFields {
+        path: (!response.path.is_empty()).then(|| response.path.clone()),
+        deleted_when: response.deleted_when.clone(),
+        matching: response.matching.clone(),
+        into: response.into.clone(),
+    })
 }
 
 fn parse_method(method: &str) -> Result<HttpMethod, ExtractError> {

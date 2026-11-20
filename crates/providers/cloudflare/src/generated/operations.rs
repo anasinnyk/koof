@@ -160,6 +160,22 @@ impl koof::Operation for AccountUpdate {
     type Request = crate::generated::types::IamComponentsSchemasAccount;
     type Response = crate::generated::types::IamResponseSingleAccount;
 }
+pub struct CloudConnectorRulesObserve;
+impl koof::Operation for CloudConnectorRulesObserve {
+    const NAME: &'static str = "cloud_connector_rules.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/zones/{zone_id}/cloud_connector/rules";
+    type Request = ();
+    type Response = crate::generated::types::CloudConnectorRulesObserveResponse;
+}
+pub struct CloudConnectorRulesUpdate;
+impl koof::Operation for CloudConnectorRulesUpdate {
+    const NAME: &'static str = "cloud_connector_rules.update";
+    const METHOD: reqwest::Method = reqwest::Method::PUT;
+    const PATH: &'static str = "/zones/{zone_id}/cloud_connector/rules";
+    type Request = crate::generated::types::CloudConnectorRulesUpdateRequest;
+    type Response = crate::generated::types::CloudConnectorRulesUpdateResponse;
+}
 pub struct CustomHostnameCreate;
 impl koof::Operation for CustomHostnameCreate {
     const NAME: &'static str = "custom_hostname.create";
@@ -1127,6 +1143,38 @@ impl koof::Operation for ZoneUpdate {
     const PATH: &'static str = "/zones/{zone_id}";
     type Request = crate::generated::types::ZoneUpdateRequest;
     type Response = crate::generated::types::ZoneUpdateResponse;
+}
+pub struct ZoneLockdownCreate;
+impl koof::Operation for ZoneLockdownCreate {
+    const NAME: &'static str = "zone_lockdown.create";
+    const METHOD: reqwest::Method = reqwest::Method::POST;
+    const PATH: &'static str = "/zones/{zone_id}/firewall/lockdowns";
+    type Request = crate::generated::types::ZoneLockdownCreateRequest;
+    type Response = crate::generated::types::FirewallZonelockdownResponseSingle;
+}
+pub struct ZoneLockdownDelete;
+impl koof::Operation for ZoneLockdownDelete {
+    const NAME: &'static str = "zone_lockdown.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}";
+    type Request = ();
+    type Response = crate::generated::types::ZoneLockdownDeleteResponse;
+}
+pub struct ZoneLockdownObserve;
+impl koof::Operation for ZoneLockdownObserve {
+    const NAME: &'static str = "zone_lockdown.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}";
+    type Request = ();
+    type Response = crate::generated::types::FirewallZonelockdownResponseSingle;
+}
+pub struct ZoneLockdownUpdate;
+impl koof::Operation for ZoneLockdownUpdate {
+    const NAME: &'static str = "zone_lockdown.update";
+    const METHOD: reqwest::Method = reqwest::Method::PUT;
+    const PATH: &'static str = "/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}";
+    type Request = crate::generated::types::ZoneLockdownUpdateRequest;
+    type Response = crate::generated::types::FirewallZonelockdownResponseSingle;
 }
 pub struct ZoneRulesetCreate;
 impl koof::Operation for ZoneRulesetCreate {

@@ -1,3 +1,4 @@
+pub mod cloud_connector_rules;
 pub mod custom_hostname;
 pub mod dns_record;
 pub mod email_routing_rule;
@@ -6,6 +7,9 @@ pub mod logpush_job;
 pub mod page_rule;
 pub mod spectrum_application;
 pub mod waiting_room;
+pub mod zone_lockdown;
+pub use crate::generated::types::ZonesV1alpha1CloudConnectorRulesAtProvider as CloudConnectorRulesAtProvider;
+pub use crate::generated::types::ZonesV1alpha1CloudConnectorRulesForProvider as CloudConnectorRulesForProvider;
 pub use crate::generated::types::ZonesV1alpha1CustomHostnameAtProvider as CustomHostnameAtProvider;
 pub use crate::generated::types::ZonesV1alpha1CustomHostnameForProvider as CustomHostnameForProvider;
 pub use crate::generated::types::ZonesV1alpha1DnsRecordAtProvider as DnsRecordAtProvider;
@@ -104,3 +108,5 @@ pub use crate::generated::types::ZonesV1alpha1SpectrumApplicationForProviderconf
 pub use crate::generated::types::ZonesV1alpha1SpectrumApplicationForProviderspectrumConfigPaygoAppConfig as SpectrumApplicationForProviderspectrumConfigPaygoAppConfig;
 pub use crate::generated::types::ZonesV1alpha1WaitingRoomAtProvider as WaitingRoomAtProvider;
 pub use crate::generated::types::ZonesV1alpha1WaitingRoomForProvider as WaitingRoomForProvider;
+pub use crate::generated::types::ZonesV1alpha1ZoneLockdownAtProvider as ZoneLockdownAtProvider;
+pub use crate::generated::types::ZonesV1alpha1ZoneLockdownForProvider as ZoneLockdownForProvider;

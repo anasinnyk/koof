@@ -195,6 +195,7 @@ pub struct OperationIr {
     pub response_path: Option<String>,
     pub deleted_when: Option<String>,
     pub response_match: Option<ResponseMatchIr>,
+    pub response_into: Option<String>,
     pub request_mapping: Option<RequestMappingIr>,
     pub result_identifiers: BTreeMap<String, String>,
 }

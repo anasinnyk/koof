@@ -317,6 +317,7 @@
         "zones.cloudflare.kube.nas1k.dev"
       ],
       "resources": [
+        "cloudconnectorrules",
         "customhostnames",
         "dnsrecords",
         "emailroutingrules",
@@ -324,7 +325,8 @@
         "logpushjobs",
         "pagerules",
         "spectrumapplications",
-        "waitingrooms"
+        "waitingrooms",
+        "zonelockdowns"
       ],
       "verbs": [
         "get",
@@ -339,6 +341,7 @@
         "zones.cloudflare.kube.nas1k.dev"
       ],
       "resources": [
+        "cloudconnectorrules/status",
         "customhostnames/status",
         "dnsrecords/status",
         "emailroutingrules/status",
@@ -346,7 +349,8 @@
         "logpushjobs/status",
         "pagerules/status",
         "spectrumapplications/status",
-        "waitingrooms/status"
+        "waitingrooms/status",
+        "zonelockdowns/status"
       ],
       "verbs": [
         "get",
@@ -359,6 +363,7 @@
         "zones.cloudflare.kube.nas1k.dev"
       ],
       "resources": [
+        "cloudconnectorrules/finalizers",
         "customhostnames/finalizers",
         "dnsrecords/finalizers",
         "emailroutingrules/finalizers",
@@ -366,7 +371,8 @@
         "logpushjobs/finalizers",
         "pagerules/finalizers",
         "spectrumapplications/finalizers",
-        "waitingrooms/finalizers"
+        "waitingrooms/finalizers",
+        "zonelockdowns/finalizers"
       ],
       "verbs": [
         "update"

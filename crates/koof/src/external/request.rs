@@ -6,13 +6,14 @@ use crate::{
 use jsonptr::Pointer;
 use serde_json::{Map, Value};
 
-/// Request body: the object at `mapping.from` with `mapping.set` applied,
-/// deserialized into `T` (unknown fields are dropped).
+/// Request body: the object at `mapping.from` with `mapping.set` applied, or the
+/// list at `mapping.from` as it is, deserialized into `T` (unknown fields are
+/// dropped).
 ///
 /// # Errors
 ///
-/// Returns [`ReconcileError`] when `from` is not an object, a `set` value cannot be
-/// resolved, or the JSON does not match `T`.
+/// Returns [`ReconcileError`] when `from` is neither an object nor a list without
+/// `set`, a `set` value cannot be resolved, or the JSON does not match `T`.
 pub async fn build<T: serde::de::DeserializeOwned>(
     client: &kube::Client,
     node: &Node,
@@ -20,6 +21,7 @@ pub async fn build<T: serde::de::DeserializeOwned>(
 ) -> Result<T, ReconcileError> {
     let mut body = match node.value.pointer(mapping.from) {
         Some(Value::Object(object)) => Value::Object(without_references(node, mapping, object)),
+        Some(Value::Array(items)) if mapping.set.is_empty() => Value::Array(items.clone()),
         None | Some(Value::Null) => Value::Object(Map::new()),
         Some(_) => {
             return Err(ResolveValueError::NonScalar {
@@ -182,6 +184,26 @@ mod tests {
                 ttl: None,
                 zone: None
             })
+        );
+    }
+
+    #[tokio::test]
+    async fn sends_a_list_as_it_is() {
+        let node = Node::of(&record(
+            Some("record-1"),
+            json!({ "tags": ["a", "b"], "zoneRef": { "name": "example" } }),
+        ))
+        .expect("node");
+        let body: Result<Vec<String>, _> = build(
+            &kubernetes(&[zone()]),
+            &node,
+            &RequestMapping::new("/spec/forProvider/tags"),
+        )
+        .await;
+
+        assert_eq!(
+            body.map_err(|error| error.to_string()),
+            Ok(vec!["a".to_owned(), "b".to_owned()])
         );
     }
 }
