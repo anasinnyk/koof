@@ -172,6 +172,7 @@ impl koof::ManagedResource for Queue {
     type Create = crate::generated::operations::QueueCreate;
     type Update = crate::generated::operations::QueueUpdate;
     type Delete = crate::generated::operations::QueueDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

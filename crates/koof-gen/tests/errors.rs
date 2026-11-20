@@ -1,6 +1,6 @@
 mod common;
 
-use common::{generated, widgets_with};
+use common::{TOKEN_OPERATION, TOKEN_SECRET, generated, widgets_with};
 use pretty_assertions::assert_eq;
 use rstest::rstest;
 
@@ -240,6 +240,41 @@ fn e2e_fixtures_cannot_depend_on_each_other_in_a_cycle() {
         message.as_deref(),
         Some(
             "e2e dependencies form a cycle: account -> widget -> account; remove `test` or break the cycle"
+        )
+    );
+}
+
+#[test]
+fn connection_details_need_a_connection_operation() {
+    assert_eq!(
+        error(TOKEN_SECRET).as_deref(),
+        Some(
+            "resources.widget.connection_secret: a key reads from the connection operation, but \
+             no operation has lifecycle: connection"
+        )
+    );
+}
+
+#[test]
+fn a_connection_operation_needs_a_key_reading_it() {
+    assert_eq!(
+        error(TOKEN_OPERATION).as_deref(),
+        Some(
+            "resources.widget.lifecycle.connection: no connectionSecret key reads from it (from: connection)"
+        )
+    );
+}
+
+#[test]
+fn the_connection_operation_only_reads() {
+    let actions =
+        format!("{TOKEN_OPERATION}{TOKEN_SECRET}").replace("        get:", "        post:");
+
+    assert_eq!(
+        error(&actions).as_deref(),
+        Some(
+            "resources.widget.lifecycle.connection: operation widget.connection must be a GET: \
+             koof calls it on every observation"
         )
     );
 }

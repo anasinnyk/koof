@@ -191,6 +191,7 @@ impl koof::ManagedResource for WaitingRoom {
     type Create = crate::generated::operations::WaitingRoomCreate;
     type Update = crate::generated::operations::WaitingRoomUpdate;
     type Delete = crate::generated::operations::WaitingRoomDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

@@ -172,6 +172,7 @@ impl koof::ManagedResource for KVNamespace {
     type Create = crate::generated::operations::KvNamespaceCreate;
     type Update = crate::generated::operations::KvNamespaceUpdate;
     type Delete = crate::generated::operations::KvNamespaceDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

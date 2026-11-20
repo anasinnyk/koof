@@ -14,12 +14,13 @@ expression: "page(&ResourceDoc::of::<Record>())"
 | create | `POST /zones/{zone_id}/records` |
 | update | `PATCH /zones/{zone_id}/records/{record_id}` |
 | delete | `DELETE /zones/{zone_id}/records/{record_id}` |
+| connection | `GET /zones/{zone_id}/records/{record_id}/secret` |
 
 References: `zoneRef` → Zone.
 
 Credentials: via zone → account.
 
-Connection details (`writeConnectionSecretToRef`): `id`, `token`.
+Connection details (`writeConnectionSecretToRef`): `id`, `token`, `secret`.
 
 ## Example
 

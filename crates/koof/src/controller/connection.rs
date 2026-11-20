@@ -97,6 +97,16 @@ pub async fn write<R: ManagedResource>(
     Ok(true)
 }
 
+/// Whether `resource` asks for a connection Secret (`spec.writeConnectionSecretToRef`).
+///
+/// # Errors
+///
+/// Returns [`ReconcileError`] when the resource cannot be serialized or the
+/// reference is malformed.
+pub fn requested<R: ManagedResource>(resource: &R) -> Result<bool, ReconcileError> {
+    Ok(target(resource)?.is_some())
+}
+
 fn target<R: ManagedResource>(resource: &R) -> Result<Option<(String, String)>, ReconcileError> {
     #[derive(serde::Deserialize)]
     struct Reference {

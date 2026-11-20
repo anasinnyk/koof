@@ -52,6 +52,7 @@ pub fn controllers(app: koof::App) -> koof::App {
         .controller::<cloudflare::v1alpha1::turnstile_widget::TurnstileWidget>()
         .controller::<storage::v1alpha1::vectorize_index::VectorizeIndex>()
         .controller::<zones::v1alpha1::waiting_room::WaitingRoom>()
+        .controller::<zerotrust::v1alpha1::warp_connector::WarpConnector>()
         .controller::<workers::v1alpha1::worker_route::WorkerRoute>()
         .controller::<cloudflare::v1alpha1::zone::Zone>()
         .controller::<rulesets::v1alpha1::zone_ruleset::Ruleset>()
@@ -94,6 +95,7 @@ pub fn fake() -> koof::fake::Fake {
         .resource::<cloudflare::v1alpha1::turnstile_widget::TurnstileWidget>()
         .resource::<storage::v1alpha1::vectorize_index::VectorizeIndex>()
         .resource::<zones::v1alpha1::waiting_room::WaitingRoom>()
+        .resource::<zerotrust::v1alpha1::warp_connector::WarpConnector>()
         .resource::<workers::v1alpha1::worker_route::WorkerRoute>()
         .resource::<cloudflare::v1alpha1::zone::Zone>()
         .resource::<rulesets::v1alpha1::zone_ruleset::Ruleset>()
@@ -153,8 +155,9 @@ pub fn crds() -> Vec<
         kube::CustomResourceExt > ::crd(), <
         storage::v1alpha1::vectorize_index::VectorizeIndex as kube::CustomResourceExt >
         ::crd(), < zones::v1alpha1::waiting_room::WaitingRoom as kube::CustomResourceExt
-        > ::crd(), < workers::v1alpha1::worker_route::WorkerRoute as
-        kube::CustomResourceExt > ::crd(), < cloudflare::v1alpha1::zone::Zone as
+        > ::crd(), < zerotrust::v1alpha1::warp_connector::WarpConnector as
+        kube::CustomResourceExt > ::crd(), < workers::v1alpha1::worker_route::WorkerRoute
+        as kube::CustomResourceExt > ::crd(), < cloudflare::v1alpha1::zone::Zone as
         kube::CustomResourceExt > ::crd(), < rulesets::v1alpha1::zone_ruleset::Ruleset as
         kube::CustomResourceExt > ::crd()
     ]
@@ -214,6 +217,8 @@ pub fn docs() -> Vec<koof::docs::ResourceDoc> {
         koof::docs::ResourceDoc::of:: <
         storage::v1alpha1::vectorize_index::VectorizeIndex > (),
         koof::docs::ResourceDoc::of:: < zones::v1alpha1::waiting_room::WaitingRoom > (),
+        koof::docs::ResourceDoc::of:: <
+        zerotrust::v1alpha1::warp_connector::WarpConnector > (),
         koof::docs::ResourceDoc::of:: < workers::v1alpha1::worker_route::WorkerRoute >
         (), koof::docs::ResourceDoc::of:: < cloudflare::v1alpha1::zone::Zone > (),
         koof::docs::ResourceDoc::of:: < rulesets::v1alpha1::zone_ruleset::Ruleset > ()

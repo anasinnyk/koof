@@ -167,6 +167,7 @@ impl koof::ManagedResource for WorkerRoute {
     type Create = crate::generated::operations::WorkerRouteCreate;
     type Update = crate::generated::operations::WorkerRouteUpdate;
     type Delete = crate::generated::operations::WorkerRouteDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

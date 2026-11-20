@@ -183,6 +183,7 @@ impl koof::ManagedResource for Healthcheck {
     type Create = crate::generated::operations::HealthcheckCreate;
     type Update = crate::generated::operations::HealthcheckUpdate;
     type Delete = crate::generated::operations::HealthcheckDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

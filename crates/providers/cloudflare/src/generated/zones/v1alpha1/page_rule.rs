@@ -167,6 +167,7 @@ impl koof::ManagedResource for PageRule {
     type Create = crate::generated::operations::PageRuleCreate;
     type Update = crate::generated::operations::PageRuleUpdate;
     type Delete = crate::generated::operations::PageRuleDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

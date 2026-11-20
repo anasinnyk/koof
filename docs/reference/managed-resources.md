@@ -17,7 +17,9 @@ before every create and update, and is not compared with the provider's (which i
 usually empty or masked), so changing the Secret takes effect with the next update.
 
 The connection Secret receives the keys listed on the kind's page, from the
-create response and every observation. A key the API returns only on create (a
+create response and every observation. Keys from a separate endpoint (the
+`connection` operation on the kind's page, such as a tunnel token) are read after
+every observation, so they appear shortly after create and follow rotation. A key the API returns only on create (a
 client secret) is kept by later observations, and is unknown for an imported
 resource. The controller refuses to write to a Secret that another object owns.
 With such kinds the controller may create and patch Secrets.

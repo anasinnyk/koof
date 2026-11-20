@@ -30,6 +30,9 @@ impl ResourceDoc {
         if descriptor.delete.is_some() {
             operations.push(("delete", R::Delete::METHOD, R::Delete::PATH));
         }
+        if descriptor.connection.is_some() {
+            operations.push(("connection", R::Connection::METHOD, R::Connection::PATH));
+        }
         Self {
             descriptor,
             crd: crd_value(&R::crd()),
@@ -179,12 +182,18 @@ fn page(resource: &ResourceDoc) -> String {
         let _ = write!(out, "\nReferences: {}.\n", references.join(", "));
     }
     let _ = write!(out, "\nCredentials: {}.\n", credentials(descriptor));
-    if !descriptor.connection_secret.is_empty() {
-        let keys: Vec<String> = descriptor
-            .connection_secret
-            .iter()
-            .map(|(key, _)| format!("`{key}`"))
-            .collect();
+    let keys: Vec<String> = descriptor
+        .connection_secret
+        .iter()
+        .chain(
+            descriptor
+                .connection
+                .iter()
+                .flat_map(|connection| connection.details),
+        )
+        .map(|(key, _)| format!("`{key}`"))
+        .collect();
+    if !keys.is_empty() {
         let _ = write!(
             out,
             "\nConnection details (`writeConnectionSecretToRef`): {}.\n",

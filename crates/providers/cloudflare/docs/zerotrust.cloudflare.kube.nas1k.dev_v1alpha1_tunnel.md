@@ -10,10 +10,13 @@
 | create | `POST /accounts/{account_id}/cfd_tunnel` |
 | update | `PATCH /accounts/{account_id}/cfd_tunnel/{tunnel_id}` |
 | delete | `DELETE /accounts/{account_id}/cfd_tunnel/{tunnel_id}` |
+| connection | `GET /accounts/{account_id}/cfd_tunnel/{tunnel_id}/token` |
 
 References: `accountRef` → Account / ClusterAccount.
 
 Credentials: via account.
+
+Connection details (`writeConnectionSecretToRef`): `tunnel_id`, `token`.
 
 ## Example
 
@@ -43,6 +46,8 @@ spec:
 | `forProvider.name` | string | yes | A user-friendly name for a tunnel. |
 | `forProvider.tunnel_secret` | string |  | Sets the password required to run a locally-managed tunnel. Must be at least 32 bytes and encoded as a base64 string. |
 | `managementPolicies` | []string |  | Actions the controller may take. `["*"]` (default) allows all; `["Observe"]` only reads (import without management). `Observe` is always required. Default `["*"]`. |
+| `writeConnectionSecretToRef` | object |  | The Secret, in the namespace of the resource, that the controller writes the connection details to. |
+| `writeConnectionSecretToRef.name` | string | yes |  |
 
 Validation:
 

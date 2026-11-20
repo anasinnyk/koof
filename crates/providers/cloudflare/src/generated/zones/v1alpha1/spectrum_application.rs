@@ -182,6 +182,7 @@ impl koof::ManagedResource for SpectrumApplication {
     type Create = crate::generated::operations::SpectrumApplicationCreate;
     type Update = crate::generated::operations::SpectrumApplicationUpdate;
     type Delete = crate::generated::operations::SpectrumApplicationDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

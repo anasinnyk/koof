@@ -194,6 +194,7 @@ impl koof::ManagedResource for ServiceHook {
     type Create = crate::generated::operations::ServiceHookCreate;
     type Update = crate::generated::operations::ServiceHookUpdate;
     type Delete = crate::generated::operations::ServiceHookDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

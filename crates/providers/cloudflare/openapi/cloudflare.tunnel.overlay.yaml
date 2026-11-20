@@ -35,6 +35,13 @@ actions:
             type: related
             via: [account]
 
+        # The token `cloudflared tunnel run --token` takes; Cloudflare returns it
+        # only from the token operation.
+        connectionSecret:
+          tunnel_id: id
+          token:
+            from: connection
+
         fields:
           mode: all
 
@@ -86,6 +93,21 @@ actions:
       x-kube-operation:
         resource: tunnel
         lifecycle: delete
+        pathParameters:
+          account_id:
+            type: related_identifier
+            via: [account]
+            name: external_id
+          tunnel_id:
+            type: external_name
+
+  - target: $.paths['/accounts/{account_id}/cfd_tunnel/{tunnel_id}/token'].get
+    update:
+      x-kube-operation:
+        resource: tunnel
+        lifecycle: connection
+        response:
+          path: result
         pathParameters:
           account_id:
             type: related_identifier

@@ -169,7 +169,10 @@ async fn writes_the_connection_details_to_the_secret_it_is_told_to() {
             secret["metadata"]["ownerReferences"][0]["uid"].clone()
         )),
         Some((
-            json!({ "id": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=" }),
+            json!({
+                "id": "MDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDE=",
+                "secret": "ZmFrZS1zZWNyZXQ=",
+            }),
             json!("uid-1")
         ))
     );

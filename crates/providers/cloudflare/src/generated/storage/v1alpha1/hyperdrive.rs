@@ -174,6 +174,7 @@ impl koof::ManagedResource for Hyperdrive {
     type Create = crate::generated::operations::HyperdriveCreate;
     type Update = crate::generated::operations::HyperdriveUpdate;
     type Delete = crate::generated::operations::HyperdriveDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

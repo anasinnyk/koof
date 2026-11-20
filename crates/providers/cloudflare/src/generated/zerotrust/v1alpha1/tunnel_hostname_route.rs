@@ -193,6 +193,7 @@ impl koof::ManagedResource for TunnelHostnameRoute {
     type Create = crate::generated::operations::TunnelHostnameRouteCreate;
     type Update = crate::generated::operations::TunnelHostnameRouteUpdate;
     type Delete = crate::generated::operations::TunnelHostnameRouteDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

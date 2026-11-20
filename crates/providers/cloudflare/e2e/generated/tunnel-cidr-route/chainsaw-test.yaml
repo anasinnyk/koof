@@ -39,6 +39,8 @@ spec:
                 name: account
               config_src: cloudflare
               name: koof-e2e
+            writeConnectionSecretToRef:
+              name: tunnel-connection
     - apply:
         resource:
           apiVersion: zerotrust.cloudflare.kube.nas1k.dev/v1alpha1

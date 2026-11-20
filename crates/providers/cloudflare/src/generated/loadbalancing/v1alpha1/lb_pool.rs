@@ -188,6 +188,7 @@ impl koof::ManagedResource for LoadBalancerPool {
     type Create = crate::generated::operations::LbPoolCreate;
     type Update = crate::generated::operations::LbPoolUpdate;
     type Delete = crate::generated::operations::LbPoolDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

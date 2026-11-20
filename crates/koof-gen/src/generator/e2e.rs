@@ -1,5 +1,8 @@
 use super::{GeneratedFile, GeneratorError};
-use crate::ir::resolved::{Provider, Resource};
+use crate::ir::{
+    ConnectionDetailIr,
+    resolved::{Provider, Resource},
+};
 use serde_json::{Map, Value, json};
 
 const SECRET: &str = "credentials";
@@ -54,6 +57,9 @@ fn test(
     create.extend(objects.iter().map(
         |object| json!({ "assert": { "resource": with_status(object, condition("Ready")) } }),
     ));
+    if let Some(secret) = connection_secret(resource) {
+        create.push(json!({ "assert": { "resource": secret } }));
+    }
 
     let mut steps = vec![json!({ "name": "create", "try": create })];
     if let (Some(_), Some(update)) = (
@@ -187,8 +193,46 @@ fn manifest(provider: &Provider<'_>, resource: &Resource<'_>) -> Value {
     }
     let mut spec = Map::new();
     spec.insert("forProvider".to_owned(), Value::Object(for_provider));
+    if writes_connection_secret(resource) {
+        spec.insert(
+            "writeConnectionSecretToRef".to_owned(),
+            json!({ "name": connection_secret_name(resource) }),
+        );
+    }
     object["spec"] = Value::Object(spec);
     object
+}
+
+fn writes_connection_secret(resource: &Resource<'_>) -> bool {
+    resource.connection.is_some() && resource.namespaced
+}
+
+fn connection_secret_name(resource: &Resource<'_>) -> String {
+    format!("{}-connection", object_name(resource))
+}
+
+/// The Secret the fake API's `connection` response fills: `fake-<key>` per key.
+fn connection_secret(resource: &Resource<'_>) -> Option<Value> {
+    if !writes_connection_secret(resource) {
+        return None;
+    }
+    let data: Map<String, Value> = resource
+        .connection_secret
+        .iter()
+        .filter(|(_, detail)| matches!(detail, ConnectionDetailIr::Operation(_)))
+        .map(|(key, _)| {
+            (
+                key.clone(),
+                Value::String(format!("(base64_encode('fake-{key}'))")),
+            )
+        })
+        .collect();
+    Some(json!({
+        "apiVersion": "v1",
+        "kind": "Secret",
+        "metadata": { "name": connection_secret_name(resource) },
+        "data": data,
+    }))
 }
 
 fn literal(value: &Value) -> Value {

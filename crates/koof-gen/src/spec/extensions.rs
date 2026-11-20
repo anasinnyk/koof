@@ -1,7 +1,7 @@
 use super::SpecError;
 use crate::ir::{
-    CredentialsIr, FieldPath, ItemReferenceIr, ReferenceIr, RequestMappingIr, ResourceName,
-    ResponseMatchIr, TestIr, ValidationIr, ValueExpr,
+    ConnectionDetailIr, CredentialsIr, FieldPath, ItemReferenceIr, ReferenceIr, RequestMappingIr,
+    ResourceName, ResponseMatchIr, TestIr, ValidationIr, ValueExpr,
 };
 use serde::{Deserialize, de::DeserializeOwned};
 use serde_json::Value;
@@ -59,7 +59,7 @@ pub struct ResourceExtension {
     pub item_references: BTreeMap<String, ItemReferenceIr>,
     pub credentials: Option<CredentialsIr>,
     #[serde(default)]
-    pub connection_secret: BTreeMap<String, String>,
+    pub connection_secret: BTreeMap<String, ConnectionDetailIr>,
     #[serde(default)]
     pub validations: Vec<ValidationIr>,
     #[serde(default)]
@@ -108,6 +108,7 @@ pub enum LifecycleAction {
     Create,
     Update,
     Delete,
+    Connection,
 }
 
 impl LifecycleAction {
@@ -118,6 +119,7 @@ impl LifecycleAction {
             Self::Create => "create",
             Self::Update => "update",
             Self::Delete => "delete",
+            Self::Connection => "connection",
         }
     }
 }

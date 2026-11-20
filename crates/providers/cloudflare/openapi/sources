@@ -23,6 +23,7 @@ cloudflare.access-group.overlay.yaml
 cloudflare.access-policy.overlay.yaml
 cloudflare.access-application.overlay.yaml
 cloudflare.tunnel.overlay.yaml
+cloudflare.warp-connector.overlay.yaml
 cloudflare.tunnel-cidr-route.overlay.yaml
 cloudflare.tunnel-hostname-route.overlay.yaml
 cloudflare.tunnel-configuration.overlay.yaml

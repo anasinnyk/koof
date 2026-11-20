@@ -174,6 +174,7 @@ impl koof::ManagedResource for D1Database {
     type Create = crate::generated::operations::D1DatabaseCreate;
     type Update = crate::generated::operations::D1DatabaseUpdate;
     type Delete = crate::generated::operations::D1DatabaseDelete;
+    type Connection = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

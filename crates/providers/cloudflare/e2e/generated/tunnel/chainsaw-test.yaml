@@ -39,6 +39,8 @@ spec:
                 name: account
               config_src: cloudflare
               name: koof-e2e
+            writeConnectionSecretToRef:
+              name: tunnel-connection
     - assert:
         resource:
           apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
@@ -57,6 +59,14 @@ spec:
           status:
             (conditions[?type == 'Ready']):
             - status: 'True'
+    - assert:
+        resource:
+          apiVersion: v1
+          data:
+            token: (base64_encode('fake-token'))
+          kind: Secret
+          metadata:
+            name: tunnel-connection
   - name: update
     try:
     - patch:
