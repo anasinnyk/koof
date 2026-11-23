@@ -132,6 +132,7 @@ impl<'a> Checker<'a, '_> {
         let update = self.operation("update", resource.lifecycle.update.as_ref());
         let delete = self.operation("delete", resource.lifecycle.delete.as_ref());
         let connection = self.connection();
+        let merge = self.merge();
 
         if self.errors.len() != errors_before {
             return None;
@@ -161,6 +162,7 @@ impl<'a> Checker<'a, '_> {
             update,
             delete,
             connection,
+            merge,
         })
     }
 
@@ -331,6 +333,29 @@ impl<'a> Checker<'a, '_> {
             );
         }
         Some(connection)
+    }
+
+    fn merge(&mut self) -> Option<Operation<'a>> {
+        let merge = self.operation("merge", self.resource.lifecycle.merge.as_ref())?;
+        if merge.ir.method != HttpMethod::Get {
+            self.error(
+                "lifecycle.merge",
+                format!(
+                    "operation {} must be a GET: koof calls it on every observation",
+                    merge.id.0
+                ),
+            );
+        }
+        if merge.ir.response_into.is_none() {
+            self.error(
+                "lifecycle.merge",
+                format!(
+                    "operation {} needs response.into: the field of the observation its response becomes",
+                    merge.id.0
+                ),
+            );
+        }
+        Some(merge)
     }
 
     fn connection_secret(&mut self) {

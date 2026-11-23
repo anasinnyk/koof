@@ -832,6 +832,60 @@ impl koof::Operation for R2BucketObserve {
     type Request = ();
     type Response = crate::generated::types::R2BucketObserveResponse;
 }
+pub struct SnippetCreate;
+impl koof::Operation for SnippetCreate {
+    const NAME: &'static str = "snippet.create";
+    const METHOD: reqwest::Method = reqwest::Method::PUT;
+    const PATH: &'static str = "/zones/{zone_id}/snippets/{snippet_name}";
+    const ENCODING: koof::multipart::Encoding = koof::multipart::Encoding::Multipart(
+        koof::multipart::Multipart::new(
+            &["metadata"],
+            "files",
+            "application/javascript+module",
+        ),
+    );
+    type Request = serde_json::Value;
+    type Response = crate::generated::types::SnippetCreateResponse;
+}
+pub struct SnippetDelete;
+impl koof::Operation for SnippetDelete {
+    const NAME: &'static str = "snippet.delete";
+    const METHOD: reqwest::Method = reqwest::Method::DELETE;
+    const PATH: &'static str = "/zones/{zone_id}/snippets/{snippet_name}";
+    type Request = ();
+    type Response = crate::generated::types::SnippetDeleteResponse;
+}
+pub struct SnippetMerge;
+impl koof::Operation for SnippetMerge {
+    const NAME: &'static str = "snippet.merge";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/zones/{zone_id}/snippets/{snippet_name}/content";
+    type Request = ();
+    type Response = ();
+}
+pub struct SnippetObserve;
+impl koof::Operation for SnippetObserve {
+    const NAME: &'static str = "snippet.observe";
+    const METHOD: reqwest::Method = reqwest::Method::GET;
+    const PATH: &'static str = "/zones/{zone_id}/snippets/{snippet_name}";
+    type Request = ();
+    type Response = crate::generated::types::SnippetObserveResponse;
+}
+pub struct SnippetUpdate;
+impl koof::Operation for SnippetUpdate {
+    const NAME: &'static str = "snippet.update";
+    const METHOD: reqwest::Method = reqwest::Method::PUT;
+    const PATH: &'static str = "/zones/{zone_id}/snippets/{snippet_name}";
+    const ENCODING: koof::multipart::Encoding = koof::multipart::Encoding::Multipart(
+        koof::multipart::Multipart::new(
+            &["metadata"],
+            "files",
+            "application/javascript+module",
+        ),
+    );
+    type Request = serde_json::Value;
+    type Response = crate::generated::types::SnippetCreateResponse;
+}
 pub struct SnippetRulesObserve;
 impl koof::Operation for SnippetRulesObserve {
     const NAME: &'static str = "snippet_rules.observe";

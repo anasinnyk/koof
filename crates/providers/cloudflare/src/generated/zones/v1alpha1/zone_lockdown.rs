@@ -170,6 +170,7 @@ impl koof::ManagedResource for ZoneLockdown {
     type Update = crate::generated::operations::ZoneLockdownUpdate;
     type Delete = crate::generated::operations::ZoneLockdownDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

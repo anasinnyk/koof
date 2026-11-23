@@ -34,8 +34,25 @@ pub fn generate_operations(
             let body_type = |schema: Option<&SchemaName>| {
                 schema.map_or_else(|| Ok(quote!(())), |schema| types.path(&schema.0))
             };
-            let request = body_type(operation.request.as_ref())?;
+            let multipart = operation
+                .request_mapping
+                .as_ref()
+                .and_then(|mapping| mapping.multipart.as_ref());
+            let request = match multipart {
+                Some(_) => quote!(serde_json::Value),
+                None => body_type(operation.request.as_ref())?,
+            };
             let response = body_type(operation.response.as_ref())?;
+            let encoding = multipart.map(|multipart| {
+                let json = &multipart.json;
+                let files = &multipart.files;
+                let file_type = &multipart.file_type;
+                quote! {
+                    const ENCODING: koof::multipart::Encoding = koof::multipart::Encoding::Multipart(
+                        koof::multipart::Multipart::new(&[#(#json),*], #files, #file_type),
+                    );
+                }
+            });
 
             Ok(quote! {
                 pub struct #ident;
@@ -44,6 +61,7 @@ pub fn generate_operations(
                     const NAME: &'static str = #name;
                     const METHOD: reqwest::Method = reqwest::Method::#method;
                     const PATH: &'static str = #path;
+                    #encoding
                     type Request = #request;
                     type Response = #response;
                 }

@@ -248,3 +248,66 @@ pub const LABELS: &str = "
                 via: [account]
                 name: external_id
 ";
+
+/// Widget `notes`: files the API returns from a separate endpoint as multipart and
+/// takes as multipart parts on create.
+pub const NOTES: &str = "
+  - target: $.components.schemas.widget.properties
+    update:
+      notes:
+        type: array
+        items:
+          type: object
+          required: [name, content]
+          properties:
+            name:
+              type: string
+            content:
+              type: string
+  - target: $.components.schemas.widget['x-kube-resource'].fields.forProvider
+    update: [notes]
+  - target: $.components.schemas.widget['x-kube-resource'].fields.atProvider
+    update: [notes]
+  - target: $.paths
+    update:
+      /accounts/{account_id}/widgets/{widget_id}/notes:
+        parameters:
+          - name: account_id
+            in: path
+            required: true
+            schema:
+              type: string
+          - name: widget_id
+            in: path
+            required: true
+            schema:
+              type: string
+        get:
+          operationId: getWidgetNotes
+          responses:
+            '200':
+              description: The notes.
+              content:
+                multipart/form-data:
+                  schema:
+                    type: object
+          x-kube-operation:
+            resource: widget
+            lifecycle: observe
+            merge: true
+            response:
+              into: notes
+            pathParameters:
+              account_id:
+                type: related_identifier
+                via: [account]
+                name: external_id
+              widget_id:
+                type: external_name
+  - target: $.paths['/accounts/{account_id}/widgets'].post['x-kube-operation']
+    update:
+      request:
+        multipart:
+          json: [metadata]
+          files: notes
+";

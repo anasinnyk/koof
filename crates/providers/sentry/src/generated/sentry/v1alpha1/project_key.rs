@@ -216,6 +216,7 @@ impl koof::ManagedResource for ProjectKey {
     type Update = crate::generated::operations::ProjectKeyUpdate;
     type Delete = crate::generated::operations::ProjectKeyDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

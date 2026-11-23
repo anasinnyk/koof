@@ -184,6 +184,7 @@ impl koof::ManagedResource for TurnstileWidget {
     type Update = crate::generated::operations::TurnstileWidgetUpdate;
     type Delete = crate::generated::operations::TurnstileWidgetDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }

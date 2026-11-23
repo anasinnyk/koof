@@ -186,6 +186,7 @@ impl koof::ManagedResource for DNSRecord {
     type Update = crate::generated::operations::DnsRecordUpdate;
     type Delete = crate::generated::operations::DnsRecordDelete;
     type Connection = koof::http::Unsupported;
+    type Merge = koof::http::Unsupported;
     fn descriptor() -> &'static koof::ResourceDescriptor {
         &DESCRIPTOR
     }
