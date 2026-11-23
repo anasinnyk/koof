@@ -137,9 +137,23 @@ pub async fn observe<R: ManagedResource>(
         (&node.descriptor.merge, observation.at_provider.as_mut())
     {
         let value = merged::<R>(context, &node, merge).await?;
-        at_provider.insert(merge.into.to_owned(), value);
+        merge_into(at_provider, merge.into, value);
     }
     Ok(observation)
+}
+
+/// Adds a merge read's `value` to the observation as `field`. A read that returned
+/// nothing (`404`, empty body) leaves the field out, so it is not compared: an
+/// empty value would look like drift and trigger an update.
+fn merge_into(at_provider: &mut Map<String, Value>, field: &str, value: Value) {
+    if value.is_null() {
+        tracing::debug!(
+            field,
+            "merge read returned nothing; the field is left out of the observation"
+        );
+    } else {
+        at_provider.insert(field.to_owned(), value);
+    }
 }
 
 async fn merged<R: ManagedResource>(
@@ -474,6 +488,18 @@ mod tests {
         assert_eq!(
             (observation.exists, observation.at_provider),
             (true, Some(json!({ "rules": null })))
+        );
+    }
+
+    #[test]
+    fn a_merge_read_that_returned_nothing_leaves_the_field_out() {
+        let mut at_provider = Map::from_iter([("name".to_owned(), json!("a"))]);
+        merge_into(&mut at_provider, "files", Value::Null);
+        merge_into(&mut at_provider, "other", json!([]));
+
+        assert_eq!(
+            Value::Object(at_provider),
+            json!({ "name": "a", "other": [] })
         );
     }
 }
