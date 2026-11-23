@@ -35,6 +35,18 @@ actions:
         fields:
           mode: all
 
+  # The create request takes a lowercase locationHint, but the bucket reports its
+  # location in uppercase (WEUR), outside the documented enum; the observed
+  # location is a plain string.
+  - target: $.components.schemas.r2_bucket.properties.location
+    remove: true
+
+  - target: $.components.schemas.r2_bucket.properties
+    update:
+      location:
+        description: Location of the bucket, in uppercase (e.g. `WEUR`).
+        type: string
+
   - target: $.paths['/accounts/{account_id}/r2/buckets/{bucket_name}'].get
     update:
       x-kube-operation:
