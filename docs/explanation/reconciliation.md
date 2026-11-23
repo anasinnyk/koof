@@ -191,5 +191,9 @@ record each action.
 | reconcile longer than `KOOF_RECONCILE_TIMEOUT` (5 min), e.g. a Kubernetes API that stopped answering | abandoned, then retried like a transient error |
 | no reconcile for twice the resync interval (a lost retry) | the next resync interval tick |
 
+With `RUST_LOG=koof=debug` every drifted field is logged with its desired and
+observed value (sensitive fields, which the status leaves out, show no observed
+value).
+
 Periodic delays get ±10 % jitter, so objects created together do not all hit the API
 at the same moment. Any change to the object triggers a reconcile immediately.

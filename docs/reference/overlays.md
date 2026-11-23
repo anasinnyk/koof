@@ -50,7 +50,7 @@ On an operation (`$.paths['…'].get`).
 | `resource` | string | Resource `name` |
 | `lifecycle` | `observe`, `create`, `update`, `delete`, or a list of them | `observe` is required, the others optional. A list declares one operation for several (`[create, update]` for a `PUT` that creates or replaces) |
 | `connectionDetails` | bool | With `lifecycle: observe`: not the observation but an extra `GET` after it, whose response only feeds `connectionSecret` keys with `from: connectionDetails` |
-| `merge` | bool | With `lifecycle: observe`: not the observation but an extra `GET` after it, whose response becomes field `response.into` of the observation (values the observe operation does not return, such as code). Needs `response.into` |
+| `merge` | bool | With `lifecycle: observe`: not the observation but an extra `GET` after it, whose response becomes field `response.into` of the observation (values the observe operation does not return, such as code). A read that returns nothing (`404`, empty body) leaves the field out, so it is not compared. Needs `response.into` |
 | `pathParameters` | map of [value](#values) | One per `{placeholder}` in the path |
 | `request.from` | path | Body source, default `spec.forProvider`; a list is sent as it is (without `set`). Drift is checked on this field |
 | `request.set` | map of dotted body path to [value](#values) | Extra body fields |

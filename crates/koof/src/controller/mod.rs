@@ -231,7 +231,9 @@ async fn drifted<R: ManagedResource>(
     if !observation.exists || deleting {
         return Ok((Vec::new(), false));
     }
-    let fields = drift(&desired(context, resource).await?, observation);
+    let node = desired(context, resource).await?;
+    let fields = drift(&node, observation);
+    log_drift::<R>(&node, observation, &fields);
     let known = !fields.is_empty()
         && context
             .attempts
@@ -368,6 +370,31 @@ async fn desired<R: ManagedResource>(
     resource: &R,
 ) -> Result<Node, ReconcileError> {
     Ok(with_item_references(&context.kube_client, &Node::of(resource)?).await?)
+}
+
+/// Logs the desired and observed value of each drifted field at debug level. The
+/// observed value is taken from the status type, which leaves out sensitive fields.
+fn log_drift<R: ManagedResource>(
+    node: &Node,
+    observation: &external::Observation,
+    fields: &[String],
+) {
+    if fields.is_empty() || !tracing::enabled!(tracing::Level::DEBUG) {
+        return;
+    }
+    let public = observation
+        .at_provider
+        .clone()
+        .and_then(|observed| serde_json::from_value::<R::AtProvider>(observed).ok())
+        .and_then(|typed| serde_json::to_value(typed).ok());
+    for field in fields {
+        let pointer = format!("/{}", field.replace('.', "/"));
+        let desired = node.value.pointer(&format!("/spec/forProvider{pointer}"));
+        let observed = public
+            .as_ref()
+            .and_then(|observed| observed.pointer(&pointer));
+        tracing::debug!(field, ?desired, ?observed, "drift");
+    }
 }
 
 async fn update_external<R: ManagedResource>(
