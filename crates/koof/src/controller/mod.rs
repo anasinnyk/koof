@@ -11,7 +11,8 @@ pub mod status;
 mod usage;
 
 pub use context::{
-    Attempts, Backoff, ControllerContext, DEFAULT_FIELD_MANAGER, DEFAULT_RESYNC, SyncTracker,
+    Activity, Attempts, Backoff, ControllerContext, DEFAULT_FIELD_MANAGER,
+    DEFAULT_RECONCILE_TIMEOUT, DEFAULT_RESYNC, SyncTracker,
 };
 
 use crate::{
@@ -31,7 +32,9 @@ use kube::runtime::{
     Controller, Predicate as _, PredicateConfig, WatchStreamExt as _,
     controller::Action,
     events::{Event, EventType},
-    predicates, reflector, watcher,
+    predicates,
+    reflector::{self, ObjectRef, Store},
+    watcher,
 };
 use policy::{Action as PolicyAction, State};
 use status::{record_failure, set_conditions, update_status};
@@ -520,6 +523,69 @@ async fn create_external<R: ManagedResource>(
     Ok(Action::requeue(CONFIRM))
 }
 
+/// [`reconcile`], abandoned with [`ReconcileError::Timeout`] after
+/// `context.reconcile_timeout`: a request that never answers (the Kubernetes client
+/// has no read timeout) would otherwise keep the object from ever being reconciled
+/// again.
+///
+/// # Errors
+///
+/// See [`reconcile`].
+pub async fn reconcile_bounded<R: ManagedResource>(
+    resource: Arc<R>,
+    context: Arc<ControllerContext>,
+) -> Result<Action, ReconcileError> {
+    let key = object_key(resource.as_ref());
+    context.activity.touched(&key);
+    let limit = context.reconcile_timeout;
+    let result = bounded(reconcile::<R>(resource, context.clone()), limit).await;
+    context.activity.touched(&key);
+    result
+}
+
+async fn bounded(
+    reconcile: impl Future<Output = Result<Action, ReconcileError>>,
+    limit: Duration,
+) -> Result<Action, ReconcileError> {
+    tokio::time::timeout(limit, reconcile)
+        .await
+        .unwrap_or_else(|_| {
+            tracing::warn!(?limit, "reconcile timed out; retrying");
+            Err(ReconcileError::Timeout(limit))
+        })
+}
+
+/// Every `context.resync`, the objects in `store` without a reconcile for twice
+/// that long: their scheduled retry got lost, so they are reconciled again.
+fn idle_objects<R: ManagedResource>(
+    store: Store<R>,
+    context: Arc<ControllerContext>,
+) -> impl futures::Stream<Item = ObjectRef<R>> + Send + 'static {
+    let interval = context.resync;
+    futures::stream::unfold((), move |()| async move {
+        tokio::time::sleep(interval).await;
+        Some(((), ()))
+    })
+    .flat_map(move |()| {
+        let objects: std::collections::HashMap<String, Arc<R>> = store
+            .state()
+            .into_iter()
+            .map(|object| (object_key(object.as_ref()), object))
+            .collect();
+        let idle = context
+            .activity
+            .idle(objects.keys().cloned().collect(), interval.saturating_mul(2));
+        if !idle.is_empty() {
+            tracing::info!(resource = %R::descriptor().group_kind(), objects = ?idle, "reconciling objects idle for too long");
+        }
+        futures::stream::iter(
+            idle.into_iter()
+                .filter_map(|key| objects.get(&key).map(|object| ObjectRef::from_obj(object.as_ref())))
+                .collect::<Vec<_>>(),
+        )
+    })
+}
+
 #[allow(clippy::needless_pass_by_value)]
 #[must_use]
 pub fn error_policy<R: ManagedResource>(
@@ -615,10 +681,12 @@ pub async fn run<R: ManagedResource>(
         );
 
     let config = kube::runtime::controller::Config::default().concurrency(context.concurrency);
+    let idle = idle_objects(reader.clone(), context.clone());
     let controller = Controller::for_stream(stream, reader)
         .with_config(config)
+        .reconcile_on(idle)
         .graceful_shutdown_on(stopping(Duration::ZERO))
-        .run(reconcile::<R>, error_policy::<R>, context)
+        .run(reconcile_bounded::<R>, error_policy::<R>, context)
         .for_each(|result| async move {
             match result {
                 Err(kube::runtime::controller::Error::ReconcilerFailed(..)) | Ok(_) => {}

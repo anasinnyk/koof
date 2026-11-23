@@ -112,9 +112,7 @@ impl App {
         shutdown: impl Future<Output = ()> + Send + 'static,
     ) -> Result<(), AppError> {
         tracing::info!(provider = self.provider.name, ?config, "configuration");
-        if config.resync_interval.is_zero() {
-            return Err(AppError::ZeroResyncInterval);
-        }
+        validate(&config)?;
         let http = config.http.client().map_err(AppError::HttpClient)?;
         let elector = if config.leader_election.enabled {
             Some(LeaderElector::new(
@@ -148,6 +146,7 @@ impl App {
                 config.concurrency,
             )
             .with_resync(config.resync_interval)
+            .with_reconcile_timeout(config.reconcile_timeout)
             .with_field_manager(field_manager),
         );
 
@@ -261,6 +260,16 @@ async fn shutdown_signal() {
     let _ = tokio::signal::ctrl_c().await;
 }
 
+fn validate(config: &Config) -> Result<(), AppError> {
+    if config.resync_interval.is_zero() {
+        return Err(AppError::ZeroResyncInterval);
+    }
+    if config.reconcile_timeout.is_zero() {
+        return Err(AppError::ZeroReconcileTimeout);
+    }
+    Ok(())
+}
+
 #[derive(Debug, thiserror::Error)]
 pub enum AppError {
     #[cfg(feature = "env")]
@@ -269,6 +278,9 @@ pub enum AppError {
 
     #[error("resync interval must be greater than zero")]
     ZeroResyncInterval,
+
+    #[error("reconcile timeout must be greater than zero")]
+    ZeroReconcileTimeout,
 
     #[error("cannot create the HTTP client")]
     HttpClient(#[source] reqwest::Error),

@@ -458,3 +458,46 @@ async fn an_interrupted_create_can_be_orphaned_on_delete() {
 
     assert_eq!(world.record(), None);
 }
+
+#[tokio::test]
+async fn a_reconcile_that_never_finishes_times_out_and_is_retried() {
+    let result = bounded(std::future::pending(), Duration::from_millis(10)).await;
+
+    assert_eq!(
+        result.map_err(|error| (error.to_string(), retry::classify(&error))),
+        Err((
+            "reconcile did not finish within 10ms".to_owned(),
+            retry::Failure::Transient(None)
+        ))
+    );
+}
+
+#[tokio::test]
+async fn a_finished_reconcile_keeps_its_result() {
+    let result = bounded(
+        std::future::ready(Ok(Action::requeue(CONFIRM))),
+        Duration::from_secs(1),
+    )
+    .await;
+
+    assert_eq!(result.ok(), Some(Action::requeue(CONFIRM)));
+}
+
+#[test]
+fn objects_without_recent_activity_are_idle() {
+    let activity = Activity::default();
+    activity.touched("recent");
+    activity.touched("gone");
+
+    assert_eq!(
+        activity.idle(
+            vec!["recent".to_owned(), "never".to_owned()],
+            Duration::from_secs(60)
+        ),
+        vec!["never".to_owned()]
+    );
+    assert_eq!(
+        activity.idle(vec!["gone".to_owned()], Duration::ZERO),
+        vec!["gone".to_owned()]
+    );
+}

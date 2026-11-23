@@ -72,6 +72,7 @@ logged at startup; an invalid value stops the binary.
 | `KOOF_POD_NAME`                    | –                           | Instance name reported on events            |
 | `KOOF_CONCURRENCY`                 | `8`                         | Parallel reconciles per resource kind       |
 | `KOOF_RESYNC_INTERVAL`             | `5m`                        | How often an object in sync is re-observed  |
+| `KOOF_RECONCILE_TIMEOUT`           | `5m`                        | Longest reconcile; then it is retried       |
 | `KOOF_HTTP__TIMEOUT`               | `30s`                       | Whole provider API request                  |
 | `KOOF_HTTP__CONNECT_TIMEOUT`       | `10s`                       | Connecting to the provider API              |
 | `KOOF_HTTP__POOL_IDLE_TIMEOUT`     | `90s`                       | How long an idle connection is kept         |
