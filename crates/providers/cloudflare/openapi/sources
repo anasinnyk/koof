@@ -3,6 +3,7 @@
 cloudflare.yaml
 cloudflare.provider.overlay.yaml
 cloudflare.account.overlay.yaml
+cloudflare.account-api-token.overlay.yaml
 cloudflare.zone.overlay.yaml
 cloudflare.dns-record.overlay.yaml
 cloudflare.ruleset.overlay.yaml
@@ -30,6 +31,9 @@ cloudflare.tunnel-configuration.overlay.yaml
 cloudflare.gateway-list.overlay.yaml
 cloudflare.gateway-rule.overlay.yaml
 cloudflare.page-rule.overlay.yaml
+cloudflare.zone-lockdown.overlay.yaml
+cloudflare.cloud-connector-rules.overlay.yaml
+cloudflare.snippet-rules.overlay.yaml
 cloudflare.custom-hostname.overlay.yaml
 cloudflare.email-routing-rule.overlay.yaml
 cloudflare.healthcheck.overlay.yaml

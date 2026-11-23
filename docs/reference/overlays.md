@@ -51,11 +51,12 @@ On an operation (`$.paths['…'].get`).
 | `lifecycle` | `observe`, `create`, `update`, `delete` | `observe` is required, the others optional |
 | `connectionDetails` | bool | With `lifecycle: observe`: not the observation but an extra `GET` after it, whose response only feeds `connectionSecret` keys with `from: connectionDetails` |
 | `pathParameters` | map of [value](#values) | One per `{placeholder}` in the path |
-| `request.from` | path | Body source, default `spec.forProvider` |
+| `request.from` | path | Body source, default `spec.forProvider`; a list is sent as it is (without `set`). Drift is checked on this field |
 | `request.set` | map of dotted body path to [value](#values) | Extra body fields |
 | `response.path` | string | Where the resource is in the response (`result`); on create, where `connectionSecret` paths start |
 | `response.deletedWhen` | string | Observe only: the resource is gone once this field is set |
 | `response.match` | `{field, value}` | Observe only: the response is a list and the resource is the item whose `field` equals the value expression `value`; missing when no item matches |
+| `response.into` | field name | Observe only: the response (at `path`) is the value of this field of the resource, for a resource that is a bare list. Not with `match` |
 | `result.identifiers` | map | Create: where an identifier is in the response (`response.body.result.id`) |
 
 ## `x-kube-field`

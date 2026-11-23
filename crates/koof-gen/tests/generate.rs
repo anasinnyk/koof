@@ -1,6 +1,6 @@
 mod common;
 
-use common::{PARTS, TOKEN_OPERATION, TOKEN_SECRET, generated, widgets, widgets_with};
+use common::{LABELS, PARTS, TOKEN_OPERATION, TOKEN_SECRET, generated, widgets, widgets_with};
 
 #[test]
 fn generates_the_provider_crate() {
@@ -114,4 +114,19 @@ fn connection_details_can_come_from_a_connection_operation() {
     assert!(descriptor.contains(r#".with_connection_secret(&[("widget_id","/id")])"#));
     assert!(descriptor.contains(r#"&[("token","")]"#));
     assert!(descriptor.contains("typeConnection=crate::generated::operations::WidgetConnection;"));
+}
+
+#[test]
+fn a_bare_list_is_managed_as_a_field() {
+    let files = generated(&widgets_with(LABELS)).expect("generated");
+    let labels: String = files["src/generated/widgets/v1alpha1/labels.rs"]
+        .split_whitespace()
+        .collect();
+    let types = &files["src/generated/types.rs"];
+
+    assert!(labels.contains(r#"plural="labels","#));
+    assert!(labels.contains(r#".with_into("labels")"#));
+    assert!(labels.contains(r#"RequestMapping::new("/spec/forProvider/labels")"#));
+    assert!(types.contains("pub struct WidgetsV1alpha1LabelsAtProvider {"));
+    assert!(types.contains("pub labels: ::std::vec::Vec<Label>,"));
 }

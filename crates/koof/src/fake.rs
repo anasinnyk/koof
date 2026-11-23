@@ -43,6 +43,7 @@ struct Shape {
     creatable: bool,
     key: Vec<String>,
     response_path: &'static str,
+    into: Option<&'static str>,
     matching: Option<(String, &'static str)>,
     create_path: &'static str,
     id_field: &'static str,
@@ -208,6 +209,7 @@ impl Shape {
             creatable: descriptor.create.is_some(),
             key,
             response_path: observe.response_path,
+            into: descriptor.observe.into,
             matching: descriptor
                 .observe
                 .matching
@@ -222,6 +224,20 @@ impl Shape {
                 .connection
                 .as_ref()
                 .map(|connection| (connection.operation.response_path, connection.details)),
+        }
+    }
+
+    fn response(&self, object: &Value) -> Value {
+        match self.into {
+            Some(field) => object.get(field).cloned().unwrap_or(Value::Null),
+            None => object.clone(),
+        }
+    }
+
+    fn stored(&self, body: Value) -> Value {
+        match (self.into, body) {
+            (Some(field), body @ Value::Array(_)) => json!({ field: body }),
+            (_, body) => body,
         }
     }
 
@@ -642,11 +658,11 @@ impl Store {
                 wrap(shape.response_path, Value::Array(items))
             }
             Lifecycle::Observe => match objects.get(&key) {
-                Some(object) => wrap(shape.response_path, object.clone()),
+                Some(object) => wrap(shape.response_path, shape.response(object)),
                 None if !shape.creatable => {
                     let mut object = Value::Object(Map::new());
                     shape.complete(&mut object);
-                    wrap(shape.response_path, object)
+                    wrap(shape.response_path, shape.response(&object))
                 }
                 None => error(StatusCode::NOT_FOUND, "not found"),
             },
@@ -660,13 +676,13 @@ impl Store {
                     merge(object, body);
                 } else {
                     let id = object.get(shape.id_field).cloned();
-                    *object = body;
+                    *object = shape.stored(body);
                     if let Some(id) = id {
                         insert(object, shape.id_field, id);
                     }
                     shape.complete(object);
                 }
-                wrap(shape.response_path, object.clone())
+                wrap(shape.response_path, shape.response(object))
             }
             Lifecycle::Delete => match objects.remove(&key) {
                 Some(object) => {

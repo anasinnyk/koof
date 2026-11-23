@@ -1,0 +1,137 @@
+overlay: 1.1.0
+info:
+  title: Cloudflare ZoneLockdown
+  version: 0.0.1
+extends: ./cloudflare.yaml
+actions:
+  - target: $.paths['/zones/{zone_id}/firewall/lockdowns'].post.requestBody.content['application/json'].schema
+    update:
+      x-kube-resource:
+        name: zone_lockdown
+        apiVersion: zones.cloudflare.kube.nas1k.dev/v1alpha1
+        kind: ZoneLockdown
+
+        test:
+          forProvider:
+            description: koof e2e
+            urls:
+              - example.com/admin*
+            configurations:
+              - target: ip
+                value: 198.51.100.4
+              - target: ip_range
+                value: 198.51.100.0/24
+          update:
+            paused: true
+
+        identifiers:
+          external_id:
+            type: external_name
+
+        references:
+          zone:
+            from: spec.forProvider.zoneRef
+            target: zone
+
+        credentials:
+          securityScheme: api_token
+          source:
+            type: related
+            via: [zone, account]
+
+        fields:
+          mode: all
+
+  # The two configuration shapes differ only in the target, which typify cannot
+  # tell apart; one object with an enum target keeps the CRD readable.
+  - target: $.components.schemas.firewall_configurations.items
+    remove: true
+
+  - target: $.components.schemas.firewall_configurations
+    update:
+      items:
+        type: object
+        properties:
+          target:
+            description: '`ip` for an IP address, `ip_range` for a /16 or /24 range.'
+            type: string
+            enum: [ip, ip_range]
+          value:
+            description: The IP address or range to match against the IP address of incoming requests.
+            type: string
+        required: [target, value]
+
+  # The API returns and accepts priority, which the documented schemas omit; the
+  # update takes every field of the create.
+  - target: $.components.schemas['firewall_schemas-priority']
+    update:
+      type: integer
+
+  - target: $.components.schemas.firewall_zonelockdown.properties
+    update:
+      priority:
+        $ref: '#/components/schemas/firewall_schemas-priority'
+
+  - target: $.paths['/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}'].put.requestBody.content['application/json'].schema.properties
+    update:
+      description:
+        $ref: '#/components/schemas/firewall_description'
+      paused:
+        $ref: '#/components/schemas/firewall_schemas-paused'
+      priority:
+        $ref: '#/components/schemas/firewall_schemas-priority'
+
+  - target: $.paths['/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}'].get
+    update:
+      x-kube-operation:
+        resource: zone_lockdown
+        lifecycle: observe
+        response:
+          path: result
+        pathParameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          lock_downs_id:
+            type: external_name
+
+  - target: $.paths['/zones/{zone_id}/firewall/lockdowns'].post
+    update:
+      x-kube-operation:
+        resource: zone_lockdown
+        lifecycle: create
+        pathParameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+        result:
+          identifiers:
+            external_id: response.body.result.id
+
+  - target: $.paths['/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}'].put
+    update:
+      x-kube-operation:
+        resource: zone_lockdown
+        lifecycle: update
+        pathParameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          lock_downs_id:
+            type: external_name
+
+  - target: $.paths['/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}'].delete
+    update:
+      x-kube-operation:
+        resource: zone_lockdown
+        lifecycle: delete
+        pathParameters:
+          zone_id:
+            type: related_identifier
+            via: [zone]
+            name: external_id
+          lock_downs_id:
+            type: external_name

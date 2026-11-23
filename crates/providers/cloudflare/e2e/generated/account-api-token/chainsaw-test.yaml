@@ -1,0 +1,93 @@
+# This file is generated from the x-kube-resource test fixtures. Do not edit manually.
+apiVersion: chainsaw.kyverno.io/v1alpha1
+kind: Test
+metadata:
+  name: account-api-token
+spec:
+  steps:
+  - name: create
+    try:
+    - apply:
+        resource:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: credentials
+          stringData:
+            token: fake-token
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: account
+          spec:
+            forProvider:
+              apiTokenSecretRef:
+                key: token
+                name: credentials
+              name: koof e2e
+    - apply:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: AccountAPIToken
+          metadata:
+            name: account-api-token
+          spec:
+            forProvider:
+              accountRef:
+                name: account
+              name: koof e2e
+              policies:
+              - effect: allow
+                permission_groups:
+                - id: 2efd5506f9c8494dacb1fa10a3e7d5b6
+                resources:
+                  com.cloudflare.api.account.0000000000000000000000000000000a: '*'
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: Account
+          metadata:
+            name: account
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: AccountAPIToken
+          metadata:
+            name: account-api-token
+          status:
+            (conditions[?type == 'Ready']):
+            - status: 'True'
+  - name: update
+    try:
+    - patch:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: AccountAPIToken
+          metadata:
+            name: account-api-token
+          spec:
+            forProvider:
+              name: koof e2e renamed
+    - assert:
+        resource:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: AccountAPIToken
+          metadata:
+            name: account-api-token
+          status:
+            (conditions[?type == 'Synced']):
+            - status: 'True'
+            atProvider:
+              name: koof e2e renamed
+  - name: delete
+    try:
+    - delete:
+        ref:
+          apiVersion: cloudflare.kube.nas1k.dev/v1alpha1
+          kind: AccountAPIToken
+          name: account-api-token

@@ -284,7 +284,12 @@ fn observe_descriptor(operation: Operation<'_>) -> TokenStream {
         let value = value_expr(&matching.value);
         quote!(.with_match(koof::resource::ResponseMatch::new(#field, #value)))
     });
-    quote!(koof::resource::ObserveDescriptor::new(#descriptor) #deleted_when #matching)
+    let into = operation
+        .ir
+        .response_into
+        .as_deref()
+        .map(|field| quote!(.with_into(#field)));
+    quote!(koof::resource::ObserveDescriptor::new(#descriptor) #deleted_when #matching #into)
 }
 
 fn operation_descriptor(operation: Operation<'_>) -> TokenStream {

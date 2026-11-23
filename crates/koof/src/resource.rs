@@ -410,6 +410,7 @@ pub struct ObserveDescriptor {
     pub operation: OperationDescriptor,
     pub deleted_when: Option<&'static str>,
     pub matching: Option<ResponseMatch>,
+    pub into: Option<&'static str>,
 }
 
 impl ObserveDescriptor {
@@ -419,6 +420,17 @@ impl ObserveDescriptor {
             operation,
             deleted_when: None,
             matching: None,
+            into: None,
+        }
+    }
+
+    /// The response (at `response_path`) is the value of the resource's field
+    /// `into`, for APIs whose resource is a bare list.
+    #[must_use]
+    pub const fn with_into(self, into: &'static str) -> Self {
+        Self {
+            into: Some(into),
+            ..self
         }
     }
 
