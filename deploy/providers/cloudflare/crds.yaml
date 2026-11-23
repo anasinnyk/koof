@@ -21416,15 +21416,7 @@
                         "type": "string"
                       },
                       "location": {
-                        "description": "Location of the bucket.",
-                        "enum": [
-                          "apac",
-                          "eeur",
-                          "enam",
-                          "weur",
-                          "wnam",
-                          "oc"
-                        ],
+                        "description": "Location of the bucket, in uppercase (e.g. `WEUR`).",
                         "nullable": true,
                         "type": "string"
                       },

@@ -56,6 +56,6 @@ Validation:
 |---|---|---|---|
 | `atProvider.creation_date` | string |  | Creation timestamp. |
 | `atProvider.jurisdiction` | string |  | Jurisdiction where objects in this bucket are guaranteed to be stored. One of `default`, `eu`, `us`, `fedramp`. |
-| `atProvider.location` | string |  | Location of the bucket. One of `apac`, `eeur`, `enam`, `weur`, `wnam`, `oc`. |
+| `atProvider.location` | string |  | Location of the bucket, in uppercase (e.g. `WEUR`). |
 | `atProvider.name` | string |  | Name of the bucket. |
 | `atProvider.storage_class` | string |  | Storage class for newly uploaded objects, unless specified otherwise. One of `Standard`, `InfrequentAccess`. |

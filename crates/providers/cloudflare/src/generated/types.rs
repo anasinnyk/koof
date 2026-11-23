@@ -41127,8 +41127,9 @@ pub struct R2Bucket {
     pub creation_date: ::std::option::Option<::std::string::String>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub jurisdiction: ::std::option::Option<R2Jurisdiction>,
+    ///Location of the bucket, in uppercase (e.g. `WEUR`).
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub location: ::std::option::Option<R2BucketLocation>,
+    pub location: ::std::option::Option<::std::string::String>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<R2BucketName>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
@@ -53475,8 +53476,9 @@ pub struct StorageV1alpha1R2BucketAtProvider {
     pub creation_date: ::std::option::Option<::std::string::String>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub jurisdiction: ::std::option::Option<R2Jurisdiction>,
+    ///Location of the bucket, in uppercase (e.g. `WEUR`).
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
-    pub location: ::std::option::Option<R2BucketLocation>,
+    pub location: ::std::option::Option<::std::string::String>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
     pub name: ::std::option::Option<R2BucketName>,
     #[serde(skip_serializing_if = "::std::option::Option::is_none")]
