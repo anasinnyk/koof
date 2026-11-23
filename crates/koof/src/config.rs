@@ -58,6 +58,8 @@ pub struct Config {
     pub concurrency: u16,
     #[serde(with = "humantime_serde")]
     pub resync_interval: Duration,
+    #[serde(with = "humantime_serde")]
+    pub reconcile_timeout: Duration,
     pub http: HttpConfig,
     pub leader_election: LeaderElectionConfig,
 }
@@ -75,6 +77,7 @@ impl Config {
             pod_name: None,
             concurrency: 8,
             resync_interval: crate::controller::DEFAULT_RESYNC,
+            reconcile_timeout: crate::controller::DEFAULT_RECONCILE_TIMEOUT,
             http: (provider.http)(http),
             leader_election: LeaderElectionConfig {
                 name: format!("koof-{}", provider.name),
@@ -148,6 +151,17 @@ mod tests {
             .collect();
         let config = Config::load(&PROVIDER, environment().source(Some(variables)))?;
         assert_eq!(config.resync_interval, Duration::from_secs(90));
+        Ok(())
+    }
+
+    #[test]
+    fn reconcile_timeout_from_environment() -> Result<(), config::ConfigError> {
+        static PROVIDER: ProviderInfo = ProviderInfo::new("test", "http://127.0.0.1");
+        let variables = [("KOOF_RECONCILE_TIMEOUT".to_owned(), "2m".to_owned())]
+            .into_iter()
+            .collect();
+        let config = Config::load(&PROVIDER, environment().source(Some(variables)))?;
+        assert_eq!(config.reconcile_timeout, Duration::from_mins(2));
         Ok(())
     }
 }

@@ -18,9 +18,11 @@ pub struct ControllerContext {
     pub backoff: Backoff,
     pub synced: SyncTracker,
     pub attempts: Attempts,
+    pub activity: Activity,
     pub descriptors: Vec<&'static ResourceDescriptor>,
     pub concurrency: u16,
     pub resync: Duration,
+    pub reconcile_timeout: Duration,
     pub field_manager: String,
 }
 
@@ -42,9 +44,11 @@ impl ControllerContext {
             backoff: Backoff::default(),
             synced: SyncTracker::default(),
             attempts: Attempts::default(),
+            activity: Activity::default(),
             descriptors,
             concurrency,
             resync: DEFAULT_RESYNC,
+            reconcile_timeout: DEFAULT_RECONCILE_TIMEOUT,
             field_manager: DEFAULT_FIELD_MANAGER.to_owned(),
         }
     }
@@ -53,6 +57,15 @@ impl ControllerContext {
     #[must_use]
     pub fn with_resync(self, resync: Duration) -> Self {
         Self { resync, ..self }
+    }
+
+    /// How long one reconcile may take before it is abandoned and retried.
+    #[must_use]
+    pub fn with_reconcile_timeout(self, reconcile_timeout: Duration) -> Self {
+        Self {
+            reconcile_timeout,
+            ..self
+        }
     }
 
     /// Server-side apply field manager that co-owns the external name annotation.
@@ -66,6 +79,34 @@ impl ControllerContext {
 }
 
 pub const DEFAULT_RESYNC: Duration = Duration::from_mins(5);
+pub const DEFAULT_RECONCILE_TIMEOUT: Duration = Duration::from_mins(5);
+
+/// When each object's reconcile last started or finished, so objects whose
+/// scheduled retry got lost can be found and reconciled again.
+#[derive(Debug, Default)]
+pub struct Activity {
+    last: Mutex<HashMap<String, Instant>>,
+}
+
+impl Activity {
+    pub fn touched(&self, key: &str) {
+        self.last
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .insert(key.to_owned(), Instant::now());
+    }
+
+    /// Of `keys`, those without activity for `idle` (or ever); forgets every other key.
+    #[must_use]
+    pub fn idle(&self, keys: Vec<String>, idle: Duration) -> Vec<String> {
+        let mut last = self.last.lock().unwrap_or_else(PoisonError::into_inner);
+        let known: BTreeSet<&String> = keys.iter().collect();
+        last.retain(|key, _| known.contains(key));
+        keys.into_iter()
+            .filter(|key| last.get(key).is_none_or(|at| at.elapsed() >= idle))
+            .collect()
+    }
+}
 pub const DEFAULT_FIELD_MANAGER: &str = "koof";
 
 #[derive(Debug, Default)]

@@ -188,6 +188,8 @@ record each action.
 | after an action, to confirm it | 5 s |
 | transient error (`429`, `5xx`, network) | exponential backoff from 5 s to the resync interval, or `Retry-After` |
 | permanent error (other `4xx`, invalid input) | the resync interval |
+| reconcile longer than `KOOF_RECONCILE_TIMEOUT` (5 min), e.g. a Kubernetes API that stopped answering | abandoned, then retried like a transient error |
+| no reconcile for twice the resync interval (a lost retry) | the next resync interval tick |
 
 Periodic delays get ±10 % jitter, so objects created together do not all hit the API
 at the same moment. Any change to the object triggers a reconcile immediately.

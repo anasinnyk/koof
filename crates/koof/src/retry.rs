@@ -20,6 +20,7 @@ pub fn classify(error: &ReconcileError) -> Failure {
         ReconcileError::Credentials(error) => credentials(error),
         ReconcileError::ConnectionSecret { source, .. } => kubernetes(source.as_ref()),
         ReconcileError::ConnectionSecretAfterCreate { source, .. } => classify(source),
+        ReconcileError::Timeout(_) => Failure::Transient(None),
         ReconcileError::Serialization(_)
         | ReconcileError::Policy(_)
         | ReconcileError::Unsupported { .. }

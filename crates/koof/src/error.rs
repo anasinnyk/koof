@@ -116,6 +116,9 @@ pub enum ReconcileError {
     #[error(transparent)]
     Policy(#[from] crate::controller::policy::PolicyError),
 
+    #[error("reconcile did not finish within {0:?}")]
+    Timeout(std::time::Duration),
+
     #[error("{kind} has no {lifecycle} operation")]
     Unsupported {
         kind: &'static str,
